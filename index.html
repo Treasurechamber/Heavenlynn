@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Heavenlynn Menu</title>
+  <script src="https://unpkg.com/@supabase/supabase-js"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: #f7f3f9;
+      color: #4e3474;
+    }
+
+    h1 {
+      text-align: center;
+      padding: 1rem;
+      background: #e0d7f3;
+      margin: 0;
+      font-size: 2rem;
+    }
+
+    .menu-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 2rem;
+      gap: 20px;
+    }
+
+    .item-card {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      width: 250px;
+      padding: 1rem;
+      text-align: center;
+      transition: transform 0.2s;
+    }
+
+    .item-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .item-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    .item-category {
+      font-size: 0.9rem;
+      color: #888;
+    }
+
+    .item-price {
+      font-size: 1.1rem;
+      margin: 10px 0;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Heavenlynn Menu</h1>
+<div class="menu-container" id="menu"></div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', async () => {
+    // ✅ Initialize Supabase client
+    const supabaseUrl = 'https://cfvsxnvvkdskbkljqicw.supabase.co'; // ⬅️ replace with your Supabase URL
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNmdnN4bnZ2a2Rza2JrbGpxaWN3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ1MzU0MTcsImV4cCI6MjA2MDExMTQxN30.dNZsSOJyW1bE4bDQP-AIEYV7Z6hlw_iVMN6LZ2IdPio'; // ⬅️ replace with your Supabase anon key
+    const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+    // ✅ Fetch data from Supabase
+    async function loadMenu() {
+      const { data, error } = await supabase
+        .from('menu_items')
+        .select('*')
+        .order('category', { ascending: true });
+
+      if (error) {
+        console.error('Error loading menu:', error);
+        return;
+      }
+
+      const container = document.getElementById('menu');
+      container.innerHTML = '';
+
+      data.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'item-card';
+
+        card.innerHTML = `
+          <div class="item-title">${item.item_name}</div>
+          <div class="item-category">${item.category}</div>
+          <div class="item-price">$${parseFloat(item.price).toFixed(2)}</div>
+        `;
+
+        container.appendChild(card);
+      });
+    }
+
+    loadMenu();
+  });
+</script>
+
+</body>
+</html>
