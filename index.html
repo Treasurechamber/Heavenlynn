@@ -2,76 +2,119 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Heavenlynn Menu</title>
   <script src="https://unpkg.com/@supabase/supabase-js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
   <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
     body {
       margin: 0;
-      font-family: 'Poppins', sans-serif;
-      background: #f7f3f9;
+      background: #fffafc;
       color: #4e3474;
     }
 
-    h1 {
+    header {
+      background: #e9d8f4;
+      padding: 1.5rem;
       text-align: center;
-      padding: 1rem;
-      background: #e0d7f3;
-      margin: 0;
       font-size: 2rem;
+      font-weight: 600;
     }
 
-    .menu-container {
+    nav {
+      position: sticky;
+      top: 0;
+      background: #f2ecf9;
+      padding: 0.5rem;
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      padding: 2rem;
+      gap: 1rem;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    nav a {
+      text-decoration: none;
+      color: #4e3474;
+      font-weight: 500;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      transition: background 0.3s;
+    }
+
+    nav a:hover {
+      background: #d8c2ec;
+    }
+
+    section {
+      padding: 2rem 1rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    h2 {
+      border-bottom: 2px solid #e0c5ff;
+      padding-bottom: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .items-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 20px;
     }
 
     .item-card {
-      background: #fff;
+      background: #ffffff;
       border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      width: 250px;
-      padding: 1rem;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+      overflow: hidden;
       text-align: center;
-      transition: transform 0.2s;
+      padding-bottom: 1rem;
     }
 
-    .item-card:hover {
-      transform: translateY(-5px);
+    .item-card img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
     }
 
-    .item-title {
-      font-size: 1.2rem;
+    .item-name {
+      font-size: 1.1rem;
       font-weight: 600;
+      margin: 0.5rem 0;
     }
 
-    .item-category {
+    .item-desc {
       font-size: 0.9rem;
-      color: #888;
+      color: #666;
+      padding: 0 0.5rem;
+      min-height: 40px;
     }
 
     .item-price {
-      font-size: 1.1rem;
-      margin: 10px 0;
+      font-size: 1rem;
+      margin-top: 0.5rem;
+      font-weight: bold;
+      color: #4e3474;
     }
   </style>
 </head>
 <body>
+  <header>Heavenlynn Menu</header>
+  <nav id="categoryNav"></nav>
+  <div id="menuSections"></div>
 
-<h1>Heavenlynn Menu</h1>
-<div class="menu-container" id="menu"></div>
-
-<script>
-  document.addEventListener('DOMContentLoaded', async () => {
-    // ✅ Initialize Supabase client
-    const supabaseUrl = 'https://cfvsxnvvkdskbkljqicw.supabase.co'; // ⬅️ replace with your Supabase URL
-    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNmdnN4bnZ2a2Rza2JrbGpxaWN3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ1MzU0MTcsImV4cCI6MjA2MDExMTQxN30.dNZsSOJyW1bE4bDQP-AIEYV7Z6hlw_iVMN6LZ2IdPio'; // ⬅️ replace with your Supabase anon key
-    const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
-
-    // ✅ Fetch data from Supabase
+  <script>
+    const supabase = window.supabase.createClient(
+      'https://cfvsxnvvkdskbkljqicw.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNmdnN4bnZ2a2Rza2JrbGpxaWN3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ1MzU0MTcsImV4cCI6MjA2MDExMTQxN30.dNZsSOJyW1bE4bDQP-AIEYV7Z6hlw_iVMN6LZ2IdPio'
+    );
     async function loadMenu() {
       const { data, error } = await supabase
         .from('menu_items')
@@ -79,30 +122,71 @@
         .order('category', { ascending: true });
 
       if (error) {
-        console.error('Error loading menu:', error);
+        console.error(error);
         return;
       }
 
-      const container = document.getElementById('menu');
-      container.innerHTML = '';
-
+      const grouped = {};
       data.forEach(item => {
-        const card = document.createElement('div');
-        card.className = 'item-card';
-
-        card.innerHTML = `
-          <div class="item-title">${item.item_name}</div>
-          <div class="item-category">${item.category}</div>
-          <div class="item-price">$${parseFloat(item.price).toFixed(2)}</div>
-        `;
-
-        container.appendChild(card);
+        if (!grouped[item.category]) grouped[item.category] = [];
+        grouped[item.category].push(item);
       });
+
+      const nav = document.getElementById('categoryNav');
+      const sections = document.getElementById('menuSections');
+
+      for (const category in grouped) {
+        const catId = category.toLowerCase().replace(/\s+/g, '-');
+
+        const link = document.createElement('a');
+        link.href = `#${catId}`;
+        link.textContent = category;
+        nav.appendChild(link);
+
+        const section = document.createElement('section');
+        section.id = catId;
+        const title = document.createElement('h2');
+        title.textContent = category;
+        section.appendChild(title);
+
+        const grid = document.createElement('div');
+        grid.className = 'items-grid';
+
+        grouped[category].forEach(item => {
+          const card = document.createElement('div');
+          card.className = 'item-card';
+
+          if (item.image_url) {
+            const img = document.createElement('img');
+            img.src = item.image_url;
+            img.alt = item.item_name;
+            card.appendChild(img);
+          }
+
+          const name = document.createElement('div');
+          name.className = 'item-name';
+          name.textContent = item.item_name;
+
+          const desc = document.createElement('div');
+          desc.className = 'item-desc';
+          desc.textContent = item.description || '';
+
+          const price = document.createElement('div');
+          price.className = 'item-price';
+          price.textContent = `$${parseFloat(item.price).toFixed(2)}`;
+
+          card.appendChild(name);
+          card.appendChild(desc);
+          card.appendChild(price);
+          grid.appendChild(card);
+        });
+
+        section.appendChild(grid);
+        sections.appendChild(section);
+      }
     }
 
     loadMenu();
-  });
-</script>
-
+  </script>
 </body>
 </html>
