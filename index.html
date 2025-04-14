@@ -223,6 +223,7 @@
       gap: 25px;
     }
 
+    /* Updated item-card for horizontal layout with circular images */
     .item-card {
       background: var(--card-bg);
       border-radius: var(--radius-md);
@@ -231,8 +232,9 @@
       transition: var(--transition);
       position: relative;
       display: flex;
-      flex-direction: column;
-      height: 100%;
+      flex-direction: row;
+      align-items: center;
+      /* Remove fixed height to accommodate variable content */
     }
 
     .item-card:hover {
@@ -240,9 +242,12 @@
       box-shadow: var(--shadow-lg);
     }
 
+    /* Update image container to be fixed square with circular images */
     .item-image {
-      position: relative;
-      height: 220px;
+      flex: 0 0 150px;
+      width: 150px;
+      height: 150px;
+      margin-right: 1.5rem;
       overflow: hidden;
     }
 
@@ -251,28 +256,17 @@
       height: 100%;
       object-fit: cover;
       transition: transform 0.5s ease;
+      border-radius: 50%;
     }
 
     .item-card:hover img {
       transform: scale(1.05);
     }
 
-    .item-badge {
-      position: absolute;
-      top: 15px;
-      right: 15px;
-      background: var(--accent);
-      color: white;
-      padding: 5px 12px;
-      border-radius: 20px;
-      font-size: 0.8rem;
-      font-weight: 500;
-      z-index: 1;
-    }
-
+    /* Right side: content */
     .item-content {
+      flex: 1;
       padding: 1.2rem;
-      flex-grow: 1;
       display: flex;
       flex-direction: column;
     }
@@ -291,11 +285,11 @@
       flex-grow: 1;
     }
 
+    /* Footer with price appears at the bottom of the content column */
     .item-footer {
       display: flex;
-      justify-content: space-between;
+      justify-content: flex-start;
       align-items: center;
-      margin-top: auto;
     }
 
     .item-price {
@@ -304,36 +298,32 @@
       color: var(--primary);
     }
 
-    .order-btn {
-      background: var(--primary-light);
-      color: var(--primary-dark);
-      border: none;
-      padding: 0.5rem 1rem;
-      border-radius: var(--radius-sm);
-      font-weight: 500;
-      cursor: pointer;
-      transition: var(--transition);
-    }
-
-    .order-btn:hover {
-      background: var(--primary);
-      color: white;
+    /* Responsive adjustments: on smaller screens, revert to vertical layout */
+    @media (max-width: 600px) {
+      .item-card {
+        flex-direction: column;
+        align-items: center;
+      }
+      .item-image {
+        flex: none;
+        width: 150px;
+        height: 150px;
+        margin-right: 0;
+        margin-bottom: 1rem;
+      }
     }
 
     /* Custom scrollbar */
     ::-webkit-scrollbar {
       width: 8px;
     }
-
     ::-webkit-scrollbar-track {
       background: #f1f1f1;
     }
-
     ::-webkit-scrollbar-thumb {
       background: #d1c2f0;
       border-radius: 10px;
     }
-
     ::-webkit-scrollbar-thumb:hover {
       background: #a18cd1;
     }
@@ -379,7 +369,7 @@
       opacity: 0.8;
     }
 
-    /* Responsive adjustments */
+    /* Responsive adjustments for hero and grid */
     @media (max-width: 768px) {
       .hero {
         height: 60vh;
@@ -404,7 +394,8 @@
       }
       
       .item-image {
-        height: 180px;
+        height: 150px;
+        width: 150px;
       }
     }
 
@@ -415,7 +406,6 @@
       align-items: center;
       height: 200px;
     }
-
     .loader div {
       width: 20px;
       height: 20px;
@@ -424,16 +414,13 @@
       margin: 0 5px;
       animation: bounce-loader 0.9s infinite alternate;
     }
-
     .loader div:nth-child(2) {
       animation-delay: 0.3s;
       background: var(--accent);
     }
-
     .loader div:nth-child(3) {
       animation-delay: 0.6s;
     }
-
     @keyframes bounce-loader {
       to {
         transform: translateY(-20px);
@@ -446,7 +433,7 @@
   <div class="hero" role="banner">
     <div class="hero-overlay" aria-hidden="true"></div>
     <!-- Use a video or high-quality image URL in production -->
-    <img src="https://cfvsxnvvkdskbkljqicw.supabase.co/storage/v1/object/public/menu-photos//Heavenlynn%20Uplifted%20Logo%20-%20Digital%20Use%20(2).jpg" class="hero-video">
+    <img src="https://cfvsxnvvkdskbkljqicw.supabase.co/storage/v1/object/public/menu-photos//Heavenlynn%20Uplifted%20Logo%20-%20Digital%20Use%20(2).jpg" class="hero-video" alt="Bakery Display">
     <div class="hero-content">
       <h1>Heavenlynn</h1>
       <p>Indulge in divine treats crafted with love and passion. Our heavenly delights await your taste buds.</p>
@@ -592,6 +579,7 @@
             const card = document.createElement('div');
             card.className = 'item-card';
 
+            // Left side: Circular image container
             const imageContainer = document.createElement('div');
             imageContainer.className = 'item-image';
 
@@ -600,18 +588,9 @@
             img.src = item.image_url ? item.image_url : `/api/placeholder/600/400`;
             img.alt = item.item_name;
             imageContainer.appendChild(img);
-
-            // Add special badge if available
-            if (specialBadges[item.item_name]) {
-              const badge = document.createElement('div');
-              badge.className = 'item-badge';
-              badge.textContent = specialBadges[item.item_name];
-              imageContainer.appendChild(badge);
-            }
-
             card.appendChild(imageContainer);
 
-            // Card content
+            // Right side: Content (description and price)
             const content = document.createElement('div');
             content.className = 'item-content';
 
@@ -630,20 +609,12 @@
             price.className = 'item-price';
             price.textContent = `$${parseFloat(item.price).toFixed(2)}`;
 
-            // Order button triggers an alert (for demo). In production, integrate with your cart system.
-            const orderBtn = document.createElement('button');
-            orderBtn.className = 'order-btn';
-            orderBtn.textContent = 'Order';
-            orderBtn.onclick = () => {
-              alert(`Added ${item.item_name} to cart!`);
-            };
-
-            footer.appendChild(price);
-            footer.appendChild(orderBtn);
-
+            // Append name, description, and price into content container
             content.appendChild(name);
             content.appendChild(desc);
+            footer.appendChild(price);
             content.appendChild(footer);
+
             card.appendChild(content);
             grid.appendChild(card);
           });
