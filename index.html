@@ -8,147 +8,749 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
   <style>
-    /* TOP BAR */
-    .top-bar {
-      background: var(--primary-dark);
-      color: white;
-      font-family: 'Poppins', sans-serif;
-      font-size: 0.9rem;
-      padding: 0.5rem 1rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 1rem;
-    }
-    .top-bar .contact-info {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
-    .top-bar a {
-      color: white;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.3rem;
+    :root {
+      --primary: #8a4fff;
+      --primary-light: #e4d7ff;
+      --primary-dark: #4e3474;
+      --accent: #ff7eb5;
+      --background: #e0d7ff;
+      --card-bg: #ffffff;
+      --text: #301e54;
+      --text-light: #6b6b6b;
+      --shadow-sm: 0 4px 12px rgba(138, 79, 255, 0.08);
+      --shadow-md: 0 6px 16px rgba(138, 79, 255, 0.12);
+      --shadow-lg: 0 12px 24px rgba(138, 79, 255, 0.16);
+      --gradient: linear-gradient(135deg, #a18cd1, #fbc2eb);
+      --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      --radius-sm: 12px;
+      --radius-md: 20px;
+      --radius-lg: 30px;
     }
 
-    /* SCROLL BUTTONS FOR NAV */
-    .nav-scroll-btn {
-      background: rgba(255,255,255,0.8);
-      border: none;
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--background);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    h1, h2, h3 {
+      font-family: 'Playfair Display', serif;
+    }
+
+    .hero {
+      height: 70vh;
+      max-height: 600px;
+      min-height: 400px;
+      position: relative;
+      overflow: hidden;
       display: flex;
       align-items: center;
       justify-content: center;
-      cursor: pointer;
-      box-shadow: var(--shadow-sm);
-      z-index: 10;
+      text-align: center;
     }
-    #scroll-left { left: 5px; }
-    #scroll-right { right: 5px; }
 
-    /* adjust nav-wrapper positioning */
+    .hero-video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center center;
+      z-index: -1;
+      filter: brightness(0.7);
+    }
+
+    .hero-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(0deg, rgba(78, 52, 116, 0.6), rgba(138, 79, 255, 0.3));
+      z-index: 0;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 800px;
+      padding: 0 2rem;
+    }
+
+    .hero h1 {
+      font-size: clamp(3rem, 8vw, 5rem);
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 1rem;
+      text-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      letter-spacing: -0.5px;
+    }
+
+    .hero p {
+      font-size: clamp(1rem, 2vw, 1.3rem);
+      color: #ffffff;
+      margin-bottom: 2rem;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .scroll-down {
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: white;
+      font-size: 2rem;
+      animation: bounce 2s infinite;
+      cursor: pointer;
+      z-index: 1;
+    }
+
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0) translateX(-50%);
+      }
+      40% {
+        transform: translateY(-20px) translateX(-50%);
+      }
+      60% {
+        transform: translateY(-10px) translateX(-50%);
+      }
+    }
+
     .nav-wrapper {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(8px);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      box-shadow: var(--shadow-sm);
+      padding: 1rem;
+      transition: var(--transition);
+    }
+
+    .nav-wrapper.scrolled {
+      padding: 0.7rem 1rem;
+    }
+
+    nav.nav-container {
+      display: flex;
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      gap: 0.5rem;
+      max-width: 1200px;
+      margin: auto;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: 0.5rem;
+      scrollbar-width: none; /* Firefox */
+    }
+
+    nav.nav-container::-webkit-scrollbar {
+      display: none; /* Chrome, Safari, Opera */
+    }
+
+    nav a {
+      text-decoration: none;
+      color: var(--primary-dark);
+      font-weight: 500;
+      padding: 0.6rem 0.8rem;
+      border-radius: var(--radius-sm);
+      background: #f9f5ff;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.85rem;
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition);
+      min-width: auto;
+      flex: 0 0 auto;
+      justify-content: center;
+      white-space: nowrap;
+    }
+
+    nav a i {
+      font-size: 0.9rem;
+    }
+
+    nav a:hover, nav a.active {
+      background: var(--gradient);
+      color: white;
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+    }
+
+    main {
+      padding: 2rem 1rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      margin-bottom: 2rem;
       position: relative;
     }
 
-    /* existing styles... */
-    :root { /* existing variables */ }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Poppins', sans-serif; background: var(--background); color: var(--text); line-height: 1.6; }
-    h1, h2, h3 { font-family: 'Playfair Display', serif; }
-    .hero { /* existing hero styles */ }
-    .hero-video { /* ... */ }
-    .hero-overlay { /* ... */ }
-    .hero-content { /* ... */ }
-    .hero h1 { /* ... */ }
-    .scroll-down { /* ... */ }
-    @keyframes bounce { /* ... */ }
+    .section-title::after {
+      content: "";
+      flex-grow: 1;
+      height: 2px;
+      background: var(--primary-light);
+      margin-left: 15px;
+      border-radius: 2px;
+    }
 
-    /* navigation and items... existing styles unchanged */
-    .nav-wrapper.scrolled { padding: 0.7rem 1rem; }
-    nav.nav-container { display: flex; max-width: 1200px; margin: auto; overflow-x: auto; scroll-behavior: smooth; }
-    nav a { /* ... */ }
-    nav a:hover, nav a.active { /* ... */ }
-    main { padding: 2rem 1rem; max-width: 1200px; margin: auto; }
-    .section-title { /* ... */ }
-    section { margin-bottom: 4rem; scroll-margin-top: 100px; }
-    .items-grid { display: grid; gap: 16px; grid-template-columns: repeat(1,1fr); }
-    .item-card { /* ... */ }
-    .item-image { /* ... */ }
-    .item-content { /* ... */ }
-    .item-name { /* ... */ }
-    .item-desc { /* ... */ }
-    .item-footer { /* ... */ }
-    .item-price { /* ... */ }
-    .badge { /* ... */ }
-    ::-webkit-scrollbar { width: 8px; height: 6px; }
-    ::-webkit-scrollbar-thumb { background: #d1c2f0; border-radius: 10px; }
-    footer { /* ... */ }
-    .footer-logo { /* ... */ }
-    .social-links a { /* ... */ }
-    .footer-text { /* ... */ }
+    .section-title h2 {
+      font-size: 2rem;
+      margin: 0;
+      color: var(--primary-dark);
+      position: relative;
+      display: inline-block;
+    }
+
+    section {
+      margin-bottom: 4rem;
+      scroll-margin-top: 100px;
+    }
+
+    .items-grid {
+      display: grid;
+      gap: 16px;
+      grid-template-columns: repeat(1, 1fr);
+    }
+
+    /* Card layout updated for mobile-first design */
+    .item-card {
+      background: var(--card-bg);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+      transition: var(--transition);
+      position: relative;
+      display: grid;
+      grid-template-columns: 100px 1fr;
+      align-items: center;
+    }
+
+    .item-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .item-image {
+      width: 100px;
+      height: 100px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .item-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+      filter: saturate(1.2) contrast(1.1); /* Makes food photos look more genuine */
+    }
+
+    .item-card:hover img {
+      transform: scale(1.05);
+    }
+
+    .item-content {
+      padding: 0.8rem;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .item-name {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+      color: var(--primary-dark);
+      line-height: 1.2;
+    }
+
+    .item-desc {
+      font-size: 0.85rem;
+      color: var(--text-light);
+      margin-bottom: 0.5rem;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      line-height: 1.4;
+    }
+
+    .item-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: auto;
+    }
+
+    .item-price {
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: var(--primary);
+    }
+
+    .badge {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: var(--accent);
+      color: white;
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-size: 0.7rem;
+      font-weight: 500;
+      z-index: 1;
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #d1c2f0;
+      border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #a18cd1;
+    }
+
+    footer {
+      background: var(--primary-dark);
+      color: white;
+      padding: 3rem 1rem;
+      text-align: center;
+    }
+
+    .footer-content {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .footer-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      margin: 1.5rem 0;
+    }
+
+    .social-links a {
+      color: white;
+      font-size: 1.5rem;
+      transition: var(--transition);
+    }
+
+    .social-links a:hover {
+      color: var(--accent);
+      transform: translateY(-3px);
+    }
+
+    .footer-text {
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+
+    /* Responsive adjustments */
+    @media (min-width: 480px) {
+      .items-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (min-width: 768px) {
+      .items-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+      }
+      
+      .section-title h2 {
+        font-size: 2.2rem;
+      }
+      
+      nav a {
+        padding: 0.8rem 1.2rem;
+        font-size: 0.95rem;
+        gap: 8px;
+      }
+      
+      nav a i {
+        font-size: 1.1rem;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .items-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 25px;
+      }
+      
+      .item-card {
+        grid-template-columns: 1fr;
+        grid-template-rows: 150px 1fr;
+      }
+      
+      .item-image {
+        width: 100%;
+        height: 150px;
+      }
+      
+      .item-name {
+        font-size: 1.2rem;
+      }
+    }
+
+    /* Loading animation */
+    .loader {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 200px;
+    }
+    .loader div {
+      width: 20px;
+      height: 20px;
+      background: var(--primary);
+      border-radius: 50%;
+      margin: 0 5px;
+      animation: bounce-loader 0.9s infinite alternate;
+    }
+    .loader div:nth-child(2) {
+      animation-delay: 0.3s;
+      background: var(--accent);
+    }
+    .loader div:nth-child(3) {
+      animation-delay: 0.6s;
+    }
+    @keyframes bounce-loader {
+      to {
+        transform: translateY(-20px);
+      }
+    }
   </style>
 </head>
 <body>
-  <!-- Top Bar with Location, Phone, Instagram -->
-  <div class="top-bar">
-    <div class="contact-info">
-      <i class="fas fa-map-marker-alt"></i><span>Tyre, Lebanon</span>
-      <i class="fas fa-phone-alt"></i><span>70006252</span>
-    </div>
-    <a href="https://instagram.com/HeavenlynnBakery" target="_blank"><i class="fab fa-instagram"></i>Instagram</a>
-  </div>
-
   <!-- Hero Section -->
   <div class="hero" role="banner">
     <div class="hero-overlay" aria-hidden="true"></div>
+    <!-- Use a video or high-quality image URL in production -->
     <img src="https://cfvsxnvvkdskbkljqicw.supabase.co/storage/v1/object/public/menu-photos//Heavenlynn%20Uplifted%20Logo%20-%20Digital%20Use%20(2).jpg" class="hero-video" alt="Bakery Display">
-    <div class="hero-content"><h1>Heavenlynn</h1></div>
-    <a href="#menu" class="scroll-down" aria-label="Scroll Down"><i class="fas fa-chevron-down"></i></a>
+    <div class="hero-content">
+      <h1>Heavenlynn</h1>
+    </div>
+    <a href="#menu" class="scroll-down" aria-label="Scroll Down">
+      <i class="fas fa-chevron-down"></i>
+    </a>
   </div>
 
-  <!-- Navigation with Scroll Buttons -->
+  <!-- Navigation -->
   <div class="nav-wrapper" id="menu">
-    <button id="scroll-left" class="nav-scroll-btn"><i class="fas fa-chevron-left"></i></button>
+    <!-- Using a nav element for semantic navigation -->
     <nav class="nav-container" id="categoryNav" role="navigation" aria-label="Menu Categories">
-      <div class="loader"><div></div><div></div><div></div></div>
+      <!-- Categories will be dynamically inserted here -->
+      <div class="loader">
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
     </nav>
-    <button id="scroll-right" class="nav-scroll-btn"><i class="fas fa-chevron-right"></i></button>
   </div>
 
   <!-- Menu Sections -->
-  <main id="menuSections"></main>
+  <main id="menuSections">
+    <!-- Menu items will be dynamically inserted here -->
+  </main>
 
   <!-- Footer -->
-  <footer role="contentinfo"><div class="footer-content">
-    <div class="footer-logo">Heavenlynn</div>
-    <div class="social-links">
-      <a href="https://instagram.com/HeavenlynnBakery" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-      <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
-      <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+  <footer role="contentinfo">
+    <div class="footer-content">
+      <div class="footer-logo">Heavenlynn</div>
+      <div class="social-links">
+        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+        <a href="#" aria-label="Pinterest"><i class="fab fa-pinterest"></i></a>
+      </div>
+      <p class="footer-text">© 2025 Heavenlynn Bakery. All rights reserved.</p>
+      <p class="footer-text">123 Sweet Street, Dessert City</p>
     </div>
-    <p class="footer-text">© 2025 Heavenlynn Bakery. All rights reserved.</p>
-    <p class="footer-text">123 Sweet Street, Dessert City, Tyre, Lebanon</p>
-  </div></footer>
+  </footer>
 
   <script>
-    // Smooth scroll nav container on button clicks
-    const navContainer = document.getElementById('categoryNav');
-    document.getElementById('scroll-left').addEventListener('click', () => {
-      navContainer.scrollBy({ left: -200, behavior: 'smooth' });
-    });
-    document.getElementById('scroll-right').addEventListener('click', () => {
-      navContainer.scrollBy({ left: 200, behavior: 'smooth' });
-    });
+    // Initialize Supabase client (demo key used here)
+    const supabase = window.supabase.createClient(
+      'https://cfvsxnvvkdskbkljqicw.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNmdnN4bnZ2a2Rza2JrbGpxaWN3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ1MzU0MTcsImV4cCI6MjA2MDExMTQxN30.dNZsSOJyW1bE4bDQP-AIEYV7Z6hlw_iVMN6LZ2IdPio'
+    );
 
-    // Existing Supabase menu loading script unchanged...
+    // Map categories to appropriate Font Awesome icons (smaller icons)
+    const iconMap = {
+      "Cookies": "fa-cookie",
+      "Rolls": "fa-bread-slice",
+      "Cake Slices": "fa-cake-candles",
+      "Cups": "fa-mug-hot",
+      "Tartes": "fa-apple-alt",
+      "Cheesecakes": "fa-cheese",
+      "Add-ons": "fa-plus-circle",
+      "Drinks": "fa-coffee",
+      "Ice Cream": "fa-ice-cream"
+    };
+
+    // Special item badges
+    const specialBadges = {
+      "Chocolate Chip Cookie": "Popular",
+      "Cinnamon Roll": "Best Seller",
+      "Red Velvet": "Featured", 
+      "Cappuccino": "New",
+      "Strawberry Cheesecake": "Chef's Choice"
+    };
+
+    // Sample genuine food images for demo purposes
+    // In a real application, these would be actual URLs to product images
+    const foodImages = {
+      "cookie": "/api/placeholder/400/400",
+      "roll": "/api/placeholder/400/400",
+      "cake": "/api/placeholder/400/400",
+      "drink": "/api/placeholder/400/400",
+      "default": "/api/placeholder/400/400"
+    };
+
+    async function loadMenu() {
+      try {
+        // Query Supabase for menu items ordered by category
+        const { data, error } = await supabase
+          .from('menu_items')
+          .select('*')
+          .order('category', { ascending: true });
+
+        if (error) throw error;
+
+        // Hide loader once data is retrieved
+        document.querySelector('.loader').style.display = 'none';
+
+        // Group items by category
+        const grouped = {};
+        data.forEach(item => {
+          if (!grouped[item.category]) grouped[item.category] = [];
+          grouped[item.category].push(item);
+        });
+
+        // Retrieve navigation container and main sections container
+        const nav = document.getElementById('categoryNav');
+        const sections = document.getElementById('menuSections');
+
+        // Clear any existing navigation content (loader)
+        nav.innerHTML = '';
+
+        // Define the desired category order
+        const categoryOrder = [
+          "Cookies", "Rolls", "Cake Slices", "Cups", "Tartes", 
+          "Cheesecakes", "Ice Cream", "Drinks", "Add-ons"
+        ];
+
+        // Sort categories based on predefined order
+        const sortedCategories = Object.keys(grouped).sort((a, b) => {
+          const indexA = categoryOrder.indexOf(a) === -1 ? Infinity : categoryOrder.indexOf(a);
+          const indexB = categoryOrder.indexOf(b) === -1 ? Infinity : categoryOrder.indexOf(b);
+          return indexA - indexB;
+        });
+
+        // Loop through sorted categories to build navigation links and content sections
+        sortedCategories.forEach(category => {
+          const catId = category.toLowerCase().replace(/\s+/g, '-');
+          const icon = iconMap[category] || 'fa-utensils';
+
+          // Create nav link for the category
+          const link = document.createElement('a');
+          link.href = `#${catId}`;
+          link.innerHTML = `<i class="fas ${icon}"></i>${category}`;
+          nav.appendChild(link);
+
+          // Create a new section for the category
+          const section = document.createElement('section');
+          section.id = catId;
+
+          // Section header
+          const titleDiv = document.createElement('div');
+          titleDiv.className = 'section-title';
+
+          const title = document.createElement('h2');
+          title.textContent = category;
+          titleDiv.appendChild(title);
+          section.appendChild(titleDiv);
+
+          // Create a grid container for menu items
+          const grid = document.createElement('div');
+          grid.className = 'items-grid';
+
+          // Helper function to determine the image type based on category
+          function getImageType(category) {
+            category = category.toLowerCase();
+            if (category.includes('cookie')) return 'cookie';
+            if (category.includes('roll')) return 'roll';
+            if (category.includes('cake') || category.includes('tarte') || category.includes('cheesecake')) return 'cake';
+            if (category.includes('drink') || category.includes('coffee')) return 'drink';
+            return 'default';
+          }
+
+          // Loop over items in the current category to generate cards
+          grouped[category].forEach(item => {
+            const card = document.createElement('div');
+            card.className = 'item-card';
+
+            // Image container
+            const imageContainer = document.createElement('div');
+            imageContainer.className = 'item-image';
+
+            // Get image source - use item's image if available or get placeholder based on category
+            let imgSrc = item.image_url ? item.image_url : foodImages[getImageType(category)];
+            
+            const img = document.createElement('img');
+            img.src = imgSrc;
+            img.alt = item.item_name;
+            imageContainer.appendChild(img);
+            card.appendChild(imageContainer);
+
+            // Add badge if it's a special item
+            if (specialBadges[item.item_name]) {
+              const badge = document.createElement('div');
+              badge.className = 'badge';
+              badge.textContent = specialBadges[item.item_name];
+              card.appendChild(badge);
+            }
+
+            // Content container
+            const content = document.createElement('div');
+            content.className = 'item-content';
+
+            const name = document.createElement('div');
+            name.className = 'item-name';
+            name.textContent = item.item_name;
+
+            const desc = document.createElement('div');
+            desc.className = 'item-desc';
+            desc.textContent = item.description || 'A delicious treat made with the finest ingredients.';
+
+            const footer = document.createElement('div');
+            footer.className = 'item-footer';
+
+            const price = document.createElement('div');
+            price.className = 'item-price';
+            price.textContent = `$${parseFloat(item.price).toFixed(2)}`;
+
+            footer.appendChild(price);
+
+            // Create and append elements to build the card structure
+            content.appendChild(name);
+            content.appendChild(desc);
+            content.appendChild(footer);
+            card.appendChild(content);
+            grid.appendChild(card);
+          });
+
+          section.appendChild(grid);
+          sections.appendChild(section);
+        });
+
+        // --- Intersection Observer for active navigation link highlighting ---
+        const navLinks = document.querySelectorAll('nav a');
+        const observerOptions = {
+          rootMargin: '-100px 0px -90% 0px',
+          threshold: 0
+        };
+
+        // Check if browser supports IntersectionObserver
+        if ('IntersectionObserver' in window) {
+          const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+              const id = entry.target.getAttribute('id');
+              const link = document.querySelector(`nav a[href="#${id}"]`);
+              if (entry.isIntersecting) {
+                navLinks.forEach(navLink => navLink.classList.remove('active'));
+                if (link) link.classList.add('active');
+              }
+            });
+          }, observerOptions);
+
+          document.querySelectorAll('section').forEach(section => {
+            observer.observe(section);
+          });
+        }
+
+        // --- Auto-scroll first category nav link into view ---
+        if (navLinks.length > 0) {
+          navLinks[0].classList.add('active');
+        }
+
+        // --- Navbar style update on scroll ---
+        const navBar = document.querySelector('.nav-wrapper');
+        window.addEventListener('scroll', () => {
+          if (window.scrollY > 100) {
+            navBar.classList.add('scrolled');
+          } else {
+            navBar.classList.remove('scrolled');
+          }
+        });
+
+        // --- Smooth scrolling for navigation links ---
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+          anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href');
+            const targetElement = document.querySelector(targetId);
+            if (targetElement) {
+              window.scrollTo({
+                top: targetElement.offsetTop - 80,
+                behavior: 'smooth'
+              });
+              
+              // Also scroll the clicked link into view in the navigation bar
+              this.scrollIntoView({
+                behavior: 'smooth',
+                block: 'nearest',
+                inline: 'center'
+              });
+            }
+          });
+        });
+      } catch (error) {
+        console.error('Error loading menu:', error);
+        document.getElementById('menuSections').innerHTML = `
+          <div style="text-align: center; padding: 3rem;">
+            <h2>Oops! Something went wrong.</h2>
+            <p>We couldn't load our menu. Please try again later.</p>
+          </div>
+        `;
+      }
+    }
+
+    // Initialize the menu when the document is ready
+    document.addEventListener('DOMContentLoaded', loadMenu);
   </script>
 </body>
 </html>
