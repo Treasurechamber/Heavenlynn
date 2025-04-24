@@ -25,6 +25,7 @@
       --radius-sm: 12px;
       --radius-md: 20px;
       --radius-lg: 30px;
+      --whatsapp: #25D366;
     }
 
     * {
@@ -240,37 +241,38 @@
       box-shadow: var(--shadow-md);
     }
 
-    /* Category scroll button */
-    .category-scroll-btn {
+    /* WhatsApp Button */
+    .whatsapp-btn {
       position: fixed;
       right: 20px;
-      bottom: 80px;
-      width: 50px;
-      height: 50px;
-      background: var(--primary);
+      bottom: 30px;
+      width: 60px;
+      height: 60px;
+      background: var(--whatsapp);
       color: white;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.5rem;
+      font-size: 1.8rem;
       box-shadow: var(--shadow-md);
       cursor: pointer;
-      z-index: 20;
+      z-index: 30;
       transition: var(--transition);
       border: none;
+      text-decoration: none;
     }
 
-    .category-scroll-btn:hover {
-      background: var(--primary-dark);
-      transform: translateY(-5px) rotate(-15deg);
+    .whatsapp-btn:hover {
+      transform: translateY(-5px) scale(1.05);
       box-shadow: var(--shadow-lg);
     }
 
+    /* Category dropdown */
     .category-dropdown {
       position: fixed;
       right: 20px;
-      bottom: 140px;
+      bottom: 100px;
       background: white;
       border-radius: var(--radius-md);
       box-shadow: var(--shadow-lg);
@@ -459,33 +461,6 @@
       z-index: 1;
     }
 
-    /* Cookie animation */
-    .floating-cookies {
-      position: fixed;
-      bottom: -50px;
-      z-index: 5;
-      opacity: 0.7;
-      pointer-events: none;
-      animation: floatUp 15s linear infinite;
-    }
-
-    @keyframes floatUp {
-      0% {
-        transform: translateY(0) rotate(0deg);
-        opacity: 0;
-      }
-      10% {
-        opacity: 0.7;
-      }
-      90% {
-        opacity: 0.4;
-      }
-      100% {
-        transform: translateY(-100vh) rotate(360deg);
-        opacity: 0;
-      }
-    }
-
     /* Custom scrollbar */
     ::-webkit-scrollbar {
       width: 8px;
@@ -664,10 +639,10 @@
     <!-- Menu items will be dynamically inserted here -->
   </main>
 
-  <!-- Floating Category Scroll Button -->
-  <button class="category-scroll-btn" id="categoryScrollBtn" aria-label="Browse Categories">
-    <i class="fas fa-cookie-bite"></i>
-  </button>
+  <!-- WhatsApp Button -->
+  <a href="https://wa.me/70006252" class="whatsapp-btn" target="_blank" aria-label="Contact on WhatsApp">
+    <i class="fab fa-whatsapp"></i>
+  </a>
 
   <!-- Category Dropdown -->
   <div class="category-dropdown" id="categoryDropdown">
@@ -675,11 +650,6 @@
     <ul id="categoryDropdownList">
       <!-- Categories will be dynamically inserted here -->
     </ul>
-  </div>
-
-  <!-- Floating Cookies Animation -->
-  <div class="floating-cookies-container" id="floatingCookiesContainer">
-    <!-- Cookies will be dynamically inserted here -->
   </div>
 
   <!-- Footer -->
@@ -736,37 +706,20 @@
       "default": "/api/placeholder/400/400"
     };
 
-    // Floating cookies animation
-    function createFloatingCookies() {
-      const container = document.getElementById('floatingCookiesContainer');
-      const cookieEmojis = ['🍪', '🥐', '🧁', '🍰', '🍩'];
-      const numCookies = 10;
-      
-      for (let i = 0; i < numCookies; i++) {
-        const cookie = document.createElement('div');
-        cookie.className = 'floating-cookies';
-        cookie.style.left = `${Math.random() * 100}vw`;
-        cookie.style.animationDuration = `${15 + Math.random() * 10}s`;
-        cookie.style.animationDelay = `${Math.random() * 5}s`;
-        cookie.style.fontSize = `${20 + Math.random() * 20}px`;
-        cookie.style.opacity = `${0.4 + Math.random() * 0.3}`;
-        cookie.textContent = cookieEmojis[Math.floor(Math.random() * cookieEmojis.length)];
-        container.appendChild(cookie);
-      }
-    }
-
-    // Toggle category dropdown
-    function setupCategoryScrollButton() {
-      const button = document.getElementById('categoryScrollBtn');
+    // Toggle category dropdown when clicking on WhatsApp button
+    function setupCategoryDropdown() {
+      const whatsappBtn = document.querySelector('.whatsapp-btn');
       const dropdown = document.getElementById('categoryDropdown');
       
-      button.addEventListener('click', function() {
+      // Add click event listener
+      whatsappBtn.addEventListener('contextmenu', function(e) {
+        e.preventDefault(); // Prevent default right-click menu
         dropdown.classList.toggle('show');
       });
       
       // Close dropdown when clicking outside
       document.addEventListener('click', function(event) {
-        if (!button.contains(event.target) && !dropdown.contains(event.target)) {
+        if (!whatsappBtn.contains(event.target) && !dropdown.contains(event.target)) {
           dropdown.classList.remove('show');
         }
       });
@@ -964,45 +917,4 @@
 
         // --- Smooth scrolling for navigation links ---
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-          anchor.addEventListener('click', function(e) {
-            e.preventDefault();
-            const targetId = this.getAttribute('href');
-            const targetElement = document.querySelector(targetId);
-            if (targetElement) {
-              window.scrollTo({
-                top: targetElement.offsetTop - 80,
-                behavior: 'smooth'
-              });
-              
-              // Also scroll the clicked link into view in the navigation bar
-              this.scrollIntoView({
-                behavior: 'smooth',
-                block: 'nearest',
-                inline: 'center'
-              });
-            }
-          });
-        });
-        
-        // Initialize the floating cookies animation
-        createFloatingCookies();
-        
-        // Initialize category scroll button and dropdown
-        setupCategoryScrollButton();
-        
-      } catch (error) {
-        console.error('Error loading menu:', error);
-        document.getElementById('menuSections').innerHTML = `
-          <div style="text-align: center; padding: 3rem;">
-            <h2>Oops! Something went wrong.</h2>
-            <p>We couldn't load our menu. Please try again later.</p>
-          </div>
-        `;
-      }
-    }
-
-    // Initialize the menu when the document is ready
-    document.addEventListener('DOMContentLoaded', loadMenu);
-  </script>
-</body>
-</html>
+          anchor.addEventListener('click', function
