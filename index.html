@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Heavenlynn Menu</title>
   <script src="https://unpkg.com/@supabase/supabase-js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Playfair+Display:wght@500;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
   <style>
     :root {
@@ -42,6 +42,55 @@
 
     h1, h2, h3 {
       font-family: 'Playfair Display', serif;
+    }
+
+    /* Contact info bar */
+    .contact-bar {
+      background: var(--primary-dark);
+      color: white;
+      padding: 10px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      position: sticky;
+      top: 0;
+      z-index: 25;
+    }
+
+    .contact-info {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .contact-info div {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.85rem;
+    }
+
+    .contact-info i {
+      font-size: 1rem;
+    }
+
+    .social-icons {
+      display: flex;
+      gap: 12px;
+    }
+
+    .social-icons a {
+      color: white;
+      font-size: 1.2rem;
+      transition: var(--transition);
+    }
+
+    .social-icons a:hover {
+      color: var(--accent);
+      transform: translateY(-3px);
     }
 
     .hero {
@@ -86,7 +135,8 @@
     }
 
     .hero h1 {
-      font-size: clamp(3rem, 8vw, 5rem);
+      font-family: 'Dancing Script', cursive;
+      font-size: clamp(3.5rem, 10vw, 6rem);
       font-weight: 700;
       color: #ffffff;
       margin-bottom: 1rem;
@@ -132,7 +182,7 @@
       background: rgba(255, 255, 255, 0.95);
       backdrop-filter: blur(8px);
       position: sticky;
-      top: 0;
+      top: 45px;
       z-index: 20;
       box-shadow: var(--shadow-sm);
       padding: 1rem;
@@ -188,6 +238,96 @@
       color: white;
       transform: translateY(-3px);
       box-shadow: var(--shadow-md);
+    }
+
+    /* Category scroll button */
+    .category-scroll-btn {
+      position: fixed;
+      right: 20px;
+      bottom: 80px;
+      width: 50px;
+      height: 50px;
+      background: var(--primary);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      box-shadow: var(--shadow-md);
+      cursor: pointer;
+      z-index: 20;
+      transition: var(--transition);
+      border: none;
+    }
+
+    .category-scroll-btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-5px) rotate(-15deg);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .category-dropdown {
+      position: fixed;
+      right: 20px;
+      bottom: 140px;
+      background: white;
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-lg);
+      padding: 1rem;
+      z-index: 20;
+      min-width: 200px;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(20px);
+      transition: var(--transition);
+    }
+
+    .category-dropdown.show {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .category-dropdown-title {
+      font-weight: 600;
+      margin-bottom: 10px;
+      color: var(--primary-dark);
+      border-bottom: 1px solid var(--primary-light);
+      padding-bottom: 5px;
+    }
+
+    .category-dropdown ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    .category-dropdown li {
+      margin-bottom: 5px;
+    }
+
+    .category-dropdown a {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      color: var(--text);
+      text-decoration: none;
+      border-radius: var(--radius-sm);
+      transition: var(--transition);
+    }
+
+    .category-dropdown a:hover {
+      background: var(--primary-light);
+      color: var(--primary-dark);
+    }
+
+    .category-dropdown a i {
+      font-size: 0.9rem;
+      color: var(--primary);
     }
 
     main {
@@ -319,6 +459,33 @@
       z-index: 1;
     }
 
+    /* Cookie animation */
+    .floating-cookies {
+      position: fixed;
+      bottom: -50px;
+      z-index: 5;
+      opacity: 0.7;
+      pointer-events: none;
+      animation: floatUp 15s linear infinite;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 0;
+      }
+      10% {
+        opacity: 0.7;
+      }
+      90% {
+        opacity: 0.4;
+      }
+      100% {
+        transform: translateY(-100vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
     /* Custom scrollbar */
     ::-webkit-scrollbar {
       width: 8px;
@@ -348,8 +515,8 @@
     }
 
     .footer-logo {
-      font-family: 'Playfair Display', serif;
-      font-size: 2rem;
+      font-family: 'Dancing Script', cursive;
+      font-size: 2.5rem;
       margin-bottom: 1rem;
     }
 
@@ -455,6 +622,17 @@
   </style>
 </head>
 <body>
+  <!-- Contact Bar -->
+  <div class="contact-bar">
+    <div class="contact-info">
+      <div><i class="fas fa-map-marker-alt"></i> Tyre, Lebanon</div>
+      <div><i class="fas fa-phone"></i> 70006252</div>
+    </div>
+    <div class="social-icons">
+      <a href="https://www.instagram.com/" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+    </div>
+  </div>
+
   <!-- Hero Section -->
   <div class="hero" role="banner">
     <div class="hero-overlay" aria-hidden="true"></div>
@@ -486,18 +664,36 @@
     <!-- Menu items will be dynamically inserted here -->
   </main>
 
+  <!-- Floating Category Scroll Button -->
+  <button class="category-scroll-btn" id="categoryScrollBtn" aria-label="Browse Categories">
+    <i class="fas fa-cookie-bite"></i>
+  </button>
+
+  <!-- Category Dropdown -->
+  <div class="category-dropdown" id="categoryDropdown">
+    <div class="category-dropdown-title">Browse Categories</div>
+    <ul id="categoryDropdownList">
+      <!-- Categories will be dynamically inserted here -->
+    </ul>
+  </div>
+
+  <!-- Floating Cookies Animation -->
+  <div class="floating-cookies-container" id="floatingCookiesContainer">
+    <!-- Cookies will be dynamically inserted here -->
+  </div>
+
   <!-- Footer -->
   <footer role="contentinfo">
     <div class="footer-content">
       <div class="footer-logo">Heavenlynn</div>
       <div class="social-links">
-        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="https://www.instagram.com/" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
         <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
         <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
         <a href="#" aria-label="Pinterest"><i class="fab fa-pinterest"></i></a>
       </div>
       <p class="footer-text">© 2025 Heavenlynn Bakery. All rights reserved.</p>
-      <p class="footer-text">123 Sweet Street, Dessert City</p>
+      <p class="footer-text">Tyre, Lebanon • 70006252</p>
     </div>
   </footer>
 
@@ -540,6 +736,42 @@
       "default": "/api/placeholder/400/400"
     };
 
+    // Floating cookies animation
+    function createFloatingCookies() {
+      const container = document.getElementById('floatingCookiesContainer');
+      const cookieEmojis = ['🍪', '🥐', '🧁', '🍰', '🍩'];
+      const numCookies = 10;
+      
+      for (let i = 0; i < numCookies; i++) {
+        const cookie = document.createElement('div');
+        cookie.className = 'floating-cookies';
+        cookie.style.left = `${Math.random() * 100}vw`;
+        cookie.style.animationDuration = `${15 + Math.random() * 10}s`;
+        cookie.style.animationDelay = `${Math.random() * 5}s`;
+        cookie.style.fontSize = `${20 + Math.random() * 20}px`;
+        cookie.style.opacity = `${0.4 + Math.random() * 0.3}`;
+        cookie.textContent = cookieEmojis[Math.floor(Math.random() * cookieEmojis.length)];
+        container.appendChild(cookie);
+      }
+    }
+
+    // Toggle category dropdown
+    function setupCategoryScrollButton() {
+      const button = document.getElementById('categoryScrollBtn');
+      const dropdown = document.getElementById('categoryDropdown');
+      
+      button.addEventListener('click', function() {
+        dropdown.classList.toggle('show');
+      });
+      
+      // Close dropdown when clicking outside
+      document.addEventListener('click', function(event) {
+        if (!button.contains(event.target) && !dropdown.contains(event.target)) {
+          dropdown.classList.remove('show');
+        }
+      });
+    }
+
     async function loadMenu() {
       try {
         // Query Supabase for menu items ordered by category
@@ -563,9 +795,11 @@
         // Retrieve navigation container and main sections container
         const nav = document.getElementById('categoryNav');
         const sections = document.getElementById('menuSections');
+        const dropdownList = document.getElementById('categoryDropdownList');
 
         // Clear any existing navigation content (loader)
         nav.innerHTML = '';
+        dropdownList.innerHTML = '';
 
         // Define the desired category order
         const categoryOrder = [
@@ -590,6 +824,17 @@
           link.href = `#${catId}`;
           link.innerHTML = `<i class="fas ${icon}"></i>${category}`;
           nav.appendChild(link);
+
+          // Create dropdown link for the category
+          const dropdownItem = document.createElement('li');
+          const dropdownLink = document.createElement('a');
+          dropdownLink.href = `#${catId}`;
+          dropdownLink.innerHTML = `<i class="fas ${icon}"></i>${category}`;
+          dropdownLink.addEventListener('click', function() {
+            document.getElementById('categoryDropdown').classList.remove('show');
+          });
+          dropdownItem.appendChild(dropdownLink);
+          dropdownList.appendChild(dropdownItem);
 
           // Create a new section for the category
           const section = document.createElement('section');
@@ -738,6 +983,13 @@
             }
           });
         });
+        
+        // Initialize the floating cookies animation
+        createFloatingCookies();
+        
+        // Initialize category scroll button and dropdown
+        setupCategoryScrollButton();
+        
       } catch (error) {
         console.error('Error loading menu:', error);
         document.getElementById('menuSections').innerHTML = `
