@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Heavenlynn Menu</title>
   <script src="https://unpkg.com/@supabase/supabase-js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Playfair+Display:wght@500;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
   <style>
     :root {
@@ -13,7 +13,6 @@
       --primary-light: #e4d7ff;
       --primary-dark: #4e3474;
       --accent: #ff7eb5;
-      /* Updated the background to a purple tone */
       --background: #e0d7ff;
       --card-bg: #ffffff;
       --text: #301e54;
@@ -43,6 +42,55 @@
 
     h1, h2, h3 {
       font-family: 'Playfair Display', serif;
+    }
+
+    /* Contact info bar */
+    .contact-bar {
+      background: var(--primary-dark);
+      color: white;
+      padding: 10px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      position: sticky;
+      top: 0;
+      z-index: 25;
+    }
+
+    .contact-info {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .contact-info div {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.85rem;
+    }
+
+    .contact-info i {
+      font-size: 1rem;
+    }
+
+    .social-icons {
+      display: flex;
+      gap: 12px;
+    }
+
+    .social-icons a {
+      color: white;
+      font-size: 1.2rem;
+      transition: var(--transition);
+    }
+
+    .social-icons a:hover {
+      color: var(--accent);
+      transform: translateY(-3px);
     }
 
     .hero {
@@ -87,7 +135,8 @@
     }
 
     .hero h1 {
-      font-size: clamp(3rem, 8vw, 5rem);
+      font-family: 'Dancing Script', cursive;
+      font-size: clamp(3.5rem, 10vw, 6rem);
       font-weight: 700;
       color: #ffffff;
       margin-bottom: 1rem;
@@ -133,7 +182,7 @@
       background: rgba(255, 255, 255, 0.95);
       backdrop-filter: blur(8px);
       position: sticky;
-      top: 0;
+      top: 45px;
       z-index: 20;
       box-shadow: var(--shadow-sm);
       padding: 1rem;
@@ -144,35 +193,44 @@
       padding: 0.7rem 1rem;
     }
 
-    /* Changed container to a nav element for semantic clarity */
     nav.nav-container {
       display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 0.8rem;
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      gap: 0.5rem;
       max-width: 1200px;
       margin: auto;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: 0.5rem;
+      scrollbar-width: none; /* Firefox */
+    }
+
+    nav.nav-container::-webkit-scrollbar {
+      display: none; /* Chrome, Safari, Opera */
     }
 
     nav a {
       text-decoration: none;
       color: var(--primary-dark);
       font-weight: 500;
-      padding: 0.8rem 1.2rem;
+      padding: 0.6rem 0.8rem;
       border-radius: var(--radius-sm);
       background: #f9f5ff;
       display: flex;
       align-items: center;
-      gap: 8px;
-      font-size: 0.95rem;
+      gap: 6px;
+      font-size: 0.85rem;
       box-shadow: var(--shadow-sm);
       transition: var(--transition);
-      min-width: 110px;
+      min-width: auto;
+      flex: 0 0 auto;
       justify-content: center;
+      white-space: nowrap;
     }
 
     nav a i {
-      font-size: 1.1rem;
+      font-size: 0.9rem;
     }
 
     nav a:hover, nav a.active {
@@ -180,6 +238,96 @@
       color: white;
       transform: translateY(-3px);
       box-shadow: var(--shadow-md);
+    }
+
+    /* Category scroll button */
+    .category-scroll-btn {
+      position: fixed;
+      right: 20px;
+      bottom: 80px;
+      width: 50px;
+      height: 50px;
+      background: var(--primary);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      box-shadow: var(--shadow-md);
+      cursor: pointer;
+      z-index: 20;
+      transition: var(--transition);
+      border: none;
+    }
+
+    .category-scroll-btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-5px) rotate(-15deg);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .category-dropdown {
+      position: fixed;
+      right: 20px;
+      bottom: 140px;
+      background: white;
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-lg);
+      padding: 1rem;
+      z-index: 20;
+      min-width: 200px;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(20px);
+      transition: var(--transition);
+    }
+
+    .category-dropdown.show {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .category-dropdown-title {
+      font-weight: 600;
+      margin-bottom: 10px;
+      color: var(--primary-dark);
+      border-bottom: 1px solid var(--primary-light);
+      padding-bottom: 5px;
+    }
+
+    .category-dropdown ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    .category-dropdown li {
+      margin-bottom: 5px;
+    }
+
+    .category-dropdown a {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      color: var(--text);
+      text-decoration: none;
+      border-radius: var(--radius-sm);
+      transition: var(--transition);
+    }
+
+    .category-dropdown a:hover {
+      background: var(--primary-light);
+      color: var(--primary-dark);
+    }
+
+    .category-dropdown a i {
+      font-size: 0.9rem;
+      color: var(--primary);
     }
 
     main {
@@ -205,7 +353,7 @@
     }
 
     .section-title h2 {
-      font-size: 2.2rem;
+      font-size: 2rem;
       margin: 0;
       color: var(--primary-dark);
       position: relative;
@@ -219,11 +367,11 @@
 
     .items-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 25px;
+      gap: 16px;
+      grid-template-columns: repeat(1, 1fr);
     }
 
-    /* Updated item-card for horizontal layout with circular images */
+    /* Card layout updated for mobile-first design */
     .item-card {
       background: var(--card-bg);
       border-radius: var(--radius-md);
@@ -231,24 +379,21 @@
       overflow: hidden;
       transition: var(--transition);
       position: relative;
-      display: flex;
-      flex-direction: row;
+      display: grid;
+      grid-template-columns: 100px 1fr;
       align-items: center;
-      /* Remove fixed height to accommodate variable content */
     }
 
     .item-card:hover {
-      transform: translateY(-5px) scale(1.01);
+      transform: translateY(-5px);
       box-shadow: var(--shadow-lg);
     }
 
-    /* Update image container to be fixed square with circular images */
     .item-image {
-      flex: 0 0 150px;
-      width: 150px;
-      height: 150px;
-      margin-right: 1.5rem;
+      width: 100px;
+      height: 100px;
       overflow: hidden;
+      position: relative;
     }
 
     .item-card img {
@@ -256,66 +401,95 @@
       height: 100%;
       object-fit: cover;
       transition: transform 0.5s ease;
-      border-radius: 50%;
+      filter: saturate(1.2) contrast(1.1); /* Makes food photos look more genuine */
     }
 
     .item-card:hover img {
       transform: scale(1.05);
     }
 
-    /* Right side: content */
     .item-content {
-      flex: 1;
-      padding: 1.2rem;
+      padding: 0.8rem;
       display: flex;
       flex-direction: column;
     }
 
     .item-name {
-      font-size: 1.3rem;
+      font-size: 1.1rem;
       font-weight: 600;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.3rem;
       color: var(--primary-dark);
+      line-height: 1.2;
     }
 
     .item-desc {
-      font-size: 0.95rem;
+      font-size: 0.85rem;
       color: var(--text-light);
-      margin-bottom: 1rem;
-      flex-grow: 1;
+      margin-bottom: 0.5rem;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      line-height: 1.4;
     }
 
-    /* Footer with price appears at the bottom of the content column */
     .item-footer {
       display: flex;
-      justify-content: flex-start;
+      justify-content: space-between;
       align-items: center;
+      margin-top: auto;
     }
 
     .item-price {
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       font-weight: bold;
       color: var(--primary);
     }
 
-    /* Responsive adjustments: on smaller screens, revert to vertical layout */
-    @media (max-width: 600px) {
-      .item-card {
-        flex-direction: column;
-        align-items: center;
+    .badge {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: var(--accent);
+      color: white;
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-size: 0.7rem;
+      font-weight: 500;
+      z-index: 1;
+    }
+
+    /* Cookie animation */
+    .floating-cookies {
+      position: fixed;
+      bottom: -50px;
+      z-index: 5;
+      opacity: 0.7;
+      pointer-events: none;
+      animation: floatUp 15s linear infinite;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 0;
       }
-      .item-image {
-        flex: none;
-        width: 150px;
-        height: 150px;
-        margin-right: 0;
-        margin-bottom: 1rem;
+      10% {
+        opacity: 0.7;
+      }
+      90% {
+        opacity: 0.4;
+      }
+      100% {
+        transform: translateY(-100vh) rotate(360deg);
+        opacity: 0;
       }
     }
 
     /* Custom scrollbar */
     ::-webkit-scrollbar {
       width: 8px;
+      height: 6px;
     }
     ::-webkit-scrollbar-track {
       background: #f1f1f1;
@@ -341,8 +515,8 @@
     }
 
     .footer-logo {
-      font-family: 'Playfair Display', serif;
-      font-size: 2rem;
+      font-family: 'Dancing Script', cursive;
+      font-size: 2.5rem;
       margin-bottom: 1rem;
     }
 
@@ -369,33 +543,52 @@
       opacity: 0.8;
     }
 
-    /* Responsive adjustments for hero and grid */
-    @media (max-width: 768px) {
-      .hero {
-        height: 60vh;
-      }
-      
+    /* Responsive adjustments */
+    @media (min-width: 480px) {
       .items-grid {
-        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-      }
-      
-      .section-title h2 {
-        font-size: 1.8rem;
+        grid-template-columns: repeat(2, 1fr);
       }
     }
 
-    @media (max-width: 480px) {
-      .hero h1 {
-        font-size: 2.5rem;
+    @media (min-width: 768px) {
+      .items-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
       }
       
+      .section-title h2 {
+        font-size: 2.2rem;
+      }
+      
+      nav a {
+        padding: 0.8rem 1.2rem;
+        font-size: 0.95rem;
+        gap: 8px;
+      }
+      
+      nav a i {
+        font-size: 1.1rem;
+      }
+    }
+
+    @media (min-width: 1024px) {
       .items-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 25px;
+      }
+      
+      .item-card {
         grid-template-columns: 1fr;
+        grid-template-rows: 150px 1fr;
       }
       
       .item-image {
+        width: 100%;
         height: 150px;
-        width: 150px;
+      }
+      
+      .item-name {
+        font-size: 1.2rem;
       }
     }
 
@@ -429,6 +622,17 @@
   </style>
 </head>
 <body>
+  <!-- Contact Bar -->
+  <div class="contact-bar">
+    <div class="contact-info">
+      <div><i class="fas fa-map-marker-alt"></i> Tyre, Lebanon</div>
+      <div><i class="fas fa-phone"></i> 70006252</div>
+    </div>
+    <div class="social-icons">
+      <a href="https://www.instagram.com/" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+    </div>
+  </div>
+
   <!-- Hero Section -->
   <div class="hero" role="banner">
     <div class="hero-overlay" aria-hidden="true"></div>
@@ -436,7 +640,6 @@
     <img src="https://cfvsxnvvkdskbkljqicw.supabase.co/storage/v1/object/public/menu-photos//Heavenlynn%20Uplifted%20Logo%20-%20Digital%20Use%20(2).jpg" class="hero-video" alt="Bakery Display">
     <div class="hero-content">
       <h1>Heavenlynn</h1>
-      <p>Indulge in divine treats crafted with love and passion. Our heavenly delights await your taste buds.</p>
     </div>
     <a href="#menu" class="scroll-down" aria-label="Scroll Down">
       <i class="fas fa-chevron-down"></i>
@@ -461,18 +664,36 @@
     <!-- Menu items will be dynamically inserted here -->
   </main>
 
+  <!-- Floating Category Scroll Button -->
+  <button class="category-scroll-btn" id="categoryScrollBtn" aria-label="Browse Categories">
+    <i class="fas fa-cookie-bite"></i>
+  </button>
+
+  <!-- Category Dropdown -->
+  <div class="category-dropdown" id="categoryDropdown">
+    <div class="category-dropdown-title">Browse Categories</div>
+    <ul id="categoryDropdownList">
+      <!-- Categories will be dynamically inserted here -->
+    </ul>
+  </div>
+
+  <!-- Floating Cookies Animation -->
+  <div class="floating-cookies-container" id="floatingCookiesContainer">
+    <!-- Cookies will be dynamically inserted here -->
+  </div>
+
   <!-- Footer -->
   <footer role="contentinfo">
     <div class="footer-content">
       <div class="footer-logo">Heavenlynn</div>
       <div class="social-links">
-        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="https://www.instagram.com/" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
         <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
         <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
         <a href="#" aria-label="Pinterest"><i class="fab fa-pinterest"></i></a>
       </div>
       <p class="footer-text">© 2025 Heavenlynn Bakery. All rights reserved.</p>
-      <p class="footer-text">123 Sweet Street, Dessert City</p>
+      <p class="footer-text">Tyre, Lebanon • 70006252</p>
     </div>
   </footer>
 
@@ -483,7 +704,7 @@
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNmdnN4bnZ2a2Rza2JrbGpxaWN3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ1MzU0MTcsImV4cCI6MjA2MDExMTQxN30.dNZsSOJyW1bE4bDQP-AIEYV7Z6hlw_iVMN6LZ2IdPio'
     );
 
-    // Map categories to appropriate Font Awesome icons
+    // Map categories to appropriate Font Awesome icons (smaller icons)
     const iconMap = {
       "Cookies": "fa-cookie",
       "Rolls": "fa-bread-slice",
@@ -496,7 +717,7 @@
       "Ice Cream": "fa-ice-cream"
     };
 
-    // Special item badges (for demo purposes)
+    // Special item badges
     const specialBadges = {
       "Chocolate Chip Cookie": "Popular",
       "Cinnamon Roll": "Best Seller",
@@ -504,6 +725,52 @@
       "Cappuccino": "New",
       "Strawberry Cheesecake": "Chef's Choice"
     };
+
+    // Sample genuine food images for demo purposes
+    // In a real application, these would be actual URLs to product images
+    const foodImages = {
+      "cookie": "/api/placeholder/400/400",
+      "roll": "/api/placeholder/400/400",
+      "cake": "/api/placeholder/400/400",
+      "drink": "/api/placeholder/400/400",
+      "default": "/api/placeholder/400/400"
+    };
+
+    // Floating cookies animation
+    function createFloatingCookies() {
+      const container = document.getElementById('floatingCookiesContainer');
+      const cookieEmojis = ['🍪', '🥐', '🧁', '🍰', '🍩'];
+      const numCookies = 10;
+      
+      for (let i = 0; i < numCookies; i++) {
+        const cookie = document.createElement('div');
+        cookie.className = 'floating-cookies';
+        cookie.style.left = `${Math.random() * 100}vw`;
+        cookie.style.animationDuration = `${15 + Math.random() * 10}s`;
+        cookie.style.animationDelay = `${Math.random() * 5}s`;
+        cookie.style.fontSize = `${20 + Math.random() * 20}px`;
+        cookie.style.opacity = `${0.4 + Math.random() * 0.3}`;
+        cookie.textContent = cookieEmojis[Math.floor(Math.random() * cookieEmojis.length)];
+        container.appendChild(cookie);
+      }
+    }
+
+    // Toggle category dropdown
+    function setupCategoryScrollButton() {
+      const button = document.getElementById('categoryScrollBtn');
+      const dropdown = document.getElementById('categoryDropdown');
+      
+      button.addEventListener('click', function() {
+        dropdown.classList.toggle('show');
+      });
+      
+      // Close dropdown when clicking outside
+      document.addEventListener('click', function(event) {
+        if (!button.contains(event.target) && !dropdown.contains(event.target)) {
+          dropdown.classList.remove('show');
+        }
+      });
+    }
 
     async function loadMenu() {
       try {
@@ -528,9 +795,11 @@
         // Retrieve navigation container and main sections container
         const nav = document.getElementById('categoryNav');
         const sections = document.getElementById('menuSections');
+        const dropdownList = document.getElementById('categoryDropdownList');
 
         // Clear any existing navigation content (loader)
         nav.innerHTML = '';
+        dropdownList.innerHTML = '';
 
         // Define the desired category order
         const categoryOrder = [
@@ -538,15 +807,14 @@
           "Cheesecakes", "Ice Cream", "Drinks", "Add-ons"
         ];
 
-        // Sort categories based on predefined order.
-        // Categories not in the list are pushed to the bottom.
+        // Sort categories based on predefined order
         const sortedCategories = Object.keys(grouped).sort((a, b) => {
           const indexA = categoryOrder.indexOf(a) === -1 ? Infinity : categoryOrder.indexOf(a);
           const indexB = categoryOrder.indexOf(b) === -1 ? Infinity : categoryOrder.indexOf(b);
           return indexA - indexB;
         });
 
-        // Loop through sorted categories to build navigation links and content sections.
+        // Loop through sorted categories to build navigation links and content sections
         sortedCategories.forEach(category => {
           const catId = category.toLowerCase().replace(/\s+/g, '-');
           const icon = iconMap[category] || 'fa-utensils';
@@ -556,6 +824,17 @@
           link.href = `#${catId}`;
           link.innerHTML = `<i class="fas ${icon}"></i>${category}`;
           nav.appendChild(link);
+
+          // Create dropdown link for the category
+          const dropdownItem = document.createElement('li');
+          const dropdownLink = document.createElement('a');
+          dropdownLink.href = `#${catId}`;
+          dropdownLink.innerHTML = `<i class="fas ${icon}"></i>${category}`;
+          dropdownLink.addEventListener('click', function() {
+            document.getElementById('categoryDropdown').classList.remove('show');
+          });
+          dropdownItem.appendChild(dropdownLink);
+          dropdownList.appendChild(dropdownItem);
 
           // Create a new section for the category
           const section = document.createElement('section');
@@ -574,23 +853,43 @@
           const grid = document.createElement('div');
           grid.className = 'items-grid';
 
+          // Helper function to determine the image type based on category
+          function getImageType(category) {
+            category = category.toLowerCase();
+            if (category.includes('cookie')) return 'cookie';
+            if (category.includes('roll')) return 'roll';
+            if (category.includes('cake') || category.includes('tarte') || category.includes('cheesecake')) return 'cake';
+            if (category.includes('drink') || category.includes('coffee')) return 'drink';
+            return 'default';
+          }
+
           // Loop over items in the current category to generate cards
           grouped[category].forEach(item => {
             const card = document.createElement('div');
             card.className = 'item-card';
 
-            // Left side: Circular image container
+            // Image container
             const imageContainer = document.createElement('div');
             imageContainer.className = 'item-image';
 
-            // Check if an image URL is provided
+            // Get image source - use item's image if available or get placeholder based on category
+            let imgSrc = item.image_url ? item.image_url : foodImages[getImageType(category)];
+            
             const img = document.createElement('img');
-            img.src = item.image_url ? item.image_url : `/api/placeholder/600/400`;
+            img.src = imgSrc;
             img.alt = item.item_name;
             imageContainer.appendChild(img);
             card.appendChild(imageContainer);
 
-            // Right side: Content (description and price)
+            // Add badge if it's a special item
+            if (specialBadges[item.item_name]) {
+              const badge = document.createElement('div');
+              badge.className = 'badge';
+              badge.textContent = specialBadges[item.item_name];
+              card.appendChild(badge);
+            }
+
+            // Content container
             const content = document.createElement('div');
             content.className = 'item-content';
 
@@ -609,12 +908,12 @@
             price.className = 'item-price';
             price.textContent = `$${parseFloat(item.price).toFixed(2)}`;
 
-            // Append name, description, and price into content container
+            footer.appendChild(price);
+
+            // Create and append elements to build the card structure
             content.appendChild(name);
             content.appendChild(desc);
-            footer.appendChild(price);
             content.appendChild(footer);
-
             card.appendChild(content);
             grid.appendChild(card);
           });
@@ -648,6 +947,11 @@
           });
         }
 
+        // --- Auto-scroll first category nav link into view ---
+        if (navLinks.length > 0) {
+          navLinks[0].classList.add('active');
+        }
+
         // --- Navbar style update on scroll ---
         const navBar = document.querySelector('.nav-wrapper');
         window.addEventListener('scroll', () => {
@@ -669,9 +973,23 @@
                 top: targetElement.offsetTop - 80,
                 behavior: 'smooth'
               });
+              
+              // Also scroll the clicked link into view in the navigation bar
+              this.scrollIntoView({
+                behavior: 'smooth',
+                block: 'nearest',
+                inline: 'center'
+              });
             }
           });
         });
+        
+        // Initialize the floating cookies animation
+        createFloatingCookies();
+        
+        // Initialize category scroll button and dropdown
+        setupCategoryScrollButton();
+        
       } catch (error) {
         console.error('Error loading menu:', error);
         document.getElementById('menuSections').innerHTML = `
