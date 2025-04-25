@@ -804,31 +804,31 @@
       "drink": "/api/placeholder/400/400",
       "default": "/api/placeholder/400/400"
     };
-    // Floating cookies animation - one cookie at a time with 15 second interval
-  function createFloatingCookies() {
+    // Floating s animation - one cookie at a time with 15 second interval
+  // Floating cookies animation - one cookie at a time, every 10 seconds
+function createFloatingCookies() {
   const container = document.getElementById('floatingCookiesContainer');
   const cookieEmoji = '🍪'; // Only cookie emoji
   
-  // Create one cookie initially
-  createSingleCookie();
+  // Create initial cookie
+  createCookie();
   
-  // Function to create a single cookie
-  function createSingleCookie() {
+  // Set interval to create a new cookie every 10 seconds
+  setInterval(createCookie, 10000);
+  
+  function createCookie() {
     // Clear any existing cookies first
     container.innerHTML = '';
     
-    // Create just one cookie
+    // Create a single new cookie
     const cookie = document.createElement('div');
     cookie.className = 'floating-cookies';
     cookie.style.left = `${Math.random() * 100}vw`;
-    cookie.style.animationDuration = '10s'; // Animation duration
+    cookie.style.animationDuration = '10s'; // Match the interval
     cookie.style.fontSize = `${20 + Math.random() * 15}px`;
     cookie.style.opacity = `${0.4 + Math.random() * 0.3}`;
     cookie.textContent = cookieEmoji;
     container.appendChild(cookie);
-    
-    // Wait 15 seconds before creating the next cookie
-    setTimeout(createSingleCookie, 15000);
   }
 }
 
