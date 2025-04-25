@@ -30,16 +30,16 @@
   text-decoration: none;
 }
 
-.whatsapp-cookie-btn:hover {
+.whatsapp--btn:hover {
   transform: translateY(-5px) rotate(15deg);
   box-shadow: var(--shadow-lg);
 }
 
-.whatsapp-cookie-btn i {
+.whatsapp--btn i {
   position: relative;
 }
 
-.whatsapp-cookie-btn::before {
+.whatsapp--btn::before {
   content: "🍪";
   position: absolute;
   font-size: 1.3rem;
@@ -525,7 +525,7 @@
     }
 
     /* animation */
-    .floating-cookies {
+    .floating-s {
       position: fixed;
       bottom: -50px;
       z-index: 5;
@@ -735,7 +735,7 @@
 
   <!-- Floating Category Scroll Button -->
   <button class="category-scroll-btn" id="categoryScrollBtn" aria-label="Browse Categories">
-    <i class="fas fa-cookie-bite"></i>
+    <i class="fas fa--bite"></i>
   </button>
 
   <!-- Category Dropdown -->
@@ -746,9 +746,9 @@
     </ul>
   </div>
 
-  <!-- Floating Cookies Animation -->
-  <div class="floating-cookies-container" id="floatingCookiesContainer">
-    <!-- Cookies will be dynamically inserted here -->
+  <!-- Floating s Animation -->
+  <div class="floating-s-container" id="floatingsContainer">
+    <!-- s will be dynamically inserted here -->
   </div>
 
   <!-- Footer -->
@@ -775,7 +775,7 @@
 
     // Map categories to appropriate Font Awesome icons (smaller icons)
     const iconMap = {
-      "Cookies": "fa-cookie",
+      "s": "fa-",
       "Rolls": "fa-bread-slice",
       "Cake Slices": "fa-cake-candles",
       "Cups": "fa-mug-hot",
@@ -788,7 +788,7 @@
 
     // Special item badges
     const specialBadges = {
-      "Chocolate Chip Cookie": "Popular",
+      "Chocolate Chip ": "Popular",
       "Cinnamon Roll": "Best Seller",
       "Red Velvet": "Featured", 
       "Cappuccino": "New",
@@ -809,32 +809,33 @@
     // Floating cookies animation - slower pace, cookies only
 // Floating cookies animation - one every ~15 seconds
 // Floating cookies animation - one cookie at a time, every 10 seconds
+// Floating cookies animation - one cookie at a time with 15 second interval
 function createFloatingCookies() {
   const container = document.getElementById('floatingCookiesContainer');
   const cookieEmoji = '🍪'; // Only cookie emoji
   
-  // Create initial cookie
-  createCookie();
+  // Create one cookie initially
+  createSingleCookie();
   
-  // Set interval to create a new cookie every 10 seconds
-  setInterval(createCookie, 10000);
-  
-  function createCookie() {
+  // Function to create a single cookie
+  function createSingleCookie() {
     // Clear any existing cookies first
     container.innerHTML = '';
     
-    // Create a single new cookie
+    // Create just one cookie
     const cookie = document.createElement('div');
     cookie.className = 'floating-cookies';
     cookie.style.left = `${Math.random() * 100}vw`;
-    cookie.style.animationDuration = '10s'; // Match the interval
+    cookie.style.animationDuration = '10s'; // Animation duration
     cookie.style.fontSize = `${20 + Math.random() * 15}px`;
     cookie.style.opacity = `${0.4 + Math.random() * 0.3}`;
     cookie.textContent = cookieEmoji;
     container.appendChild(cookie);
+    
+    // Wait 15 seconds before creating the next cookie
+    setTimeout(createSingleCookie, 15000);
   }
 }
-
     // Toggle category dropdown
     function setupCategoryScrollButton() {
       const button = document.getElementById('categoryScrollBtn');
