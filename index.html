@@ -1,78 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" 
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Heavenlynn Menu</title>
   <script src="https://unpkg.com/@supabase/supabase-js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Playfair+Display:wght@500;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
   <style>
-    /* WhatsApp Cookie Button */
-.whatsapp-cookie-btn {
-  position: fixed;
-  left: 20px;
-  bottom: 80px;
-  width: 60px;
-  height: 60px;
-  background: #25D366;
-  color: white;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.8rem;
-  box-shadow: var(--shadow-md);
-  cursor: pointer;
-  z-index: 20;
-  transition: var(--transition);
-  border: 2px solid white;
-  text-decoration: none;
-}
-
-.whatsapp--btn:hover {
-  transform: translateY(-5px) rotate(15deg);
-  box-shadow: var(--shadow-lg);
-}
-
-.whatsapp--btn i {
-  position: relative;
-}
-
-.whatsapp--btn::before {
-  content: "🍪";
-  position: absolute;
-  font-size: 1.3rem;
-  top: -5px;
-  right: -5px;
-  filter: drop-shadow(0 2px 3px rgba(0,0,0,0.2));
-}
-
-/* Location and Contact Info */
-.info-banner {
-  background: var(--primary-light);
-  padding: 1rem;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  gap: 1.5rem;
-  text-align: center;
-  border-bottom: 2px solid var(--primary);
-}
-
-.info-item {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: var(--primary-dark);
-  font-weight: 500;
-}
-
-.info-item i {
-  font-size: 1.2rem;
-  color: var(--primary);
-}
     :root {
       --primary: #8a4fff;
       --primary-light: #e4d7ff;
@@ -524,8 +459,8 @@
       z-index: 1;
     }
 
-    /* animation */
-    .floating-s {
+    /* Cookie animation */
+    .floating-cookies {
       position: fixed;
       bottom: -50px;
       z-index: 5;
@@ -687,6 +622,17 @@
   </style>
 </head>
 <body>
+  <!-- Contact Bar -->
+  <div class="contact-bar">
+    <div class="contact-info">
+      <div><i class="fas fa-map-marker-alt"></i> Tyre, Lebanon</div>
+      <div><i class="fas fa-phone"></i> 70006252</div>
+    </div>
+    <div class="social-icons">
+      <a href="https://www.instagram.com/" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+    </div>
+  </div>
+
   <!-- Hero Section -->
   <div class="hero" role="banner">
     <div class="hero-overlay" aria-hidden="true"></div>
@@ -699,21 +645,6 @@
       <i class="fas fa-chevron-down"></i>
     </a>
   </div>
-        <!-- Info Banner -->
-<div class="info-banner">
-  <div class="info-item">
-    <i class="fas fa-map-marker-alt"></i>
-    <span>Tyre, Lebanon</span>
-  </div>
-  <div class="info-item">
-    <i class="fas fa-phone"></i>
-    <span>70006252</span>
-  </div>
-  <div class="social-icons">
-      <a href="https:heavenlynn.lb
-" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-    </div>
-</div>
 
   <!-- Navigation -->
   <div class="nav-wrapper" id="menu">
@@ -735,7 +666,7 @@
 
   <!-- Floating Category Scroll Button -->
   <button class="category-scroll-btn" id="categoryScrollBtn" aria-label="Browse Categories">
-    <i class="fas fa--bite"></i>
+    <i class="fas fa-cookie-bite"></i>
   </button>
 
   <!-- Category Dropdown -->
@@ -746,9 +677,9 @@
     </ul>
   </div>
 
-  <!-- Floating s Animation -->
-  <div class="floating-s-container" id="floatingsContainer">
-    <!-- s will be dynamically inserted here -->
+  <!-- Floating Cookies Animation -->
+  <div class="floating-cookies-container" id="floatingCookiesContainer">
+    <!-- Cookies will be dynamically inserted here -->
   </div>
 
   <!-- Footer -->
@@ -775,7 +706,7 @@
 
     // Map categories to appropriate Font Awesome icons (smaller icons)
     const iconMap = {
-      "s": "fa-",
+      "Cookies": "fa-cookie",
       "Rolls": "fa-bread-slice",
       "Cake Slices": "fa-cake-candles",
       "Cups": "fa-mug-hot",
@@ -788,7 +719,7 @@
 
     // Special item badges
     const specialBadges = {
-      "Chocolate Chip ": "Popular",
+      "Chocolate Chip Cookie": "Popular",
       "Cinnamon Roll": "Best Seller",
       "Red Velvet": "Featured", 
       "Cappuccino": "New",
@@ -798,45 +729,31 @@
     // Sample genuine food images for demo purposes
     // In a real application, these would be actual URLs to product images
     const foodImages = {
-      "": "/api/placeholder/400/400",
+      "cookie": "/api/placeholder/400/400",
       "roll": "/api/placeholder/400/400",
       "cake": "/api/placeholder/400/400",
       "drink": "/api/placeholder/400/400",
       "default": "/api/placeholder/400/400"
     };
-    // Floating s animation - one cookie at a time with 15 second interval
-  // Floating cookies animation - one cookie at a time, every 10 seconds
-function createFloatingCookies() {
-  const container = document.getElementById('floatingCookiesContainer');
-  const cookieEmoji = '🍪'; // Only cookie emoji
-  
-  // Create initial cookie
-  createCookie();
-  
-  // Set interval to create a new cookie every 10 seconds
-  setInterval(createCookie, 10000);
-  
-  function createCookie() {
-    // Clear any existing cookies first
-    container.innerHTML = '';
-    
-    // Create a single new cookie
-    const cookie = document.createElement('div');
-    cookie.className = 'floating-cookies';
-    cookie.style.left = `${Math.random() * 100}vw`;
-    cookie.style.animationDuration = '10s'; // Match the interval
-    cookie.style.fontSize = `${20 + Math.random() * 15}px`;
-    cookie.style.opacity = `${0.4 + Math.random() * 0.3}`;
-    cookie.textContent = cookieEmoji;
-    container.appendChild(cookie);
-  }
-}
 
-    // Floating s animation
-    // Floating s animation - slower pace, s only
-// Floating s animation - one every ~15 seconds
-// Floating s animation - one  at a time, every 10 seconds
-// Floating s animation - one  at a time with 15 second interval
+    // Floating cookies animation
+    function createFloatingCookies() {
+      const container = document.getElementById('floatingCookiesContainer');
+      const cookieEmojis = ['🍪', '🥐', '🧁', '🍰', '🍩'];
+      const numCookies = 10;
+      
+      for (let i = 0; i < numCookies; i++) {
+        const cookie = document.createElement('div');
+        cookie.className = 'floating-cookies';
+        cookie.style.left = `${Math.random() * 100}vw`;
+        cookie.style.animationDuration = `${15 + Math.random() * 10}s`;
+        cookie.style.animationDelay = `${Math.random() * 5}s`;
+        cookie.style.fontSize = `${20 + Math.random() * 20}px`;
+        cookie.style.opacity = `${0.4 + Math.random() * 0.3}`;
+        cookie.textContent = cookieEmojis[Math.floor(Math.random() * cookieEmojis.length)];
+        container.appendChild(cookie);
+      }
+    }
 
     // Toggle category dropdown
     function setupCategoryScrollButton() {
@@ -886,7 +803,7 @@ function createFloatingCookies() {
 
         // Define the desired category order
         const categoryOrder = [
-          "s", "Rolls", "Cake Slices", "Cups", "Tartes", 
+          "Cookies", "Rolls", "Cake Slices", "Cups", "Tartes", 
           "Cheesecakes", "Ice Cream", "Drinks", "Add-ons"
         ];
 
@@ -1086,20 +1003,6 @@ function createFloatingCookies() {
 
     // Initialize the menu when the document is ready
     document.addEventListener('DOMContentLoaded', loadMenu);
-          // Setup WhatsApp button
-document.addEventListener('DOMContentLoaded', function() {
-  const whatsappBtn = document.querySelector('.whatsapp-cookie-btn');
-  if (whatsappBtn) {
-    whatsappBtn.addEventListener('click', function() {
-      // You could add analytics tracking here if needed
-      console.log('WhatsApp button clicked');
-    });
-  }
-});
   </script>
-        <!-- WhatsApp Cookie Button -->
-<a href="https://wa.me/96170006252" class="whatsapp-cookie-btn" target="_blank" aria-label="Contact us on WhatsApp">
-  <i class="fab fa-whatsapp"></i>
-</a>
 </body>
 </html>
