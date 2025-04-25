@@ -1,13 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8" 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Heavenlynn Menu</title>
   <script src="https://unpkg.com/@supabase/supabase-js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Playfair+Display:wght@500;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
   <style>
+    /* WhatsApp Cookie Button */
+.whatsapp-cookie-btn {
+  position: fixed;
+  left: 20px;
+  bottom: 80px;
+  width: 60px;
+  height: 60px;
+  background: #25D366;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  box-shadow: var(--shadow-md);
+  cursor: pointer;
+  z-index: 20;
+  transition: var(--transition);
+  border: 2px solid white;
+  text-decoration: none;
+}
+
+.whatsapp-cookie-btn:hover {
+  transform: translateY(-5px) rotate(15deg);
+  box-shadow: var(--shadow-lg);
+}
+
+.whatsapp-cookie-btn i {
+  position: relative;
+}
+
+.whatsapp-cookie-btn::before {
+  content: "🍪";
+  position: absolute;
+  font-size: 1.3rem;
+  top: -5px;
+  right: -5px;
+  filter: drop-shadow(0 2px 3px rgba(0,0,0,0.2));
+}
+
+/* Location and Contact Info */
+.info-banner {
+  background: var(--primary-light);
+  padding: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  text-align: center;
+  border-bottom: 2px solid var(--primary);
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--primary-dark);
+  font-weight: 500;
+}
+
+.info-item i {
+  font-size: 1.2rem;
+  color: var(--primary);
+}
     :root {
       --primary: #8a4fff;
       --primary-light: #e4d7ff;
@@ -25,7 +90,6 @@
       --radius-sm: 12px;
       --radius-md: 20px;
       --radius-lg: 30px;
-      --whatsapp: #25d366;
     }
 
     * {
@@ -266,80 +330,6 @@
       background: var(--primary-dark);
       transform: translateY(-5px) rotate(-15deg);
       box-shadow: var(--shadow-lg);
-    }
-
-    /* WhatsApp Cookie Button */
-    .whatsapp-cookie-btn {
-      position: fixed;
-      left: 20px;
-      bottom: 30px;
-      width: 65px;
-      height: 65px;
-      background: var(--whatsapp);
-      color: white;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 2rem;
-      box-shadow: var(--shadow-md);
-      cursor: pointer;
-      z-index: 20;
-      transition: var(--transition);
-      border: none;
-      overflow: hidden;
-    }
-
-    .whatsapp-cookie-btn::before {
-      content: '🍪';
-      position: absolute;
-      font-size: 2.5rem;
-      transition: var(--transition);
-    }
-
-    .whatsapp-cookie-btn:hover::before {
-      transform: translateY(-40px);
-    }
-
-    .whatsapp-cookie-btn i {
-      opacity: 0;
-      transform: scale(0);
-      transition: var(--transition);
-    }
-
-    .whatsapp-cookie-btn:hover i {
-      opacity: 1;
-      transform: scale(1);
-    }
-
-    .whatsapp-cookie-btn:hover {
-      transform: translateY(-5px);
-      box-shadow: var(--shadow-lg);
-    }
-
-    .whatsapp-tooltip {
-      position: absolute;
-      bottom: 75px;
-      left: 0;
-      background: white;
-      color: var(--text);
-      font-size: 0.8rem;
-      padding: 8px 12px;
-      border-radius: var(--radius-sm);
-      box-shadow: var(--shadow-md);
-      opacity: 0;
-      visibility: hidden;
-      transition: var(--transition);
-      width: max-content;
-      max-width: 150px;
-      transform: translateY(10px);
-      pointer-events: none;
-    }
-
-    .whatsapp-cookie-btn:hover .whatsapp-tooltip {
-      opacity: 1;
-      visibility: visible;
-      transform: translateY(0);
     }
 
     .category-dropdown {
@@ -720,6 +710,17 @@
       <i class="fas fa-chevron-down"></i>
     </a>
   </div>
+        <!-- Info Banner -->
+<div class="info-banner">
+  <div class="info-item">
+    <i class="fas fa-map-marker-alt"></i>
+    <span>Tyre, Lebanon</span>
+  </div>
+  <div class="info-item">
+    <i class="fas fa-phone"></i>
+    <span>70006252</span>
+  </div>
+</div>
 
   <!-- Navigation -->
   <div class="nav-wrapper" id="menu">
@@ -738,12 +739,6 @@
   <main id="menuSections">
     <!-- Menu items will be dynamically inserted here -->
   </main>
-
-  <!-- WhatsApp Cookie Button -->
-  <button class="whatsapp-cookie-btn" id="whatsappCookieBtn" aria-label="Contact Us on WhatsApp">
-    <span class="whatsapp-tooltip">Message us for orders!</span>
-    <i class="fab fa-whatsapp"></i>
-  </button>
 
   <!-- Floating Category Scroll Button -->
   <button class="category-scroll-btn" id="categoryScrollBtn" aria-label="Browse Categories">
@@ -816,21 +811,6 @@
       "drink": "/api/placeholder/400/400",
       "default": "/api/placeholder/400/400"
     };
-
-    // WhatsApp button functionality
-    function setupWhatsAppButton() {
-      const whatsappBtn = document.getElementById('whatsappCookieBtn');
-      
-      whatsappBtn.addEventListener('click', function() {
-        // Creating the WhatsApp URL with a predefined message
-        const phoneNumber = "70006252"; // Replace with your actual WhatsApp number
-        const message = "Hello! I'd like to place an order from Heavenlynn Bakery.";
-        const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-        
-        // Open WhatsApp in a new tab
-        window.open(whatsappUrl, '_blank');
-      });
-    }
 
     // Floating cookies animation
     function createFloatingCookies() {
@@ -924,4 +904,195 @@
           // Create dropdown link for the category
           const dropdownItem = document.createElement('li');
           const dropdownLink = document.createElement('a');
-          dropdownLink.href = `#${
+          dropdownLink.href = `#${catId}`;
+          dropdownLink.innerHTML = `<i class="fas ${icon}"></i>${category}`;
+          dropdownLink.addEventListener('click', function() {
+            document.getElementById('categoryDropdown').classList.remove('show');
+          });
+          dropdownItem.appendChild(dropdownLink);
+          dropdownList.appendChild(dropdownItem);
+
+          // Create a new section for the category
+          const section = document.createElement('section');
+          section.id = catId;
+
+          // Section header
+          const titleDiv = document.createElement('div');
+          titleDiv.className = 'section-title';
+
+          const title = document.createElement('h2');
+          title.textContent = category;
+          titleDiv.appendChild(title);
+          section.appendChild(titleDiv);
+
+          // Create a grid container for menu items
+          const grid = document.createElement('div');
+          grid.className = 'items-grid';
+
+          // Helper function to determine the image type based on category
+          function getImageType(category) {
+            category = category.toLowerCase();
+            if (category.includes('cookie')) return 'cookie';
+            if (category.includes('roll')) return 'roll';
+            if (category.includes('cake') || category.includes('tarte') || category.includes('cheesecake')) return 'cake';
+            if (category.includes('drink') || category.includes('coffee')) return 'drink';
+            return 'default';
+          }
+
+          // Loop over items in the current category to generate cards
+          grouped[category].forEach(item => {
+            const card = document.createElement('div');
+            card.className = 'item-card';
+
+            // Image container
+            const imageContainer = document.createElement('div');
+            imageContainer.className = 'item-image';
+
+            // Get image source - use item's image if available or get placeholder based on category
+            let imgSrc = item.image_url ? item.image_url : foodImages[getImageType(category)];
+            
+            const img = document.createElement('img');
+            img.src = imgSrc;
+            img.alt = item.item_name;
+            imageContainer.appendChild(img);
+            card.appendChild(imageContainer);
+
+            // Add badge if it's a special item
+            if (specialBadges[item.item_name]) {
+              const badge = document.createElement('div');
+              badge.className = 'badge';
+              badge.textContent = specialBadges[item.item_name];
+              card.appendChild(badge);
+            }
+
+            // Content container
+            const content = document.createElement('div');
+            content.className = 'item-content';
+
+            const name = document.createElement('div');
+            name.className = 'item-name';
+            name.textContent = item.item_name;
+
+            const desc = document.createElement('div');
+            desc.className = 'item-desc';
+            desc.textContent = item.description || 'A delicious treat made with the finest ingredients.';
+
+            const footer = document.createElement('div');
+            footer.className = 'item-footer';
+
+            const price = document.createElement('div');
+            price.className = 'item-price';
+            price.textContent = `$${parseFloat(item.price).toFixed(2)}`;
+
+            footer.appendChild(price);
+
+            // Create and append elements to build the card structure
+            content.appendChild(name);
+            content.appendChild(desc);
+            content.appendChild(footer);
+            card.appendChild(content);
+            grid.appendChild(card);
+          });
+
+          section.appendChild(grid);
+          sections.appendChild(section);
+        });
+
+        // --- Intersection Observer for active navigation link highlighting ---
+        const navLinks = document.querySelectorAll('nav a');
+        const observerOptions = {
+          rootMargin: '-100px 0px -90% 0px',
+          threshold: 0
+        };
+
+        // Check if browser supports IntersectionObserver
+        if ('IntersectionObserver' in window) {
+          const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+              const id = entry.target.getAttribute('id');
+              const link = document.querySelector(`nav a[href="#${id}"]`);
+              if (entry.isIntersecting) {
+                navLinks.forEach(navLink => navLink.classList.remove('active'));
+                if (link) link.classList.add('active');
+              }
+            });
+          }, observerOptions);
+
+          document.querySelectorAll('section').forEach(section => {
+            observer.observe(section);
+          });
+        }
+
+        // --- Auto-scroll first category nav link into view ---
+        if (navLinks.length > 0) {
+          navLinks[0].classList.add('active');
+        }
+
+        // --- Navbar style update on scroll ---
+        const navBar = document.querySelector('.nav-wrapper');
+        window.addEventListener('scroll', () => {
+          if (window.scrollY > 100) {
+            navBar.classList.add('scrolled');
+          } else {
+            navBar.classList.remove('scrolled');
+          }
+        });
+
+        // --- Smooth scrolling for navigation links ---
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+          anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href');
+            const targetElement = document.querySelector(targetId);
+            if (targetElement) {
+              window.scrollTo({
+                top: targetElement.offsetTop - 80,
+                behavior: 'smooth'
+              });
+              
+              // Also scroll the clicked link into view in the navigation bar
+              this.scrollIntoView({
+                behavior: 'smooth',
+                block: 'nearest',
+                inline: 'center'
+              });
+            }
+          });
+        });
+        
+        // Initialize the floating cookies animation
+        createFloatingCookies();
+        
+        // Initialize category scroll button and dropdown
+        setupCategoryScrollButton();
+        
+      } catch (error) {
+        console.error('Error loading menu:', error);
+        document.getElementById('menuSections').innerHTML = `
+          <div style="text-align: center; padding: 3rem;">
+            <h2>Oops! Something went wrong.</h2>
+            <p>We couldn't load our menu. Please try again later.</p>
+          </div>
+        `;
+      }
+    }
+
+    // Initialize the menu when the document is ready
+    document.addEventListener('DOMContentLoaded', loadMenu);
+          // Setup WhatsApp button
+document.addEventListener('DOMContentLoaded', function() {
+  const whatsappBtn = document.querySelector('.whatsapp-cookie-btn');
+  if (whatsappBtn) {
+    whatsappBtn.addEventListener('click', function() {
+      // You could add analytics tracking here if needed
+      console.log('WhatsApp button clicked');
+    });
+  }
+});
+  </script>
+        <!-- WhatsApp Cookie Button -->
+<a href="https://wa.me/96170006252" class="whatsapp-cookie-btn" target="_blank" aria-label="Contact us on WhatsApp">
+  <i class="fab fa-whatsapp"></i>
+</a>
+</body>
+</html>
