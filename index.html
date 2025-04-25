@@ -798,19 +798,14 @@
     // Sample genuine food images for demo purposes
     // In a real application, these would be actual URLs to product images
     const foodImages = {
-      "cookie": "/api/placeholder/400/400",
+      "": "/api/placeholder/400/400",
       "roll": "/api/placeholder/400/400",
       "cake": "/api/placeholder/400/400",
       "drink": "/api/placeholder/400/400",
       "default": "/api/placeholder/400/400"
     };
-
-    // Floating cookies animation
-    // Floating cookies animation - slower pace, cookies only
-// Floating cookies animation - one every ~15 seconds
-// Floating cookies animation - one cookie at a time, every 10 seconds
-// Floating cookies animation - one cookie at a time with 15 second interval
-function createFloatingCookies() {
+    // Floating cookies animation - one cookie at a time with 15 second interval
+  function createFloatingCookies() {
   const container = document.getElementById('floatingCookiesContainer');
   const cookieEmoji = '🍪'; // Only cookie emoji
   
@@ -836,6 +831,13 @@ function createFloatingCookies() {
     setTimeout(createSingleCookie, 15000);
   }
 }
+
+    // Floating s animation
+    // Floating s animation - slower pace, s only
+// Floating s animation - one every ~15 seconds
+// Floating s animation - one  at a time, every 10 seconds
+// Floating s animation - one  at a time with 15 second interval
+
     // Toggle category dropdown
     function setupCategoryScrollButton() {
       const button = document.getElementById('categoryScrollBtn');
@@ -884,7 +886,7 @@ function createFloatingCookies() {
 
         // Define the desired category order
         const categoryOrder = [
-          "Cookies", "Rolls", "Cake Slices", "Cups", "Tartes", 
+          "s", "Rolls", "Cake Slices", "Cups", "Tartes", 
           "Cheesecakes", "Ice Cream", "Drinks", "Add-ons"
         ];
 
