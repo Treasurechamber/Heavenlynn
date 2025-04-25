@@ -187,6 +187,8 @@
       box-shadow: var(--shadow-sm);
       padding: 1rem;
       transition: var(--transition);
+      border-top: 2px solid var(--primary);
+      border-bottom: 2px solid var(--primary);
     }
 
     .nav-wrapper.scrolled {
@@ -204,11 +206,32 @@
       -webkit-overflow-scrolling: touch;
       padding-bottom: 0.5rem;
       scrollbar-width: none; /* Firefox */
+      scrollbar-color: var(--primary) var(--primary-light);
+      border: 1px solid var(--primary);
+      border-radius: var(--radius-sm);
+      padding: 10px;
     }
 
     nav.nav-container::-webkit-scrollbar {
-      display: none; /* Chrome, Safari, Opera */
+      height: 8px;
+      display: block; /* Chrome, Safari, Opera */
     }
+
+    nav.nav-container::-webkit-scrollbar {
+  height: 8px;
+  display: block;
+}
+
+nav.nav-container::-webkit-scrollbar-track {
+  background: var(--primary-light);
+  border-radius: 10px;
+}
+
+nav.nav-container::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 10px;
+  border: 2px solid var(--primary-dark);
+}
 
     nav a {
       text-decoration: none;
@@ -706,7 +729,7 @@
   border-radius: 15px;
   padding: 20px;
   min-width: 300px;
-  max-width: 70vw;
+  max-width: 80vw; /* Increased from 70vw */
   text-align: center;
   box-shadow: var(--shadow-lg);
   z-index: 100;
@@ -715,6 +738,12 @@
   color: var(--primary-dark);
   transform-origin: center;
   animation: fortune-appear 0.5s forwards;
+  /* Added these properties to ensure visibility */
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 @keyframes fortune-appear {
