@@ -465,8 +465,10 @@
       bottom: -50px;
       z-index: 5;
       opacity: 0.7;
-      pointer-events: none;
+      pointer-events: auto;
       animation: floatUp 15s linear infinite;
+      cursor: pointer;
+      user-select: none;
     }
 
     @keyframes floatUp {
@@ -814,9 +816,11 @@
 
     // Floating cookies animation
    // Floating cookies animation - one cookie at a time with 15 second interval
+// Floating cookies animation - one cookie at a time with 15 second interval
 function createFloatingCookies() {
   const container = document.getElementById('floatingCookiesContainer');
-  const cookieEmoji = '🍪'; // Only cookie emoji
+  const cookieEmoji = '🍪'; // Cookie emoji
+  const milkshakeEmoji = '🥤'; // Milkshake emoji
   
   // Create one cookie initially
   createSingleCookie();
@@ -834,6 +838,16 @@ function createFloatingCookies() {
     cookie.style.fontSize = `${20 + Math.random() * 15}px`;
     cookie.style.opacity = `${0.4 + Math.random() * 0.3}`;
     cookie.textContent = cookieEmoji;
+    
+    // Add click/tap event listener to transform cookie
+    cookie.style.pointerEvents = 'auto'; // Make the cookie clickable
+    cookie.addEventListener('click', function() {
+      this.textContent = milkshakeEmoji;
+      this.style.fontSize = `${parseInt(this.style.fontSize) + 5}px`; // Make it slightly larger
+      this.style.transform += ' rotate(360deg)'; // Add a spin effect
+      this.style.transition = 'all 0.3s ease'; // Add transition for smooth effect
+    });
+    
     container.appendChild(cookie);
     
     // Wait 15 seconds before creating the next cookie
