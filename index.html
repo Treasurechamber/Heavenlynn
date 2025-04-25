@@ -524,7 +524,7 @@
       z-index: 1;
     }
 
-    /* Cookie animation */
+    /* animation */
     .floating-cookies {
       position: fixed;
       bottom: -50px;
@@ -807,21 +807,33 @@
 
     // Floating cookies animation
     // Floating cookies animation - slower pace, cookies only
+// Floating cookies animation - one cookie every ~15 seconds
 function createFloatingCookies() {
   const container = document.getElementById('floatingCookiesContainer');
-  const cookieEmojis = ['🍪', '🍪', '🍪']; // Only cookie emojis
-  const numCookies = 6; // Fewer cookies
+  const cookieEmoji = '🍪'; // Only cookie emoji
   
-  for (let i = 0; i < numCookies; i++) {
+  // Create initial cookie
+  createCookie();
+  
+  // Set interval to create a new cookie approximately every 15 seconds
+  setInterval(createCookie, 15000);
+  
+  function createCookie() {
     const cookie = document.createElement('div');
     cookie.className = 'floating-cookies';
     cookie.style.left = `${Math.random() * 100}vw`;
-    cookie.style.animationDuration = `${25 + Math.random() * 15}s`; // Slower animation (25-40s)
-    cookie.style.animationDelay = `${Math.random() * 8}s`;
+    cookie.style.animationDuration = '30s'; // 30 second float animation
     cookie.style.fontSize = `${20 + Math.random() * 15}px`;
     cookie.style.opacity = `${0.4 + Math.random() * 0.3}`;
-    cookie.textContent = cookieEmojis[Math.floor(Math.random() * cookieEmojis.length)];
+    cookie.textContent = cookieEmoji;
     container.appendChild(cookie);
+    
+    // Remove cookie from DOM after animation completes to prevent memory issues
+    setTimeout(() => {
+      if (cookie && cookie.parentNode) {
+        cookie.parentNode.removeChild(cookie);
+      }
+    }, 31000);
   }
 }
 
