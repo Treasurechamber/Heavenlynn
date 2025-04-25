@@ -687,17 +687,6 @@
   </style>
 </head>
 <body>
-  <!-- Contact Bar -->
-  <div class="contact-bar">
-    <div class="contact-info">
-      <div><i class="fas fa-map-marker-alt"></i> Tyre, Lebanon</div>
-      <div><i class="fas fa-phone"></i> 70006252</div>
-    </div>
-    <div class="social-icons">
-      <a href="https://www.instagram.com/" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-    </div>
-  </div>
-
   <!-- Hero Section -->
   <div class="hero" role="banner">
     <div class="hero-overlay" aria-hidden="true"></div>
@@ -720,6 +709,10 @@
     <i class="fas fa-phone"></i>
     <span>70006252</span>
   </div>
+  <div class="social-icons">
+      <a href="https:heavenlynn.lb
+" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+    </div>
 </div>
 
   <!-- Navigation -->
@@ -813,23 +806,24 @@
     };
 
     // Floating cookies animation
-    function createFloatingCookies() {
-      const container = document.getElementById('floatingCookiesContainer');
-      const cookieEmojis = ['🍪', '🥐', '🧁', '🍰', '🍩'];
-      const numCookies = 10;
-      
-      for (let i = 0; i < numCookies; i++) {
-        const cookie = document.createElement('div');
-        cookie.className = 'floating-cookies';
-        cookie.style.left = `${Math.random() * 100}vw`;
-        cookie.style.animationDuration = `${15 + Math.random() * 10}s`;
-        cookie.style.animationDelay = `${Math.random() * 5}s`;
-        cookie.style.fontSize = `${20 + Math.random() * 20}px`;
-        cookie.style.opacity = `${0.4 + Math.random() * 0.3}`;
-        cookie.textContent = cookieEmojis[Math.floor(Math.random() * cookieEmojis.length)];
-        container.appendChild(cookie);
-      }
-    }
+    // Floating cookies animation - slower pace, cookies only
+function createFloatingCookies() {
+  const container = document.getElementById('floatingCookiesContainer');
+  const cookieEmojis = ['🍪', '🍪', '🍪']; // Only cookie emojis
+  const numCookies = 6; // Fewer cookies
+  
+  for (let i = 0; i < numCookies; i++) {
+    const cookie = document.createElement('div');
+    cookie.className = 'floating-cookies';
+    cookie.style.left = `${Math.random() * 100}vw`;
+    cookie.style.animationDuration = `${25 + Math.random() * 15}s`; // Slower animation (25-40s)
+    cookie.style.animationDelay = `${Math.random() * 8}s`;
+    cookie.style.fontSize = `${20 + Math.random() * 15}px`;
+    cookie.style.opacity = `${0.4 + Math.random() * 0.3}`;
+    cookie.textContent = cookieEmojis[Math.floor(Math.random() * cookieEmojis.length)];
+    container.appendChild(cookie);
+  }
+}
 
     // Toggle category dropdown
     function setupCategoryScrollButton() {
