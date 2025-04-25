@@ -807,7 +807,8 @@
 
     // Floating cookies animation
     // Floating cookies animation - slower pace, cookies only
-// Floating cookies animation - one cookie every ~15 seconds
+// Floating cookies animation - one every ~15 seconds
+// Floating cookies animation - one cookie at a time, every 10 seconds
 function createFloatingCookies() {
   const container = document.getElementById('floatingCookiesContainer');
   const cookieEmoji = '🍪'; // Only cookie emoji
@@ -815,25 +816,22 @@ function createFloatingCookies() {
   // Create initial cookie
   createCookie();
   
-  // Set interval to create a new cookie approximately every 15 seconds
-  setInterval(createCookie, 15000);
+  // Set interval to create a new cookie every 10 seconds
+  setInterval(createCookie, 10000);
   
   function createCookie() {
+    // Clear any existing cookies first
+    container.innerHTML = '';
+    
+    // Create a single new cookie
     const cookie = document.createElement('div');
     cookie.className = 'floating-cookies';
     cookie.style.left = `${Math.random() * 100}vw`;
-    cookie.style.animationDuration = '30s'; // 30 second float animation
+    cookie.style.animationDuration = '10s'; // Match the interval
     cookie.style.fontSize = `${20 + Math.random() * 15}px`;
     cookie.style.opacity = `${0.4 + Math.random() * 0.3}`;
     cookie.textContent = cookieEmoji;
     container.appendChild(cookie);
-    
-    // Remove cookie from DOM after animation completes to prevent memory issues
-    setTimeout(() => {
-      if (cookie && cookie.parentNode) {
-        cookie.parentNode.removeChild(cookie);
-      }
-    }, 31000);
   }
 }
 
