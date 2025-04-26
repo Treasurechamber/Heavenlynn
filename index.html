@@ -892,6 +892,189 @@ nav.nav-container::-webkit-scrollbar-thumb {
   0% { transform: scale(1); opacity: 0.7; }
   100% { transform: scale(0); opacity: 0; }
 }
+    <!-- Update these CSS styles in the existing <style> section of your code -->
+
+/* Update these styles in your existing CSS section */
+:root {
+  --border-color: #d5c9a8;  /* Light beige color for borders */
+  --item-padding: 1.5rem;
+  --item-border: 1px solid var(--border-color);
+}
+
+/* Hero section adjustments */
+.hero {
+  height: 60vh;
+  max-height: 500px;
+  min-height: 350px;
+}
+
+.hero-content {
+  padding: 0 1.5rem;
+  margin-top: 2rem; /* Push content down slightly */
+}
+
+.hero h1 {
+  font-family: 'Megrim', cursive;
+  font-size: clamp(3.5rem, 12vw, 7rem);
+  letter-spacing: 8px;
+  text-shadow: 0 0 20px var(--primary), 0 0 40px var(--accent);
+  margin-bottom: 0.5rem;
+}
+
+/* Card layout completely redone for mobile-first design */
+.items-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-left: var(--item-border);
+  border-right: var(--item-border);
+}
+
+.item-card {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  grid-gap: 1rem;
+  padding: var(--item-padding);
+  background: white;
+  border-bottom: var(--item-border);
+  position: relative;
+  transition: var(--transition);
+}
+
+.item-card:first-child {
+  border-top: var(--item-border);
+}
+
+.item-image {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid var(--accent);
+}
+
+.item-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.item-name {
+  font-size: 1.3rem;
+  color: #b3a069; /* Match the beige color from the image */
+  margin-bottom: 0.3rem;
+  font-weight: 700;
+}
+
+.item-desc {
+  font-size: 0.9rem;
+  color: #a69c80; /* Light brown for description */
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+}
+
+.item-price {
+  margin-top: 0.5rem;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+/* Category navigation updates */
+.nav-wrapper {
+  top: 0;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  border-bottom: 3px solid var(--primary);
+}
+
+nav.nav-container {
+  display: flex;
+  gap: 5px;
+  padding: 10px;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  background: #1a1742;
+  border-radius: var(--radius-md);
+}
+
+nav a {
+  flex: 0 0 auto;
+  padding: 0.7rem 1rem;
+  color: white;
+  text-decoration: none;
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  white-space: nowrap;
+  transition: all 0.3s ease;
+  background: rgba(196, 113, 237, 0.2);
+  border: none;
+}
+
+nav a.active {
+  background: var(--primary);
+  transform: translateY(-3px);
+  box-shadow: 0 4px 8px rgba(196, 113, 237, 0.4);
+}
+
+/* Enhanced Media Queries for responsive design */
+@media (min-width: 768px) {
+  /* Tablet and above */
+  .items-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px;
+    border: none;
+  }
+  
+  .item-card {
+    border: var(--item-border);
+    border-radius: var(--radius-md);
+    grid-template-columns: 1fr;
+    grid-template-rows: 150px 1fr;
+    height: 100%;
+  }
+  
+  .item-image {
+    width: 100%;
+    height: 150px;
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-sm);
+  }
+  
+  .hero-content {
+    margin-top: 0;
+  }
+}
+
+@media (min-width: 1024px) {
+  /* Desktop */
+  .items-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1200px) {
+  /* Large Desktop */
+  .items-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Fix for the hero image to ensure it's properly visible */
+.hero-video {
+  object-position: center 30%;
+}
+
+/* Fix for the section titles to match the beige color scheme */
+.section-title h2 {
+  color: #b3a069;
+  text-shadow: none;
+  font-size: 2rem;
+}
+
+.section-title::after {
+  background: linear-gradient(90deg, #d5c9a8, transparent);
+}
   </style>
 </head>
 <body>
