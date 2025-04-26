@@ -187,6 +187,8 @@
       box-shadow: var(--shadow-sm);
       padding: 1rem;
       transition: var(--transition);
+      border-top: 2px solid var(--primary);
+      border-bottom: 2px solid var(--primary);
     }
 
     .nav-wrapper.scrolled {
@@ -204,11 +206,32 @@
       -webkit-overflow-scrolling: touch;
       padding-bottom: 0.5rem;
       scrollbar-width: none; /* Firefox */
+      scrollbar-color: var(--primary) var(--primary-light);
+      border: 1px solid var(--primary);
+      border-radius: var(--radius-sm);
+      padding: 10px;
     }
 
     nav.nav-container::-webkit-scrollbar {
-      display: none; /* Chrome, Safari, Opera */
+      height: 8px;
+      display: block; /* Chrome, Safari, Opera */
     }
+
+    nav.nav-container::-webkit-scrollbar {
+  height: 8px;
+  display: block;
+}
+
+nav.nav-container::-webkit-scrollbar-track {
+  background: var(--primary-light);
+  border-radius: 10px;
+}
+
+nav.nav-container::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 10px;
+  border: 2px solid var(--primary-dark);
+}
 
     nav a {
       text-decoration: none;
@@ -465,8 +488,10 @@
       bottom: -50px;
       z-index: 5;
       opacity: 0.7;
-      pointer-events: none;
+      pointer-events: auto;
       animation: floatUp 15s linear infinite;
+      cursor: pointer;
+      user-select: none;
     }
 
     @keyframes floatUp {
@@ -619,6 +644,145 @@
         transform: translateY(-20px);
       }
     }
+    /* WhatsApp Cookie Button */
+.whatsapp-cookie-btn {
+  position: fixed;
+  left: 20px;
+  bottom: 80px;
+  width: 60px;
+  height: 60px;
+  background: #25D366;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  box-shadow: var(--shadow-md);
+  cursor: pointer;
+  z-index: 20;
+  transition: var(--transition);
+  border: 2px solid white;
+  text-decoration: none;
+}
+
+.whatsapp-cookie-btn:hover {
+  transform: translateY(-5px) rotate(15deg);
+  box-shadow: var(--shadow-lg);
+}
+
+.whatsapp-cookie-btn i {
+  position: relative;
+}
+
+.whatsapp-cookie-btn::before {
+  content: "🍪";
+  position: absolute;
+  font-size: 1.3rem;
+  top: -5px;
+  right: -5px;
+  filter: drop-shadow(0 2px 3px rgba(0,0,0,0.2));
+}
+
+/* Location and Contact Info */
+.info-banner {
+  background: var(--primary-light);
+  padding: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  text-align: center;
+  border-bottom: 2px solid var(--primary);
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--primary-dark);
+  font-weight: 500;
+}
+
+.info-item i {
+  font-size: 1.2rem;
+  color: var(--primary);
+}
+    /* Cookie Fortune Teller styles */
+.cookie-crumble {
+  animation: crumble 0.5s forwards !important;
+}
+
+@keyframes crumble {
+  0% { transform: scale(1); }
+  20% { transform: scale(1.2) rotate(10deg); }
+  50% { transform: scale(0.9) rotate(-5deg); opacity: 0.8; }
+  80% { transform: scale(1.1) rotate(20deg); opacity: 0.6; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.cookie-fortune {
+  position: fixed;
+  background: #fff9e5;
+  border: 2px dashed var(--primary);
+  border-radius: 15px;
+  padding: 20px;
+  min-width: 300px;
+  max-width: 80vw; /* Increased from 70vw */
+  text-align: center;
+  box-shadow: var(--shadow-lg);
+  z-index: 100;
+  font-family: 'Dancing Script', cursive;
+  font-size: 1.4rem;
+  color: var(--primary-dark);
+  transform-origin: center;
+  animation: fortune-appear 0.5s forwards;
+  /* Added these properties to ensure visibility */
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@keyframes fortune-appear {
+  0% { transform: scale(0.2) rotate(-10deg); opacity: 0; }
+  70% { transform: scale(1.1) rotate(5deg); }
+  100% { transform: scale(1) rotate(0); opacity: 1; }
+}
+
+.cookie-sparkle {
+  position: fixed;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 100;
+  animation: sparkle-fade 1s forwards;
+}
+
+@keyframes sparkle-fade {
+  0% { transform: scale(0) translate(0, 0); opacity: 1; }
+  100% { transform: scale(1) translate(var(--tx, 50px), var(--ty, -50px)); opacity: 0; }
+}
+
+.cookie-trail {
+  position: fixed;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent);
+  pointer-events: none;
+  z-index: 90;
+  opacity: 0.7;
+  animation: trail-fade 0.5s forwards;
+}
+
+@keyframes trail-fade {
+  0% { transform: scale(1); opacity: 0.7; }
+  100% { transform: scale(0); opacity: 0; }
+}
   </style>
 </head>
 <body>
@@ -645,6 +809,17 @@
       <i class="fas fa-chevron-down"></i>
     </a>
   </div>
+  <!-- Info Banner -->
+<div class="info-banner">
+  <div class="info-item">
+    <i class="fas fa-map-marker-alt"></i>
+    <span>Tyre, Lebanon</span>
+  </div>
+  <div class="info-item">
+    <i class="fas fa-phone"></i>
+    <span>70006252</span>
+  </div>
+</div>
 
   <!-- Navigation -->
   <div class="nav-wrapper" id="menu">
@@ -737,40 +912,200 @@
     };
 
     // Floating cookies animation
-    function createFloatingCookies() {
-      const container = document.getElementById('floatingCookiesContainer');
-      const cookieEmojis = ['🍪', '🥐', '🧁', '🍰', '🍩'];
-      const numCookies = 10;
-      
-      for (let i = 0; i < numCookies; i++) {
-        const cookie = document.createElement('div');
-        cookie.className = 'floating-cookies';
-        cookie.style.left = `${Math.random() * 100}vw`;
-        cookie.style.animationDuration = `${15 + Math.random() * 10}s`;
-        cookie.style.animationDelay = `${Math.random() * 5}s`;
-        cookie.style.fontSize = `${20 + Math.random() * 20}px`;
-        cookie.style.opacity = `${0.4 + Math.random() * 0.3}`;
-        cookie.textContent = cookieEmojis[Math.floor(Math.random() * cookieEmojis.length)];
-        container.appendChild(cookie);
-      }
-    }
+   // Floating cookies animation - one cookie at a time with 15 second interval
+// Floating cookies animation - one cookie at a time with 15 second interval
+function createFloatingCookies() {
+  const container = document.getElementById('floatingCookiesContainer');
+  const cookieEmoji = '🍪'; // Cookie emoji
+  const milkshakeEmoji = '🥤'; // Milkshake emoji
+  
+  // Create one cookie initially
+  createSingleCookie();
+  
+  // Function to create a single cookie
+  function createSingleCookie() {
+    // Clear any existing cookies first
+    container.innerHTML = '';
+    
+    // Create just one cookie
+    const cookie = document.createElement('div');
+    cookie.className = 'floating-cookies';
+    cookie.style.left = `${Math.random() * 100}vw`;
+    cookie.style.animationDuration = '10s'; // Animation duration
+    cookie.style.fontSize = `${20 + Math.random() * 15}px`;
+    cookie.style.opacity = `${0.4 + Math.random() * 0.3}`;
+    cookie.textContent = cookieEmoji;
+    
+    // Add click/tap event listener to transform cookie
+    cookie.style.pointerEvents = 'auto'; // Make the cookie clickable
+    cookie.addEventListener('click', function() {
+      this.textContent = milkshakeEmoji;
+      this.style.fontSize = `${parseInt(this.style.fontSize) + 5}px`; // Make it slightly larger
+      this.style.transform += ' rotate(360deg)'; // Add a spin effect
+      this.style.transition = 'all 0.3s ease'; // Add transition for smooth effect
+    });
+    
+    container.appendChild(cookie);
+    
+    // Wait 15 seconds before creating the next cookie
+    setTimeout(createSingleCookie, 15000);
+  }
+}
 
     // Toggle category dropdown
-    function setupCategoryScrollButton() {
-      const button = document.getElementById('categoryScrollBtn');
-      const dropdown = document.getElementById('categoryDropdown');
-      
-      button.addEventListener('click', function() {
-        dropdown.classList.toggle('show');
-      });
-      
-      // Close dropdown when clicking outside
-      document.addEventListener('click', function(event) {
-        if (!button.contains(event.target) && !dropdown.contains(event.target)) {
-          dropdown.classList.remove('show');
-        }
-      });
+   // Fortune Cookie Menu Revealer
+function setupCategoryScrollButton() {
+  const button = document.getElementById('categoryScrollBtn');
+  const dropdown = document.getElementById('categoryDropdown');
+  
+  // Add custom animation elements
+  const fortuneElement = document.createElement('div');
+  fortuneElement.className = 'cookie-fortune';
+  fortuneElement.style.display = 'none';
+  document.body.appendChild(fortuneElement);
+  
+  // Fortune messages - compliments paired with menu sections
+  const fortunes = [
+    "Your smile is as sweet as our cookies!",
+    "Your day will be as delightful as our cinnamon rolls!",
+    "Happiness awaits in our cake selection!",
+    "Your future holds a delicious milkshake!",
+    "Good fortune comes with our tartes!",
+    "A cheesecake will bring you joy today!",
+    "Luck favors those who try our ice cream!",
+    "Your wisdom tells you to explore our drinks menu!",
+    "The stars align for you to discover our add-ons!"
+  ];
+  
+  // Secret menu reveals - appear 20% of the time
+  const secretMenuItems = [
+    "🌟 SECRET MENU: Ask about our Cookie Dough Milkshake! 🌟",
+    "🌟 SECRET MENU: Try our Brownie Cheesecake Fusion! 🌟",
+    "🌟 SPECIAL OFFER: Show this message for 10% off today! 🌟",
+    "🌟 SECRET MENU: The Triple Chocolate Experience awaits! 🌟"
+  ];
+  
+  // Sections for jumping
+  const sections = ["cookies", "rolls", "cake-slices", "cups", "tartes", 
+                   "cheesecakes", "ice-cream", "drinks", "add-ons"];
+  
+  // When cookie is clicked
+  button.addEventListener('click', function(e) {
+    // Prevent any existing dropdown behavior
+    e.stopPropagation();
+    
+    // Create crumbling animation effect
+    button.classList.add('cookie-crumble');
+    
+    // Generate sparkles
+    createSparkles(e.clientX, e.clientY);
+    
+    // Choose a random section to recommend
+    const randomIndex = Math.floor(Math.random() * fortunes.length);
+    const randomSection = sections[randomIndex] || sections[0];
+    
+    // Select random fortune
+    let fortune = fortunes[randomIndex];
+    
+    // 20% chance for secret menu item
+    if (Math.random() < 0.2) {
+      fortune = secretMenuItems[Math.floor(Math.random() * secretMenuItems.length)];
     }
+    
+    // Show fortune with typing effect
+    fortuneElement.style.display = 'block';
+    fortuneElement.style.left = `${e.clientX - 150}px`;
+    fortuneElement.style.top = `${e.clientY - 100}px`;
+    typeWriter(fortuneElement, fortune, 0, 50);
+    
+    // Scroll to section after reading fortune
+    setTimeout(() => {
+      const section = document.getElementById(randomSection);
+      if (section) {
+        window.scrollTo({
+          top: section.offsetTop - 80,
+          behavior: 'smooth'
+        });
+      }
+      
+      // Hide fortune and reset cookie
+      setTimeout(() => {
+        fortuneElement.style.display = 'none';
+        fortuneElement.textContent = '';
+        button.classList.remove('cookie-crumble');
+      }, 1000);
+    }, fortune.length * 50 + 1000); // Wait for typing effect + 1s reading time
+  });
+  
+  // Close dropdown when clicking outside
+  document.addEventListener('click', function(event) {
+    if (!button.contains(event.target) && !dropdown.contains(event.target)) {
+      dropdown.classList.remove('show');
+    }
+  });
+  
+  // Text typing effect
+  function typeWriter(element, text, i, speed) {
+    if (i < text.length) {
+      element.textContent += text.charAt(i);
+      i++;
+      setTimeout(() => typeWriter(element, text, i, speed), speed);
+    }
+  }
+  
+  // Create sparkle effect
+  function createSparkles(x, y) {
+    for (let i = 0; i < 20; i++) {
+      const sparkle = document.createElement('div');
+      sparkle.className = 'cookie-sparkle';
+      
+      // Random position around click
+      const posX = x + (Math.random() - 0.5) * 100;
+      const posY = y + (Math.random() - 0.5) * 100;
+      
+      sparkle.style.left = `${posX}px`;
+      sparkle.style.top = `${posY}px`;
+      
+      // Random color
+      const hue = Math.floor(Math.random() * 360);
+      sparkle.style.backgroundColor = `hsl(${hue}, 100%, 65%)`;
+      
+      // Random size
+      const size = 4 + Math.random() * 10;
+      sparkle.style.width = `${size}px`;
+      sparkle.style.height = `${size}px`;
+      
+      // Random animation duration
+      sparkle.style.animationDuration = `${0.5 + Math.random() * 1}s`;
+      
+      document.body.appendChild(sparkle);
+      
+      // Remove after animation
+      setTimeout(() => {
+        document.body.removeChild(sparkle);
+      }, 1500);
+    }
+    
+    // Add mouse trail for a few seconds
+    const trailTime = setTimeout(() => {
+      document.removeEventListener('mousemove', createTrail);
+    }, 3000);
+    
+    document.addEventListener('mousemove', createTrail);
+    
+    function createTrail(e) {
+      const trail = document.createElement('div');
+      trail.className = 'cookie-trail';
+      trail.style.left = `${e.clientX}px`;
+      trail.style.top = `${e.clientY}px`;
+      document.body.appendChild(trail);
+      
+      setTimeout(() => {
+        document.body.removeChild(trail);
+      }, 500);
+    }
+  }
+}
 
     async function loadMenu() {
       try {
@@ -1003,6 +1338,20 @@
 
     // Initialize the menu when the document is ready
     document.addEventListener('DOMContentLoaded', loadMenu);
+    // Setup WhatsApp button
+document.addEventListener('DOMContentLoaded', function() {
+  const whatsappBtn = document.querySelector('.whatsapp-cookie-btn');
+  if (whatsappBtn) {
+    whatsappBtn.addEventListener('click', function() {
+      // You could add analytics tracking here if needed
+      console.log('WhatsApp button clicked');
+    });
+  }
+});
   </script>
+  <!-- WhatsApp Cookie Button -->
+<a href="https://wa.me/96170006252" class="whatsapp-cookie-btn" target="_blank" aria-label="Contact us on WhatsApp">
+  <i class="fab fa-whatsapp"></i>
+</a>
 </body>
 </html>
