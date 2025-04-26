@@ -5,26 +5,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Heavenlynn Menu</title>
   <script src="https://unpkg.com/@supabase/supabase-js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;500;600;700&family=Megrim&family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Playfair+Display:wght@500;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
   <style>
     :root {
-     --background: #ffffff;
-    --card-bg: #1a1742;
-    --primary: #c471ed;
-    --primary-light: #f0c7ff;
-    --primary-dark: #834d9b;
-    --accent: #12c2e9;
-    --text: #ffffff;
-    --text-light: #c4c3cc;
-    --shadow-sm: 0 4px 12px rgba(196, 113, 237, 0.15);
-    --shadow-md: 0 6px 16px rgba(196, 113, 237, 0.2);
-    --shadow-lg: 0 12px 24px rgba(196, 113, 237, 0.25);
-    --gradient: linear-gradient(135deg, #12c2e9, #c471ed, #f64f59);
-    --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-    --radius-sm: 12px;
-    --radius-md: 20px;
-    --radius-lg: 30px;
+      --primary: #8a4fff;
+      --primary-light: #e4d7ff;
+      --primary-dark: #4e3474;
+      --accent: #ff7eb5;
+      --background: #e0d7ff;
+      --card-bg: #ffffff;
+      --text: #301e54;
+      --text-light: #6b6b6b;
+      --shadow-sm: 0 4px 12px rgba(138, 79, 255, 0.08);
+      --shadow-md: 0 6px 16px rgba(138, 79, 255, 0.12);
+      --shadow-lg: 0 12px 24px rgba(138, 79, 255, 0.16);
+      --gradient: linear-gradient(135deg, #a18cd1, #fbc2eb);
+      --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      --radius-sm: 12px;
+      --radius-md: 20px;
+      --radius-lg: 30px;
     }
 
     * {
@@ -34,15 +34,14 @@
     }
 
     body {
-      font-family: 'Quicksand', sans-serif;
-      background-color: var(--background);
+      font-family: 'Poppins', sans-serif;
+      background: var(--background);
       color: var(--text);
       line-height: 1.6;
     }
 
     h1, h2, h3 {
-        font-family: 'Megrim', cursive;
-        letter-spacing: 2px;
+      font-family: 'Playfair Display', serif;
     }
 
     /* Contact info bar */
@@ -119,8 +118,13 @@
     }
 
     .hero-overlay {
-        background: linear-gradient(0deg, var(--background), rgba(15, 12, 41, 0.5));
-
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(0deg, rgba(78, 52, 116, 0.6), rgba(138, 79, 255, 0.3));
+      z-index: 0;
     }
 
     .hero-content {
@@ -131,20 +135,14 @@
     }
 
     .hero h1 {
-      font-family: 'Megrim', cursive;
-  font-size: clamp(4rem, 15vw, 8rem);
-  letter-spacing: 10px;
-  text-shadow: 0 0 20px var(--primary), 0 0 40px var(--accent);
-  animation: glow 3s infinite alternate;
+      font-family: 'Dancing Script', cursive;
+      font-size: clamp(3.5rem, 10vw, 6rem);
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 1rem;
+      text-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      letter-spacing: -0.5px;
     }
-    @keyframes glow {
-  0% {
-    text-shadow: 0 0 10px var(--primary), 0 0 20px var(--accent);
-  }
-  100% {
-    text-shadow: 0 0 20px var(--primary), 0 0 40px var(--accent), 0 0 80px var(--primary);
-  }
-}
 
     .hero p {
       font-size: clamp(1rem, 2vw, 1.3rem);
@@ -189,8 +187,6 @@
       box-shadow: var(--shadow-sm);
       padding: 1rem;
       transition: var(--transition);
-      border-top: 2px solid var(--primary);
-      border-bottom: 2px solid var(--primary);
     }
 
     .nav-wrapper.scrolled {
@@ -198,39 +194,39 @@
     }
 
     nav.nav-container {
-      border: none;
-  background: rgba(26, 23, 66, 0.7);
-  backdrop-filter: blur(10px);
-  padding: 15px;
+      display: flex;
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      gap: 0.5rem;
+      max-width: 1200px;
+      margin: auto;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: 0.5rem;
+      scrollbar-width: none; /* Firefox */
     }
 
     nav.nav-container::-webkit-scrollbar {
-      height: 8px;
-      display: block; /* Chrome, Safari, Opera */
+      display: none; /* Chrome, Safari, Opera */
     }
-
-    nav.nav-container::-webkit-scrollbar {
-  height: 8px;
-  display: block;
-}
-
-nav.nav-container::-webkit-scrollbar-track {
-  background: var(--primary-light);
-  border-radius: 10px;
-}
-
-nav.nav-container::-webkit-scrollbar-thumb {
-  background: var(--primary);
-  border-radius: 10px;
-  border: 2px solid var(--primary-dark);
-}
 
     nav a {
-       background: rgba(196, 113, 237, 0.2);
-  color: var(--text);
-  font-family: 'Comfortaa', cursive;
-  border: none;
-  transition: all 0.3s ease;
+      text-decoration: none;
+      color: var(--primary-dark);
+      font-weight: 500;
+      padding: 0.6rem 0.8rem;
+      border-radius: var(--radius-sm);
+      background: #f9f5ff;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.85rem;
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition);
+      min-width: auto;
+      flex: 0 0 auto;
+      justify-content: center;
+      white-space: nowrap;
     }
 
     nav a i {
@@ -239,8 +235,9 @@ nav.nav-container::-webkit-scrollbar-thumb {
 
     nav a:hover, nav a.active {
       background: var(--gradient);
-  transform: translateY(-3px) scale(1.05);
-  box-shadow: 0 5px 15px rgba(196, 113, 237, 0.4);
+      color: white;
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
     }
 
     /* Category scroll button */
@@ -356,14 +353,12 @@ nav.nav-container::-webkit-scrollbar-thumb {
     }
 
     .section-title h2 {
-       color: var(--primary-light);
-  text-shadow: 0 0 15px rgba(196, 113, 237, 0.6);
-  font-size: 2.5rem;
+      font-size: 2rem;
+      margin: 0;
+      color: var(--primary-dark);
+      position: relative;
+      display: inline-block;
     }
-    .section-title::after {
-  background: linear-gradient(90deg, var(--primary), transparent);
-  height: 3px;
-}
 
     section {
       margin-bottom: 4rem;
@@ -371,39 +366,34 @@ nav.nav-container::-webkit-scrollbar-thumb {
     }
 
     .items-grid {
-        display: flex;
-  flex-direction: column;
-  gap: 0;
+      display: grid;
+      gap: 16px;
+      grid-template-columns: repeat(1, 1fr);
     }
 
     /* Card layout updated for mobile-first design */
     .item-card {
-      background: rgba(26, 23, 66, 0.7);
-  border-radius: var(--radius-md);
-  box-shadow: 0 4px 20px rgba(18, 194, 233, 0.2);
-  position: relative;
-  transition: var(--transition);
-  border: none !important;
-  overflow: hidden;
-  backdrop-filter: blur(10px);
+      background: var(--card-bg);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+      transition: var(--transition);
+      position: relative;
+      display: grid;
+      grid-template-columns: 100px 1fr;
+      align-items: center;
     }
-    .item-card:first-child {
-  border-top: none !important;
-}
 
     .item-card:hover {
-    transform: translateY(-5px);
-  box-shadow: 0 10px 30px rgba(196, 113, 237, 0.3);
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
     }
 
     .item-image {
-      width: 90px;
-  height: 90px;
-  border-radius: 50%;
-  overflow: hidden;
-  position: relative;
-  box-shadow: 0 0 20px rgba(196, 113, 237, 0.5);
-  border: 2px solid var(--accent);
+      width: 100px;
+      height: 100px;
+      overflow: hidden;
+      position: relative;
     }
 
     .item-card img {
@@ -425,15 +415,22 @@ nav.nav-container::-webkit-scrollbar-thumb {
     }
 
     .item-name {
-      font-family: 'Comfortaa', cursive;
-  font-weight: 600;
-  color: var(--primary-light);
-  text-shadow: 0 0 10px rgba(196, 113, 237, 0.5);
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+      color: var(--primary-dark);
+      line-height: 1.2;
     }
 
     .item-desc {
-     color: var(--text-light);
-
+      font-size: 0.85rem;
+      color: var(--text-light);
+      margin-bottom: 0.5rem;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      line-height: 1.4;
     }
 
     .item-footer {
@@ -444,9 +441,9 @@ nav.nav-container::-webkit-scrollbar-thumb {
     }
 
     .item-price {
-     font-family: 'Comfortaa', cursive;
-  color: var(--accent);
-  text-shadow: 0 0 5px rgba(18, 194, 233, 0.5);
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: var(--primary);
     }
 
     .badge {
@@ -461,121 +458,6 @@ nav.nav-container::-webkit-scrollbar-thumb {
       font-weight: 500;
       z-index: 1;
     }
-    /* Updated item card styling */
-.items-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-}
-
-.item-card {
-  background: transparent;
-  border-radius: 0;
-  box-shadow: none;
-  position: relative;
-  display: grid;
-  grid-template-columns: 120px 1fr;
-  align-items: center;
-  padding: 1.5rem 0;
-  border-bottom: 1px solid #e0d7ff;
-  margin: 0;
-}
-
-.item-card:first-child {
-  border-top: 1px solid #e0d7ff;
-}
-
-.item-card:hover {
-  transform: none;
-  box-shadow: none;
-  background: rgba(224, 215, 255, 0.1);
-}
-
-.item-image {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  overflow: hidden;
-  position: relative;
-  box-shadow: var(--shadow-sm);
-}
-
-.item-content {
-  padding: 0 1rem;
-}
-
-.item-name {
-  font-size: 1.2rem;
-  font-weight: 600;
-  color: var(--primary-dark);
-  margin-bottom: 0.3rem;
-}
-
-.item-desc {
-  font-size: 0.9rem;
-  color: var(--text-light);
-  margin-bottom: 0.8rem;
-  -webkit-line-clamp: 3;
-}
-
-.badge {
-  position: absolute;
-  top: 1.5rem;
-  right: 0;
-}
-
-/* Responsive styles */
-@media (min-width: 768px) {
-  .items-grid {
-     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 25px;
-  }
-  
-  .item-card {
-      padding: 1.2rem;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .item-card:first-child {
-    border-top: 1px solid #e0d7ff;
-  }
-  
-  .item-image {
-    width: 100%;
-    height: 150px;
-    border-radius: 15px;
-    margin-bottom: 1rem;
-  }
-   .item-content {
-   padding: 0;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-  }
-  .item-footer {
-    margin-top: auto;
-  }
-  
-  .badge {
-    top: 0.5rem;
-    right: 0.5rem;
-  }
-}
-
-@media (min-width: 1024px) {
-  .items-grid {
-  grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-@media (min-width: 1200px) {
-  .items-grid {
-     grid-template-columns: repeat(4, 1fr);
-  }
-}
 
     /* Cookie animation */
     .floating-cookies {
@@ -583,10 +465,8 @@ nav.nav-container::-webkit-scrollbar-thumb {
       bottom: -50px;
       z-index: 5;
       opacity: 0.7;
-      pointer-events: auto;
+      pointer-events: none;
       animation: floatUp 15s linear infinite;
-      cursor: pointer;
-      user-select: none;
     }
 
     @keyframes floatUp {
@@ -623,8 +503,10 @@ nav.nav-container::-webkit-scrollbar-thumb {
     }
 
     footer {
-       background: linear-gradient(180deg, var(--background), var(--primary-dark));
-  padding: 4rem 1rem;
+      background: var(--primary-dark);
+      color: white;
+      padding: 3rem 1rem;
+      text-align: center;
     }
 
     .footer-content {
@@ -633,11 +515,9 @@ nav.nav-container::-webkit-scrollbar-thumb {
     }
 
     .footer-logo {
-      font-family: 'Megrim', cursive;
-  font-size: 3.5rem;
-  letter-spacing: 5px;
-  margin-bottom: 1.5rem;
-  text-shadow: 0 0 15px var(--primary);
+      font-family: 'Dancing Script', cursive;
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
     }
 
     .social-links {
@@ -659,8 +539,8 @@ nav.nav-container::-webkit-scrollbar-thumb {
     }
 
     .footer-text {
-       font-family: 'Quicksand', sans-serif;
-  opacity: 0.9;
+      font-size: 0.9rem;
+      opacity: 0.8;
     }
 
     /* Responsive adjustments */
@@ -739,163 +619,20 @@ nav.nav-container::-webkit-scrollbar-thumb {
         transform: translateY(-20px);
       }
     }
-    /* WhatsApp Cookie Button */
-.whatsapp-cookie-btn {
-  position: fixed;
-  left: 20px;
-  bottom: 80px;
-  width: 60px;
-  height: 60px;
-  background: #25D366;
-  color: white;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.8rem;
-  box-shadow: var(--shadow-md);
-  cursor: pointer;
-  z-index: 20;
-  transition: var(--transition);
-  border: 2px solid white;
-  text-decoration: none;
-}
-
-.whatsapp-cookie-btn:hover {
-  transform: translateY(-5px) rotate(15deg);
-  box-shadow: var(--shadow-lg);
-}
-
-.whatsapp-cookie-btn i {
-  position: relative;
-}
-
-.whatsapp-cookie-btn::before {
-  content: "🍪";
-  position: absolute;
-  font-size: 1.3rem;
-  top: -5px;
-  right: -5px;
-  filter: drop-shadow(0 2px 3px rgba(0,0,0,0.2));
-}
-
-/* Location and Contact Info */
-.info-banner {
-  background: linear-gradient(90deg, var(--primary-dark), var(--background));
-  padding: 1.5rem;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  gap: 2rem;
-  text-align: center;
-  border-bottom: none;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
-}
-
-.info-item {
-  display: flex;
-  align-items: center;
-  gap: 0.8rem;
-  color: var(--text);
-  font-weight: 500;
-  font-family: 'Comfortaa', cursive;
-}
-
-.info-item i {
- font-size: 1.3rem;
-  color: var(--accent);
-  text-shadow: 0 0 10px rgba(18, 194, 233, 0.5);
-}
-    /* Cookie Fortune Teller styles */
-.cookie-crumble {
-  animation: crumble 0.5s forwards !important;
-}
-
-@keyframes crumble {
-  0% { transform: scale(1); }
-  20% { transform: scale(1.2) rotate(10deg); }
-  50% { transform: scale(0.9) rotate(-5deg); opacity: 0.8; }
-  80% { transform: scale(1.1) rotate(20deg); opacity: 0.6; }
-  100% { transform: scale(1); opacity: 1; }
-}
-
-.cookie-fortune {
-  position: fixed;
-  top: 50% !important;
-  left: 50% !important;
-  transform: translate(-50%, -50%) !important;
-  background: #fff9e5;
-  border: 3px solid var(--primary);
-  border-radius: 15px;
-  padding: 25px;
-  min-width: 320px;
-  max-width: 90vw;
-  text-align: center;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  z-index: 1000;
-  font-family: 'Dancing Script', cursive;
-  font-size: 1.6rem;
-  color: var(--primary-dark);
-  animation: fortune-appear 0.5s forwards;
-  overflow-wrap: break-word;
-  word-wrap: break-word;
-}
-
-@keyframes fortune-appear {
-   0% { transform: translate(-50%, -50%) scale(0.2) rotate(-10deg); opacity: 0; }
-  70% { transform: translate(-50%, -50%) scale(1.1) rotate(5deg); }
-  100% { transform: translate(-50%, -50%) scale(1) rotate(0); opacity: 1; }
-}
-    .fortune-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.4);
-  z-index: 999;
-  display: none;
-}
-    .fortune-overlay.show {
-  display: block;
-}
-
-.cookie-sparkle {
-  position: fixed;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 100;
-  animation: sparkle-fade 1s forwards;
-}
-
-@keyframes sparkle-fade {
-  0% { transform: scale(0) translate(0, 0); opacity: 1; }
-  100% { transform: scale(1) translate(var(--tx, 50px), var(--ty, -50px)); opacity: 0; }
-}
-
-.cookie-trail {
-  position: fixed;
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: var(--accent);
-  pointer-events: none;
-  z-index: 90;
-  opacity: 0.7;
-  animation: trail-fade 0.5s forwards;
-}
-
-@keyframes trail-fade {
-  0% { transform: scale(1); opacity: 0.7; }
-  100% { transform: scale(0); opacity: 0; }
-}
   </style>
 </head>
 <body>
   <!-- Contact Bar -->
+  <div class="contact-bar">
+    <div class="contact-info">
+      <div><i class="fas fa-map-marker-alt"></i> Tyre, Lebanon</div>
+      <div><i class="fas fa-phone"></i> 70006252</div>
+    </div>
+    <div class="social-icons">
+      <a href="https://www.instagram.com/" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+    </div>
+  </div>
+
   <!-- Hero Section -->
   <div class="hero" role="banner">
     <div class="hero-overlay" aria-hidden="true"></div>
@@ -908,21 +645,6 @@ nav.nav-container::-webkit-scrollbar-thumb {
       <i class="fas fa-chevron-down"></i>
     </a>
   </div>
-  <!-- Info Banner -->
-<div class="info-banner">
-  <div class="info-item">
-    <i class="fas fa-map-marker-alt"></i>
-    <span>Tyre, Lebanon</span>
-  </div>
-  <div class="info-item">
-    <i class="fas fa-phone"></i>
-    <span>70006252</span>
-  </div>
-  <div class="info-item">
-    <i class="fab fa-instagram"></i>
-    <a href="https://www.instagram.com/" target="_blank" style="color: inherit; text-decoration: none;">@heavenlynn</a>
-  </div>
-</div>
 
   <!-- Navigation -->
   <div class="nav-wrapper" id="menu">
@@ -1015,205 +737,40 @@ nav.nav-container::-webkit-scrollbar-thumb {
     };
 
     // Floating cookies animation
-   // Floating cookies animation - one cookie at a time with 15 second interval
-// Floating cookies animation - one cookie at a time with 15 second interval
-function createFloatingCookies() {
-  const container = document.getElementById('floatingCookiesContainer');
-  const cookieEmoji = '🍪'; // Cookie emoji
-  const milkshakeEmoji = '🥤'; // Milkshake emoji
-  
-  // Create one cookie initially
-  createSingleCookie();
-  
-  // Function to create a single cookie
-  function createSingleCookie() {
-    // Clear any existing cookies first
-    container.innerHTML = '';
-    
-    // Create just one cookie
-    const cookie = document.createElement('div');
-    cookie.className = 'floating-cookies';
-    cookie.style.left = `${Math.random() * 100}vw`;
-    cookie.style.animationDuration = '10s'; // Animation duration
-    cookie.style.fontSize = `${20 + Math.random() * 15}px`;
-    cookie.style.opacity = `${0.4 + Math.random() * 0.3}`;
-    cookie.textContent = cookieEmoji;
-    
-    // Add click/tap event listener to transform cookie
-    cookie.style.pointerEvents = 'auto'; // Make the cookie clickable
-    cookie.addEventListener('click', function() {
-      this.textContent = milkshakeEmoji;
-      this.style.fontSize = `${parseInt(this.style.fontSize) + 5}px`; // Make it slightly larger
-      this.style.transform += ' rotate(360deg)'; // Add a spin effect
-      this.style.transition = 'all 0.3s ease'; // Add transition for smooth effect
-    });
-    
-    container.appendChild(cookie);
-    
-    // Wait 15 seconds before creating the next cookie
-    setTimeout(createSingleCookie, 15000);
-  }
-}
+    function createFloatingCookies() {
+      const container = document.getElementById('floatingCookiesContainer');
+      const cookieEmojis = ['🍪', '🥐', '🧁', '🍰', '🍩'];
+      const numCookies = 10;
+      
+      for (let i = 0; i < numCookies; i++) {
+        const cookie = document.createElement('div');
+        cookie.className = 'floating-cookies';
+        cookie.style.left = `${Math.random() * 100}vw`;
+        cookie.style.animationDuration = `${15 + Math.random() * 10}s`;
+        cookie.style.animationDelay = `${Math.random() * 5}s`;
+        cookie.style.fontSize = `${20 + Math.random() * 20}px`;
+        cookie.style.opacity = `${0.4 + Math.random() * 0.3}`;
+        cookie.textContent = cookieEmojis[Math.floor(Math.random() * cookieEmojis.length)];
+        container.appendChild(cookie);
+      }
+    }
 
     // Toggle category dropdown
-   // Fortune Cookie Menu Revealer
-function setupCategoryScrollButton() {
-  const button = document.getElementById('categoryScrollBtn');
-  const dropdown = document.getElementById('categoryDropdown');
-  
-  // Add custom animation elements
-  const fortuneElement = document.createElement('div');
-  const fortuneOverlay = document.createElement('div');
-fortuneOverlay.className = 'fortune-overlay';
-document.body.appendChild(fortuneOverlay);
-  fortuneElement.className = 'cookie-fortune';
-  fortuneElement.style.display = 'none';
-  document.body.appendChild(fortuneElement);
-  
-  // Fortune messages - compliments paired with menu sections
-  const fortunes = [
-    "Your smile is as sweet as our cookies!",
-    "Your day will be as delightful as our cinnamon rolls!",
-    "Happiness awaits in our cake selection!",
-    "Your future holds a delicious milkshake!",
-    "Good fortune comes with our tartes!",
-    "A cheesecake will bring you joy today!",
-    "Luck favors those who try our ice cream!",
-    "Your wisdom tells you to explore our drinks menu!",
-    "The stars align for you to discover our add-ons!"
-  ];
-  
-  // Secret menu reveals - appear 20% of the time
-  const secretMenuItems = [
-    "🌟 SECRET MENU: Ask about our Cookie Dough Milkshake! 🌟",
-    "🌟 SECRET MENU: Try our Brownie Cheesecake Fusion! 🌟",
-    "🌟 SPECIAL OFFER: Show this message for 10% off today! 🌟",
-    "🌟 SECRET MENU: The Triple Chocolate Experience awaits! 🌟"
-  ];
-  
-  // Sections for jumping
-  const sections = ["cookies", "rolls", "cake-slices", "cups", "tartes", 
-                   "cheesecakes", "ice-cream", "drinks", "add-ons"];
-  
-  // When cookie is clicked
-  button.addEventListener('click', function(e) {
-    // Prevent any existing dropdown behavior
-    e.stopPropagation();
-    
-    // Create crumbling animation effect
-    button.classList.add('cookie-crumble');
-    
-    // Generate sparkles
-    createSparkles(e.clientX, e.clientY);
-    
-    // Choose a random section to recommend
-    const randomIndex = Math.floor(Math.random() * fortunes.length);
-    const randomSection = sections[randomIndex] || sections[0];
-    
-    // Select random fortune
-    let fortune = fortunes[randomIndex];
-    
-    // 20% chance for secret menu item
-    if (Math.random() < 0.2) {
-      fortune = secretMenuItems[Math.floor(Math.random() * secretMenuItems.length)];
+    function setupCategoryScrollButton() {
+      const button = document.getElementById('categoryScrollBtn');
+      const dropdown = document.getElementById('categoryDropdown');
+      
+      button.addEventListener('click', function() {
+        dropdown.classList.toggle('show');
+      });
+      
+      // Close dropdown when clicking outside
+      document.addEventListener('click', function(event) {
+        if (!button.contains(event.target) && !dropdown.contains(event.target)) {
+          dropdown.classList.remove('show');
+        }
+      });
     }
-    
-    // Show fortune with typing effect
-    fortuneOverlay.classList.add('show');
-    fortuneElement.style.display = 'block';
-    fortuneElement.style.left = `${e.clientX - 150}px`;
-    fortuneElement.style.top = `${e.clientY - 100}px`;
-    typeWriter(fortuneElement, fortune, 0, 50);
-    
-    // Scroll to section after reading fortune
-    setTimeout(() => {
-      const section = document.getElementById(randomSection);
-      if (section) {
-        window.scrollTo({
-          top: section.offsetTop - 80,
-          behavior: 'smooth'
-        });
-      }
-      
-      // Hide fortune and reset cookie
-      setTimeout(() => {
-        fortuneElement.style.display = 'none';
-        fortuneElement.textContent = '';
-         fortuneOverlay.classList.remove('show'); 
-        button.classList.remove('cookie-crumble');
-      }, 1000);
-    }, fortune.length * 50 + 1000); // Wait for typing effect + 1s reading time
-  });
-  
-  // Close dropdown when clicking outside
-  document.addEventListener('click', function(event) {
-    if (!button.contains(event.target) && !dropdown.contains(event.target)) {
-      dropdown.classList.remove('show');
-    }
-  });
-  
-  // Text typing effect
-  function typeWriter(element, text, i, speed) {
-    if (i < text.length) {
-      element.textContent += text.charAt(i);
-      i++;
-      setTimeout(() => typeWriter(element, text, i, speed), speed);
-    }
-  }
-  
-  // Create sparkle effect
-  function createSparkles(x, y) {
-    for (let i = 0; i < 20; i++) {
-      const sparkle = document.createElement('div');
-      sparkle.className = 'cookie-sparkle';
-      
-      // Random position around click
-      const posX = x + (Math.random() - 0.5) * 100;
-      const posY = y + (Math.random() - 0.5) * 100;
-      
-      sparkle.style.left = `${posX}px`;
-      sparkle.style.top = `${posY}px`;
-      
-      // Random color
-      const hue = Math.floor(Math.random() * 360);
-      sparkle.style.backgroundColor = `hsl(${hue}, 100%, 65%)`;
-      
-      // Random size
-      const size = 4 + Math.random() * 10;
-      sparkle.style.width = `${size}px`;
-      sparkle.style.height = `${size}px`;
-      
-      // Random animation duration
-      sparkle.style.animationDuration = `${0.5 + Math.random() * 1}s`;
-      
-      document.body.appendChild(sparkle);
-      
-      // Remove after animation
-      setTimeout(() => {
-        document.body.removeChild(sparkle);
-      }, 1500);
-    }
-    
-    // Add mouse trail for a few seconds
-    const trailTime = setTimeout(() => {
-      document.removeEventListener('mousemove', createTrail);
-    }, 3000);
-    
-    document.addEventListener('mousemove', createTrail);
-    
-    function createTrail(e) {
-      const trail = document.createElement('div');
-      trail.className = 'cookie-trail';
-      trail.style.left = `${e.clientX}px`;
-      trail.style.top = `${e.clientY}px`;
-      document.body.appendChild(trail);
-      
-      setTimeout(() => {
-        document.body.removeChild(trail);
-      }, 500);
-    }
-  }
-}
 
     async function loadMenu() {
       try {
@@ -1446,20 +1003,6 @@ document.body.appendChild(fortuneOverlay);
 
     // Initialize the menu when the document is ready
     document.addEventListener('DOMContentLoaded', loadMenu);
-    // Setup WhatsApp button
-document.addEventListener('DOMContentLoaded', function() {
-  const whatsappBtn = document.querySelector('.whatsapp-cookie-btn');
-  if (whatsappBtn) {
-    whatsappBtn.addEventListener('click', function() {
-      // You could add analytics tracking here if needed
-      console.log('WhatsApp button clicked');
-    });
-  }
-});
   </script>
-  <!-- WhatsApp Cookie Button -->
-<a href="https://wa.me/96170006252" class="whatsapp-cookie-btn" target="_blank" aria-label="Contact us on WhatsApp">
-  <i class="fab fa-whatsapp"></i>
-</a>
 </body>
 </html>
