@@ -1034,24 +1034,225 @@ nav.nav-container::-webkit-scrollbar-thumb {
   50% { transform: scale(1.1); }
   100% { transform: scale(1); }
 }
+    /* New Item Announcement */
+.new-item-announcement {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.9rem;
+  position: relative;
+  background: linear-gradient(90deg, rgba(255,126,181,0.2), var(--accent));
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-weight: 500;
+  animation: glow 2s infinite alternate;
+  cursor: pointer;
+}
+
+.new-item-announcement i {
+  color: gold;
+  filter: drop-shadow(0 0 3px rgba(255, 215, 0, 0.8));
+}
+
+.view-item-btn {
+  background: white;
+  color: var(--primary-dark);
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-left: 6px;
+  transition: all 0.2s ease;
+}
+
+.new-item-announcement:hover .view-item-btn {
+  background: var(--primary-dark);
+  color: white;
+  transform: scale(1.1);
+}
+
+@keyframes glow {
+  0% { box-shadow: 0 0 5px var(--accent); }
+  100% { box-shadow: 0 0 15px var(--accent); }
+}
+
+/* New Item Popup Styles */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(5px);
+  z-index: 1000;
+  display: none;
+}
+
+.new-item-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.9);
+  background: white;
+  z-index: 1001;
+  width: 90%;
+  max-width: 400px;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  display: none;
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+  overflow: hidden;
+}
+
+.new-item-popup.active {
+  display: block;
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.popup-overlay.active {
+  display: block;
+}
+
+.new-item-popup-content {
+  padding: 25px;
+  text-align: center;
+}
+
+.close-popup {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  font-size: 24px;
+  color: var(--primary-dark);
+  cursor: pointer;
+  z-index: 10;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 50%;
+}
+
+.new-item-image {
+  width: 180px;
+  height: 180px;
+  margin: 0 auto 20px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid var(--primary-light);
+  position: relative;
+}
+
+.new-item-image::after {
+  content: "NEW";
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: var(--accent);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: bold;
+  transform: rotate(15deg);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+}
+
+.new-item-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.new-item-popup h3 {
+  color: var(--primary);
+  margin-bottom: 20px;
+  font-family: 'Dancing Script', cursive;
+  font-size: 2rem;
+}
+
+.new-item-popup h4 {
+  color: var(--primary-dark);
+  margin-bottom: 10px;
+  font-size: 1.3rem;
+}
+
+.new-item-popup p {
+  color: var(--text-light);
+  margin-bottom: 20px;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.new-item-price {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--primary);
+  margin-bottom: 20px;
+}
+
+.order-now-btn {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 25px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+  box-shadow: 0 5px 15px rgba(138, 79, 255, 0.3);
+}
+
+.order-now-btn:hover {
+  background: var(--primary-dark);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(138, 79, 255, 0.4);
+}
+
+/* Add Font Awesome sparkles icon */
+.fa-sparkles:before {
+  content: "\f890";
+}
   </style>
 </head>
 <body>
-  <!-- Cosmic Contact Bar -->
+ <!-- Cosmic Contact Bar -->
 <div class="cosmic-contact-bar">
   <div class="shooting-star" style="top: 10%; animation-delay: 0s;"></div>
   <div class="shooting-star" style="top: 50%; animation-delay: 2s;"></div>
   <div class="shooting-star" style="top: 80%; animation-delay: 4s;"></div>
   
   <div class="cosmic-contact-info">
-    <div><i class="fas fa-map-marker-alt"></i> Tyre, Lebanon</div>
-    <div><i class="fas fa-phone"></i> 70006252</div>
     <div><i class="fas fa-star"></i> Heavenly Treats <span class="cosmic-badge">Now Serving</span></div>
-  </div>
-  <div class="cosmic-social-icons">
-    <a href="https://www.instagram.com/" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+    <div class="new-item-announcement" id="newItemAnnouncement">
+      <i class="fas fa-sparkles"></i> New Item Just Arrived!
+      <span class="view-item-btn" id="viewNewItemBtn">View</span>
+    </div>
   </div>
 </div>
+
+<!-- New Item Popup -->
+<div class="new-item-popup" id="newItemPopup">
+  <div class="new-item-popup-content">
+    <span class="close-popup" id="closePopup">&times;</span>
+    <h3>New Item Just Arrived!</h3>
+    <div class="new-item-image">
+      <img src="/api/placeholder/400/400" alt="New Item">
+    </div>
+    <h4>Cosmic Chocolate Cookie</h4>
+    <p>Our latest creation featuring a blend of premium dark chocolate, caramelized hazelnuts, and a touch of sea salt, crowned with edible gold flakes for a truly heavenly experience.</p>
+    <div class="new-item-price">$3.99</div>
+    <button class="order-now-btn">Order Now</button>
+  </div>
+</div>
+<div class="popup-overlay" id="popupOverlay"></div>
 
   <!-- Hero Section -->
   <div class="hero" role="banner">
@@ -1614,6 +1815,79 @@ document.addEventListener('DOMContentLoaded', function() {
       console.log('WhatsApp button clicked');
     });
   }
+});
+    // New Item Popup functionality
+document.addEventListener('DOMContentLoaded', function() {
+  const newItemAnnouncement = document.getElementById('newItemAnnouncement');
+  const viewNewItemBtn = document.getElementById('viewNewItemBtn');
+  const newItemPopup = document.getElementById('newItemPopup');
+  const closePopup = document.getElementById('closePopup');
+  const popupOverlay = document.getElementById('popupOverlay');
+
+  // Function to open popup
+  function openPopup() {
+    newItemPopup.classList.add('active');
+    popupOverlay.classList.add('active');
+    
+    // Add sparkle effect around the popup
+    createSparkleEffect();
+  }
+  
+  // Function to close popup
+  function closePopup() {
+    newItemPopup.classList.remove('active');
+    popupOverlay.classList.remove('active');
+    
+    // Clear any sparkle elements
+    document.querySelectorAll('.popup-sparkle').forEach(el => el.remove());
+  }
+  
+  // Create sparkle effect around the popup
+  function createSparkleEffect() {
+    for (let i = 0; i < 12; i++) {
+      const sparkle = document.createElement('div');
+      sparkle.className = 'cookie-sparkle popup-sparkle';
+      
+      // Position sparkles in a circle around the popup
+      const angle = (i / 12) * Math.PI * 2;
+      const radius = 220;
+      const centerX = window.innerWidth / 2;
+      const centerY = window.innerHeight / 2;
+      
+      const posX = centerX + Math.cos(angle) * radius;
+      const posY = centerY + Math.sin(angle) * radius;
+      
+      sparkle.style.left = `${posX}px`;
+      sparkle.style.top = `${posY}px`;
+      
+      // Random colors for sparkles
+      const colors = ['#ff7eb5', '#8a4fff', '#ffc0cb', '#ffdf00'];
+      sparkle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+      
+      // Larger sparkles
+      const size = 8 + Math.random() * 10;
+      sparkle.style.width = `${size}px`;
+      sparkle.style.height = `${size}px`;
+      
+      // Longer animation
+      sparkle.style.animationDuration = `${2 + Math.random() * 2}s`;
+      
+      document.body.appendChild(sparkle);
+    }
+  }
+  
+  // Event listeners
+  newItemAnnouncement.addEventListener('click', openPopup);
+  viewNewItemBtn.addEventListener('click', function(e) {
+    e.stopPropagation(); // Prevent triggering the parent's click event
+    openPopup();
+  });
+  
+  closePopup.addEventListener('click', closePopup);
+  popupOverlay.addEventListener('click', closePopup);
+  
+  // Automatically show the popup after 3 seconds of page load
+  setTimeout(openPopup, 3000);
 });
   </script>
   <!-- WhatsApp Cookie Button -->
