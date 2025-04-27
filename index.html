@@ -1089,7 +1089,12 @@ function setupCategoryScrollButton() {
   const dropdown = document.getElementById('categoryDropdown');
   
   // Add custom animation elements
-  const fortuneElement = document.createElement('div');
+// Add custom animation elements
+const fortuneElement = document.createElement('div');
+fortuneElement.className = 'cookie-fortune';
+fortuneElement.style.display = 'none'; // Initially hidden
+document.body.appendChild(fortuneElement);
+
 const fortuneOverlay = document.createElement('div');
 fortuneOverlay.className = 'fortune-overlay';
 document.body.appendChild(fortuneOverlay);
@@ -1144,11 +1149,14 @@ document.body.appendChild(fortuneOverlay);
     
     // Show fortune with typing effect
     // Show overlay
-    fortuneOverlay.classList.add('show');
-    fortuneElement.style.display = 'block';
-    fortuneElement.style.left = `${e.clientX - 150}px`;
-    fortuneElement.style.top = `${e.clientY - 100}px`;
-    typeWriter(fortuneElement, fortune, 0, 50);
+   // Show fortune with typing effect
+// Show overlay
+// Show fortune with typing effect
+// Show overlay
+fortuneOverlay.classList.add('show');
+fortuneElement.style.display = 'block';
+fortuneElement.textContent = ''; // Clear any previous text
+typeWriter(fortuneElement, fortune, 0, 50);
     
     // Scroll to section after reading fortune
     setTimeout(() => {
