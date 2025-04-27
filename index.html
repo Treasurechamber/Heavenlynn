@@ -196,20 +196,20 @@
     }
 
     nav.nav-container {
-      display: flex;
-      flex-wrap: nowrap;
-      justify-content: flex-start;
-      gap: 0.5rem;
-      max-width: 1200px;
-      margin: auto;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      padding-bottom: 0.5rem;
-      scrollbar-width: none; /* Firefox */
-      scrollbar-color: var(--primary) var(--primary-light);
-      border: 1px solid var(--primary);
-      border-radius: var(--radius-sm);
-      padding: 10px;
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        gap: 0.5rem;
+        max-width: 1200px;
+        margin: auto;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 0.5rem;
+        scrollbar-width: none; /* Firefox */
+        scrollbar-color: var(--primary) var(--primary-light);
+        border-radius: var(--radius-sm);
+        padding: 10px;
+
     }
 
     nav.nav-container::-webkit-scrollbar {
@@ -826,8 +826,8 @@ nav.nav-container::-webkit-scrollbar-thumb {
 }
 
 .item-image {
-   width: 120px;
-  height: 120px;
+   width: 90px;
+  height: 90px;
   border-radius: 50%;
   overflow: hidden;
   position: relative;
@@ -882,7 +882,7 @@ nav.nav-container::-webkit-scrollbar-thumb {
   
   .item-image {
      width: 100%;
-    height: 180px;
+    height: 140px;
     border-radius: 15px;
     margin-bottom: 1rem;
   }
@@ -913,19 +913,145 @@ nav.nav-container::-webkit-scrollbar-thumb {
     grid-template-columns: repeat(4, 1fr);
   }
 }
+    /* Cosmic Contact Bar */
+.cosmic-contact-bar {
+  background: linear-gradient(90deg, var(--primary-dark), #24243e, #302b63);
+  color: white;
+  padding: 10px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  position: sticky;
+  top: 0;
+  z-index: 25;
+  overflow: hidden;
+}
+
+.cosmic-contact-bar::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 2px),
+    radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 1px);
+  background-size: 50px 50px, 25px 25px;
+  background-position: 0 0, 25px 25px;
+  animation: twinkle 6s linear infinite;
+  opacity: 0.2;
+}
+
+@keyframes twinkle {
+  0% { background-position: 0 0, 25px 25px; }
+  100% { background-position: 50px 50px, 75px 75px; }
+}
+
+.cosmic-contact-info {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 2;
+}
+
+.cosmic-contact-info div {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  position: relative;
+}
+
+.cosmic-contact-info i {
+  font-size: 1rem;
+  color: var(--accent);
+  filter: drop-shadow(0 0 2px rgba(255, 126, 181, 0.5));
+}
+
+.cosmic-social-icons {
+  display: flex;
+  gap: 12px;
+  position: relative;
+  z-index: 2;
+}
+
+.cosmic-social-icons a {
+  color: white;
+  font-size: 1.2rem;
+  transition: var(--transition);
+}
+
+.cosmic-social-icons a:hover {
+  color: var(--accent);
+  transform: translateY(-3px) rotate(10deg);
+  filter: drop-shadow(0 0 3px var(--accent));
+}
+
+.shooting-star {
+  position: absolute;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, white, transparent);
+  animation: shoot 3s linear infinite;
+  opacity: 0;
+  z-index: 1;
+}
+
+@keyframes shoot {
+  0% {
+    transform: translateX(-100px) translateY(10px);
+    opacity: 0;
+    width: 0;
+  }
+  10% {
+    opacity: 1;
+    width: 20px;
+  }
+  100% {
+    transform: translateX(calc(100vw + 100px)) translateY(-10px);
+    opacity: 0;
+    width: 20px;
+  }
+}
+
+.cosmic-badge {
+  background: var(--accent);
+  color: white;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 0.7rem;
+  font-weight: 500;
+  margin-left: 8px;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
   </style>
 </head>
 <body>
-  <!-- Contact Bar -->
-  <div class="contact-bar">
-    <div class="contact-info">
-      <div><i class="fas fa-map-marker-alt"></i> Tyre, Lebanon</div>
-      <div><i class="fas fa-phone"></i> 70006252</div>
-    </div>
-    <div class="social-icons">
-      <a href="https://www.instagram.com/" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-    </div>
+  <!-- Cosmic Contact Bar -->
+<div class="cosmic-contact-bar">
+  <div class="shooting-star" style="top: 10%; animation-delay: 0s;"></div>
+  <div class="shooting-star" style="top: 50%; animation-delay: 2s;"></div>
+  <div class="shooting-star" style="top: 80%; animation-delay: 4s;"></div>
+  
+  <div class="cosmic-contact-info">
+    <div><i class="fas fa-map-marker-alt"></i> Tyre, Lebanon</div>
+    <div><i class="fas fa-phone"></i> 70006252</div>
+    <div><i class="fas fa-star"></i> Heavenly Treats <span class="cosmic-badge">Now Serving</span></div>
   </div>
+  <div class="cosmic-social-icons">
+    <a href="https://www.instagram.com/" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+  </div>
+</div>
 
   <!-- Hero Section -->
   <div class="hero" role="banner">
