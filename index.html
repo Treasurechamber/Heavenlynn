@@ -95,17 +95,102 @@
     }
 
     .hero {
-      height: 85vh;
-  max-height: 700px;
-  min-height: 500px;
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  background: linear-gradient(135deg, #5B247A, #1BCEDF);
+       height: 85vh;
+    max-height: 700px;
+    min-height: 500px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: #130c2a; 
     }
+      .hero-celestial {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(ellipse at center, rgba(91, 55, 183, 0.4) 0%, rgba(18, 12, 36, 0.9) 70%);
+    z-index: 0;
+    animation: pulse 8s ease-in-out infinite alternate;
+  }
+      .hero-stardust {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image: 
+      radial-gradient(white, rgba(255,255,255,.4) 2px, transparent 5px),
+      radial-gradient(white, rgba(255,255,255,.2) 1px, transparent 4px),
+      radial-gradient(white, rgba(255,255,255,.1) 2px, transparent 6px);
+    background-size: 550px 550px, 350px 350px, 250px 250px;
+    background-position: 0 0, 40px 60px, 130px 270px;
+    z-index: 1;
+    opacity: 0.6;
+    animation: starTwinkle 10s ease infinite, stardriftSlow 100s linear infinite;
+  }
+      .hero-aurora {
+    position: absolute;
+    top: 0;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(90deg, 
+      transparent 0%,
+      rgba(162, 83, 255, 0.1) 20%, 
+      rgba(105, 225, 255, 0.1) 30%, 
+      rgba(255, 145, 237, 0.1) 50%, 
+      rgba(162, 83, 255, 0.1) 70%, 
+      transparent 100%);
+    z-index: 2;
+    transform: rotate(10deg);
+    animation: auroraWave 25s ease-in-out infinite alternate;
+    filter: blur(30px);
+  }
+      .hero-radiance {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 70%;
+    height: 70%;
+    background: radial-gradient(ellipse at center, 
+      rgba(255, 255, 255, 0.15) 0%, 
+      rgba(229, 191, 255, 0.1) 40%, 
+      rgba(147, 86, 255, 0.05) 60%, 
+      transparent 100%);
+    border-radius: 50%;
+    z-index: 3;
+    animation: pulseGlow 5s ease-in-out infinite;
+  }
+
+  /* Animations */
+  @keyframes pulse {
+    0% { opacity: 0.5; }
+    100% { opacity: 0.8; }
+  }
+
+  @keyframes starTwinkle {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
+  }
+
+  @keyframes stardriftSlow {
+    0% { background-position: 0 0, 40px 60px, 130px 270px; }
+    100% { background-position: 550px 550px, 590px 610px, 680px 820px; }
+  }
+
+  @keyframes auroraWave {
+    0% { transform: rotate(10deg) translateY(5%); opacity: 0.5; }
+    50% { transform: rotate(15deg) translateY(0%); opacity: 0.7; }
+    100% { transform: rotate(10deg) translateY(-5%); opacity: 0.5; }
+  }
+
+  @keyframes pulseGlow {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); }
+    50% { transform: translate(-50%, -50%) scale(1.1); }
+  }
     .hero-gradient {
   position: absolute;
   top: 0;
@@ -181,21 +266,28 @@
     }
 
     .hero h1 {
-       position: relative;
-  z-index: 2;
-  font-family: 'Dancing Script', cursive;
-  font-size: clamp(5rem, 12vw, 8rem);
-  font-weight: 700;
-  color: #ffffff;
-  text-shadow: 0 5px 15px rgba(0, 0, 0, 0.3), 0 0 30px rgba(255, 126, 181, 0.6);
-  letter-spacing: -1px;
-  animation: floatText 6s ease-in-out infinite;
+      position: relative;
+    z-index: 10;
+    font-family: 'Dancing Script', cursive;
+    font-size: clamp(5rem, 12vw, 8rem);
+    font-weight: 700;
+    color: #ffffff;
+    text-shadow: 
+      0 0 10px rgba(255, 165, 255, 0.8),
+      0 0 20px rgba(147, 86, 255, 0.5),
+      0 0 30px rgba(105, 225, 255, 0.4),
+      0 0 40px rgba(162, 83, 255, 0.3);
+    letter-spacing: -1px;
+    animation: floatText 6s ease-in-out infinite, glowText 3s ease-in-out infinite alternate;
     }
     @keyframes floatText {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-15px); }
 }
-
+  @keyframes glowText {
+    0% { text-shadow: 0 0 10px rgba(255, 165, 255, 0.8), 0 0 20px rgba(147, 86, 255, 0.5), 0 0 30px rgba(105, 225, 255, 0.4), 0 0 40px rgba(162, 83, 255, 0.3); }
+    100% { text-shadow: 0 0 15px rgba(255, 165, 255, 0.9), 0 0 25px rgba(147, 86, 255, 0.6), 0 0 35px rgba(105, 225, 255, 0.5), 0 0 45px rgba(162, 83, 255, 0.4); }
+  }
     .hero p {
       font-size: clamp(1rem, 2vw, 1.3rem);
       color: #ffffff;
@@ -1030,9 +1122,12 @@ nav.nav-container::-webkit-scrollbar-thumb {
  
 <!-- Hero Section -->
 <div class="hero" role="banner">
-  <div class="hero-bubbles"></div>
-  <div class="hero-stars"></div>
-  <div class="hero-gradient"></div>
+  <!-- These are the artistic background elements -->
+  <div class="hero-celestial"></div>
+  <div class="hero-stardust"></div>
+  <div class="hero-aurora"></div>
+  <div class="hero-radiance"></div>
+  
   <div class="hero-content">
     <h1>Heavenlynn</h1>
   </div>
