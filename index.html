@@ -235,21 +235,22 @@ nav.nav-container::-webkit-scrollbar-thumb {
 
     nav a {
       text-decoration: none;
-      color: var(--primary-dark);
-      font-weight: 500;
-      padding: 0.6rem 0.8rem;
-      border-radius: var(--radius-sm);
-      background: #f9f5ff;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.85rem;
-      box-shadow: var(--shadow-sm);
-      transition: var(--transition);
-      min-width: auto;
-      flex: 0 0 auto;
-      justify-content: center;
-      white-space: nowrap;
+  color: var(--primary-dark);
+  font-weight: 500;
+  padding: 0.6rem 0.8rem;
+  border-radius: var(--radius-sm);
+  background: var(--primary-light); /* Change from #f9f5ff to var(--primary-light) for more visibility */
+  border: 1px solid var(--primary); /* Add a border for more definition */
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  box-shadow: var(--shadow-md); /* Increased shadow depth */
+  transition: var(--transition);
+  min-width: auto;
+  flex: 0 0 auto;
+  justify-content: center;
+  white-space: nowrap;
     }
 
     nav a i {
