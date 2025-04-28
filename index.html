@@ -321,7 +321,7 @@ nav.nav-container::-webkit-scrollbar-thumb {
     }
 
     .category-dropdown ul {
-      list-style: none;
+      list-: none;
       padding: 0;
       margin: 0;
       max-height: 200px;
@@ -709,7 +709,7 @@ nav.nav-container::-webkit-scrollbar-thumb {
   font-size: 1.2rem;
   color: var(--primary);
 }
-    /* Cookie Fortune Teller styles */
+    /* Cookie Fortune Teller s */
 .cookie-crumble {
   animation: crumble 0.5s forwards !important;
 }
@@ -858,7 +858,7 @@ nav.nav-container::-webkit-scrollbar-thumb {
   right: 0;
 }
 
-/* Responsive styles */
+/* Responsive s */
 @media (min-width: 768px) {
   .items-grid {
     display: grid;
@@ -913,6 +913,84 @@ nav.nav-container::-webkit-scrollbar-thumb {
     grid-template-columns: repeat(4, 1fr);
   }
 }
+    .nav-wrapper {
+    position: relative;
+    top: 0;
+    padding: 0;
+    background: transparent;
+    box-shadow: none;
+    border: none;
+  }
+
+  nav.nav-container {
+    display: none; /* Hide the horizontal category navigation */
+  }
+
+  /* Adjust spacing between sections for better flow */
+  section {
+    margin-bottom: 2rem;
+    padding-top: 1rem;
+    scroll-margin-top: 0;
+  }
+
+  /* Make section titles more prominent */
+  .section-title {
+    background: var(--primary-light);
+    padding: 0.8rem 1rem;
+    border-radius: var(--radius-sm);
+    margin-bottom: 1rem;
+    position: relative;
+  }
+
+  .section-title::after {
+    display: none;
+  }
+
+  .section-title h2 {
+    font-size: 1.5rem;
+    color: var(--primary-dark);
+    width: 100%;
+    text-align: center;
+  }
+
+  /* Better item spacing on mobile */
+  .item-card {
+    margin-bottom: 0.5rem;
+    padding: 1rem 0;
+  }
+
+  /* Hide category scroll button since all categories are now visible */
+  .category-scroll-btn {
+    display: none;
+  }
+  
+  /* Quick jump links at the top */
+  .quick-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    padding: 1rem;
+    background: var(--primary-light);
+    margin-bottom: 1rem;
+  }
+  
+  .quick-links a {
+    background: white;
+    padding: 8px 12px;
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    color: var(--primary-dark);
+    font-size: 0.9rem;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+  }
+  
+  .quick-links a:hover {
+    background: var(--primary);
+    color: white;
+    transform: translateY(-2px);
+  }
   </style>
 </head>
 <body>
@@ -968,6 +1046,9 @@ nav.nav-container::-webkit-scrollbar-thumb {
   <main id="menuSections">
     <!-- Menu items will be dynamically inserted here -->
   </main>
+  <div class="quick-links" id="quickLinks">
+  <!-- Quick jump links will be added here by JavaScript -->
+</div>
 
   <!-- Floating Category Scroll Button -->
   <button class="category-scroll-btn" id="categoryScrollBtn" aria-label="Browse Categories">
@@ -1397,6 +1478,34 @@ typeWriter(fortuneElement, fortune, 0, 50);
           section.appendChild(grid);
           sections.appendChild(section);
         });
+        // Create quick jump links
+const quickLinksContainer = document.getElementById('quickLinks');
+quickLinksContainer.innerHTML = ''; // Clear any existing links
+
+// Create links for each category
+sortedCategories.forEach(category => {
+  const catId = category.toLowerCase().replace(/\s+/g, '-');
+  const icon = iconMap[category] || 'fa-utensils';
+  
+  // Create quick link
+  const quickLink = document.createElement('a');
+  quickLink.href = `#${catId}`;
+  quickLink.innerHTML = `<i class="fas ${icon}"></i> ${category}`;
+  
+  // Add click event for smooth scrolling
+  quickLink.addEventListener('click', function(e) {
+    e.preventDefault();
+    const targetElement = document.getElementById(catId);
+    if (targetElement) {
+      window.scrollTo({
+        top: targetElement.offsetTop - 80,
+        behavior: 'smooth'
+      });
+    }
+  });
+  
+  quickLinksContainer.appendChild(quickLink);
+});
 
         // --- Intersection Observer for active navigation link highlighting ---
         const navLinks = document.querySelectorAll('nav a');
