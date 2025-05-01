@@ -59,13 +59,64 @@
       top: 0;
       z-index: 25;
     }
+    .fixed-contact-bar {
+  background: var(--primary-dark);
+  color: white;
+  padding: 12px 20px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  font-family: 'Cormorant Garamond', serif;
+  letter-spacing: 0.5px;
+  border-bottom: 2px solid var(--primary);
+}
 
     .contact-info {
       display: flex;
-      align-items: center;
-      gap: 15px;
-      flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  max-width: 1200px;
+  margin: 0 auto;
+  flex-wrap: wrap;
     }
+    .contact-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.95rem;
+  padding: 0 10px;
+}
+    .contact-item i {
+  color: var(--accent);
+  font-size: 0.9rem;
+}
+
+.contact-item span {
+  font-weight: 500;
+}
+
+.contact-item a {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: white;
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.contact-item a:hover {
+  color: var(--accent);
+}
+
+.contact-separator {
+  width: 1px;
+  height: 20px;
+  background-color: rgba(255, 255, 255, 0.3);
+}
 
     .contact-info div {
       display: flex;
@@ -95,6 +146,7 @@
     }
 
     .hero {
+      margin-top: 46px
   height: 65vh;  /* Reduced height */
   max-height: 550px;
   min-height: 350px;
@@ -184,7 +236,7 @@
       background: rgba(255, 255, 255, 0.95);
       backdrop-filter: blur(8px);
       position: sticky;
-      top: 45px;
+      top: 46px;
       z-index: 20;
       box-shadow: var(--shadow-sm);
       padding: 1rem;
@@ -601,6 +653,17 @@ nav.nav-container::-webkit-scrollbar-thumb {
       nav a i {
         font-size: 1.1rem;
       }
+        .contact-info {
+    justify-content: center;
+  }
+  
+  .contact-separator {
+    display: none;
+  }
+  
+  .contact-item {
+    padding: 5px 10px;
+  }
     }
 
     @media (min-width: 1024px) {
@@ -936,13 +999,25 @@ nav.nav-container::-webkit-scrollbar-thumb {
   </style>
 </head>
 <body>
-<div class="contact-bar">
+<!-- Fixed Contact Bar -->
+<div class="fixed-contact-bar">
   <div class="contact-info">
-    <div class="elegant-contact"><i class="fas fa-map-marker-alt"></i> <span>Tyre, Lebanon</span></div>
-    <div class="elegant-contact"><i class="fas fa-phone"></i> <span>70006252</span></div>
-  </div>
-  <div class="social-icons">
-    <a href="https://www.instagram.com/heavenlynn_lb/" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+    <div class="contact-item">
+      <i class="fas fa-map-marker-alt"></i>
+      <span>Tyre, Lebanon</span>
+    </div>
+    <div class="contact-separator"></div>
+    <div class="contact-item">
+      <i class="fas fa-phone"></i>
+      <span>70006252</span>
+    </div>
+    <div class="contact-separator"></div>
+    <div class="contact-item">
+      <a href="https://www.instagram.com/heavenlynn_lb/" target="_blank" aria-label="Instagram">
+        <i class="fab fa-instagram"></i>
+        <span>@heavenlynn_lb</span>
+      </a>
+    </div>
   </div>
 </div>
 
