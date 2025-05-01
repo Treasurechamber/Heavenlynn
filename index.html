@@ -47,16 +47,20 @@
 
     /* Contact info bar */
     .contact-bar {
-     background: var(--primary-dark);
+    background: var(--primary-dark);
   color: white;
   padding: 12px 20px;
   width: 100%;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  font-family: 'Cormorant Garamond', serif;
-  letter-spacing: 0.5px;
+  font-family: 'Playfair Display', serif;
+  letter-spacing: 0.8px;
   border-bottom: 2px solid var(--primary);
   position: fixed;
-  z-index: 20;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  transition: var(--transition);
     }
    /* .fixed-contact-bar {
   background: var(--primary-dark);
