@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Heavenlynn Menu</title>
   <script src="https://unpkg.com/@supabase/supabase-js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Playfair+Display:wght@500;700&family=Poppins:wght@300;400;500;600&family=Cormorant+Garamond:wght@400;500;600&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Playfair+Display:wght@500;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
   <style>
@@ -94,9 +95,9 @@
     }
 
     .hero {
-      height: 70vh;
-      max-height: 600px;
-      min-height: 400px;
+  height: 65vh;  /* Reduced height */
+  max-height: 550px;
+  min-height: 350px;
       position: relative;
       overflow: hidden;
       display: flex;
@@ -128,10 +129,11 @@
     }
 
     .hero-content {
-      position: relative;
-      z-index: 1;
-      max-width: 800px;
-      padding: 0 2rem;
+     position: relative;
+  z-index: 1;
+  max-width: 800px;
+  padding: 0 2rem;
+  margin-top: 35vh; /* Move content down */
     }
 
     .hero h1 {
@@ -414,8 +416,8 @@ nav.nav-container::-webkit-scrollbar-thumb {
     }
 
     .item-image {
-      width: 100px;
-      height: 100px;
+       width: 70px; /* Reduced from 90px */
+  height: 70px; /* Reduced from 90px */
       overflow: hidden;
       position: relative;
     }
@@ -577,6 +579,10 @@ nav.nav-container::-webkit-scrollbar-thumb {
     }
 
     @media (min-width: 768px) {
+        .item-image {
+    width: 100%;
+    height: 120px; /* Reduced from 140px */
+  }
       .items-grid {
         grid-template-columns: repeat(3, 1fr);
         gap: 20px;
@@ -858,6 +864,19 @@ nav.nav-container::-webkit-scrollbar-thumb {
   top: 1.5rem;
   right: 0;
 }
+    /* Elegant contact styling */
+.elegant-contact {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.9rem;
+  font-family: 'Cormorant Garamond', serif;
+  letter-spacing: 0.5px;
+}
+
+.elegant-contact span {
+  font-weight: 500;
+}
 
 /* Responsive styles */
 @media (min-width: 768px) {
@@ -917,40 +936,27 @@ nav.nav-container::-webkit-scrollbar-thumb {
   </style>
 </head>
 <body>
-  <!-- Contact Bar -->
-  <div class="contact-bar">
-    <div class="contact-info">
-      <div><i class="fas fa-map-marker-alt"></i> Tyre, Lebanon</div>
-      <div><i class="fas fa-phone"></i> 70006252</div>
-    </div>
-    <div class="social-icons">
-      <a href="https://www.instagram.com/" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-    </div>
+<div class="contact-bar">
+  <div class="contact-info">
+    <div class="elegant-contact"><i class="fas fa-map-marker-alt"></i> <span>Tyre, Lebanon</span></div>
+    <div class="elegant-contact"><i class="fas fa-phone"></i> <span>70006252</span></div>
   </div>
-
-  <!-- Hero Section -->
-  <div class="hero" role="banner">
-    <div class="hero-overlay" aria-hidden="true"></div>
-    <!-- Use a video or high-quality image URL in production -->
-    <img src="https://cfvsxnvvkdskbkljqicw.supabase.co/storage/v1/object/public/menu-photos//Heavenlynn%20Uplifted%20Logo%20-%20Digital%20Use%20(2).jpg" class="hero-video" alt="Bakery Display">
-    <div class="hero-content">
-      <h1>Heavenlynn</h1>
-    </div>
-    <a href="#menu" class="scroll-down" aria-label="Scroll Down">
-      <i class="fas fa-chevron-down"></i>
-    </a>
-  </div>
-  <!-- Info Banner -->
-<div class="info-banner">
-  <div class="info-item">
-    <i class="fas fa-map-marker-alt"></i>
-    <span>Tyre, Lebanon</span>
-  </div>
-  <div class="info-item">
-    <i class="fas fa-phone"></i>
-    <span>70006252</span>
+  <div class="social-icons">
+    <a href="https://www.instagram.com/heavenlynn_lb/" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
   </div>
 </div>
+
+<div class="hero" role="banner">
+  <div class="hero-overlay" aria-hidden="true"></div>
+  <img src="https://cfvsxnvvkdskbkljqicw.supabase.co/storage/v1/object/public/menu-photos//Heavenlynn%20Uplifted%20Logo%20-%20Digital%20Use%20(2).jpg" class="hero-video" alt="Bakery Display">
+  <div class="hero-content">
+    <h1>Heavenlynn</h1>
+  </div>
+  <a href="#menu" class="scroll-down" aria-label="Scroll Down">
+    <i class="fas fa-chevron-down"></i>
+  </a>
+</div>
+
 
   <!-- Navigation -->
   <div class="nav-wrapper" id="menu">
