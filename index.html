@@ -6,8 +6,28 @@
   <title>Heavenlynn Menu</title>
   <script src="https://unpkg.com/@supabase/supabase-js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Playfair+Display:wght@500;700&family=Poppins:wght@300;400;500;600&family=Cormorant+Garamond:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?faminnly=Dancing+Script:wght@600;700&family=Playfair+Display:wght@500;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
   <style>
+    :root {
+      --primary: #8a4fff;
+      --primary-light: #e4d7ff;
+      --primary-dark: #4e3474;
+      --accent: #ff7eb5;F
+      --background: #ffffff;
+      --card-bg: #ffffff;
+      --text: #301e54;
+      --text-light: #6b6b6b;
+      --shadow-sm: 0 4px 12px rgba(138, 79, 255, 0.08);
+      --shadow-md: 0 6px 16px rgba(138, 79, 255, 0.12);
+      --shadow-lg: 0 12px 24px rgba(138, 79, 255, 0.16);
+      --gradient: linear-gradient(135deg, #a18cd1, #fbc2eb);
+      --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      --radius-sm: 12px;
+      --radius-md: 20px;
+      --radius-lg: 30px;
+    }
+
     * {
       box-sizing: border-box;
       margin: 0;
@@ -27,212 +47,320 @@
 
     /* Contact info bar */
     .contact-bar {
-      background: var(--primary-dark);
-      color: white;
-      padding: 14px 20px;
-      width: 100%;
-      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
-      font-family: 'Cormorant Garamond', serif;
-      letter-spacing: 1px;
-      border-bottom: 2px solid var(--primary);
-      position: relative;
-      z-index: 20;
+     background: var(--primary-dark);
+  color: white;
+  padding: 14px 20px;
+  width: 100%;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
+  font-family: 'Cormorant Garamond', serif;
+  letter-spacing: 1px;
+  border-bottom: 2px solid var(--primary);
+  position: relative;
+  z-index: 20;
     }
+   /* .fixed-contact-bar {
+  background: var(--primary-dark);
+  color: white;
+  padding: 12px 20px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  font-family: 'Cormorant Garamond', serif;
+  letter-spacing: 0.5px;
+  border-bottom: 2px solid var(--primary);
+}*/
 
     .contact-info {
       display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 15px;
-      max-width: 1200px;
-      margin: 0 auto;
-      flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  max-width: 1200px;
+  margin: 0 auto;
+  flex-wrap: wrap;
     }
     .contact-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1rem;
+  padding: 0 12px;
+  position: relative;
+}
+
+.contact-item i {
+  color: var(--accent);
+  font-size: 1rem;
+}
+
+.contact-item span {
+  font-weight: 500;
+  font-style: italic;
+  text-transform: lowercase;
+}
+
+.contact-item a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: white;
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.contact-item a:hover {
+  color: var(--accent);
+}
+
+.contact-separator {
+  width: 1px;
+  height: 24px;
+  background-color: rgba(255, 255, 255, 0.4);
+  position: relative;
+}
+
+.contact-separator::before,
+.contact-separator::after {
+  content: none !important;;
+  position: absolute;
+  color: var(--accent);
+  font-size: 0.8rem;
+  left: -3px;
+}
+
+.contact-separator::before {
+  top: -4px;
+}
+
+.contact-separator::after {
+  bottom: -4px;
+}
+
+/* Make contact items more artistic on hover */
+.contact-item:hover i {
+  transform: scale(1.2) rotate(5deg);
+  transition: transform 0.3s ease;
+}
+
+.contact-item:hover span {
+  text-shadow: 0 0 8px rgba(255, 126, 181, 0.5);
+}
+    .-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.95rem;
+  padding: 0 10px;
+}
+    .-item i {
+  color: var(--accent);
+  font-size: 0.9rem;
+}
+
+.-item span {
+  font-weight: 500;
+}
+
+.-item a {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: white;
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.-item a:hover {
+  color: var(--accent);
+}
+
+.-separator {
+  width: 1px;
+  height: 20px;
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+    .-info div {
       display: flex;
       align-items: center;
-      gap: 10px;
-      font-size: 1rem;
-      padding: 0 12px;
-      position: relative;
+      gap: 6px;
+      font-size: 0.85rem;
     }
 
-    .contact-item i {
-      color: var(--accent);
+    .-info i {
       font-size: 1rem;
     }
 
-    .contact-item span {
-      font-weight: 500;
-      font-style: italic;
-      text-transform: lowercase;
-    }
-
-    .contact-item a {
+    .social-icons {
       display: flex;
-      align-items: center;
-      gap: 10px;
+      gap: 12px;
+    }
+
+    .social-icons a {
       color: white;
-      text-decoration: none;
+      font-size: 1.2rem;
       transition: var(--transition);
     }
 
-    .contact-item a:hover {
+    .social-icons a:hover {
       color: var(--accent);
+      transform: translateY(-3px);
     }
 
-    .contact-separator {
-      width: 1px;
-      height: 24px;
-      background-color: rgba(255, 255, 255, 0.4);
-      position: relative;
-    }
-
-    /* Artistic hover */
-    .contact-item:hover i {
-      transform: scale(1.2) rotate(5deg);
-      transition: transform 0.3s ease;
-    }
-    .contact-item:hover span {
-      text-shadow: 0 0 8px rgba(255, 126, 181, 0.5);
-    }
-
-    .slideshow-container {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -1;
-      overflow: hidden;
-    }
-
-    .slide {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      opacity: 0;
-      transform: scale(1.05);
-      transition: opacity 1s ease-in-out, transform 1.5s ease-in-out;
-      z-index: -1;
-
-      /* ⬅ UPDATED: keep desktop BGs crisp & bright */
-      background-size: cover;
-      background-position: center center;
-      background-repeat: no-repeat;
-      background-attachment: fixed;
-      filter: brightness(1.1);
-    }
-
-    .slide.active {
-      opacity: 1;
-      transform: scale(1);
-      z-index: 0;
-    }
+      .slideshow-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+  }
+  
+  .slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transform: scale(1.05);
+    transition: opacity 1s ease-in-out, transform 1.5s ease-in-out;
+    background-size: cover;
+    background-position: center;
+    z-index: -1;
+  }
+  
+  .slide.active {
+    opacity: 1;
+    transform: scale(1);
+    z-index: 0;
+  }
 
     .hero {
-      height: 65vh;
-      max-height: 550px;
-      min-height: 350px;
-      position: relative;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
+    height: 65vh;
+  max-height: 550px;
+  min-height: 350px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
     }
 
+.hero-video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 80%;
+  max-height: 80%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  z-index: -1;
+  filter: brightness(1);
+}
+
     .hero-overlay {
-      background: linear-gradient(0deg, rgba(48, 30, 84, 0.7), rgba(138, 79, 255, 0.5));
-      z-index: 0;
+     background: linear-gradient(0deg, rgba(48, 30, 84, 0.7), rgba(138, 79, 255, 0.5));
+    z-index: 0;
     }
 
     .hero-content {
-      margin-top: 0;
-      padding: 0 2rem;
-      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+    margin-top: 0;
+    padding: 0 2rem;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
     }
 
-    .hero-tagline {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(1.1rem, 2.5vw, 1.5rem);
-      color: #ffffff;
-      letter-spacing: 1px;
-      margin-top: -0.5rem;
-      margin-bottom: 2rem;
+     .hero-tagline {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+    color: #ffffff;
+    letter-spacing: 1px;
+    margin-top: -0.5rem;
+    margin-bottom: 2rem;
+  }
+  
+  /* Slideshow Navigation Dots */
+  .slideshow-dots {
+    position: absolute;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 12px;
+    z-index: 5;
+  }
+  
+  .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+  }
+  
+  .dot.active {
+    background-color: var(--accent);
+    transform: scale(1.3);
+    border-color: white;
+  }
+  
+  /* Promotion Badge */
+  .promo-badge {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 120px;
+    height: 120px;
+    z-index: 5;
+    animation: pulse 2s infinite alternate;
+    filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.3));
+  }
+  
+  .promo-badge-inner {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: var(--accent);
+    border-radius: 50%;
+    position: relative;
+    transform: rotate(15deg);
+    border: 3px solid white;
+  }
+  
+  .promo-text {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: white;
+    line-height: 1;
+    margin-bottom: 5px;
+  }
+  
+  .promo-subtext {
+    font-size: 0.9rem;
+    color: white;
+    font-weight: 500;
+  }
+  
+  @keyframes pulse {
+    0% {
+      transform: scale(1);
     }
-
-    .slideshow-dots {
-      position: absolute;
-      bottom: 80px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      gap: 12px;
-      z-index: 5;
+    100% {
+      transform: scale(1.1);
     }
-
-    .dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background-color: rgba(255, 255, 255, 0.5);
-      cursor: pointer;
-      transition: all 0.3s ease;
-      border: 2px solid transparent;
-    }
-
-    .dot.active {
-      background-color: var(--accent);
-      transform: scale(1.3);
-      border-color: white;
-    }
-
-    .promo-badge {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      width: 120px;
-      height: 120px;
-      z-index: 5;
-      animation: pulse 2s infinite alternate;
-      filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.3));
-    }
-
-    .promo-badge-inner {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      background: var(--accent);
-      border-radius: 50%;
-      position: relative;
-      transform: rotate(15deg);
-      border: 3px solid white;
-    }
-
-    .promo-text {
-      font-size: 1.8rem;
-      font-weight: 700;
-      color: white;
-      line-height: 1;
-      margin-bottom: 5px;
-    }
-
-    .promo-subtext {
-      font-size: 0.9rem;
-      color: white;
-      font-weight: 500;
-    }
-
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      100% { transform: scale(1.1); }
-    }
+  }
 
     .hero h1 {
       font-family: 'Dancing Script', cursive;
@@ -267,22 +395,28 @@
     }
 
     @keyframes bounce {
-      0%,20%,50%,80%,100% { transform: translateY(0) translateX(-50%); }
-      40% { transform: translateY(-20px) translateX(-50%); }
-      60% { transform: translateY(-10px) translateX(-50%); }
+      0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0) translateX(-50%);
+      }
+      40% {
+        transform: translateY(-20px) translateX(-50%);
+      }
+      60% {
+        transform: translateY(-10px) translateX(-50%);
+      }
     }
 
     .nav-wrapper {
-      background: rgba(255,255,255,0.95);
-      backdrop-filter: blur(8px);
-      position: sticky;
-      top: 0;
-      z-index: 20;
-      box-shadow: var(--shadow-sm);
-      padding: 1rem;
-      transition: var(--transition);
-      border-top: 2px solid var(--primary);
-      border-bottom: 2px solid var(--primary);
+      background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  box-shadow: var(--shadow-sm);
+  padding: 1rem;
+  transition: var(--transition);
+  border-top: 2px solid var(--primary);
+  border-bottom: 2px solid var(--primary);
     }
 
     .nav-wrapper.scrolled {
@@ -290,42 +424,67 @@
     }
 
     nav.nav-container {
-      display: flex;
-      gap: 0.5rem;
-      max-width: 1200px;
-      margin: auto;
-      overflow-x: auto;
-      padding: 10px;
-      scrollbar-width: none;
-      border-radius: var(--radius-sm);
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        gap: 0.5rem;
+        max-width: 1200px;
+        margin: auto;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 0.5rem;
+        scrollbar-width: none; /* Firefox */
+        scrollbar-color: var(--primary) var(--primary-light);
+        border-radius: var(--radius-sm);
+        padding: 10px;
+
     }
-    nav.nav-container::-webkit-scrollbar { height: 8px; }
-    nav.nav-container::-webkit-scrollbar-track {
-      background: var(--primary-light);
-      border-radius: 10px;
+
+    nav.nav-container::-webkit-scrollbar {
+      height: 8px;
+      display: block; /* Chrome, Safari, Opera */
     }
-    nav.nav-container::-webkit-scrollbar-thumb {
-      background: var(--primary);
-      border-radius: 10px;
-      border: 2px solid var(--primary-dark);
-    }
+
+    nav.nav-container::-webkit-scrollbar {
+  height: 8px;
+  display: block;
+}
+
+nav.nav-container::-webkit-scrollbar-track {
+  background: var(--primary-light);
+  border-radius: 10px;
+}
+
+nav.nav-container::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 10px;
+  border: 2px solid var(--primary-dark);
+}
 
     nav a {
       text-decoration: none;
-      color: var(--primary-dark);
-      font-weight: 500;
-      padding: 0.6rem 0.8rem;
-      border-radius: var(--radius-sm);
-      background: var(--primary-light);
-      border: 1px solid var(--primary);
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.85rem;
-      box-shadow: var(--shadow-md);
-      transition: var(--transition);
-      white-space: nowrap;
+  color: var(--primary-dark);
+  font-weight: 500;
+  padding: 0.6rem 0.8rem;
+  border-radius: var(--radius-sm);
+  background: var(--primary-light); /* Change from #f9f5ff to var(--primary-light) for more visibility */
+  border: 1px solid var(--primary); /* Add a border for more definition */
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  box-shadow: var(--shadow-md); /* Increased shadow depth */
+  transition: var(--transition);
+  min-width: auto;
+  flex: 0 0 auto;
+  justify-content: center;
+  white-space: nowrap;
     }
+
+    nav a i {
+      font-size: 0.9rem;
+    }
+
     nav a:hover, nav a.active {
       background: var(--gradient);
       color: white;
@@ -333,74 +492,808 @@
       box-shadow: var(--shadow-md);
     }
 
-    /* ... rest of your existing CSS ... */
+    /* Category scroll button */
+    .category-scroll-btn {
+      position: fixed;
+      right: 20px;
+      bottom: 80px;
+      width: 50px;
+      height: 50px;
+      background: var(--primary);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      box-shadow: var(--shadow-md);
+      cursor: pointer;
+      z-index: 20;
+      transition: var(--transition);
+      border: none;
+    }
 
+    .category-scroll-btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-5px) rotate(-15deg);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .category-dropdown {
+      position: fixed;
+      right: 20px;
+      bottom: 140px;
+      background: white;
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-lg);
+      padding: 1rem;
+      z-index: 20;
+      min-width: 200px;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(20px);
+      transition: var(--transition);
+    }
+
+    .category-dropdown.show {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .category-dropdown-title {
+      font-weight: 600;
+      margin-bottom: 10px;
+      color: var(--primary-dark);
+      border-bottom: 1px solid var(--primary-light);
+      padding-bottom: 5px;
+    }
+
+    .category-dropdown ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    .category-dropdown li {
+      margin-bottom: 5px;
+    }
+
+    .category-dropdown a {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      color: var(--text);
+      text-decoration: none;
+      border-radius: var(--radius-sm);
+      transition: var(--transition);
+    }
+
+    .category-dropdown a:hover {
+      background: var(--primary-light);
+      color: var(--primary-dark);
+    }
+
+    .category-dropdown a i {
+      font-size: 0.9rem;
+      color: var(--primary);
+    }
+
+    main {
+      padding: 2rem 1rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      margin-bottom: 2rem;
+      position: relative;
+    }
+
+    .section-title::after {
+      content: "";
+      flex-grow: 1;
+      height: 2px;
+      background: var(--primary-light);
+      margin-left: 15px;
+      border-radius: 2px;
+    }
+
+    .section-title h2 {
+      font-size: 2rem;
+      margin: 0;
+      color: var(--primary-dark);
+      position: relative;
+      display: inline-block;
+    }
+
+    section {
+      margin-bottom: 4rem;
+      scroll-margin-top: 100px;
+    }
+
+    .items-grid {
+      display: grid;
+      gap: 16px;
+      grid-template-columns: repeat(1, 1fr);
+    }
+
+    /* Card layout updated for mobile-first design */
+    .item-card {
+      background: var(--card-bg);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+      transition: var(--transition);
+      position: relative;
+      display: grid;
+      grid-template-columns: 100px 1fr;
+      align-items: center;
+    }
+
+    .item-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .item-image {
+       width: 70px; /* Reduced from 90px */
+  height: 70px; /* Reduced from 90px */
+      overflow: hidden;
+      position: relative;
+    }
+
+    .item-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+      filter: saturate(1.2) contrast(1.1); /* Makes food photos look more genuine */
+    }
+
+    .item-card:hover img {
+      transform: scale(1.05);
+    }
+
+    .item-content {
+      padding: 0.8rem;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .item-name {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+      color: var(--primary-dark);
+      line-height: 1.2;
+    }
+
+    .item-desc {
+      font-size: 0.85rem;
+      color: var(--text-light);
+      margin-bottom: 0.5rem;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      line-height: 1.4;
+    }
+
+    .item-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: auto;
+    }
+
+    .item-price {
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: var(--primary);
+    }
+
+    .badge {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: var(--accent);
+      color: white;
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-size: 0.7rem;
+      font-weight: 500;
+      z-index: 1;
+    }
+
+    /* Cookie animation */
+    .floating-cookies {
+      position: fixed;
+      bottom: -50px;
+      z-index: 5;
+      opacity: 0.7;
+      pointer-events: auto;
+      animation: floatUp 15s linear infinite;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 0;
+      }
+      10% {
+        opacity: 0.7;
+      }
+      90% {
+        opacity: 0.4;
+      }
+      100% {
+        transform: translateY(-100vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #d1c2f0;
+      border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #a18cd1;
+    }
+
+    footer {
+      background: var(--primary-dark);
+      color: white;
+      padding: 3rem 1rem;
+      text-align: center;
+    }
+
+    .footer-content {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .footer-logo {
+      font-family: 'Dancing Script', cursive;
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      margin: 1.5rem 0;
+    }
+
+    .social-links a {
+      color: white;
+      font-size: 1.5rem;
+      transition: var(--transition);
+    }
+
+    .social-links a:hover {
+      color: var(--accent);
+      transform: translateY(-3px);
+    }
+
+    .footer-text {
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+
+    /* Responsive adjustments */
+    @media (min-width: 480px) {
+      .items-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (min-width: 768px) {
+      .promo-badge {
+      width: 90px;
+      height: 90px;
+      top: 15px;
+      right: 15px;
+    }
+    
+    .promo-text {
+      font-size: 1.3rem;
+    }
+    
+    .promo-subtext {
+      font-size: 0.7rem;
+    }
+        .item-image {
+    width: 100%;
+    height: 120px; /* Reduced from 140px */
+  }
+       .contact-info {
+    gap: 8px;
+  }
+      .contact-item {
+    padding: 0 8px;
+    font-size: 0.9rem;
+  }
+       .contact-separator {
+    height: 20px;
+  }
+      .items-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+      }
+      
+      .section-title h2 {
+        font-size: 2.2rem;
+      }
+      
+      nav a {
+        padding: 0.8rem 1.2rem;
+        font-size: 0.95rem;
+        gap: 8px;
+      }
+      
+      nav a i {
+        font-size: 1.1rem;
+      }
+        .-info {
+    justify-content: center;
+  }
+  
+  .-separator {
+    display: none;
+  }
+  
+  .-item {
+    padding: 5px 10px;
+  }
+    }
+
+    @media (min-width: 1024px) {
+      .items-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 25px;
+      }
+      
+      .item-card {
+        grid-template-columns: 1fr;
+        grid-template-rows: 150px 1fr;
+      }
+      
+      .item-image {
+        width: 100%;
+        height: 150px;
+      }
+      
+      .item-name {
+        font-size: 1.2rem;
+      }
+    }
+
+    /* Loading animation */
+    .loader {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 200px;
+    }
+    .loader div {
+      width: 20px;
+      height: 20px;
+      background: var(--primary);
+      border-radius: 50%;
+      margin: 0 5px;
+      animation: bounce-loader 0.9s infinite alternate;
+    }
+    .loader div:nth-child(2) {
+      animation-delay: 0.3s;
+      background: var(--accent);
+    }
+    .loader div:nth-child(3) {
+      animation-delay: 0.6s;
+    }
+    @keyframes bounce-loader {
+      to {
+        transform: translateY(-20px);
+      }
+    }
+    /* WhatsApp Cookie Button */
+.whatsapp-cookie-btn {
+  position: fixed;
+  left: 20px;
+  bottom: 80px;
+  width: 60px;
+  height: 60px;
+  background: #25D366;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  box-shadow: var(--shadow-md);
+  cursor: pointer;
+  z-index: 20;
+  transition: var(--transition);
+  border: 2px solid white;
+  text-decoration: none;
+}
+
+.whatsapp-cookie-btn:hover {
+  transform: translateY(-5px) rotate(15deg);
+  box-shadow: var(--shadow-lg);
+}
+
+.whatsapp-cookie-btn i {
+  position: relative;
+}
+
+.whatsapp-cookie-btn::before {
+  content: "🍪";
+  position: absolute;
+  font-size: 1.3rem;
+  top: -5px;
+  right: -5px;
+  filter: drop-shadow(0 2px 3px rgba(0,0,0,0.2));
+}
+
+/* Location and  Info */
+.info-banner {
+  background: var(--primary-light);
+  padding: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  text-align: center;
+  border-bottom: 2px solid var(--primary);
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--primary-dark);
+  font-weight: 500;
+}
+
+.info-item i {
+  font-size: 1.2rem;
+  color: var(--primary);
+}
+    /* Cookie Fortune Teller styles */
+.cookie-crumble {
+  animation: crumble 0.5s forwards !important;
+}
+
+@keyframes crumble {
+  0% { transform: scale(1); }
+  20% { transform: scale(1.2) rotate(10deg); }
+  50% { transform: scale(0.9) rotate(-5deg); opacity: 0.8; }
+  80% { transform: scale(1.1) rotate(20deg); opacity: 0.6; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.cookie-fortune {
+  position: fixed;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  background: #fff9e5;
+  border: 3px solid var(--primary);
+  border-radius: 15px;
+  padding: 25px;
+  min-width: 320px;
+  max-width: 90vw;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  font-family: 'Dancing Script', cursive;
+  font-size: 1.6rem;
+  color: var(--primary-dark);
+  animation: fortune-appear 0.5s forwards;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
+
+@keyframes fortune-appear {
+  0% { transform: translate(-50%, -50%) scale(0.2) rotate(-10deg); opacity: 0; }
+  70% { transform: translate(-50%, -50%) scale(1.1) rotate(5deg); }
+  100% { transform: translate(-50%, -50%) scale(1) rotate(0); opacity: 1; }
+}
+    .fortune-overlay {
+ position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 999;
+  display: none;
+}
+    .fortune-overlay.show {
+  display: block;
+}
+
+
+.cookie-sparkle {
+  position: fixed;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 100;
+  animation: sparkle-fade 1s forwards;
+}
+
+@keyframes sparkle-fade {
+  0% { transform: scale(0) translate(0, 0); opacity: 1; }
+  100% { transform: scale(1) translate(var(--tx, 50px), var(--ty, -50px)); opacity: 0; }
+}
+
+.cookie-trail {
+  position: fixed;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent);
+  pointer-events: none;
+  z-index: 90;
+  opacity: 0.7;
+  animation: trail-fade 0.5s forwards;
+}
+
+@keyframes trail-fade {
+  0% { transform: scale(1); opacity: 0.7; }
+  100% { transform: scale(0); opacity: 0; }
+}
+    /* Updated item card styling */
+.items-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.item-card {
+  background: #ffffff;
+  border-radius: 0;
+  box-shadow: none;
+  position: relative;
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  align-items: center;
+  padding: 1.5rem 0;
+  border-bottom: 1px solid #e0d7ff;
+  margin: 0;
+}
+
+.item-card:first-child {
+  border-top: 1px solid #e0d7ff;
+}
+
+.item-card:hover {
+   transform: none;
+  box-shadow: none;
+  background: rgba(224, 215, 255, 0.05);
+}
+
+.item-image {
+   width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  overflow: hidden;
+  position: relative;
+  box-shadow: var(--shadow-sm);
+}
+
+.item-content {
+  padding: 0 1rem;
+}
+
+.item-name {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--primary-dark);
+  margin-bottom: 0.3rem;
+}
+
+.item-desc {
+  font-size: 0.9rem;
+  color: var(--text-light);
+  margin-bottom: 0.8rem;
+  -webkit-line-clamp: 3;
+}
+
+.badge {
+  position: absolute;
+  top: 1.5rem;
+  right: 0;
+}
+    /* Elegant  styling */
+.elegant- {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.9rem;
+  font-family: 'Cormorant Garamond', serif;
+  letter-spacing: 0.5px;
+}
+
+.elegant- span {
+  font-weight: 500;
+}
+
+/* Responsive styles */
+@media (min-width: 768px) {
+  .items-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px;
+  }
+  
+  .item-card {
+   border: 1px solid #e0d7ff;
+    border-radius: var(--radius-md);
+    padding: 1.2rem;
+    transition: all 0.3s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .item-card:first-child {
+    border-top: 1px solid #e0d7ff;
+  }
+  
+  .item-image {
+     width: 100%;
+    height: 140px;
+    border-radius: 15px;
+    margin-bottom: 1rem;
+  }
+    .item-content {
+    padding: 0;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+   .item-footer {
+    margin-top: auto;
+  }
+  .badge {
+    top: 0.5rem;
+    right: 0.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .items-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1200px) {
+  .items-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
   </style>
 </head>
 <body>
 
-  <div class="hero" role="banner">
-    <div class="hero-overlay" aria-hidden="true"></div>
-    <div class="slideshow-container"></div>
-    <div class="promo-badge">
-      <div class="promo-badge-inner">
-        <span class="promo-text">10% OFF</span>
-        <span class="promo-subtext">Today Only!</span>
-      </div>
-    </div>
-    <div class="hero-content">
-      <h1>Heavenlynn</h1>
-      <p class="hero-tagline">Artisanal Treats Made with Love</p>
-    </div>
-    <a href="#menu" class="scroll-down" aria-label="Scroll Down">
-      <i class="fas fa-chevron-down"></i>
-    </a>
-    <div class="slideshow-dots"></div>
+<div class="hero" role="banner">
+  <div class="hero-overlay" aria-hidden="true"></div>
+
+
+    <!-- Slideshow container -->
+  <div class="slideshow-container">
+    <!-- Slides will be added dynamically with JavaScript -->
   </div>
 
-  <div class="contact-bar" id="contactBar">
-    <div class="contact-info">
-      <div class="contact-item">
-        <i class="fas fa-map-marker-alt"></i>
-        <span>Tyre, Lebanon</span>
-      </div>
-      <div class="contact-separator"></div>
-      <div class="contact-item">
-        <i class="fas fa-phone"></i>
-        <span>70006252</span>
-      </div>
-      <div class="contact-separator"></div>
-      <div class="contact-item">
-        <a href="https://www.instagram.com/heavenlynn.lb/" target="_blank" aria-label="Instagram">
-          <i class="fab fa-instagram"></i>
-          <span>@heavenlynn.lb</span>
-        </a>
-      </div>
+    <!-- Promotion badge -->
+  <div class="promo-badge">
+    <div class="promo-badge-inner">
+      <span class="promo-text">10% OFF</span>
+      <span class="promo-subtext">Today Only!</span>
     </div>
   </div>
+  
+  <div class="hero-content">
+    <h1>Heavenlynn</h1>
+    <p class="hero-tagline">Artisanal Treats Made with Love</p>
+  </div>
+  
+  <a href="#menu" class="scroll-down" aria-label="Scroll Down">
+    <i class="fas fa-chevron-down"></i>
+  </a>
+  
+  <!-- Slideshow navigation dots -->
+  <div class="slideshow-dots"></div>
+</div>
 
+
+  
+<div class="contact-bar" id="contactBar">
+  <div class="contact-info">
+    <div class="contact-item">
+      <i class="fas fa-map-marker-alt"></i>
+      <span>Tyre, Lebanon</span>
+    </div>
+    <div class="contact-separator"></div>
+    <div class="contact-item">
+      <i class="fas fa-phone"></i>
+      <span>70006252</span>
+    </div>
+    <div class="contact-separator"></div>
+  <div class="contact-item">
+  <a href="https://www.instagram.com/heavenlynn.lb/" target="_blank" aria-label="Instagram">
+    <i class="fab fa-instagram"></i>
+    <span>@heavenlynn.lb</span>
+  </a>
+</div>
+  </div>
+</div>
+
+  <!-- Navigation -->
   <div class="nav-wrapper" id="menu">
+    <!-- Using a nav element for semantic navigation -->
     <nav class="nav-container" id="categoryNav" role="navigation" aria-label="Menu Categories">
-      <div class="loader"><div></div><div></div><div></div></div>
+      <!-- Categories will be dynamically inserted here -->
+      <div class="loader">
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
     </nav>
   </div>
 
-  <main id="menuSections"></main>
+  <!-- Menu Sections -->
+  <main id="menuSections">
+    <!-- Menu items will be dynamically inserted here -->
+  </main>
 
+  <!-- Floating Category Scroll Button -->
   <button class="category-scroll-btn" id="categoryScrollBtn" aria-label="Browse Categories">
     <i class="fas fa-cookie-bite"></i>
   </button>
+
+  <!-- Category Dropdown -->
   <div class="category-dropdown" id="categoryDropdown">
     <div class="category-dropdown-title">Browse Categories</div>
-    <ul id="categoryDropdownList"></ul>
+    <ul id="categoryDropdownList">
+      <!-- Categories will be dynamically inserted here -->
+    </ul>
   </div>
-  <div class="floating-cookies-container" id="floatingCookiesContainer"></div>
 
+  <!-- Floating Cookies Animation -->
+  <div class="floating-cookies-container" id="floatingCookiesContainer">
+    <!-- Cookies will be dynamically inserted here -->
+  </div>
+
+  <!-- Footer -->
   <footer role="contentinfo">
     <div class="footer-content">
       <div class="footer-logo">Heavenlynn</div>
       <div class="social-links">
-        <a href="https://www.instagram.com/heavenlynn.lb/" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+  <a href="https://www.instagram.com/heavenlynn.lb/" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+
         <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
         <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
         <a href="#" aria-label="Pinterest"><i class="fab fa-pinterest"></i></a>
@@ -411,46 +1304,575 @@
   </footer>
 
   <script>
+    // Initialize Supabase client (demo key used here)
     const supabase = window.supabase.createClient(
       'https://cfvsxnvvkdskbkljqicw.supabase.co',
-      'YOUR_PUBLIC_ANON_KEY'
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNmdnN4bnZ2a2Rza2JrbGpxaWN3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ1MzU0MTcsImV4cCI6MjA2MDExMTQxN30.dNZsSOJyW1bE4bDQP-AIEYV7Z6hlw_iVMN6LZ2IdPio'
     );
 
-    // ... your loadMenu(), createFloatingCookies(), setupCategoryScrollButton(), etc. ...
-
-    // --- UPDATED IntersectionObserver for Active Nav + Auto-Center ---
-    const navLinks = document.querySelectorAll('nav a');
-    const observerOptions = {
-      rootMargin: '-100px 0px -90% 0px',
-      threshold: 0
+    // Map categories to appropriate Font Awesome icons (smaller icons)
+    const iconMap = {
+      "Cookies": "fa-cookie",
+      "Rolls": "fa-bread-slice",
+      "Cake Slices": "fa-cake-candles",
+      "Cups": "fa-mug-hot",
+      "Tartes": "fa-apple-alt",
+      "Cheesecakes": "fa-cheese",
+      "Add-ons": "fa-plus-circle",
+      "Drinks": "fa-coffee",
+      "Ice Cream": "fa-ice-cream"
     };
 
-    if ('IntersectionObserver' in window) {
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          const id = entry.target.getAttribute('id');
-          const link = document.querySelector(`nav a[href="#${id}"]`);
-          if (entry.isIntersecting) {
-            navLinks.forEach(navLink => navLink.classList.remove('active'));
-            if (link) {
-              link.classList.add('active');
-              link.scrollIntoView({ behavior: 'smooth', inline: 'center' });
+    // Special item badges
+    const specialBadges = {
+      "Chocolate Chip Cookie": "Popular",
+      "Cinnamon Roll": "Best Seller",
+      "Red Velvet": "Featured", 
+      "Cappuccino": "New",
+      "Strawberry Cheesecake": "Chef's Choice"
+    };
+
+    // Sample genuine food  for demo purposes
+    // In a real application, these would be actual URLs to product 
+    const foodImages = {
+      "cookie": "/api/placeholder/400/400",
+      "roll": "/api/placeholder/400/400",
+      "cake": "/api/placeholder/400/400",
+      "drink": "/api/placeholder/400/400",
+      "default": "/api/placeholder/400/400"
+    };
+
+    // Floating cookies animation
+   // Floating cookies animation - one cookie at a time with 15 second interval
+// Floating cookies animation - one cookie at a time with 15 second interval
+function createFloatingCookies() {
+  const container = document.getElementById('floatingCookiesContainer');
+  const cookieEmoji = '🍪'; // Cookie emoji
+  const milkshakeEmoji = '🥤'; // Milkshake emoji
+  
+  // Create one cookie initially
+  createSingleCookie();
+  
+  // Function to create a single cookie
+  function createSingleCookie() {
+    // Clear any existing cookies first
+    container.innerHTML = '';
+    
+    // Create just one cookie
+    const cookie = document.createElement('div');
+    cookie.className = 'floating-cookies';
+    cookie.style.left = `${Math.random() * 100}vw`;
+    cookie.style.animationDuration = '10s'; // Animation duration
+    cookie.style.fontSize = `${20 + Math.random() * 15}px`;
+    cookie.style.opacity = `${0.4 + Math.random() * 0.3}`;
+    cookie.textContent = cookieEmoji;
+    
+    // Add click/tap event listener to transform cookie
+    cookie.style.pointerEvents = 'auto'; // Make the cookie clickable
+    cookie.addEventListener('click', function() {
+      this.textContent = milkshakeEmoji;
+      this.style.fontSize = `${parseInt(this.style.fontSize) + 5}px`; // Make it slightly larger
+      this.style.transform += ' rotate(360deg)'; // Add a spin effect
+      this.style.transition = 'all 0.3s ease'; // Add transition for smooth effect
+    });
+    
+    container.appendChild(cookie);
+    
+    // Wait 15 seconds before creating the next cookie
+    setTimeout(createSingleCookie, 15000);
+  }
+}
+
+    // Toggle category dropdown
+   // Fortune Cookie Menu Revealer
+function setupCategoryScrollButton() {
+  const button = document.getElementById('categoryScrollBtn');
+  const dropdown = document.getElementById('categoryDropdown');
+  
+  // Add custom animation elements
+// Add custom animation elements
+const fortuneElement = document.createElement('div');
+fortuneElement.className = 'cookie-fortune';
+fortuneElement.style.display = 'none'; // Initially hidden
+document.body.appendChild(fortuneElement);
+
+const fortuneOverlay = document.createElement('div');
+fortuneOverlay.className = 'fortune-overlay';
+document.body.appendChild(fortuneOverlay);
+  
+  // Fortune messages - compliments paired with menu sections
+  const fortunes = [
+    "Your smile is as sweet as our cookies!",
+    "Your day will be as delightful as our cinnamon rolls!",
+    "Happiness awaits in our cake selection!",
+    "Your future holds a delicious milkshake!",
+    "Good fortune comes with our tartes!",
+    "A cheesecake will bring you joy today!",
+    "Luck favors those who try our ice cream!",
+    "Your wisdom tells you to explore our drinks menu!",
+    "The stars align for you to discover our add-ons!"
+  ];
+  
+  // Secret menu reveals - appear 20% of the time
+  const secretMenuItems = [
+    "🌟 SECRET MENU: Ask about our Cookie Dough Milkshake! 🌟",
+    "🌟 SECRET MENU: Try our Brownie Cheesecake Fusion! 🌟",
+    "🌟 SPECIAL OFFER: Show this message for 10% off today! 🌟",
+    "🌟 SECRET MENU: The Triple Chocolate Experience awaits! 🌟"
+  ];
+  
+  // Sections for jumping
+  const sections = ["cookies", "rolls", "cake-slices", "cups", "tartes", 
+                   "cheesecakes", "ice-cream", "drinks", "add-ons"];
+  
+  // When cookie is clicked
+  button.addEventListener('click', function(e) {
+    // Prevent any existing dropdown behavior
+    e.stopPropagation();
+    
+    // Create crumbling animation effect
+    button.classList.add('cookie-crumble');
+    
+    // Generate sparkles
+    createSparkles(e.clientX, e.clientY);
+    
+    // Choose a random section to recommend
+    const randomIndex = Math.floor(Math.random() * fortunes.length);
+    const randomSection = sections[randomIndex] || sections[0];
+    
+    // Select random fortune
+    let fortune = fortunes[randomIndex];
+    
+    // 20% chance for secret menu item
+    if (Math.random() < 0.2) {
+      fortune = secretMenuItems[Math.floor(Math.random() * secretMenuItems.length)];
+    }
+    
+    // Show fortune with typing effect
+    // Show overlay
+   // Show fortune with typing effect
+// Show overlay
+// Show fortune with typing effect
+// Show overlay
+fortuneOverlay.classList.add('show');
+fortuneElement.style.display = 'block';
+fortuneElement.textContent = ''; // Clear any previous text
+typeWriter(fortuneElement, fortune, 0, 50);
+    
+    // Scroll to section after reading fortune
+    setTimeout(() => {
+      const section = document.getElementById(randomSection);
+      if (section) {
+        window.scrollTo({
+          top: section.offsetTop - 80,
+          behavior: 'smooth'
+        });
+      }
+      
+      // Hide fortune and reset cookie
+      setTimeout(() => {
+        fortuneElement.style.display = 'none';
+        fortuneElement.textContent = '';
+        fortuneOverlay.classList.remove('show'); 
+        button.classList.remove('cookie-crumble');
+      }, 1000);
+    }, fortune.length * 50 + 1000); // Wait for typing effect + 1s reading time
+  });
+  
+  // Close dropdown when clicking outside
+  document.addEventListener('click', function(event) {
+    if (!button.contains(event.target) && !dropdown.contains(event.target)) {
+      dropdown.classList.remove('show');
+    }
+  });
+  
+  // Text typing effect
+  function typeWriter(element, text, i, speed) {
+    if (i < text.length) {
+      element.textContent += text.charAt(i);
+      i++;
+      setTimeout(() => typeWriter(element, text, i, speed), speed);
+    }
+  }
+  
+  // Create sparkle effect
+  function createSparkles(x, y) {
+    for (let i = 0; i < 20; i++) {
+      const sparkle = document.createElement('div');
+      sparkle.className = 'cookie-sparkle';
+      
+      // Random position around click
+      const posX = x + (Math.random() - 0.5) * 100;
+      const posY = y + (Math.random() - 0.5) * 100;
+      
+      sparkle.style.left = `${posX}px`;
+      sparkle.style.top = `${posY}px`;
+      
+      // Random color
+      const hue = Math.floor(Math.random() * 360);
+      sparkle.style.backgroundColor = `hsl(${hue}, 100%, 65%)`;
+      
+      // Random size
+      const size = 4 + Math.random() * 10;
+      sparkle.style.width = `${size}px`;
+      sparkle.style.height = `${size}px`;
+      
+      // Random animation duration
+      sparkle.style.animationDuration = `${0.5 + Math.random() * 1}s`;
+      
+      document.body.appendChild(sparkle);
+      
+      // Remove after animation
+      setTimeout(() => {
+        document.body.removeChild(sparkle);
+      }, 1500);
+    }
+    
+    // Add mouse trail for a few seconds
+    const trailTime = setTimeout(() => {
+      document.removeEventListener('mousemove', createTrail);
+    }, 3000);
+    
+    document.addEventListener('mousemove', createTrail);
+    
+    function createTrail(e) {
+      const trail = document.createElement('div');
+      trail.className = 'cookie-trail';
+      trail.style.left = `${e.clientX}px`;
+      trail.style.top = `${e.clientY}px`;
+      document.body.appendChild(trail);
+      
+      setTimeout(() => {
+        document.body.removeChild(trail);
+      }, 500);
+    }
+  }
+}
+
+    async function loadMenu() {
+      try {
+        // Query Supabase for menu items ordered by category
+        const { data, error } = await supabase
+          .from('menu_items')
+          .select('*')
+          .order('category', { ascending: true });
+
+        if (error) throw error;
+
+        // Hide loader once data is retrieved
+        document.querySelector('.loader').style.display = 'none';
+
+        // Group items by category
+        const grouped = {};
+        data.forEach(item => {
+          if (!grouped[item.category]) grouped[item.category] = [];
+          grouped[item.category].push(item);
+        });
+
+        // Retrieve navigation container and main sections container
+        const nav = document.getElementById('categoryNav');
+        const sections = document.getElementById('menuSections');
+        const dropdownList = document.getElementById('categoryDropdownList');
+
+        // Clear any existing navigation content (loader)
+        nav.innerHTML = '';
+        dropdownList.innerHTML = '';
+
+        // Define the desired category order
+        const categoryOrder = [
+          "Cookies", "Rolls", "Cake Slices", "Cups", "Tartes", 
+          "Cheesecakes", "Ice Cream", "Drinks", "Add-ons"
+        ];
+
+        // Sort categories based on predefined order
+        const sortedCategories = Object.keys(grouped).sort((a, b) => {
+          const indexA = categoryOrder.indexOf(a) === -1 ? Infinity : categoryOrder.indexOf(a);
+          const indexB = categoryOrder.indexOf(b) === -1 ? Infinity : categoryOrder.indexOf(b);
+          return indexA - indexB;
+        });
+
+        // Loop through sorted categories to build navigation links and content sections
+        sortedCategories.forEach(category => {
+          const catId = category.toLowerCase().replace(/\s+/g, '-');
+          const icon = iconMap[category] || 'fa-utensils';
+
+          // Create nav link for the category
+          const link = document.createElement('a');
+          link.href = `#${catId}`;
+          link.innerHTML = `<i class="fas ${icon}"></i>${category}`;
+          nav.appendChild(link);
+
+          // Create dropdown link for the category
+          const dropdownItem = document.createElement('li');
+          const dropdownLink = document.createElement('a');
+          dropdownLink.href = `#${catId}`;
+          dropdownLink.innerHTML = `<i class="fas ${icon}"></i>${category}`;
+          dropdownLink.addEventListener('click', function() {
+            document.getElementById('categoryDropdown').classList.remove('show');
+          });
+          dropdownItem.appendChild(dropdownLink);
+          dropdownList.appendChild(dropdownItem);
+
+          // Create a new section for the category
+          const section = document.createElement('section');
+          section.id = catId;
+
+          // Section header
+          const titleDiv = document.createElement('div');
+          titleDiv.className = 'section-title';
+
+          const title = document.createElement('h2');
+          title.textContent = category;
+          titleDiv.appendChild(title);
+          section.appendChild(titleDiv);
+
+          // Create a grid container for menu items
+          const grid = document.createElement('div');
+          grid.className = 'items-grid';
+
+          // Helper function to determine the image type based on category
+          function getImageType(category) {
+            category = category.toLowerCase();
+            if (category.includes('cookie')) return 'cookie';
+            if (category.includes('roll')) return 'roll';
+            if (category.includes('cake') || category.includes('tarte') || category.includes('cheesecake')) return 'cake';
+            if (category.includes('drink') || category.includes('coffee')) return 'drink';
+            return 'default';
+          }
+
+          // Loop over items in the current category to generate cards
+          grouped[category].forEach(item => {
+            const card = document.createElement('div');
+            card.className = 'item-card';
+
+            // Image container
+            const imageContainer = document.createElement('div');
+            imageContainer.className = 'item-image';
+
+            // Get image source - use item's image if available or get placeholder based on category
+            let imgSrc = item.image_url ? item.image_url : foodImages[getImageType(category)];
+            
+            const img = document.createElement('img');
+            img.src = imgSrc;
+            img.alt = item.item_name;
+            imageContainer.appendChild(img);
+            card.appendChild(imageContainer);
+
+            // Add badge if it's a special item
+            if (specialBadges[item.item_name]) {
+              const badge = document.createElement('div');
+              badge.className = 'badge';
+              badge.textContent = specialBadges[item.item_name];
+              card.appendChild(badge);
             }
+
+            // Content container
+            const content = document.createElement('div');
+            content.className = 'item-content';
+
+            const name = document.createElement('div');
+            name.className = 'item-name';
+            name.textContent = item.item_name;
+
+            const desc = document.createElement('div');
+            desc.className = 'item-desc';
+            desc.textContent = item.description || 'A delicious treat made with the finest ingredients.';
+
+            const footer = document.createElement('div');
+            footer.className = 'item-footer';
+
+            const price = document.createElement('div');
+            price.className = 'item-price';
+            price.textContent = `$${parseFloat(item.price).toFixed(2)}`;
+
+            footer.appendChild(price);
+
+            // Create and append elements to build the card structure
+            content.appendChild(name);
+            content.appendChild(desc);
+            content.appendChild(footer);
+            card.appendChild(content);
+            grid.appendChild(card);
+          });
+
+          section.appendChild(grid);
+          sections.appendChild(section);
+        });
+
+        // --- Intersection Observer for active navigation link highlighting ---
+        const navLinks = document.querySelectorAll('nav a');
+        const observerOptions = {
+          rootMargin: '-100px 0px -90% 0px',
+          threshold: 0
+        };
+
+        // Check if browser supports IntersectionObserver
+        if ('IntersectionObserver' in window) {
+          const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+              const id = entry.target.getAttribute('id');
+              const link = document.querySelector(`nav a[href="#${id}"]`);
+              if (entry.isIntersecting) {
+                navLinks.forEach(navLink => navLink.classList.remove('active'));
+                if (link) link.classList.add('active');
+              }
+            });
+          }, observerOptions);
+
+          document.querySelectorAll('section').forEach(section => {
+            observer.observe(section);
+          });
+        }
+
+        // --- Auto-scroll first category nav link into view ---
+        if (navLinks.length > 0) {
+          navLinks[0].classList.add('active');
+        }
+
+        // --- Navbar style update on scroll ---
+        const navBar = document.querySelector('.nav-wrapper');
+        window.addEventListener('scroll', () => {
+          if (window.scrollY > 100) {
+            navBar.classList.add('scrolled');
+          } else {
+            navBar.classList.remove('scrolled');
           }
         });
-      }, observerOptions);
 
-      document.querySelectorAll('section').forEach(section => {
-        observer.observe(section);
-      });
+        // --- Smooth scrolling for navigation links ---
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+          anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href');
+            const targetElement = document.querySelector(targetId);
+            if (targetElement) {
+              window.scrollTo({
+                top: targetElement.offsetTop - 80,
+                behavior: 'smooth'
+              });
+              
+              // Also scroll the clicked link into view in the navigation bar
+              this.scrollIntoView({
+                behavior: 'smooth',
+                block: 'nearest',
+                inline: 'center'
+              });
+            }
+          });
+        });
+        
+        // Initialize the floating cookies animation
+        createFloatingCookies();
+        
+        // Initialize category scroll button and dropdown
+        setupCategoryScrollButton();
+        
+      } catch (error) {
+        console.error('Error loading menu:', error);
+        document.getElementById('menuSections').innerHTML = `
+          <div style="text-align: center; padding: 3rem;">
+            <h2>Oops! Something went wrong.</h2>
+            <p>We couldn't load our menu. Please try again later.</p>
+          </div>
+        `;
+      }
     }
 
-    // ... rest of your JS (smooth scrolling, slideshow logic, etc.) ...
-  </script>
+    // Initialize the menu when the document is ready
+    document.addEventListener('DOMContentLoaded', loadMenu);
+    // Setup WhatsApp button
+document.addEventListener('DOMContentLoaded', function() {
+  const whatsappBtn = document.querySelector('.whatsapp-cookie-btn');
+  if (whatsappBtn) {
+    whatsappBtn.addEventListener('click', function() {
+      // You could add analytics tracking here if needed
+      console.log('WhatsApp button clicked');
+    });
+  }
+});
+     // Slideshow functionality
+  document.addEventListener('DOMContentLoaded', function() {
+    // Sample bakery images - in production, these would come from your actual product images
+    // You should replace these with real URLs from your Supabase storage
+    const slideImages = [
+        "images/cake.jpeg",
+        "images/christmas.jpeg",
+        "images/cookies.jpeg",
+        "images/tartes.jpeg",
+        "images/san.jpeg"
 
+    ];
+    
+    const slideshowContainer = document.querySelector('.slideshow-container');
+    const dotsContainer = document.querySelector('.slideshow-dots');
+    let currentSlide = 0;
+    
+    // Create slides and dots
+    slideImages.forEach((image, index) => {
+      // Create slide
+      const slide = document.createElement('div');
+      slide.className = `slide ${index === 0 ? 'active' : ''}`;
+      slide.style.backgroundImage = `url(${image})`;
+      slideshowContainer.appendChild(slide);
+      
+      // Create navigation dot
+      const dot = document.createElement('div');
+      dot.className = `dot ${index === 0 ? 'active' : ''}`;
+      dot.addEventListener('click', () => goToSlide(index));
+      dotsContainer.appendChild(dot);
+    });
+    
+    // Function to go to a specific slide
+    function goToSlide(n) {
+      const slides = document.querySelectorAll('.slide');
+      const dots = document.querySelectorAll('.dot');
+      
+      slides[currentSlide].classList.remove('active');
+      dots[currentSlide].classList.remove('active');
+      
+      currentSlide = n;
+      
+      slides[currentSlide].classList.add('active');
+      dots[currentSlide].classList.add('active');
+    }
+    
+    // Auto advance slides
+    function nextSlide() {
+      const slides = document.querySelectorAll('.slide');
+      const nextIndex = (currentSlide + 1) % slides.length;
+      goToSlide(nextIndex);
+    }
+    
+    // Start slideshow
+    const slideInterval = setInterval(nextSlide, 5000); // Change slide every 5 seconds
+    
+    // Stop slideshow on user interaction (accessibility)
+    document.querySelector('.slideshow-container').addEventListener('mouseover', () => {
+      clearInterval(slideInterval);
+    });
+    
+    // Resume slideshow when mouse leaves
+    document.querySelector('.slideshow-container').addEventListener('mouseleave', () => {
+      clearInterval(slideInterval);
+      setInterval(nextSlide, 5000);
+    });
+    
+    // Add smooth parallax effect to slides
+    document.addEventListener('mousemove', (e) => {
+      const mouseX = e.clientX / window.innerWidth;
+      const mouseY = e.clientY / window.innerHeight;
+      
+      document.querySelectorAll('.slide').forEach(slide => {
+        const offsetX = (mouseX - 0.5) * 20;
+        const offsetY = (mouseY - 0.5) * 20;
+        slide.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(${slide.classList.contains('active') ? 1 : 1.05})`;
+      });
+    });
+  });
+  </script>
   <!-- WhatsApp Cookie Button -->
-  <a href="https://wa.me/96170006252" class="whatsapp-cookie-btn" target="_blank" aria-label="Contact us on WhatsApp">
-    <i class="fab fa-whatsapp"></i>
-  </a>
+<a href="https://wa.me/96170006252" class="whatsapp-cookie-btn" target="_blank" aria-label="Contact us on WhatsApp">
+  <i class="fab fa-whatsapp"></i>
+</a>
 </body>
 </html>
