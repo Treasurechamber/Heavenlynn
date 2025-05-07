@@ -591,6 +591,8 @@
     section#cups .item-image {
   border-radius: 15px; /* Square with slightly rounded corners */
   overflow: hidden;
+  width: 80px; /* Smaller width */
+  height: 80px; /* Smaller height */
 }
 
     .item-footer {
@@ -925,7 +927,10 @@
 
     @media (min-width: 768px) {
         section#cups .item-image {
-    border-radius: 15px; /* Keep square with slightly rounded corners */
+           border-radius: 15px; /* Keep square with slightly rounded corners */
+           width: 120px; /* Slightly larger but still smaller than default */
+           height: 120px;
+           margin: 0 auto; /* Center the image */
   }
       .promo-badge {
         width: 90px;
