@@ -582,12 +582,16 @@
       font-size: 0.9rem;
       color: var(--text-light);
       margin-bottom: 0.8rem;
-      display: -webkit-box;
+      /*display: -webkit-box;
       -webkit-line-clamp: 3;
       -webkit-box-orient: vertical;
-      overflow: hidden;
+      overflow: hidden;*/
       line-height: 1.4;
     }
+    section#cups .item-image {
+  border-radius: 15px; /* Square with slightly rounded corners */
+  overflow: hidden;
+}
 
     .item-footer {
       display: flex;
@@ -920,6 +924,9 @@
     }
 
     @media (min-width: 768px) {
+        section#cups .item-image {
+    border-radius: 15px; /* Keep square with slightly rounded corners */
+  }
       .promo-badge {
         width: 90px;
         height: 90px;
