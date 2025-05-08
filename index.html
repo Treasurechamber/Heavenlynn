@@ -1150,14 +1150,17 @@
     @media (min-width: 768px) {
       .featured-slider {
       padding-bottom: 2rem;
+      scroll-snap-type: x mandatory;
     }
     
     .featured-item {
-      min-width: calc(100% - 40px);
+       min-width: 100%; /* Makes each item take full width */
+       scroll-snap-align: center; /* Ensures slides snap to center */
+       height: 320px;
     }
     
     .featured-img {
-      height: 140px;
+      height: 180px;
     }
       .promo-badge {
         width: 90px;
@@ -1922,14 +1925,15 @@
     const sliderPrev = document.getElementById('sliderPrev');
     const sliderNext = document.getElementById('sliderNext');
     
-    sliderPrev.addEventListener('click', () => {
-      slider.scrollBy({ left: -300, behavior: 'smooth' });
-    });
-    
-    sliderNext.addEventListener('click', () => {
-      slider.scrollBy({ left: 300, behavior: 'smooth' });
-    });
-  }
+   sliderPrev.addEventListener('click', () => {
+  const itemWidth = slider.querySelector('.featured-item').offsetWidth;
+  slider.scrollBy({ left: -itemWidth, behavior: 'smooth' });
+});
+
+sliderNext.addEventListener('click', () => {
+  const itemWidth = slider.querySelector('.featured-item').offsetWidth;
+  slider.scrollBy({ left: itemWidth, behavior: 'smooth' });
+});
 </script>
 </body>
 </html>
