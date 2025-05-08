@@ -325,6 +325,7 @@
 
   .featured-item {
     min-width: 250px;
+    width: 250px;
     flex: 0 0 auto;
     border-radius: var(--radius-md);
     overflow: hidden;
@@ -1149,19 +1150,36 @@
 
     @media (min-width: 768px) {
       .featured-slider {
-      padding-bottom: 2rem;
-    justify-content: center;
+     padding-bottom: 2rem;
+    justify-content: flex-start;
     }
     
     .featured-item {
-       min-width: 180px; /* Narrower width for portrait orientation */
-    max-width: 180px; /* Enforce maximum width */
-    height: 340px;
+       min-width: 160px !important; /* Force narrower width with !important */
+    width: 160px !important; /* Force width with !important */
+    max-width: 160px !important; /* Force maximum width */
+    margin-right: 15px;
     }
     
     .featured-img {
-      height: 180px;
+      height: 140px;
     }
+       .featured-name {
+    font-size: 1rem; /* Smaller font for mobile */
+  }
+  
+  .featured-desc {
+    font-size: 0.8rem; /* Smaller font for mobile */
+  }
+  
+  .featured-price {
+    font-size: 0.9rem; /* Smaller font for mobile */
+  }
+  
+  .featured-button {
+    font-size: 0.7rem; /* Smaller font for mobile */
+    padding: 0.3rem 0.6rem;
+  }
       .slider-controls {
     margin-top: 1.5rem;
   }
@@ -1928,12 +1946,12 @@
     const sliderPrev = document.getElementById('sliderPrev');
     const sliderNext = document.getElementById('sliderNext');
     
-sliderPrev.addEventListener('click', () => {
-  slider.scrollBy({ left: -190, behavior: 'smooth' }); /* Scroll distance slightly more than item width */
+document.getElementById('sliderPrev').addEventListener('click', () => {
+  document.getElementById('featuredSlider').scrollBy({ left: -175, behavior: 'smooth' });
 });
 
-sliderNext.addEventListener('click', () => {
-  slider.scrollBy({ left: 190, behavior: 'smooth' }); /* Scroll distance slightly more than item width */
+document.getElementById('sliderNext').addEventListener('click', () => {
+  document.getElementById('featuredSlider').scrollBy({ left: 175, behavior: 'smooth' });
 });
     }
 </script>
