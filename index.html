@@ -1150,18 +1150,21 @@
     @media (min-width: 768px) {
       .featured-slider {
       padding-bottom: 2rem;
-      scroll-snap-type: x mandatory;
+    justify-content: center;
     }
     
     .featured-item {
-       min-width: 100%; /* Makes each item take full width */
-       scroll-snap-align: center; /* Ensures slides snap to center */
-       height: 320px;
+       min-width: 180px; /* Narrower width for portrait orientation */
+    max-width: 180px; /* Enforce maximum width */
+    height: 340px;
     }
     
     .featured-img {
       height: 180px;
     }
+      .slider-controls {
+    margin-top: 1.5rem;
+  }
       .promo-badge {
         width: 90px;
         height: 90px;
@@ -1925,14 +1928,12 @@
     const sliderPrev = document.getElementById('sliderPrev');
     const sliderNext = document.getElementById('sliderNext');
     
-   sliderPrev.addEventListener('click', () => {
-  const itemWidth = slider.querySelector('.featured-item').offsetWidth;
-  slider.scrollBy({ left: -itemWidth, behavior: 'smooth' });
+sliderPrev.addEventListener('click', () => {
+  slider.scrollBy({ left: -190, behavior: 'smooth' }); /* Scroll distance slightly more than item width */
 });
 
 sliderNext.addEventListener('click', () => {
-  const itemWidth = slider.querySelector('.featured-item').offsetWidth;
-  slider.scrollBy({ left: itemWidth, behavior: 'smooth' });
+  slider.scrollBy({ left: 190, behavior: 'smooth' }); /* Scroll distance slightly more than item width */
 });
     }
 </script>
