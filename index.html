@@ -229,6 +229,239 @@
       margin-left: auto;
       margin-right: auto;
     }
+    .featured-items-wrapper {
+    position: relative;
+    background: var(--gradient);
+    padding: 2.5rem 1rem 3rem;
+    margin-bottom: 0;
+    overflow: hidden;
+  }
+  
+  .featured-items-wrapper::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.15'%3E%3Cpath d='M50 50c0-5.523 4.477-10 10-10s10 4.477 10 10-4.477 10-10 10c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10zM10 10c0-5.523 4.477-10 10-10s10 4.477 10 10-4.477 10-10 10c0 5.523-4.477 10-10 10S0 25.523 0 20s4.477-10 10-10zm10 8c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8zm40 40c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8z' /%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    z-index: 0;
+  }
+  
+  .featured-heading {
+    text-align: center;
+    position: relative;
+    margin-bottom: 2rem;
+    z-index: 1;
+  }
+  
+  .featured-badge {
+    display: inline-block;
+    background: var(--accent);
+    color: white;
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 5px 14px;
+    border-radius: 20px;
+    margin-bottom: 0.5rem;
+    transform: rotate(-2deg);
+    box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+  }
+  
+  .featured-heading h2 {
+    color: white;
+    font-size: 2.2rem;
+    margin: 0.5rem 0;
+    text-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  }
+  
+  .featured-heading p {
+    color: rgba(255,255,255,0.85);
+    font-size: 1rem;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  
+  .featured-carousel-container {
+    position: relative;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    z-index: 1;
+  }
+  
+  .featured-carousel {
+    display: flex;
+    gap: 1.5rem;
+    width: 100%;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    padding: 1rem 0.5rem;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+  }
+  
+  .featured-item {
+    flex: 0 0 calc(100% - 2rem);
+    min-width: 260px;
+    max-width: 350px;
+    background: white;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    transform: translateY(0);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    scroll-snap-align: center;
+  }
+  
+  .featured-item:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+  }
+  
+  .featured-item-image {
+    height: 200px;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .featured-item-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+  }
+  
+  .featured-item:hover .featured-item-image img {
+    transform: scale(1.1);
+  }
+  
+  .featured-item-body {
+    padding: 1.5rem;
+    position: relative;
+  }
+  
+  .featured-item-price {
+    position: absolute;
+    top: -30px;
+    right: 20px;
+    background: var(--accent);
+    color: white;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.2rem;
+    border-radius: 50%;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    border: 3px solid white;
+  }
+  
+  .featured-item-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--primary-dark);
+    margin-bottom: 0.5rem;
+  }
+  
+  .featured-item-desc {
+    color: var(--text-light);
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    line-height: 1.4;
+  }
+  
+  .featured-item-label {
+    display: inline-block;
+    padding: 3px 10px;
+    background: var(--primary-light);
+    color: var(--primary-dark);
+    font-size: 0.8rem;
+    font-weight: 500;
+    border-radius: 12px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+  }
+  
+  .featured-item-footer {
+    margin-top: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .featured-item-timer {
+    display: flex;
+    align-items: center;
+    color: var(--accent);
+    font-size: 0.85rem;
+    font-weight: 500;
+  }
+  
+  .featured-item-timer i {
+    margin-right: 5px;
+  }
+  
+  .carousel-nav {
+    background: white;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary);
+    font-size: 1rem;
+    cursor: pointer;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    margin: 0 5px;
+    flex-shrink: 0;
+    z-index: 2;
+  }
+  
+  .carousel-nav:hover {
+    transform: scale(1.1);
+    background: var(--primary);
+    color: white;
+  }
+  
+  .carousel-nav.prev {
+    left: 10px;
+  }
+  
+  .carousel-nav.next {
+    right: 10px;
+  }
+  
+  .featured-dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 1.5rem;
+    z-index: 1;
+    position: relative;
+  }
+  
+  .featured-dot {
+    width: 10px;
+    height: 10px;
+    background-color: rgba(255,255,255,0.4);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .featured-dot.active {
+    background-color: white;
+    transform: scale(1.3);
+  }
 
     /* Slideshow Navigation Dots */
     .slideshow-dots {
@@ -923,6 +1156,35 @@
     }
 
     @media (min-width: 768px) {
+       .featured-items-wrapper {
+      padding: 3rem 2rem 4rem;
+    }
+    
+    .featured-heading h2 {
+      font-size: 2.5rem;
+    }
+    
+    .featured-carousel {
+      padding: 1.5rem 1rem;
+    }
+    
+    .featured-item {
+      flex: 0 0 calc(50% - 1.5rem);
+    }
+    
+    .carousel-nav {
+      width: 50px;
+      height: 50px;
+      font-size: 1.2rem;
+    }
+    
+    .carousel-nav.prev {
+      left: 20px;
+    }
+    
+    .carousel-nav.next {
+      right: 20px;
+    }
         section#cups .item-image {
            border-radius: 15px; /* Keep square with slightly rounded corners */
   }
@@ -1012,6 +1274,24 @@
         right: 0.5rem;
       }
     }
+     @media (min-width: 992px) {
+    .featured-item {
+      flex: 0 0 calc(33.333% - 1.5rem);
+    }
+  }
+  
+  /* Animation for featured items */
+  @keyframes featuredPulse {
+    0% {
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    50% {
+      box-shadow: 0 15px 30px rgba(255,126,181,0.3);
+    }
+    100% {
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+  }
 
     @media (min-width: 1024px) {
       .items-grid {
@@ -1045,6 +1325,29 @@
   </a>
   <div class="slideshow-dots"></div>
 </div>
+ <div class="featured-items-wrapper" id="featured">
+  <div class="featured-heading">
+    <span class="featured-badge">Limited Time</span>
+    <h2>Featured Treats of the Week</h2>
+    <p>Handcrafted specials you won't want to miss!</p>
+  </div>
+  
+  <div class="featured-carousel-container">
+    <button class="carousel-nav prev" aria-label="Previous featured item">
+      <i class="fas fa-chevron-left"></i>
+    </button>
+    
+    <div class="featured-carousel" id="featuredCarousel">
+      <!-- Featured items will be dynamically loaded here -->
+    </div>
+    
+    <button class="carousel-nav next" aria-label="Next featured item">
+      <i class="fas fa-chevron-right"></i>
+    </button>
+  </div>
+  
+  <div class="featured-dots" id="featuredDots"></div>
+</div> 
 
 <div class="contact-bar" id="contactBar">
   <div class="contact-info">
@@ -1569,6 +1872,148 @@
         slide.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(${slide.classList.contains('active') ? 1 : 1.05})`;
       });
     });
+  });
+   const featuredItems = [
+    {
+      name: "Sakura Matcha Trifle",
+      image: "/api/placeholder/400/400",
+      description: "Layers of matcha sponge cake, cherry blossom cream, and sweet red bean. A Japanese-inspired delight.",
+      price: 7.99,
+      labels: ["Limited Edition", "Vegan"],
+      availableDays: "Until Saturday"
+    },
+    {
+      name: "Caramel Brownie Explosion",
+      image: "/api/placeholder/400/400",
+      description: "Fudgy chocolate brownie topped with salted caramel, chocolate ganache, and caramelized pecans.",
+      price: 6.49,
+      labels: ["New", "Best Seller"],
+      availableDays: "Until Friday"
+    },
+    {
+      name: "Raspberry Pistachio Roll",
+      image: "/api/placeholder/400/400",
+      description: "Fluffy yeast roll filled with fresh raspberry jam and topped with crushed pistachios.",
+      price: 4.99,
+      labels: ["Seasonal"],
+      availableDays: "This week only"
+    },
+    {
+      name: "Lemon Meringue Cheesecake Cup",
+      image: "/api/placeholder/400/400",
+      description: "Creamy lemon cheesecake topped with toasted Italian meringue in a convenient cup.",
+      price: 5.99,
+      labels: ["Chef's Special"],
+      availableDays: "Limited quantity"
+    }
+  ];
+  function initFeaturedItems() {
+    const carousel = document.getElementById('featuredCarousel');
+    const dotsContainer = document.getElementById('featuredDots');
+    
+    if (!carousel) return;
+    
+    // Clear existing content
+    carousel.innerHTML = '';
+    dotsContainer.innerHTML = '';
+    
+    // Add featured items
+    featuredItems.forEach((item, index) => {
+      // Create item card
+      const card = document.createElement('div');
+      card.className = 'featured-item';
+      card.id = `featured-item-${index}`;
+      
+      // Create HTML structure for the card
+      card.innerHTML = `
+        <div class="featured-item-image">
+          <img src="${item.image}" alt="${item.name}">
+        </div>
+        <div class="featured-item-body">
+          <div class="featured-item-price">$${item.price.toFixed(2)}</div>
+          <h3 class="featured-item-title">${item.name}</h3>
+          <p class="featured-item-desc">${item.description}</p>
+          <div>
+            ${item.labels.map(label => `<span class="featured-item-label">${label}</span>`).join('')}
+          </div>
+          <div class="featured-item-footer">
+            <div class="featured-item-timer">
+              <i class="fas fa-clock"></i> ${item.availableDays}
+            </div>
+          </div>
+        </div>
+      `;
+      
+      carousel.appendChild(card);
+      
+      // Create dot for this item
+      const dot = document.createElement('div');
+      dot.className = `featured-dot ${index === 0 ? 'active' : ''}`;
+      dot.addEventListener('click', () => {
+        scrollToItem(index);
+        updateActiveDot(index);
+      });
+      dotsContainer.appendChild(dot);
+    });
+    
+    // Set up navigation buttons
+    const prevBtn = document.querySelector('.carousel-nav.prev');
+    const nextBtn = document.querySelector('.carousel-nav.next');
+    let currentItem = 0;
+    
+    prevBtn.addEventListener('click', () => {
+      currentItem = Math.max(currentItem - 1, 0);
+      scrollToItem(currentItem);
+      updateActiveDot(currentItem);
+    });
+    
+    nextBtn.addEventListener('click', () => {
+      currentItem = Math.min(currentItem + 1, featuredItems.length - 1);
+      scrollToItem(currentItem);
+      updateActiveDot(currentItem);
+    });
+    
+    // Scroll to item function
+    function scrollToItem(index) {
+      const item = document.getElementById(`featured-item-${index}`);
+      carousel.scrollTo({
+        left: item.offsetLeft - carousel.offsetLeft,
+        behavior: 'smooth'
+      });
+    }
+    
+    // Update active dot
+    function updateActiveDot(index) {
+      const dots = document.querySelectorAll('.featured-dot');
+      dots.forEach((dot, i) => {
+        dot.classList.toggle('active', i === index);
+      });
+    }
+    
+    // Handle scroll events to update active dot
+    carousel.addEventListener('scroll', () => {
+      const scrollPosition = carousel.scrollLeft;
+      const itemWidth = carousel.querySelector('.featured-item').offsetWidth;
+      const currentIndex = Math.round(scrollPosition / itemWidth);
+      updateActiveDot(currentIndex);
+    });
+    
+    // Apply animation to the first featured item
+    const firstItem = document.querySelector('.featured-item');
+    if (firstItem) {
+      firstItem.style.animation = 'featuredPulse 2s infinite';
+    }
+  }
+  
+  // Add the initFeaturedItems function to your document ready event
+  document.addEventListener('DOMContentLoaded', function() {
+    // Your existing initialization code
+    loadMenu();
+    
+    // Initialize featured items
+    initFeaturedItems();
+    
+    // Rest of your existing code...
   });
 </script>
 </body>
