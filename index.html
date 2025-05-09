@@ -557,6 +557,12 @@
     }
 
     nav.nav-container {
+       position: relative;
+      -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+      scrollbar-width: thin;
+      mask-image: linear-gradient(to right, transparent, black 10px, black 90%, transparent);
+     -webkit-mask-image: linear-gradient(to right, transparent, black 10px, black 90%, transparent);
+      padding: 10px 20px;
       display: flex;
       flex-wrap: nowrap;
       justify-content: flex-start;
@@ -564,13 +570,79 @@
       max-width: 1200px;
       margin: auto;
       overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      padding-bottom: 0.5rem;
-      scrollbar-width: none;
       scrollbar-color: var(--primary) var(--primary-light);
       border-radius: var(--radius-sm);
       padding: 10px;
     }
+    .nav-scroll-indicator {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 30px;
+  height: 30px;
+  background: rgba(138, 79, 255, 0.8);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+.nav-scroll-indicator:hover {
+  background: var(--primary-dark);
+}
+
+.nav-scroll-left {
+  left: 5px;
+}
+
+.nav-scroll-right {
+  right: 5px;
+}
+    @media (max-width: 767px) {
+  nav.nav-container {
+    gap: 8px;
+    padding-bottom: 8px;
+    padding-top: 8px;
+  }
+  
+  nav a {
+    padding: 0.5rem 0.7rem;
+    font-size: 0.8rem;
+  }
+  
+  nav a i {
+    font-size: 0.9rem;
+  }
+  
+  .nav-wrapper.scrolled {
+    padding: 0.5rem;
+  }
+}
+
+/* Adding a subtle animation to indicate scrollability */
+@media (max-width: 767px) {
+  nav.nav-container::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    width: 40px;
+    background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.8));
+    pointer-events: none;
+    animation: pulse-fade 2s infinite alternate;
+  }
+  
+  @keyframes pulse-fade {
+    0% { opacity: 0.3; }
+    100% { opacity: 0.8; }
+  }
+}
 
     nav.nav-container::-webkit-scrollbar {
       height: 8px;
@@ -1742,25 +1814,42 @@
       });
 
       // Smooth scrolling
-      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
-          e.preventDefault();
-          const targetId = this.getAttribute('href');
-          const targetElement = document.querySelector(targetId);
-          if (targetElement) {
-            window.scrollTo({
-              top: targetElement.offsetTop - 80,
-              behavior: 'smooth'
-            });
-            
-            this.scrollIntoView({
-              behavior: 'smooth',
-              block: 'nearest',
-              inline: 'center'
-            });
-          }
-        });
+// Improved smooth scrolling with better mobile support
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function(e) {
+    e.preventDefault();
+    const targetId = this.getAttribute('href');
+    const targetElement = document.querySelector(targetId);
+    if (targetElement) {
+      // Scroll the page to the section
+      window.scrollTo({
+        top: targetElement.offsetTop - 80,
+        behavior: 'smooth'
       });
+      
+      // Ensure the nav item is fully visible in the nav container
+      const navContainer = document.getElementById('categoryNav');
+      
+      // Calculate position to center the clicked nav item
+      const itemWidth = this.offsetWidth;
+      const containerWidth = navContainer.offsetWidth;
+      const itemPosition = this.offsetLeft;
+      const scrollPosition = itemPosition - (containerWidth / 2) + (itemWidth / 2);
+      
+      // Scroll the nav container horizontally
+      navContainer.scrollTo({
+        left: scrollPosition,
+        behavior: 'smooth'
+      });
+      
+      // Add active class to the clicked nav item
+      document.querySelectorAll('nav a').forEach(link => {
+        link.classList.remove('active');
+      });
+      this.classList.add('active');
+    }
+  });
+});
       
       // Initialize features
       createFloatingCookies();
@@ -1963,6 +2052,55 @@ document.getElementById('sliderNext').addEventListener('click', () => {
   document.getElementById('featuredSlider').scrollBy({ left: 175, behavior: 'smooth' });
 });
     }
+  // Add scroll indicators for navigation
+function addNavScrollIndicators() {
+  const navWrapper = document.querySelector('.nav-wrapper');
+  const navContainer = document.getElementById('categoryNav');
+  
+  // Create scroll indicators
+  const leftIndicator = document.createElement('div');
+  leftIndicator.className = 'nav-scroll-indicator nav-scroll-left';
+  leftIndicator.innerHTML = '<i class="fas fa-chevron-left"></i>';
+  
+  const rightIndicator = document.createElement('div');
+  rightIndicator.className = 'nav-scroll-indicator nav-scroll-right';
+  rightIndicator.innerHTML = '<i class="fas fa-chevron-right"></i>';
+  
+  // Add indicators to DOM
+  navWrapper.insertBefore(leftIndicator, navContainer);
+  navWrapper.appendChild(rightIndicator);
+  
+  // Show/hide indicators based on scroll position
+  function updateIndicators() {
+    leftIndicator.style.opacity = navContainer.scrollLeft > 20 ? '1' : '0';
+    rightIndicator.style.opacity = 
+      navContainer.scrollLeft < navContainer.scrollWidth - navContainer.offsetWidth - 20 ? '1' : '0';
+  }
+  
+  // Initial update
+  updateIndicators();
+  
+  // Update on scroll
+  navContainer.addEventListener('scroll', updateIndicators);
+  
+  // Scroll on indicator click
+  leftIndicator.addEventListener('click', () => {
+    navContainer.scrollBy({
+      left: -120,
+      behavior: 'smooth'
+    });
+  });
+  
+  rightIndicator.addEventListener('click', () => {
+    navContainer.scrollBy({
+      left: 120,
+      behavior: 'smooth'
+    });
+  });
+}
+
+// Call this function after building the navigation
+addNavScrollIndicators();
 </script>
 </body>
 </html>
