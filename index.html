@@ -429,61 +429,6 @@
     transform: rotate(5deg);
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
   }
-    /* Improved mobile nav styles */
-@media (max-width: 767px) {
-  .nav-wrapper {
-    position: sticky;
-    top: 0;
-    padding: 8px 0;
-    z-index: 20;
-  }
-  
-  nav.nav-container {
-    display: flex;
-    flex-wrap: nowrap;
-    gap: 8px;
-    padding: 8px 12px;
-    overflow-x: scroll;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: thin;
-    margin: 0 -5px;
-    position: relative;
-  }
-  
-  nav.nav-container:after {
-    content: '';
-    min-width: 10px;
-    height: 1px;
-  }
-  
-  nav.nav-container:before {
-    content: '';
-    min-width: 10px;
-    height: 1px;
-  }
-  
-  nav.nav-container a {
-    flex: 0 0 auto;
-    min-width: auto;
-    padding: 8px 12px;
-    font-size: 0.85rem;
-    white-space: nowrap;
-    scroll-snap-align: center;
-  }
-  
-  /* Force showing scrollbar on iOS */
-  nav.nav-container::-webkit-scrollbar {
-    -webkit-appearance: none;
-    height: 4px;
-  }
-  
-  nav.nav-container::-webkit-scrollbar-thumb {
-    background: var(--primary);
-    border-radius: 4px;
-  }
-}
-
   .slider-controls {
     display: flex;
     justify-content: center;
@@ -2018,71 +1963,6 @@ document.getElementById('sliderNext').addEventListener('click', () => {
   document.getElementById('featuredSlider').scrollBy({ left: 175, behavior: 'smooth' });
 });
     }
-  function fixMobileNavigation() {
-  const navContainer = document.getElementById('categoryNav');
-  const navItems = navContainer.querySelectorAll('a');
-  
-  // Add click handler to ensure active item is centered in view
-  navItems.forEach(item => {
-    item.addEventListener('click', function() {
-      // Short delay to allow for class changes
-      setTimeout(() => {
-        // Center the clicked item
-        this.scrollIntoView({
-          behavior: 'smooth',
-          block: 'nearest',
-          inline: 'center'
-        });
-      }, 100);
-    });
-  });
-  
-  // Improve scroll snap behavior
-  navContainer.style.scrollSnapType = 'x mandatory';
-  navItems.forEach(item => {
-    item.style.scrollSnapAlign = 'center';
-  });
-  
-  // Add visible scrollbar indicator on mobile
-  if (window.innerWidth < 768) {
-    navContainer.style.paddingBottom = '12px';
-    
-    // Add visual indicator that content is scrollable
-    const scrollIndicator = document.createElement('div');
-    scrollIndicator.style.position = 'absolute';
-    scrollIndicator.style.bottom = '2px';
-    scrollIndicator.style.left = '50%';
-    scrollIndicator.style.transform = 'translateX(-50%)';
-    scrollIndicator.style.fontSize = '12px';
-    scrollIndicator.style.color = 'var(--primary)';
-    scrollIndicator.style.opacity = '0.8';
-    scrollIndicator.innerHTML = '<i class="fas fa-arrows-left-right"></i>';
-    
-    // Append to nav wrapper and fade out after scrolling
-    const navWrapper = document.querySelector('.nav-wrapper');
-    navWrapper.style.position = 'relative';
-    navWrapper.appendChild(scrollIndicator);
-    
-    // Hide indicator after user scrolls
-    navContainer.addEventListener('scroll', function() {
-      scrollIndicator.style.opacity = '0';
-      scrollIndicator.style.transition = 'opacity 0.5s ease';
-      setTimeout(() => {
-        scrollIndicator.remove();
-      }, 500);
-    }, { once: true });
-  }
-}
-  document.addEventListener('DOMContentLoaded', function() {
-  // Add this right after your loadMenu() call
-  // Wait for menu to load before fixing navigation
-  const checkNavReady = setInterval(() => {
-    if (document.querySelectorAll('nav a').length > 0) {
-      clearInterval(checkNavReady);
-      fixMobileNavigation();
-    }
-  }, 200);
-});
 </script>
 </body>
 </html>
