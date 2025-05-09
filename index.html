@@ -429,6 +429,7 @@
     transform: rotate(5deg);
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
   }
+
   .slider-controls {
     display: flex;
     justify-content: center;
@@ -546,103 +547,35 @@
       top: 0;
       z-index: 20;
       box-shadow: var(--shadow-sm);
-      padding: 1rem;
+      padding: 1rem 0.5rem; /* Reduced horizontal padding */
       transition: var(--transition);
       border-top: 2px solid var(--primary);
       border-bottom: 2px solid var(--primary);
     }
 
     .nav-wrapper.scrolled {
-      padding: 0.7rem 1rem;
+      padding: 0.7rem 0.5rem;
     }
 
     nav.nav-container {
-       position: relative;
-      -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
-      scrollbar-width: thin;
-      mask-image: linear-gradient(to right, transparent, black 10px, black 90%, transparent);
-     -webkit-mask-image: linear-gradient(to right, transparent, black 10px, black 90%, transparent);
-      padding: 10px 20px;
       display: flex;
-      flex-wrap: nowrap;
-      justify-content: flex-start;
-      gap: 0.5rem;
-      max-width: 1200px;
-      margin: auto;
-      overflow-x: auto;
-      scrollbar-color: var(--primary) var(--primary-light);
-      border-radius: var(--radius-sm);
-      padding: 10px;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  gap: 0.5rem;
+  max-width: 1200px;
+  margin: auto;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 0.5rem;
+  scrollbar-width: none;
+  scrollbar-color: var(--primary) var(--primary-light);
+  border-radius: var(--radius-sm);
+  padding: 10px 5px; /* Adjusted padding */
+  scroll-padding: 0 16px;
+  /* Add these properties to improve scroll behavior */
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
     }
-    .nav-scroll-indicator {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 30px;
-  height: 30px;
-  background: rgba(138, 79, 255, 0.8);
-  color: white;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  z-index: 10;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  opacity: 0;
-  transition: all 0.3s ease;
-}
-.nav-scroll-indicator:hover {
-  background: var(--primary-dark);
-}
-
-.nav-scroll-left {
-  left: 5px;
-}
-
-.nav-scroll-right {
-  right: 5px;
-}
-    @media (max-width: 767px) {
-  nav.nav-container {
-    gap: 8px;
-    padding-bottom: 8px;
-    padding-top: 8px;
-  }
-  
-  nav a {
-    padding: 0.5rem 0.7rem;
-    font-size: 0.8rem;
-  }
-  
-  nav a i {
-    font-size: 0.9rem;
-  }
-  
-  .nav-wrapper.scrolled {
-    padding: 0.5rem;
-  }
-}
-
-/* Adding a subtle animation to indicate scrollability */
-@media (max-width: 767px) {
-  nav.nav-container::after {
-    content: "";
-    position: absolute;
-    right: 0;
-    top: 0;
-    height: 100%;
-    width: 40px;
-    background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.8));
-    pointer-events: none;
-    animation: pulse-fade 2s infinite alternate;
-  }
-  
-  @keyframes pulse-fade {
-    0% { opacity: 0.3; }
-    100% { opacity: 0.8; }
-  }
-}
 
     nav.nav-container::-webkit-scrollbar {
       height: 8px;
@@ -662,22 +595,24 @@
 
     nav a {
       text-decoration: none;
-      color:  var(--primary-dark);
-      font-weight: 500;
-      padding: 0.6rem 0.8rem;
-      border-radius: var(--radius-sm);
-      background: var(--primary-light);
-      border: 1px solid var(--primary);
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.85rem;
-      box-shadow: var(--shadow-md);
-      transition: var(--transition);
-      min-width: auto;
-      flex: 0 0 auto;
-      justify-content: center;
-      white-space: nowrap;
+  color: var(--primary-dark);
+  font-weight: 500;
+  padding: 0.6rem 0.7rem; /* Reduced padding */
+  border-radius: var(--radius-sm);
+  background: var(--primary-light);
+  border: 1px solid var(--primary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  box-shadow: var(--shadow-md);
+  transition: var(--transition);
+  min-width: auto;
+  flex: 0 0 auto;
+  justify-content: center;
+  white-space: nowrap;
+  /* Add scroll snap alignment */
+  scroll-snap-align: start;
     }
 
     nav a i {
@@ -1782,25 +1717,33 @@
 
       // Setup navigation highlighting
       const navLinks = document.querySelectorAll('nav a');
-      if ('IntersectionObserver' in window) {
-        const observer = new IntersectionObserver((entries) => {
-          entries.forEach(entry => {
-            const id = entry.target.getAttribute('id');
-            const link = document.querySelector(`nav a[href="#${id}"]`);
-            if (entry.isIntersecting) {
-              navLinks.forEach(navLink => navLink.classList.remove('active'));
-              if (link) link.classList.add('active');
-            }
+     if ('IntersectionObserver' in window) {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      const id = entry.target.getAttribute('id');
+      const link = document.querySelector(`nav a[href="#${id}"]`);
+      if (entry.isIntersecting) {
+        navLinks.forEach(navLink => navLink.classList.remove('active'));
+        if (link) {
+          link.classList.add('active');
+          // Add this line to scroll the active nav item into view
+          link.scrollIntoView({
+            behavior: 'smooth',
+            block: 'nearest',
+            inline: 'center'
           });
-        }, {
-          rootMargin: '-100px 0px -90% 0px',
-          threshold: 0
-        });
-
-        document.querySelectorAll('section').forEach(section => {
-          observer.observe(section);
-        });
+        }
       }
+    });
+  }, {
+    rootMargin: '-100px 0px -90% 0px',
+    threshold: 0
+  });
+
+  document.querySelectorAll('section').forEach(section => {
+    observer.observe(section);
+  });
+}
 
       // Highlight first nav link
       if (navLinks.length > 0) {
@@ -1814,42 +1757,25 @@
       });
 
       // Smooth scrolling
-// Improved smooth scrolling with better mobile support
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-  anchor.addEventListener('click', function(e) {
-    e.preventDefault();
-    const targetId = this.getAttribute('href');
-    const targetElement = document.querySelector(targetId);
-    if (targetElement) {
-      // Scroll the page to the section
-      window.scrollTo({
-        top: targetElement.offsetTop - 80,
-        behavior: 'smooth'
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+          e.preventDefault();
+          const targetId = this.getAttribute('href');
+          const targetElement = document.querySelector(targetId);
+          if (targetElement) {
+            window.scrollTo({
+              top: targetElement.offsetTop - 80,
+              behavior: 'smooth'
+            });
+            
+            this.scrollIntoView({
+              behavior: 'smooth',
+              block: 'nearest',
+              inline: 'center'
+            });
+          }
+        });
       });
-      
-      // Ensure the nav item is fully visible in the nav container
-      const navContainer = document.getElementById('categoryNav');
-      
-      // Calculate position to center the clicked nav item
-      const itemWidth = this.offsetWidth;
-      const containerWidth = navContainer.offsetWidth;
-      const itemPosition = this.offsetLeft;
-      const scrollPosition = itemPosition - (containerWidth / 2) + (itemWidth / 2);
-      
-      // Scroll the nav container horizontally
-      navContainer.scrollTo({
-        left: scrollPosition,
-        behavior: 'smooth'
-      });
-      
-      // Add active class to the clicked nav item
-      document.querySelectorAll('nav a').forEach(link => {
-        link.classList.remove('active');
-      });
-      this.classList.add('active');
-    }
-  });
-});
       
       // Initialize features
       createFloatingCookies();
@@ -2050,57 +1976,53 @@ document.getElementById('sliderPrev').addEventListener('click', () => {
 
 document.getElementById('sliderNext').addEventListener('click', () => {
   document.getElementById('featuredSlider').scrollBy({ left: 175, behavior: 'smooth' });
+   enhanceNavigation();
 });
     }
-  // Add scroll indicators for navigation
-function addNavScrollIndicators() {
-  const navWrapper = document.querySelector('.nav-wrapper');
-  const navContainer = document.getElementById('categoryNav');
-  
-  // Create scroll indicators
-  const leftIndicator = document.createElement('div');
-  leftIndicator.className = 'nav-scroll-indicator nav-scroll-left';
-  leftIndicator.innerHTML = '<i class="fas fa-chevron-left"></i>';
-  
-  const rightIndicator = document.createElement('div');
-  rightIndicator.className = 'nav-scroll-indicator nav-scroll-right';
-  rightIndicator.innerHTML = '<i class="fas fa-chevron-right"></i>';
-  
-  // Add indicators to DOM
-  navWrapper.insertBefore(leftIndicator, navContainer);
-  navWrapper.appendChild(rightIndicator);
-  
-  // Show/hide indicators based on scroll position
-  function updateIndicators() {
-    leftIndicator.style.opacity = navContainer.scrollLeft > 20 ? '1' : '0';
-    rightIndicator.style.opacity = 
-      navContainer.scrollLeft < navContainer.scrollWidth - navContainer.offsetWidth - 20 ? '1' : '0';
+  function enhanceNavigation() {
+  // Function to scroll the active link into view
+  function scrollActiveCategoryIntoView() {
+    const activeLink = document.querySelector('nav a.active');
+    if (activeLink) {
+      activeLink.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
+        inline: 'center'
+      });
+    }
   }
   
-  // Initial update
-  updateIndicators();
+  // Auto scroll to active link on page load
+  setTimeout(scrollActiveCategoryIntoView, 500);
   
-  // Update on scroll
-  navContainer.addEventListener('scroll', updateIndicators);
-  
-  // Scroll on indicator click
-  leftIndicator.addEventListener('click', () => {
-    navContainer.scrollBy({
-      left: -120,
-      behavior: 'smooth'
-    });
+  // Auto scroll active link into view when scrolling through sections
+  window.addEventListener('scroll', function() {
+    clearTimeout(window.scrollEndTimer);
+    window.scrollEndTimer = setTimeout(scrollActiveCategoryIntoView, 100);
   });
   
-  rightIndicator.addEventListener('click', () => {
-    navContainer.scrollBy({
-      left: 120,
-      behavior: 'smooth'
-    });
+  // Improve touch scrolling for the navigation
+  const nav = document.querySelector('nav.nav-container');
+  let isScrolling = false;
+  let startX, scrollLeft;
+  
+  nav.addEventListener('touchstart', (e) => {
+    isScrolling = true;
+    startX = e.touches[0].pageX - nav.offsetLeft;
+    scrollLeft = nav.scrollLeft;
+  });
+  
+  nav.addEventListener('touchmove', (e) => {
+    if(!isScrolling) return;
+    const x = e.touches[0].pageX - nav.offsetLeft;
+    const dist = (x - startX);
+    nav.scrollLeft = scrollLeft - dist;
+  });
+  
+  nav.addEventListener('touchend', () => {
+    isScrolling = false;
   });
 }
-
-// Call this function after building the navigation
-addNavScrollIndicators();
 </script>
 </body>
 </html>
