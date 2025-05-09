@@ -1581,6 +1581,13 @@
         if (!grouped[item.category]) grouped[item.category] = [];
         grouped[item.category].push(item);
       });
+      if (grouped["Rolls"]) {
+  grouped["Rolls"].sort((a, b) => {
+    if (a.item_name === "Cinnamon Roll") return -1;
+    if (b.item_name === "Cinnamon Roll") return 1;
+    return 0;
+  });
+}
 
       const nav = document.getElementById('categoryNav');
       const sections = document.getElementById('menuSections');
