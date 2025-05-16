@@ -1597,6 +1597,7 @@ function forceScrollActiveIntoView() {
     const leftPos = activeLink.offsetLeft - nav.offsetWidth / 2 + activeLink.offsetWidth / 2;
     nav.scrollTo({ left: leftPos, behavior: 'smooth' });
   }
+}
   async function loadMenu() {
     try {
       const { data, error } = await supabase
