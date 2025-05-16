@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+bmgj<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -1339,6 +1339,10 @@
     <div class="loader"><div></div><div></div><div></div></div>
   </nav>
 </div>
+  <div id="currentCategoryDisplay"
+     style="text-align:center; padding:1rem; font-size:1.2rem; font-weight:600;">
+  <!-- current category will appear here -->
+</div>
   <div class="featured-section">
   <div class="featured-header">
     <h2>Weekly Specials</h2>
@@ -1729,6 +1733,12 @@ const observer = new IntersectionObserver((entries) => {
     if (entry.isIntersecting && link) {
       navLinks.forEach(n => n.classList.remove('active'));
       link.classList.add('active');
+      
+      // ← ADD THIS BLOCK
+      const display = document.getElementById('currentCategoryDisplay');
+      if (display) display.textContent = link.textContent.trim();
+      // ↑
+
       scrollActiveCategoryIntoView();
       forceScrollActiveIntoView();
     }
@@ -1737,6 +1747,7 @@ const observer = new IntersectionObserver((entries) => {
   rootMargin: '-120px 0px -75% 0px',
   threshold: 0.4
 });
+
 
 
   document.querySelectorAll('section').forEach(section => {
