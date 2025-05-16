@@ -1722,30 +1722,22 @@
       // Setup navigation highlighting
       const navLinks = document.querySelectorAll('nav a');
      if ('IntersectionObserver' in window) {
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      const id = entry.target.getAttribute('id');
-      const link = document.querySelector(`nav a[href="#${id}"]`);
-      if (entry.isIntersecting) {
-        navLinks.forEach(navLink => navLink.classList.remove('active'));
-        if (link) {
-          link.classList.add('active');
-          // Add this line to scroll the active nav item into view
-          link.scrollIntoView({
-            behavior: 'smooth',
-            block: 'nearest',
-            inline: 'center'
-          });
-        }
-      }
-    });
-  }, {
-   }, {
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    const id   = entry.target.id;
+    const link = document.querySelector(`nav a[href="#${id}"]`);
+    if (entry.isIntersecting && link) {
+      navLinks.forEach(n => n.classList.remove('active'));
+      link.classList.add('active');
+      scrollActiveCategoryIntoView();
+      forceScrollActiveIntoView();
+    }
+  });
+}, {
   rootMargin: '-120px 0px -75% 0px',
   threshold: 0.4
 });
 
-  });
 
   document.querySelectorAll('section').forEach(section => {
     observer.observe(section);
