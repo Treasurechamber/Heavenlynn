@@ -1,4 +1,4 @@
-bmgj<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -1339,10 +1339,6 @@ bmgj<!DOCTYPE html>
     <div class="loader"><div></div><div></div><div></div></div>
   </nav>
 </div>
-  <div id="currentCategoryDisplay"
-     style="text-align:center; padding:1rem; font-size:1.2rem; font-weight:600;">
-  <!-- current category will appear here -->
-</div>
   <div class="featured-section">
   <div class="featured-header">
     <h2>Weekly Specials</h2>
@@ -1578,26 +1574,7 @@ bmgj<!DOCTYPE html>
       }
     }
   }
-function scrollActiveCategoryIntoView() {
-  const activeLink = document.querySelector('nav a.active');
-  if (activeLink) {
-    requestAnimationFrame(() => {
-      activeLink.scrollIntoView({
-        behavior: 'smooth',
-        inline: 'center',
-        block: 'nearest'
-      });
-    });
-  }
-}
-function forceScrollActiveIntoView() {
-  const nav = document.querySelector('nav.nav-container');
-  const activeLink = document.querySelector('nav a.active');
-  if (nav && activeLink) {
-    const leftPos = activeLink.offsetLeft - nav.offsetWidth / 2 + activeLink.offsetWidth / 2;
-    nav.scrollTo({ left: leftPos, behavior: 'smooth' });
-  }
-}
+
   async function loadMenu() {
     try {
       const { data, error } = await supabase
@@ -1745,29 +1722,27 @@ function forceScrollActiveIntoView() {
       // Setup navigation highlighting
       const navLinks = document.querySelectorAll('nav a');
      if ('IntersectionObserver' in window) {
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    const id   = entry.target.id;
-    const link = document.querySelector(`nav a[href="#${id}"]`);
-    if (entry.isIntersecting && link) {
-      navLinks.forEach(n => n.classList.remove('active'));
-      link.classList.add('active');
-      
-      // ← ADD THIS BLOCK
-      const display = document.getElementById('currentCategoryDisplay');
-      if (display) display.textContent = link.textContent.trim();
-      // ↑
-
-      scrollActiveCategoryIntoView();
-      forceScrollActiveIntoView();
-    }
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      const id = entry.target.getAttribute('id');
+      const link = document.querySelector(`nav a[href="#${id}"]`);
+      if (entry.isIntersecting) {
+        navLinks.forEach(navLink => navLink.classList.remove('active'));
+        if (link) {
+          link.classList.add('active');
+          // Add this line to scroll the active nav item into view
+          link.scrollIntoView({
+            behavior: 'smooth',
+            block: 'nearest',
+            inline: 'center'
+          });
+        }
+      }
+    });
+  }, {
+    rootMargin: '-100px 0px -90% 0px',
+    threshold: 0
   });
-}, {
-  rootMargin: '-120px 0px -75% 0px',
-  threshold: 0.4
-});
-
-
 
   document.querySelectorAll('section').forEach(section => {
     observer.observe(section);
@@ -2009,16 +1984,17 @@ document.getElementById('sliderNext').addEventListener('click', () => {
 });
     }
   function enhanceNavigation() {
-    // Auto scroll to active link on page load
-setTimeout(() => {
-  scrollActiveCategoryIntoView();
-  forceScrollActiveIntoView();
-}, 500);
-
   // Function to scroll the active link into view
-
-}
-
+  function scrollActiveCategoryIntoView() {
+    const activeLink = document.querySelector('nav a.active');
+    if (activeLink) {
+      activeLink.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
+        inline: 'center'
+      });
+    }
+  }
   
   // Auto scroll to active link on page load
   setTimeout(scrollActiveCategoryIntoView, 500);
@@ -2026,11 +2002,7 @@ setTimeout(() => {
   // Auto scroll active link into view when scrolling through sections
   window.addEventListener('scroll', function() {
     clearTimeout(window.scrollEndTimer);
-    window.scrollEndTimer = setTimeout(() => {
-  scrollActiveCategoryIntoView();
-  forceScrollActiveIntoView();
-}, 100);
-
+    window.scrollEndTimer = setTimeout(scrollActiveCategoryIntoView, 100);
   });
   
   // Improve touch scrolling for the navigation
