@@ -1578,7 +1578,25 @@ bmgj<!DOCTYPE html>
       }
     }
   }
-
+function scrollActiveCategoryIntoView() {
+  const activeLink = document.querySelector('nav a.active');
+  if (activeLink) {
+    requestAnimationFrame(() => {
+      activeLink.scrollIntoView({
+        behavior: 'smooth',
+        inline: 'center',
+        block: 'nearest'
+      });
+    });
+  }
+}
+function forceScrollActiveIntoView() {
+  const nav = document.querySelector('nav.nav-container');
+  const activeLink = document.querySelector('nav a.active');
+  if (nav && activeLink) {
+    const leftPos = activeLink.offsetLeft - nav.offsetWidth / 2 + activeLink.offsetWidth / 2;
+    nav.scrollTo({ left: leftPos, behavior: 'smooth' });
+  }
   async function loadMenu() {
     try {
       const { data, error } = await supabase
@@ -1997,25 +2015,7 @@ setTimeout(() => {
 }, 500);
 
   // Function to scroll the active link into view
-function scrollActiveCategoryIntoView() {
-  const activeLink = document.querySelector('nav a.active');
-  if (activeLink) {
-    requestAnimationFrame(() => {
-      activeLink.scrollIntoView({
-        behavior: 'smooth',
-        inline: 'center',
-        block: 'nearest'
-      });
-    });
-  }
-}
-function forceScrollActiveIntoView() {
-  const nav = document.querySelector('nav.nav-container');
-  const activeLink = document.querySelector('nav a.active');
-  if (nav && activeLink) {
-    const leftPos = activeLink.offsetLeft - nav.offsetWidth / 2 + activeLink.offsetWidth / 2;
-    nav.scrollTo({ left: leftPos, behavior: 'smooth' });
-  }
+
 }
 
   
