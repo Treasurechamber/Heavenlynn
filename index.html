@@ -1720,44 +1720,34 @@
       });
 
       // Setup navigation highlighting
-   // ─── OBSERVER SETUP ────────────────────────────────────────────
-const navLinks = document.querySelectorAll('nav a');
-const display   = document.getElementById('currentCategoryDisplay');
-
-if ('IntersectionObserver' in window) {
+      const navLinks = document.querySelectorAll('nav a');
+     if ('IntersectionObserver' in window) {
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
-      if (!entry.isIntersecting) return;
-
-      // 1) remove .active from all
-      navLinks.forEach(a => a.classList.remove('active'));
-
-      // 2) find the matching link
-      const id   = entry.target.id;
+      const id = entry.target.getAttribute('id');
       const link = document.querySelector(`nav a[href="#${id}"]`);
-      if (!link) return;
-
-      // 3) mark it active
-      link.classList.add('active');
-
-      // 4) update your display DIV
-      display.textContent = link.textContent.trim();
-
-      // 5) ensure it scrolls into view in the nav bar
-      link.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+      if (entry.isIntersecting) {
+        navLinks.forEach(navLink => navLink.classList.remove('active'));
+        if (link) {
+          link.classList.add('active');
+          // Add this line to scroll the active nav item into view
+          link.scrollIntoView({
+            behavior: 'smooth',
+            block: 'nearest',
+            inline: 'center'
+          });
+        }
+      }
     });
   }, {
-    root:          null,
-    rootMargin:    '0px 0px -80% 0px',  // fire when section top hits 20% from top
-    threshold:     0
+    rootMargin: '-100px 0px -90% 0px',
+    threshold: 0
   });
 
-  document.querySelectorAll('main section').forEach(sec => {
-    observer.observe(sec);
+  document.querySelectorAll('section').forEach(section => {
+    observer.observe(section);
   });
 }
-// ─────────────────────────────────────────────────────────────────
-
 
       // Highlight first nav link
       if (navLinks.length > 0) {
