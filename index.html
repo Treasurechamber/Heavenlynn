@@ -1740,8 +1740,11 @@
       }
     });
   }, {
-    rootMargin: '-100px 0px -90% 0px',
-    threshold: 0
+   }, {
+  rootMargin: '-120px 0px -75% 0px',
+  threshold: 0.4
+});
+
   });
 
   document.querySelectorAll('section').forEach(section => {
@@ -1984,17 +1987,34 @@ document.getElementById('sliderNext').addEventListener('click', () => {
 });
     }
   function enhanceNavigation() {
+    // Auto scroll to active link on page load
+setTimeout(() => {
+  scrollActiveCategoryIntoView();
+  forceScrollActiveIntoView();
+}, 500);
+
   // Function to scroll the active link into view
-  function scrollActiveCategoryIntoView() {
-    const activeLink = document.querySelector('nav a.active');
-    if (activeLink) {
+function scrollActiveCategoryIntoView() {
+  const activeLink = document.querySelector('nav a.active');
+  if (activeLink) {
+    requestAnimationFrame(() => {
       activeLink.scrollIntoView({
         behavior: 'smooth',
-        block: 'nearest',
-        inline: 'center'
+        inline: 'center',
+        block: 'nearest'
       });
-    }
+    });
   }
+}
+function forceScrollActiveIntoView() {
+  const nav = document.querySelector('nav.nav-container');
+  const activeLink = document.querySelector('nav a.active');
+  if (nav && activeLink) {
+    const leftPos = activeLink.offsetLeft - nav.offsetWidth / 2 + activeLink.offsetWidth / 2;
+    nav.scrollTo({ left: leftPos, behavior: 'smooth' });
+  }
+}
+
   
   // Auto scroll to active link on page load
   setTimeout(scrollActiveCategoryIntoView, 500);
@@ -2002,7 +2022,11 @@ document.getElementById('sliderNext').addEventListener('click', () => {
   // Auto scroll active link into view when scrolling through sections
   window.addEventListener('scroll', function() {
     clearTimeout(window.scrollEndTimer);
-    window.scrollEndTimer = setTimeout(scrollActiveCategoryIntoView, 100);
+    window.scrollEndTimer = setTimeout(() => {
+  scrollActiveCategoryIntoView();
+  forceScrollActiveIntoView();
+}, 100);
+
   });
   
   // Improve touch scrolling for the navigation
