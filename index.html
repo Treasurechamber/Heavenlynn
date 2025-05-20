@@ -1036,6 +1036,53 @@
       font-size: 0.9rem;
       opacity: 0.8;
     }
+     .tiktok-coming-soon {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: white;
+    transition: var(--transition);
+    cursor: pointer;
+  }
+  
+  .tiktok-badge {
+    position: absolute;
+    top: -12px;
+    right: -10px;
+    background: linear-gradient(135deg, #25F4EE, #FE2C55, #000000);
+    color: white;
+    font-size: 0.6rem;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 10px;
+    transform: rotate(5deg);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    opacity: 0;
+    transition: all 0.3s ease;
+  }
+  
+  .tiktok-coming-soon:hover {
+    transform: translateY(-3px) scale(1.1);
+  }
+  
+  .tiktok-coming-soon:hover .tiktok-badge {
+    opacity: 1;
+    transform: rotate(5deg) translateY(-5px);
+  }
+  
+  .tiktok-coming-soon:hover i {
+    animation: tiktok-dance 1s infinite alternate;
+  }
+  
+  @keyframes tiktok-dance {
+    0% { transform: rotate(-5deg) scale(1); }
+    25% { transform: rotate(5deg) scale(1.1); }
+    50% { transform: rotate(-5deg) scale(1); }
+    75% { transform: rotate(5deg) scale(1.1); }
+    100% { transform: rotate(-5deg) scale(1); }
+  }
 
     /* Loading animation */
     .loader {
@@ -1344,7 +1391,7 @@
     <div class="contact-separator"></div>
     <div class="contact-item">
       <i class="fas fa-phone"></i>
-      <span>70006252</span>
+      <span>81955816</span>
     </div>
     <div class="contact-separator"></div>
     <div class="contact-item">
@@ -1399,16 +1446,17 @@
     <div class="footer-logo">Heavenlynn</div>
     <div class="social-links">
       <a href="https://www.instagram.com/heavenlynn.lb/" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-      <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
-      <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-      <a href="#" aria-label="Pinterest"><i class="fab fa-pinterest"></i></a>
+      <div class="tiktok-coming-soon">
+        <i class="fab fa-tiktok"></i>
+        <span class="tiktok-badge">Coming Soon!</span>
+      </div>
     </div>
     <p class="footer-text">© 2025 Heavenlynn Bakery. All rights reserved.</p>
-    <p class="footer-text">Tyre, Lebanon • 70006252</p>
+    <p class="footer-text">Tyre, Lebanon • 81955816</p>
   </div>
 </footer>
 
-<a href="https://wa.me/96170006252" class="whatsapp-cookie-btn" target="_blank" aria-label="Contact us on WhatsApp">
+<a href="https://wa.me/96181955816" class="whatsapp-cookie-btn" target="_blank" aria-label="Contact us on WhatsApp">
   <i class="fab fa-whatsapp"></i>
 </a>
 
