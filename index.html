@@ -1150,6 +1150,28 @@
     ::-webkit-scrollbar-thumb:hover {
       background: #a18cd1;
     }
+    .preorder-tag {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: linear-gradient(135deg, #8a4fff, #ff7eb5);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  transform: rotate(-5deg);
+  box-shadow: 0 3px 8px rgba(138, 79, 255, 0.3);
+  z-index: 5;
+  border: 1px solid white;
+  animation: gentle-float 3s infinite alternate;
+}
+
+@keyframes gentle-float {
+  0% { transform: rotate(-5deg) translateY(0); }
+  100% { transform: rotate(-3deg) translateY(-3px); }
+}
 
     /* Responsive styles */
     @media (min-width: 480px) {
@@ -1591,36 +1613,37 @@ function setupCategoryScrollButton() {
   document.head.appendChild(fortuneStyles);
   
   // Expanded fortunes with categories
-  const fortunes = {
-    sweet: [
-      "Your smile is as sweet as our cookies!",
-      "Life is what you bake of it!",
-      "When in doubt, add more sprinkles!",
-      "The best things in life are sweet and homemade",
-      "You're the chocolate chip to my cookie dough!"
-    ],
-    wisdom: [
-      "Good things come to those who bake",
-      "A balanced diet is a cookie in each hand",
-      "Cookies make everything better, especially Mondays",
-      "A recipe has no soul. You, as the baker, must bring soul to the recipe",
-      "Success is a batch of perfectly baked cookies"
-    ],
-    prediction: [
-      "You will discover a delicious new treat in your future",
-      "Your next meal will bring unexpected joy",
-      "An opportunity to share dessert with someone special is coming",
-      "Your creative ideas will rise like perfectly baked bread",
-      "A sweet surprise is waiting just around the corner"
-    ],
-    secret: [
-      "🌟 SECRET MENU: Ask about our Cookie Dough Milkshake! 🌟",
-      "🌟 SECRET MENU: Try our Brownie Cheesecake Fusion! 🌟",
-      "🌟 SPECIAL OFFER: Show this message for 15% off today! 🌟",
-      "🌟 SECRET MENU: The Triple Chocolate Experience awaits! 🌟",
-      "🌟 SECRET MENU: The Royal Purple Taro Cake is our hidden gem! 🌟"
-    ]
-  };
+ // Expanded fortunes with categories
+const fortunes = {
+  tips: [
+    "Pro Tip: Our cookies taste best when shared with friends!",
+    "Tip: Try our desserts with a cup of our signature coffee for the perfect pairing.",
+    "Baker's Tip: Store your cookies in an airtight container to keep them fresh longer!",
+    "Tip: The early bird gets the freshest pastries - visit us before 10am!",
+    "Pro Tip: Our weekly specials are announced every Monday on Instagram!"
+  ],
+  motivation: [
+    "You deserve something sweet today - treat yourself!",
+    "A little indulgence is good for the soul. You're doing great!",
+    "Life is short, eat the cake first! You've earned it.",
+    "The perfect moment for a treat is whenever you decide. Enjoy today!",
+    "Your smile makes our day brighter. Keep shining!"
+  ],
+  inspiration: [
+    "Good things come to those who bake patiently.",
+    "Food made with love feeds the soul as well as the body.",
+    "Finding joy in the little things - like the perfect cookie - is the secret to happiness.",
+    "Creativity and passion are our secret ingredients in every recipe.",
+    "The best memories are made gathered around good food and better company."
+  ],
+  offers: [
+    "🌟 Show this for 10% off your next order! 🌟",
+    "🌟 Buy any cake slice and get a coffee at half price! 🌟",
+    "🌟 Free cookie with any purchase over $20! 🌟",
+    "🌟 Mention 'Sweet Surprise' for a special treat with your order! 🌟",
+    "🌟 Join our loyalty program and get every 10th coffee free! 🌟"
+  ]
+};
   
   // Food-related emojis for emoji rain
   const foodEmojis = [
@@ -1681,19 +1704,28 @@ function setupCategoryScrollButton() {
   }
   
   function getRandomFortune() {
-    // Weighted random selection with 10% chance of secret fortune
-    const rand = Math.random();
-    let category;
-    
-    if (rand < 0.1) {
-      category = 'secret';
-    } else if (rand < 0.4) {
-      category = 'sweet';
-    } else if (rand < 0.7) {
-      category = 'wisdom';
-    } else {
-      category = 'prediction';
-    }
+  // Weighted random selection with only 5% chance of offers
+  const rand = Math.random();
+  let category;
+  
+  if (rand < 0.05) {
+    category = 'offers';
+  } else if (rand < 0.40) {
+    category = 'tips';
+  } else if (rand < 0.70) {
+    category = 'motivation';
+  } else {
+    category = 'inspiration';
+  }
+  
+  const categoryFortunes = fortunes[category];
+  const fortuneText = categoryFortunes[Math.floor(Math.random() * categoryFortunes.length)];
+  
+  return {
+    text: fortuneText,
+    category: category
+  };
+}
     
     const categoryFortunes = fortunes[category];
     const fortuneText = categoryFortunes[Math.floor(Math.random() * categoryFortunes.length)];
@@ -1753,21 +1785,21 @@ function setupCategoryScrollButton() {
           icon.style.fontSize = '2rem';
           icon.style.marginBottom = '10px';
           
-          switch(fortune.category) {
-            case 'sweet':
-              icon.textContent = '✨';
-              break;
-            case 'wisdom':
-              icon.textContent = '🔮';
-              break;
-            case 'prediction':
-              icon.textContent = '🌙';
-              break;
-            case 'secret':
-              icon.textContent = '🌟';
-              createEmojiRain(30); // Special effect for secret fortunes
-              break;
-          }
+         switch(fortune.category) {
+          case 'tips':
+            icon.textContent = '💡';
+            break;
+          case 'motivation':
+            icon.textContent = '✨';
+            break;
+          case 'inspiration':
+            icon.textContent = '🌈';
+            break;
+          case 'offers':
+            icon.textContent = '🎁';
+            createEmojiRain(20); // Special effect for offers, but less intense
+            break;
+        }
           
           fortuneElement.appendChild(icon);
           
@@ -1965,6 +1997,8 @@ function setupCategoryScrollButton() {
         }
 
         // Create item cards
+        // Add preorder tag for Cookie Cakes and Cakes sections
+        const needsPreorder = ['Cakes', 'Cookie Cakes'].includes(category);
         grouped[category].forEach(item => {
           const card = document.createElement('div');
           card.className = 'item-card';
@@ -1986,6 +2020,13 @@ function setupCategoryScrollButton() {
             badge.textContent = specialBadges[item.item_name];
             card.appendChild(badge);
           }
+          // Add preorder tag for specific categories
+if (needsPreorder) {
+  const preorderTag = document.createElement('div');
+  preorderTag.className = 'preorder-tag';
+  preorderTag.textContent = 'Preorder';
+  card.appendChild(preorderTag);
+}
 
           // Content
           const content = document.createElement('div');
