@@ -2331,29 +2331,6 @@ document.getElementById('sliderNext').addEventListener('click', () => {
 });
     }
 
-  
-  // Improve touch scrolling for the navigation
-  const nav = document.querySelector('nav.nav-container');
-  let isScrolling = false;
-  let startX, scrollLeft;
-  
-  nav.addEventListener('touchstart', (e) => {
-    isScrolling = true;
-    startX = e.touches[0].pageX - nav.offsetLeft;
-    scrollLeft = nav.scrollLeft;
-  });
-  
-  nav.addEventListener('touchmove', (e) => {
-    if(!isScrolling) return;
-    const x = e.touches[0].pageX - nav.offsetLeft;
-    const dist = (x - startX);
-    nav.scrollLeft = scrollLeft - dist;
-  });
-  
-  nav.addEventListener('touchend', () => {
-    isScrolling = false;
-  });
-}
 </script>
 </body>
 </html>
