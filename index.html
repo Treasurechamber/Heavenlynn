@@ -1613,37 +1613,36 @@ function setupCategoryScrollButton() {
   document.head.appendChild(fortuneStyles);
   
   // Expanded fortunes with categories
- // Expanded fortunes with categories
-const fortunes = {
-  tips: [
-    "Pro Tip: Our cookies taste best when shared with friends!",
-    "Tip: Try our desserts with a cup of our signature coffee for the perfect pairing.",
-    "Baker's Tip: Store your cookies in an airtight container to keep them fresh longer!",
-    "Tip: The early bird gets the freshest pastries - visit us before 10am!",
-    "Pro Tip: Our weekly specials are announced every Monday on Instagram!"
-  ],
-  motivation: [
-    "You deserve something sweet today - treat yourself!",
-    "A little indulgence is good for the soul. You're doing great!",
-    "Life is short, eat the cake first! You've earned it.",
-    "The perfect moment for a treat is whenever you decide. Enjoy today!",
-    "Your smile makes our day brighter. Keep shining!"
-  ],
-  inspiration: [
-    "Good things come to those who bake patiently.",
-    "Food made with love feeds the soul as well as the body.",
-    "Finding joy in the little things - like the perfect cookie - is the secret to happiness.",
-    "Creativity and passion are our secret ingredients in every recipe.",
-    "The best memories are made gathered around good food and better company."
-  ],
-  offers: [
-    "🌟 Show this for 10% off your next order! 🌟",
-    "🌟 Buy any cake slice and get a coffee at half price! 🌟",
-    "🌟 Free cookie with any purchase over $20! 🌟",
-    "🌟 Mention 'Sweet Surprise' for a special treat with your order! 🌟",
-    "🌟 Join our loyalty program and get every 10th coffee free! 🌟"
-  ]
-};
+  const fortunes = {
+    tips: [
+      "Pro Tip: Our cookies taste best when shared with friends!",
+      "Tip: Try our desserts with a cup of our signature coffee for the perfect pairing.",
+      "Baker's Tip: Store your cookies in an airtight container to keep them fresh longer!",
+      "Tip: The early bird gets the freshest pastries - visit us before 10am!",
+      "Pro Tip: Our weekly specials are announced every Monday on Instagram!"
+    ],
+    motivation: [
+      "You deserve something sweet today - treat yourself!",
+      "A little indulgence is good for the soul. You're doing great!",
+      "Life is short, eat the cake first! You've earned it.",
+      "The perfect moment for a treat is whenever you decide. Enjoy today!",
+      "Your smile makes our day brighter. Keep shining!"
+    ],
+    inspiration: [
+      "Good things come to those who bake patiently.",
+      "Food made with love feeds the soul as well as the body.",
+      "Finding joy in the little things - like the perfect cookie - is the secret to happiness.",
+      "Creativity and passion are our secret ingredients in every recipe.",
+      "The best memories are made gathered around good food and better company."
+    ],
+    offers: [
+      "🌟 Show this for 10% off your next order! 🌟",
+      "🌟 Buy any cake slice and get a coffee at half price! 🌟",
+      "🌟 Free cookie with any purchase over $20! 🌟",
+      "🌟 Mention 'Sweet Surprise' for a special treat with your order! 🌟",
+      "🌟 Join our loyalty program and get every 10th coffee free! 🌟"
+    ]
+  };
   
   // Food-related emojis for emoji rain
   const foodEmojis = [
@@ -1703,31 +1702,29 @@ const fortunes = {
     }
   }
   
-function getRandomFortune() {
-  // Weighted random selection with only 5% chance of offers
-  const rand = Math.random();
-  let category;
-  
-  if (rand < 0.05) {
-    category = 'offers';
-  } else if (rand < 0.40) {
-    category = 'tips';
-  } else if (rand < 0.70) {
-    category = 'motivation';
-  } else {
-    category = 'inspiration';
+  function getRandomFortune() {
+    // Weighted random selection with only 5% chance of offers
+    const rand = Math.random();
+    let category;
+    
+    if (rand < 0.05) {
+      category = 'offers';
+    } else if (rand < 0.40) {
+      category = 'tips';
+    } else if (rand < 0.70) {
+      category = 'motivation';
+    } else {
+      category = 'inspiration';
+    }
+    
+    const categoryFortunes = fortunes[category];
+    const fortuneText = categoryFortunes[Math.floor(Math.random() * categoryFortunes.length)];
+    
+    return {
+      text: fortuneText,
+      category: category
+    };
   }
-  
-  const categoryFortunes = fortunes[category];
-  const fortuneText = categoryFortunes[Math.floor(Math.random() * categoryFortunes.length)];
-  
-  return {
-    text: fortuneText,
-    category: category
-  };
-}
-  
- 
   
   function typeWriter(element, text, i, speed, callback) {
     if (i < text.length) {
@@ -1768,8 +1765,8 @@ function getRandomFortune() {
           fortuneElement.style.display = 'block';
           fortuneElement.textContent = '';
           fortuneElement.style.fontFamily = "'Dancing Script', cursive";
-          fortuneElement.style.color = fortune.category === 'secret' ? 'var(--accent)' : 'var(--primary-dark)';
-          fortuneElement.style.fontSize = fortune.category === 'secret' ? '1.8rem' : '1.5rem';
+          fortuneElement.style.color = fortune.category === 'offers' ? 'var(--accent)' : 'var(--primary-dark)';
+          fortuneElement.style.fontSize = fortune.category === 'offers' ? '1.8rem' : '1.5rem';
           fortuneElement.style.textAlign = 'center';
           fortuneElement.style.padding = '10px';
           
@@ -1778,21 +1775,21 @@ function getRandomFortune() {
           icon.style.fontSize = '2rem';
           icon.style.marginBottom = '10px';
           
-        switch(fortune.category) {
-  case 'tips':
-    icon.textContent = '💡';
-    break;
-  case 'motivation':
-    icon.textContent = '✨';
-    break;
-  case 'inspiration':
-    icon.textContent = '🌈';
-    break;
-  case 'offers':
-    icon.textContent = '🎁';
-    createEmojiRain(20); // Special effect for offers, but less intense
-    break;
-}
+          switch(fortune.category) {
+            case 'tips':
+              icon.textContent = '💡';
+              break;
+            case 'motivation':
+              icon.textContent = '✨';
+              break;
+            case 'inspiration':
+              icon.textContent = '🌈';
+              break;
+            case 'offers':
+              icon.textContent = '🎁';
+              createEmojiRain(20); // Special effect for offers, but less intense
+              break;
+          }
           
           fortuneElement.appendChild(icon);
           
@@ -1807,7 +1804,7 @@ function getRandomFortune() {
             document.addEventListener('click', closeFortune);
             
             // Navigate to section if it's a prediction or secret
-            if (fortune.category === 'prediction' || fortune.category === 'secret') {
+            if (fortune.category === 'offers') {
               const sections = ["cookies", "rolls", "slices", "cakes", "cookie-cakes", "cups", 
                               "cheesecakes", "ice-cream", "drinks", "add-ons"];
               const randomSection = sections[Math.floor(Math.random() * sections.length)];
@@ -1841,6 +1838,14 @@ function getRandomFortune() {
       }, 500);
     }
   });
+  
+  // For the dropdown menu functionality
+  document.addEventListener('click', function(event) {
+    if (!button.contains(event.target) && !dropdown.contains(event.target)) {
+      dropdown.classList.remove('show');
+    }
+  });
+}
   
   // For the dropdown menu functionality
   document.addEventListener('click', function(event) {
