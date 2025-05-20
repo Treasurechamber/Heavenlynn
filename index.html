@@ -1703,7 +1703,7 @@ const fortunes = {
     }
   }
   
-  function getRandomFortune() {
+ function getRandomFortune() {
   // Weighted random selection with only 5% chance of offers
   const rand = Math.random();
   let category;
@@ -1717,6 +1717,15 @@ const fortunes = {
   } else {
     category = 'inspiration';
   }
+  
+  const categoryFortunes = fortunes[category];
+  const fortuneText = categoryFortunes[Math.floor(Math.random() * categoryFortunes.length)];
+  
+  return {
+    text: fortuneText,
+    category: category
+  };
+}
   
   const categoryFortunes = fortunes[category];
   const fortuneText = categoryFortunes[Math.floor(Math.random() * categoryFortunes.length)];
@@ -1785,21 +1794,21 @@ const fortunes = {
           icon.style.fontSize = '2rem';
           icon.style.marginBottom = '10px';
           
-         switch(fortune.category) {
-          case 'tips':
-            icon.textContent = '💡';
-            break;
-          case 'motivation':
-            icon.textContent = '✨';
-            break;
-          case 'inspiration':
-            icon.textContent = '🌈';
-            break;
-          case 'offers':
-            icon.textContent = '🎁';
-            createEmojiRain(20); // Special effect for offers, but less intense
-            break;
-        }
+        switch(fortune.category) {
+  case 'tips':
+    icon.textContent = '💡';
+    break;
+  case 'motivation':
+    icon.textContent = '✨';
+    break;
+  case 'inspiration':
+    icon.textContent = '🌈';
+    break;
+  case 'offers':
+    icon.textContent = '🎁';
+    createEmojiRain(20); // Special effect for offers, but less intense
+    break;
+}
           
           fortuneElement.appendChild(icon);
           
@@ -1997,6 +2006,7 @@ const fortunes = {
         }
 
         // Create item cards
+        // Add preorder tag for Cookie Cakes and Cakes sections
         // Add preorder tag for Cookie Cakes and Cakes sections
         const needsPreorder = ['Cakes', 'Cookie Cakes'].includes(category);
         grouped[category].forEach(item => {
