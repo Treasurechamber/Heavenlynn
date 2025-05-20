@@ -2082,7 +2082,7 @@ function setupCategoryScrollButton() {
       
       // Initialize features
       createFloatingCookies();
-      createFloatingCookies();
+ 
       
     } catch (error) {
       console.error('Error loading menu:', error);
@@ -2152,7 +2152,7 @@ function setupCategoryScrollButton() {
     }
     
     // Slideshow controls
-    const slideInterval = setInterval(nextSlide, 5000);
+   slideInterval = setInterval(nextSlide, 5000);  // This should be just setInterval
     
     document.querySelector('.slideshow-container').addEventListener('mouseover', () => {
       clearInterval(slideInterval);
@@ -2160,7 +2160,7 @@ function setupCategoryScrollButton() {
     
     document.querySelector('.slideshow-container').addEventListener('mouseleave', () => {
       clearInterval(slideInterval);
-      setInterval(nextSlide, 5000);
+      slideInterval = setInterval(nextSlide, 5000);
     });
     
     // Parallax effect
@@ -2233,7 +2233,7 @@ function enhanceNavigation() {
   window.addEventListener('scroll', function() {
     clearTimeout(window.scrollEndTimer);
     window.scrollEndTimer = setTimeout(scrollActiveCategoryIntoView, 100);
-    enhanceNavigation();
+   
   });
   
   // Improve touch scrolling for the navigation
@@ -2330,27 +2330,7 @@ document.getElementById('sliderNext').addEventListener('click', () => {
    enhanceNavigation();
 });
     }
-  function enhanceNavigation() {
-  // Function to scroll the active link into view
-  function scrollActiveCategoryIntoView() {
-    const activeLink = document.querySelector('nav a.active');
-    if (activeLink) {
-      activeLink.scrollIntoView({
-        behavior: 'smooth',
-        block: 'nearest',
-        inline: 'center'
-      });
-    }
-  }
-  
-  // Auto scroll to active link on page load
-  setTimeout(scrollActiveCategoryIntoView, 500);
-  
-  // Auto scroll active link into view when scrolling through sections
-  window.addEventListener('scroll', function() {
-    clearTimeout(window.scrollEndTimer);
-    window.scrollEndTimer = setTimeout(scrollActiveCategoryIntoView, 100);
-  });
+
   
   // Improve touch scrolling for the navigation
   const nav = document.querySelector('nav.nav-container');
