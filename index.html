@@ -1469,8 +1469,8 @@
 
   // Map categories to icons
   const iconMap = {
-    "Cookies": "fa-cookie", "Rolls": "fa-bread-slice", "Slices": "fa-pie-slice", "Cakes": "fa-cake-candles",
-    "Cups": "fa-bowl-food", "Cheesecakes": "fa-cheese",  "Add-ons": "fa-plus-circle", "Drinks": "fa-coffee", "Ice Cream": "fa-ice-cream","Cookie Cakes": "fa-cookie-bite"
+    "Cookies": "fa-cookie-bite", "Rolls": "fa-bread-slice", "Slices": "fa-pie-slice", "Cakes": "fa-cake-candles",
+    "Cups": "fa-bowl-food", "Cheesecakes": "fa-cheese",  "Add-ons": "fa-plus-circle", "Drinks": "fa-coffee", "Ice Cream": "fa-ice-cream","Cookie Cakes": "fa-cookie"
   
   };
 
@@ -2399,6 +2399,27 @@ function loadFeaturedItems() {
     enhanceNavigation();
   });
 }
+  <script>
+  // This script will ensure the Slices category has its pie slice icon
+  document.addEventListener('DOMContentLoaded', function() {
+    // Wait for the menu to be fully loaded
+    setTimeout(function() {
+      // Find the Slices link in the main navigation
+      document.querySelectorAll('nav a').forEach(function(link) {
+        if (link.textContent.trim() === 'Slices' && !link.querySelector('i')) {
+          link.innerHTML = '<i class="fas fa-pie-slice"></i> Slices';
+        }
+      });
+      
+      // Also fix it in the dropdown menu if needed
+      document.querySelectorAll('#categoryDropdownList a').forEach(function(link) {
+        if (link.textContent.trim() === 'Slices' && !link.querySelector('i')) {
+          link.innerHTML = '<i class="fas fa-pie-slice"></i> Slices';
+        }
+      });
+    }, 1000); // Wait 1 second for the menu to load
+  });
+</script>
 </script>
 </body>
 </html>
