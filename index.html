@@ -1518,47 +1518,45 @@ fortuneStyles.textContent = `
     animation: crack-cookie 1s forwards;
   }
   
-.fortune-paper {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, 100px) rotate(-15deg);
-  width: 320px; /* Increased width */
-  min-height: 200px; /* Increased min-height */
-  background: #fff9e5;
-  border: 2px dashed var(--primary);
-  border-radius: 15px;
-  z-index: 1002;
-  opacity: 0;
-  transition: all 0.5s ease;
-  filter: drop-shadow(0 5px 15px rgba(0,0,0,0.2));
-  padding: 30px 25px; /* Increased padding */
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
+  /* Completely redesigned fortune paper */
+  .fortune-paper {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 85%;
+    max-width: 350px;
+    background: #fff9e5;
+    border: 2px dashed var(--primary);
+    border-radius: 15px;
+    z-index: 1002;
+    opacity: 0;
+    padding: 25px;
+    box-sizing: border-box;
+  }
   
   .fortune-paper.show {
-    transform: translate(-50%, 20px) rotate(-5deg);
     opacity: 1;
   }
   
-  .fortune-sparkles {
-    position: absolute;
+  /* Simple fortune text container */
+  .fortune-text-container {
     width: 100%;
-    height: 100%;
-    pointer-events: none;
+    text-align: center;
+    font-family: 'Dancing Script', cursive;
+    color: var(--primary-dark);
+    font-size: 1.4rem;
+    line-height: 1.6;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
   }
   
-  .fortune-sparkle {
-    position: absolute;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background: #fff;
-    opacity: 0;
+  /* Icon styling */
+  .fortune-icon {
+    font-size: 2rem;
+    margin-bottom: 15px;
+    display: block;
+    text-align: center;
   }
   
   @keyframes crack-cookie {
@@ -1566,7 +1564,7 @@ fortuneStyles.textContent = `
     40% { transform: translate(-50%, -50%) scale(1.1) rotate(5deg); }
     60% { transform: translate(-50%, -50%) scale(1.15) rotate(-8deg); }
     80% { transform: translate(-50%, -50%) scale(0.95) rotate(10deg); }
-    100% { transform: translate(-50%, -50%) scale(1) rotate(0); opacity: 0; } /* Made cookie disappear */
+    100% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
   }
   
   .emoji-rain {
@@ -1599,24 +1597,6 @@ fortuneStyles.textContent = `
     }
   }
   
-.cookie-fortune {
-  position: static; /* Change from relative */
-  width: 100%;
-  max-width: 270px; /* Wider max-width */
-  margin: 0 auto;
-  background-color: transparent; /* Make background transparent */
-  border: none; /* Remove any border */
-  box-shadow: none; /* Remove any shadow */
-  font-family: 'Dancing Script', cursive;
-  font-size: 1.4rem;
-  color: var(--primary-dark);
-  line-height: 1.5;
-  text-align: center;
-  padding: 0; /* Remove padding */
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-}
-  
   .fortune-overlay.show {
     display: block;
     animation: fade-in 0.3s forwards;
@@ -1627,7 +1607,7 @@ fortuneStyles.textContent = `
     to { opacity: 1; }
   }
 `;
-  document.head.appendChild(fortuneStyles);
+document.head.appendChild(fortuneStyles);
   
   // Expanded fortunes with categories
   const fortunes = {
@@ -1764,102 +1744,69 @@ fortuneStyles.textContent = `
     fortuneCookie.style.display = 'block';
     
     // Add click event to fortune cookie
-    fortuneCookie.onclick = function() {
-      // Crack the cookie
-      this.classList.add('crack');
-      createSparkles(window.innerWidth / 2, window.innerHeight / 2, 30);
+// Add click event to fortune cookie
+fortuneCookie.onclick = function() {
+  // Crack the cookie
+  this.classList.add('crack');
+  createSparkles(window.innerWidth / 2, window.innerHeight / 2, 30);
+  
+  // Show fortune paper after a short delay
+  setTimeout(() => {
+    // Clear any existing content
+    fortunePaper.innerHTML = '';
+    fortunePaper.style.display = 'block';
+    
+    setTimeout(() => {
+      fortunePaper.classList.add('show');
       
-      // Show fortune paper after a short delay
-      setTimeout(() => {
-        fortunePaper.style.display = 'block';
-        setTimeout(() => {
-          fortunePaper.classList.add('show');
-          
-          // Get a random fortune
-          const fortune = getRandomFortune();
-          
-          // Display the fortune with typewriter effect
-          // Display the fortune with typewriter effect
-// Display the fortune with typewriter effect
-// Display the fortune with typewriter effect
-fortuneElement.style.display = 'block';
-fortuneElement.textContent = '';
-fortuneElement.style.fontFamily = "'Dancing Script', cursive";
-fortuneElement.style.color = fortune.category === 'offers' ? 'var(--accent)' : 'var(--primary-dark)';
-fortuneElement.style.fontSize = '1.4rem';
-fortuneElement.style.lineHeight = '1.5';
-fortuneElement.style.textAlign = 'center';
-fortuneElement.style.width = '100%';
-fortuneElement.style.maxWidth = '270px';
-fortuneElement.style.margin = '0 auto';
-fortuneElement.style.padding = '0';
-fortuneElement.style.border = 'none';
-fortuneElement.style.boxShadow = 'none';
-fortuneElement.style.backgroundColor = 'transparent';
-fortuneElement.style.wordWrap = 'break-word';
-fortuneElement.style.overflowWrap = 'break-word';
-fortuneElement.style.position = 'static';
-          
-          // Create an image of star or moon based on fortune category
-          const icon = document.createElement('div');
-          icon.style.fontSize = '2rem';
-          icon.style.marginBottom = '10px';
-          
-          switch(fortune.category) {
-            case 'tips':
-              icon.textContent = '💡';
-              break;
-            case 'motivation':
-              icon.textContent = '✨';
-              break;
-            case 'inspiration':
-              icon.textContent = '🌈';
-              break;
-            case 'offers':
-              icon.textContent = '🎁';
-              createEmojiRain(20); // Special effect for offers, but less intense
-              break;
-          }
-          
-          fortuneElement.appendChild(icon);
-          
-          
-         // Create a span for the text
-const textSpan = document.createElement('span');
-textSpan.style.display = 'block';
-textSpan.style.width = '100%';
-textSpan.style.margin = '0 auto';
-textSpan.style.wordWrap = 'break-word';
-textSpan.style.overflowWrap = 'break-word';
-textSpan.style.whiteSpace = 'normal'; // Ensure text wraps
-fortunePaper.appendChild(fortuneElement);
-fortuneElement.appendChild(textSpan);
-          
-          // Type out the fortune
-          typeWriter(textSpan, fortune.text, 0, 40, () => {
-            // After typing is complete, allow clicking anywhere to close
-            document.addEventListener('click', closeFortune);
-            
-            // Navigate to section if it's a prediction or secret
-            if (fortune.category === 'offers') {
-              const sections = ["cookies", "rolls", "slices", "cakes", "cookie-cakes", "cups", 
-                              "cheesecakes", "ice-cream", "drinks", "add-ons"];
-              const randomSection = sections[Math.floor(Math.random() * sections.length)];
-              
-              setTimeout(() => {
-                const section = document.getElementById(randomSection);
-                if (section) {
-                  window.scrollTo({
-                    top: section.offsetTop - 80,
-                    behavior: 'smooth'
-                  });
-                }
-              }, 3000);
-            }
-          });
-        }, 200);
-      }, 800);
-    };
+      // Get a random fortune
+      const fortune = getRandomFortune();
+      
+      // Create icon based on category
+      const icon = document.createElement('div');
+      icon.className = 'fortune-icon';
+      
+      switch(fortune.category) {
+        case 'tips':
+          icon.textContent = '💡';
+          break;
+        case 'motivation':
+          icon.textContent = '✨';
+          break;
+        case 'inspiration':
+          icon.textContent = '🌈';
+          break;
+        case 'offers':
+          icon.textContent = '🎁';
+          createEmojiRain(20);
+          break;
+      }
+      
+      // Create text container
+      const textContainer = document.createElement('div');
+      textContainer.className = 'fortune-text-container';
+      
+      // Append elements
+      fortunePaper.appendChild(icon);
+      fortunePaper.appendChild(textContainer);
+      
+      // Type out the fortune
+      let i = 0;
+      function typeText() {
+        if (i < fortune.text.length) {
+          textContainer.textContent += fortune.text.charAt(i);
+          i++;
+          setTimeout(typeText, 40);
+        } else {
+          // After typing is complete, allow clicking anywhere to close
+          document.addEventListener('click', closeFortune);
+        }
+      }
+      
+      typeText();
+    }, 200);
+  }, 800);
+};
     
     function closeFortune() {
       document.removeEventListener('click', closeFortune);
