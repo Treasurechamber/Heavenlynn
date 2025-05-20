@@ -2082,7 +2082,7 @@ function setupCategoryScrollButton() {
       
       // Initialize features
       createFloatingCookies();
-      setupCategoryScrollButton();
+      createFloatingCookies();
       
     } catch (error) {
       console.error('Error loading menu:', error);
@@ -2115,6 +2115,7 @@ function setupCategoryScrollButton() {
     const slideshowContainer = document.querySelector('.slideshow-container');
     const dotsContainer = document.querySelector('.slideshow-dots');
     let currentSlide = 0;
+    let slideInterval; 
     
     // Create slides and dots
     slideImages.forEach((image, index) => {
@@ -2211,6 +2212,52 @@ function setupCategoryScrollButton() {
       tag: "Weekend Special"
     }
   ];
+  // Add this function BEFORE loadFeaturedItems() function
+function enhanceNavigation() {
+  // Function to scroll the active link into view
+  function scrollActiveCategoryIntoView() {
+    const activeLink = document.querySelector('nav a.active');
+    if (activeLink) {
+      activeLink.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
+        inline: 'center'
+      });
+    }
+  }
+  
+  // Auto scroll to active link on page load
+  setTimeout(scrollActiveCategoryIntoView, 500);
+  
+  // Auto scroll active link into view when scrolling through sections
+  window.addEventListener('scroll', function() {
+    clearTimeout(window.scrollEndTimer);
+    window.scrollEndTimer = setTimeout(scrollActiveCategoryIntoView, 100);
+    enhanceNavigation();
+  });
+  
+  // Improve touch scrolling for the navigation
+  const nav = document.querySelector('nav.nav-container');
+  let isScrolling = false;
+  let startX, scrollLeft;
+  
+  nav.addEventListener('touchstart', (e) => {
+    isScrolling = true;
+    startX = e.touches[0].pageX - nav.offsetLeft;
+    scrollLeft = nav.scrollLeft;
+  });
+  
+  nav.addEventListener('touchmove', (e) => {
+    if(!isScrolling) return;
+    const x = e.touches[0].pageX - nav.offsetLeft;
+    const dist = (x - startX);
+    nav.scrollLeft = scrollLeft - dist;
+  });
+  
+  nav.addEventListener('touchend', () => {
+    isScrolling = false;
+  });
+}
     function loadFeaturedItems() {
     const slider = document.getElementById('featuredSlider');
     
