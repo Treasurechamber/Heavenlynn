@@ -1469,7 +1469,7 @@
 
   // Map categories to icons
   const iconMap = {
-    "Cookies": "fa-cookie-bite", "Rolls": "fa-bread-slice", "Slices": "fa-pie-slice", "Cakes": "fa-cake-candles",
+    "Cookies": "fa-cookie-bite", "Rolls": "fa-bread-slice", "Slices": "fa-chart-pie", "Cakes": "fa-cake-candles",
     "Cups": "fa-bowl-food", "Cheesecakes": "fa-cheese",  "Add-ons": "fa-plus-circle", "Drinks": "fa-coffee", "Ice Cream": "fa-ice-cream","Cookie Cakes": "fa-cookie"
   
   };
@@ -2399,41 +2399,6 @@ function loadFeaturedItems() {
     enhanceNavigation();
   });
 }
-</script>
-<script>
-  // Super aggressive fix for Slices icon that will keep trying
-  (function() {
-    // Check every 500ms for 10 seconds
-    var attempts = 0;
-    var maxAttempts = 20;
-    
-    function fixSlicesIcon() {
-      // Try all possible selectors that might find the Slices link
-      var slicesLinks = Array.from(document.querySelectorAll('a')).filter(function(link) {
-        return link.textContent.trim() === 'Slices' || 
-               link.textContent.includes('Slices') ||
-               (link.getAttribute('href') && link.getAttribute('href').includes('slice'));
-      });
-      
-      if (slicesLinks.length > 0) {
-        console.log('Found Slices links:', slicesLinks.length);
-        
-        slicesLinks.forEach(function(link) {
-          // Force replace content
-          link.innerHTML = '<i class="fas fa-pie-slice"></i> Slices';
-          console.log('Fixed a Slices link');
-        });
-      }
-      
-      attempts++;
-      if (attempts < maxAttempts) {
-        setTimeout(fixSlicesIcon, 500);
-      }
-    }
-    
-    // Start the checks
-    fixSlicesIcon();
-  })();
 </script>
 </body>
 </html>
