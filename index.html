@@ -1703,7 +1703,7 @@ const fortunes = {
     }
   }
   
- function getRandomFortune() {
+function getRandomFortune() {
   // Weighted random selection with only 5% chance of offers
   const rand = Math.random();
   let category;
@@ -1727,23 +1727,7 @@ const fortunes = {
   };
 }
   
-  const categoryFortunes = fortunes[category];
-  const fortuneText = categoryFortunes[Math.floor(Math.random() * categoryFortunes.length)];
-  
-  return {
-    text: fortuneText,
-    category: category
-  };
-}
-    
-    const categoryFortunes = fortunes[category];
-    const fortuneText = categoryFortunes[Math.floor(Math.random() * categoryFortunes.length)];
-    
-    return {
-      text: fortuneText,
-      category: category
-    };
-  }
+ 
   
   function typeWriter(element, text, i, speed, callback) {
     if (i < text.length) {
