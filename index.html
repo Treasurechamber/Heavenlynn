@@ -1519,21 +1519,28 @@ fortuneStyles.textContent = `
   }
   
   .fortune-paper {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, 100px) rotate(-15deg);
-    width: 320px; /* Increased width */
-    min-height: 160px; /* Changed to min-height and increased */
-    background: #fffdeb;
-    border: 2px dashed var(--primary);
-    border-radius: 15px; /* Increased border radius */
-    z-index: 1002; /* Increased to appear above other elements */
-    opacity: 0;
-    transition: all 0.5s ease;
-    filter: drop-shadow(0 5px 15px rgba(0,0,0,0.2));
-    padding: 20px; /* Added padding */
-  }
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, 100px) rotate(-15deg);
+  width: 300px; /* Adjusted width */
+  height: auto; /* Auto height to accommodate content */
+  min-height: 180px; /* Ensure minimum height */
+  background: #fffdeb;
+  border: 2px dashed var(--primary);
+  border-radius: 15px;
+  z-index: 1002;
+  opacity: 0;
+  transition: all 0.5s ease;
+  filter: drop-shadow(0 5px 15px rgba(0,0,0,0.2));
+  padding: 25px 20px; /* Adjusted padding */
+  box-sizing: border-box; /* Ensure padding is included in width */
+  display: flex; /* Use flexbox */
+  flex-direction: column; /* Stack children vertically */
+  justify-content: center; /* Center vertically */
+  align-items: center; /* Center horizontally */
+  overflow: hidden; /* Hide overflow */
+}
   
   .fortune-paper.show {
     transform: translate(-50%, 20px) rotate(-5deg);
@@ -1594,21 +1601,17 @@ fortuneStyles.textContent = `
     }
   }
   
-  .cookie-fortune {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 1003; /* Increased to be above paper */
-    width: 100%; /* Added width */
-    height: 100%; /* Added height */
-    padding: 15px; /* Added padding */
-    box-sizing: border-box; /* Added box-sizing */
-    display: flex; /* Added display */
-    flex-direction: column; /* Added flex-direction */
-    align-items: center; /* Center content horizontally */
-    justify-content: center; /* Center content vertically */
-  }
+.cookie-fortune {
+  position: relative; /* Changed from absolute */
+  width: 100%; /* Full width of parent */
+  max-width: 250px; /* Maximum width */
+  z-index: 1003;
+  margin: 0 auto; /* Center horizontally */
+  word-wrap: break-word; /* Allow word breaking */
+  overflow-wrap: break-word; /* Modern version of word-wrap */
+  font-size: 1.3rem; /* Consistent font size */
+  line-height: 1.4; /* Improved line height */
+}
   
   .fortune-overlay.show {
     display: block;
@@ -1773,20 +1776,20 @@ fortuneStyles.textContent = `
           
           // Display the fortune with typewriter effect
           // Display the fortune with typewriter effect
+// Display the fortune with typewriter effect
 fortuneElement.style.display = 'block';
 fortuneElement.textContent = '';
 fortuneElement.style.fontFamily = "'Dancing Script', cursive";
 fortuneElement.style.color = fortune.category === 'offers' ? 'var(--accent)' : 'var(--primary-dark)';
-fortuneElement.style.fontSize = fortune.category === 'offers' ? '1.5rem' : '1.3rem'; // Slightly smaller font
+fortuneElement.style.fontSize = '1.2rem'; // Smaller font size
+fortuneElement.style.lineHeight = '1.4'; // Better line height
 fortuneElement.style.textAlign = 'center';
-fortuneElement.style.padding = '15px'; // Added padding
-fortuneElement.style.backgroundColor = 'rgba(255, 249, 229, 0.95)'; // Semi-transparent background
-fortuneElement.style.borderRadius = '10px'; // Rounded corners
-fortuneElement.style.width = '100%'; // Full width 
-fortuneElement.style.maxWidth = '280px'; // Maximum width
-fortuneElement.style.margin = '0 auto'; // Center horizontally
-fortuneElement.style.textShadow = '0 0 1px rgba(255, 255, 255, 0.8)'; // Text shadow for better readability
-fortuneElement.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.1)'; // Subtle shadow
+fortuneElement.style.padding = '10px';
+fortuneElement.style.width = '100%';
+fortuneElement.style.maxWidth = '240px'; // Narrower width
+fortuneElement.style.wordWrap = 'break-word'; // Allow word breaking
+fortuneElement.style.overflowWrap = 'break-word'; // Modern version of word-wrap
+fortuneElement.style.overflow = 'hidden'; // Hide overflow
           
           // Create an image of star or moon based on fortune category
           const icon = document.createElement('div');
@@ -1811,10 +1814,15 @@ fortuneElement.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.1)'; // Subtle shado
           
           fortuneElement.appendChild(icon);
           
-          // Create a span for the text
-          const textSpan = document.createElement('span');
-          fortunePaper.appendChild(fortuneElement);
-          fortuneElement.appendChild(textSpan);
+          
+         // Create a span for the text
+const textSpan = document.createElement('span');
+textSpan.style.display = 'block';
+textSpan.style.width = '100%';
+textSpan.style.wordWrap = 'break-word';
+textSpan.style.overflowWrap = 'break-word';
+fortunePaper.appendChild(fortuneElement);
+fortuneElement.appendChild(textSpan);
           
           // Type out the fortune
           typeWriter(textSpan, fortune.text, 0, 40, () => {
