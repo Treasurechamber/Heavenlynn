@@ -2399,24 +2399,18 @@ function loadFeaturedItems() {
     enhanceNavigation();
   });
 }
-  // This script will ensure the Slices category has its pie slice icon
+</script>
+  <script>
+  // Fix for missing Slices icon
   document.addEventListener('DOMContentLoaded', function() {
-    // Wait for the menu to be fully loaded
     setTimeout(function() {
-      // Find the Slices link in the main navigation
-      document.querySelectorAll('nav a').forEach(function(link) {
-        if (link.textContent.trim() === 'Slices' && !link.querySelector('i')) {
+      const slicesLinks = document.querySelectorAll('a[href="#slices"]');
+      slicesLinks.forEach(function(link) {
+        if (!link.querySelector('i.fa-pie-slice')) {
           link.innerHTML = '<i class="fas fa-pie-slice"></i> Slices';
         }
       });
-      
-      // Also fix it in the dropdown menu if needed
-      document.querySelectorAll('#categoryDropdownList a').forEach(function(link) {
-        if (link.textContent.trim() === 'Slices' && !link.querySelector('i')) {
-          link.innerHTML = '<i class="fas fa-pie-slice"></i> Slices';
-        }
-      });
-    }, 1000); // Wait 1 second for the menu to load
+    }, 1500);
   });
 </script>
 </body>
