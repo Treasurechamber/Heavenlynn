@@ -1518,28 +1518,26 @@ fortuneStyles.textContent = `
     animation: crack-cookie 1s forwards;
   }
   
-  .fortune-paper {
+.fortune-paper {
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, 100px) rotate(-15deg);
-  width: 300px; /* Adjusted width */
-  height: auto; /* Auto height to accommodate content */
-  min-height: 180px; /* Ensure minimum height */
-  background: #fffdeb;
+  width: 320px; /* Increased width */
+  min-height: 200px; /* Increased min-height */
+  background: #fff9e5;
   border: 2px dashed var(--primary);
   border-radius: 15px;
   z-index: 1002;
   opacity: 0;
   transition: all 0.5s ease;
   filter: drop-shadow(0 5px 15px rgba(0,0,0,0.2));
-  padding: 25px 20px; /* Adjusted padding */
-  box-sizing: border-box; /* Ensure padding is included in width */
-  display: flex; /* Use flexbox */
-  flex-direction: column; /* Stack children vertically */
-  justify-content: center; /* Center vertically */
-  align-items: center; /* Center horizontally */
-  overflow: hidden; /* Hide overflow */
+  padding: 30px 25px; /* Increased padding */
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
   
   .fortune-paper.show {
@@ -1602,15 +1600,21 @@ fortuneStyles.textContent = `
   }
   
 .cookie-fortune {
-  position: relative; /* Changed from absolute */
-  width: 100%; /* Full width of parent */
-  max-width: 250px; /* Maximum width */
-  z-index: 1003;
-  margin: 0 auto; /* Center horizontally */
-  word-wrap: break-word; /* Allow word breaking */
-  overflow-wrap: break-word; /* Modern version of word-wrap */
-  font-size: 1.3rem; /* Consistent font size */
-  line-height: 1.4; /* Improved line height */
+  position: static; /* Change from relative */
+  width: 100%;
+  max-width: 270px; /* Wider max-width */
+  margin: 0 auto;
+  background-color: transparent; /* Make background transparent */
+  border: none; /* Remove any border */
+  box-shadow: none; /* Remove any shadow */
+  font-family: 'Dancing Script', cursive;
+  font-size: 1.4rem;
+  color: var(--primary-dark);
+  line-height: 1.5;
+  text-align: center;
+  padding: 0; /* Remove padding */
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
   
   .fortune-overlay.show {
@@ -1777,19 +1781,24 @@ fortuneStyles.textContent = `
           // Display the fortune with typewriter effect
           // Display the fortune with typewriter effect
 // Display the fortune with typewriter effect
+// Display the fortune with typewriter effect
 fortuneElement.style.display = 'block';
 fortuneElement.textContent = '';
 fortuneElement.style.fontFamily = "'Dancing Script', cursive";
 fortuneElement.style.color = fortune.category === 'offers' ? 'var(--accent)' : 'var(--primary-dark)';
-fortuneElement.style.fontSize = '1.2rem'; // Smaller font size
-fortuneElement.style.lineHeight = '1.4'; // Better line height
+fortuneElement.style.fontSize = '1.4rem';
+fortuneElement.style.lineHeight = '1.5';
 fortuneElement.style.textAlign = 'center';
-fortuneElement.style.padding = '10px';
 fortuneElement.style.width = '100%';
-fortuneElement.style.maxWidth = '240px'; // Narrower width
-fortuneElement.style.wordWrap = 'break-word'; // Allow word breaking
-fortuneElement.style.overflowWrap = 'break-word'; // Modern version of word-wrap
-fortuneElement.style.overflow = 'hidden'; // Hide overflow
+fortuneElement.style.maxWidth = '270px';
+fortuneElement.style.margin = '0 auto';
+fortuneElement.style.padding = '0';
+fortuneElement.style.border = 'none';
+fortuneElement.style.boxShadow = 'none';
+fortuneElement.style.backgroundColor = 'transparent';
+fortuneElement.style.wordWrap = 'break-word';
+fortuneElement.style.overflowWrap = 'break-word';
+fortuneElement.style.position = 'static';
           
           // Create an image of star or moon based on fortune category
           const icon = document.createElement('div');
@@ -1819,8 +1828,10 @@ fortuneElement.style.overflow = 'hidden'; // Hide overflow
 const textSpan = document.createElement('span');
 textSpan.style.display = 'block';
 textSpan.style.width = '100%';
+textSpan.style.margin = '0 auto';
 textSpan.style.wordWrap = 'break-word';
 textSpan.style.overflowWrap = 'break-word';
+textSpan.style.whiteSpace = 'normal'; // Ensure text wraps
 fortunePaper.appendChild(fortuneElement);
 fortuneElement.appendChild(textSpan);
           
