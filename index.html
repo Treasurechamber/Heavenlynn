@@ -2233,7 +2233,6 @@ function enhanceNavigation() {
   window.addEventListener('scroll', function() {
     clearTimeout(window.scrollEndTimer);
     window.scrollEndTimer = setTimeout(scrollActiveCategoryIntoView, 100);
-   
   });
   
   // Improve touch scrolling for the navigation
@@ -2258,79 +2257,76 @@ function enhanceNavigation() {
     isScrolling = false;
   });
 }
-    function loadFeaturedItems() {
-    const slider = document.getElementById('featuredSlider');
+
+function loadFeaturedItems() {
+  const slider = document.getElementById('featuredSlider');
+  
+  featuredItems.forEach(item => {
+    const featuredItem = document.createElement('div');
+    featuredItem.className = 'featured-item';
     
-    featuredItems.forEach(item => {
-      const featuredItem = document.createElement('div');
-      featuredItem.className = 'featured-item';
-      
-      const limitedTag = document.createElement('div');
-      limitedTag.className = 'limited-tag';
-      limitedTag.textContent = item.tag;
-      
-      const imgContainer = document.createElement('div');
-      imgContainer.className = 'featured-img';
-      
-      const img = document.createElement('img');
-      img.src = item.image;
-      img.alt = item.name;
-      imgContainer.appendChild(img);
-      
-      const content = document.createElement('div');
-      content.className = 'featured-content';
-      
-      const name = document.createElement('div');
-      name.className = 'featured-name';
-      name.textContent = item.name;
-      
-      const desc = document.createElement('div');
-      desc.className = 'featured-desc';
-      desc.textContent = item.description;
-      
-      const footer = document.createElement('div');
-      footer.className = 'featured-footer';
-      
-      const price = document.createElement('div');
-      price.className = 'featured-price';
-      price.textContent = `$${item.price.toFixed(2)}`;
-      
-      const button = document.createElement('button');
-      button.className = 'featured-button';
-      button.textContent = 'Order Now';
-      button.addEventListener('click', () => {
-        // You can add WhatsApp link here
-        window.open(`https://wa.me/96170006252?text=Hi! I'd like to order the ${item.name}`, '_blank');
-      });
-      
-      footer.appendChild(price);
-      footer.appendChild(button);
-      
-      content.appendChild(name);
-      content.appendChild(desc);
-      content.appendChild(footer);
-      
-      featuredItem.appendChild(limitedTag);
-      featuredItem.appendChild(imgContainer);
-      featuredItem.appendChild(content);
-      
-      slider.appendChild(featuredItem);
+    const limitedTag = document.createElement('div');
+    limitedTag.className = 'limited-tag';
+    limitedTag.textContent = item.tag;
+    
+    const imgContainer = document.createElement('div');
+    imgContainer.className = 'featured-img';
+    
+    const img = document.createElement('img');
+    img.src = item.image;
+    img.alt = item.name;
+    imgContainer.appendChild(img);
+    
+    const content = document.createElement('div');
+    content.className = 'featured-content';
+    
+    const name = document.createElement('div');
+    name.className = 'featured-name';
+    name.textContent = item.name;
+    
+    const desc = document.createElement('div');
+    desc.className = 'featured-desc';
+    desc.textContent = item.description;
+    
+    const footer = document.createElement('div');
+    footer.className = 'featured-footer';
+    
+    const price = document.createElement('div');
+    price.className = 'featured-price';
+    price.textContent = `$${item.price.toFixed(2)}`;
+    
+    const button = document.createElement('button');
+    button.className = 'featured-button';
+    button.textContent = 'Order Now';
+    button.addEventListener('click', () => {
+      // You can add WhatsApp link here
+      window.open(`https://wa.me/96170006252?text=Hi! I'd like to order the ${item.name}`, '_blank');
     });
     
-    // Set up slider navigation
-    const sliderPrev = document.getElementById('sliderPrev');
-    const sliderNext = document.getElementById('sliderNext');
+    footer.appendChild(price);
+    footer.appendChild(button);
     
-document.getElementById('sliderPrev').addEventListener('click', () => {
-  document.getElementById('featuredSlider').scrollBy({ left: -175, behavior: 'smooth' });
-});
-
-document.getElementById('sliderNext').addEventListener('click', () => {
-  document.getElementById('featuredSlider').scrollBy({ left: 175, behavior: 'smooth' });
-   enhanceNavigation();
-});
+    content.appendChild(name);
+    content.appendChild(desc);
+    content.appendChild(footer);
     
+    featuredItem.appendChild(limitedTag);
+    featuredItem.appendChild(imgContainer);
+    featuredItem.appendChild(content);
+    
+    slider.appendChild(featuredItem);
+  });
+  
+  // Set up slider navigation
+  document.getElementById('sliderPrev').addEventListener('click', () => {
+    document.getElementById('featuredSlider').scrollBy({ left: -175, behavior: 'smooth' });
+  });
 
+  document.getElementById('sliderNext').addEventListener('click', () => {
+    document.getElementById('featuredSlider').scrollBy({ left: 175, behavior: 'smooth' });
+    enhanceNavigation();
+  });
+}
 </script>
 </body>
 </html>
