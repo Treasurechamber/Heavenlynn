@@ -2400,23 +2400,40 @@ function loadFeaturedItems() {
   });
 }
 </script>
- <script>
-  // Direct fix for the Slices icon
-  window.addEventListener('load', function() {
-    // Target all navigation items
-    const navItems = document.querySelectorAll('nav a, #categoryDropdownList a');
+<script>
+  // Super aggressive fix for Slices icon that will keep trying
+  (function() {
+    // Check every 500ms for 10 seconds
+    var attempts = 0;
+    var maxAttempts = 20;
     
-    // Loop through all navigation items
-    navItems.forEach(function(link) {
-      // Check if this is the Slices link by text content
-      if (link.textContent.includes('Slices')) {
-        // Force replace with correct icon
-        link.innerHTML = '<i class="fas fa-pie-slice"></i> Slices';
+    function fixSlicesIcon() {
+      // Try all possible selectors that might find the Slices link
+      var slicesLinks = Array.from(document.querySelectorAll('a')).filter(function(link) {
+        return link.textContent.trim() === 'Slices' || 
+               link.textContent.includes('Slices') ||
+               (link.getAttribute('href') && link.getAttribute('href').includes('slice'));
+      });
+      
+      if (slicesLinks.length > 0) {
+        console.log('Found Slices links:', slicesLinks.length);
+        
+        slicesLinks.forEach(function(link) {
+          // Force replace content
+          link.innerHTML = '<i class="fas fa-pie-slice"></i> Slices';
+          console.log('Fixed a Slices link');
+        });
       }
-    });
+      
+      attempts++;
+      if (attempts < maxAttempts) {
+        setTimeout(fixSlicesIcon, 500);
+      }
+    }
     
-    console.log('Slice icon fix attempted');
-  });
+    // Start the checks
+    fixSlicesIcon();
+  })();
 </script>
 </body>
 </html>
