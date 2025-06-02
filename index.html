@@ -45,18 +45,18 @@
     }
 
     /* Contact info bar */
-    .contact-bar {
-      background:#D9AFE1;
-      color: white;
-      padding: 14px 20px;
-      width: 100%;
-      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
-      font-family: 'Cormorant Garamond', serif;
-      letter-spacing: 1px;
-      border-bottom: 2px solid var(--primary);
-      position: relative;
-      z-index: 20;
-    }
+.contact-bar {
+  background:#D9AFE1;
+  color: white;
+  padding: 14px 20px;
+  width: 100%;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
+  font-family: 'Dancing Script', cursive;
+  letter-spacing: 1px;
+  border-bottom: 2px solid var(--primary);
+  position: relative;
+  z-index: 20;
+}
 
     .contact-info {
       display: flex;
@@ -68,34 +68,35 @@
       flex-wrap: wrap;
     }
 
-    .contact-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 1rem;
-      padding: 0 12px;
-      position: relative;
-    }
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.1rem;
+  padding: 0 12px;
+  position: relative;
+  font-weight: 600;
+}
 
     .contact-item i {
       color: var(--accent);
       font-size: 1rem;
     }
 
-    .contact-item span {
-      font-weight: 500;
-      font-style: italic;
-      text-transform: lowercase;
-    }
+.contact-item span {
+  font-weight: 600;
+  font-style: italic;
+}
 
-    .contact-item a {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      color: white;
-      text-decoration: none;
-      transition: var(--transition);
-    }
+.contact-item a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: white;
+  text-decoration: none;
+  transition: var(--transition);
+  font-weight: 600;
+}
 
     .contact-item a:hover {
       color: var(--accent);
@@ -116,6 +117,49 @@
     .contact-item:hover span {
       text-shadow: 0 0 8px rgba(255, 126, 181, 0.5);
     }
+    /* Cookie Loading Animation */
+.cookie-loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  gap: 15px;
+}
+
+.cookie-loader .cookie {
+  width: 40px;
+  height: 40px;
+  font-size: 2rem;
+  animation: cookie-bounce 1.2s infinite;
+  filter: drop-shadow(0 4px 8px rgba(138, 79, 255, 0.3));
+}
+
+.cookie-loader .cookie:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.cookie-loader .cookie:nth-child(2) {
+  animation-delay: 0.3s;
+}
+
+.cookie-loader .cookie:nth-child(3) {
+  animation-delay: 0.6s;
+}
+
+@keyframes cookie-bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  10% {
+    transform: translateY(-20px) rotate(45deg);
+  }
+  40% {
+    transform: translateY(-30px) rotate(90deg);
+  }
+  60% {
+    transform: translateY(-15px) rotate(135deg);
+  }
+}
 
     .social-icons {
       display: flex;
@@ -1405,7 +1449,11 @@
 
 <div class="nav-wrapper" id="menu">
   <nav class="nav-container" id="categoryNav" role="navigation" aria-label="Menu Categories">
-    <div class="loader"><div></div><div></div><div></div></div>
+   <div class="cookie-loader">
+  <div class="cookie">🍪</div>
+  <div class="cookie">🍪</div>
+  <div class="cookie">🍪</div>
+</div>
   </nav>
 </div>
   <div class="featured-section">
@@ -1944,7 +1992,7 @@ fortuneCookie.onclick = function() {
         .order('category', { ascending: true });
 
       if (error) throw error;
-      document.querySelector('.loader').style.display = 'none';
+     document.querySelector('.cookie-loader').style.display = 'none';
 
       // Group items by category
       const grouped = {};
@@ -2158,6 +2206,7 @@ if (needsPreorder) {
       
     } catch (error) {
       console.error('Error loading menu:', error);
+      document.querySelector('.cookie-loader').style.display = 'none';
       document.getElementById('menuSections').innerHTML = `
         <div style="text-align: center; padding: 3rem;">
           <h2>Oops! Something went wrong.</h2>
