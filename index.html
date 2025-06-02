@@ -1150,6 +1150,28 @@
     ::-webkit-scrollbar-thumb:hover {
       background: #a18cd1;
     }
+    .preorder-tag {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: linear-gradient(135deg, #8a4fff, #ff7eb5);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  transform: rotate(-5deg);
+  box-shadow: 0 3px 8px rgba(138, 79, 255, 0.3);
+  z-index: 5;
+  border: 1px solid white;
+  animation: gentle-float 3s infinite alternate;
+}
+
+@keyframes gentle-float {
+  0% { transform: rotate(-5deg) translateY(0); }
+  100% { transform: rotate(-3deg) translateY(-3px); }
+}
 
     /* Responsive styles */
     @media (min-width: 480px) {
@@ -1449,82 +1471,373 @@
   }
 
   // Fortune Cookie Menu Revealer
-  function setupCategoryScrollButton() {
-    const button = document.getElementById('categoryScrollBtn');
-    const dropdown = document.getElementById('categoryDropdown');
+function setupCategoryScrollButton() {
+  const button = document.getElementById('categoryScrollBtn');
+  const dropdown = document.getElementById('categoryDropdown');
+  
+  // Create fortune cookie elements
+  const fortuneCookie = document.createElement('div');
+  fortuneCookie.className = 'fortune-cookie';
+  fortuneCookie.style.display = 'none';
+  document.body.appendChild(fortuneCookie);
+  
+  const fortunePaper = document.createElement('div');
+  fortunePaper.className = 'fortune-paper';
+  fortunePaper.style.display = 'none';
+  document.body.appendChild(fortunePaper);
+  
+  const fortuneElement = document.createElement('div');
+  fortuneElement.className = 'cookie-fortune';
+  fortuneElement.style.display = 'none';
+  document.body.appendChild(fortuneElement);
+  
+  const fortuneOverlay = document.createElement('div');
+  fortuneOverlay.className = 'fortune-overlay';
+  document.body.appendChild(fortuneOverlay);
+  
+  // Add CSS for the new elements
+// Add CSS for the new elements
+const fortuneStyles = document.createElement('style');
+fortuneStyles.textContent = `
+  .fortune-cookie {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 180px;
+    height: 180px;
+    background: url('https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/1f960.svg') no-repeat center center;
+    background-size: contain;
+    z-index: 1001;
+    cursor: pointer;
+    filter: drop-shadow(0 10px 25px rgba(0,0,0,0.4));
+    transition: all 0.3s ease;
+  }
+  
+  .fortune-cookie.crack {
+    animation: crack-cookie 1s forwards;
+  }
+  
+  /* Completely redesigned fortune paper */
+  .fortune-paper {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 85%;
+    max-width: 350px;
+    background: #fff9e5;
+    border: 2px dashed var(--primary);
+    border-radius: 15px;
+    z-index: 1002;
+    opacity: 0;
+    padding: 25px;
+    box-sizing: border-box;
+  }
+  
+  .fortune-paper.show {
+    opacity: 1;
+  }
+  
+  /* Simple fortune text container */
+  .fortune-text-container {
+    width: 100%;
+    text-align: center;
+    font-family: 'Dancing Script', cursive;
+    color: var(--primary-dark);
+    font-size: 1.4rem;
+    line-height: 1.6;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+  
+  /* Icon styling */
+  .fortune-icon {
+    font-size: 2rem;
+    margin-bottom: 15px;
+    display: block;
+    text-align: center;
+  }
+  
+  @keyframes crack-cookie {
+    0% { transform: translate(-50%, -50%) scale(1) rotate(0); }
+    40% { transform: translate(-50%, -50%) scale(1.1) rotate(5deg); }
+    60% { transform: translate(-50%, -50%) scale(1.15) rotate(-8deg); }
+    80% { transform: translate(-50%, -50%) scale(0.95) rotate(10deg); }
+    100% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+  }
+  
+  .emoji-rain {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 998;
+  }
+  
+  .emoji-drop {
+    position: absolute;
+    font-size: 24px;
+    animation: emoji-fall 6s linear forwards;
+  }
+  
+  @keyframes emoji-fall {
+    0% { 
+      transform: translateY(-50px) rotate(0deg); 
+      opacity: 1;
+    }
+    80% {
+      opacity: 1;
+    }
+    100% { 
+      transform: translateY(calc(100vh + 50px)) rotate(359deg); 
+      opacity: 0;
+    }
+  }
+  
+  .fortune-overlay.show {
+    display: block;
+    animation: fade-in 0.3s forwards;
+  }
+  
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+`;
+document.head.appendChild(fortuneStyles);
+  
+  // Expanded fortunes with categories
+  const fortunes = {
+    tips: [
+      "Pro Tip: Our cookies taste best when shared with friends!",
+      "Tip: Try our desserts with a cup of our signature coffee for the perfect pairing.",
+      "Baker's Tip: Store your cookies in an airtight container to keep them fresh longer!",
+      "Tip: The early bird gets the freshest pastries - visit us before 10am!",
+      "Pro Tip: Our weekly specials are announced every Wednesday on Instagram!"
+    ],
+    motivation: [
+      "You deserve something sweet today - treat yourself!",
+      "A little indulgence is good for the soul. You're doing great!",
+      "Life is short, eat the cake first! You've earned it.",
+      "The perfect moment for a treat is whenever you decide. Enjoy today!",
+      "Your smile makes our day brighter. Keep shining!"
+    ],
+    inspiration: [
+      "Good things come to those who bake patiently.",
+      "Food made with love feeds the soul as well as the body.",
+      "Finding joy in the little things - like the perfect cookie - is the secret to happiness.",
+      "Creativity and passion are our secret ingredients in every recipe.",
+      "The best memories are made gathered around good food and better company."
+    ],
+    offers: [
+      "🌟 Show this for 10% off your next order! 🌟",
+      "🌟 Buy any cake slice and get a coffee at half price! 🌟",
+      "🌟 Free cookie with any purchase over $20! 🌟",
+      "🌟 Mention 'Sweet Surprise' for a special treat with your order! 🌟",
+      "🌟 Join our loyalty program and get every 10th coffee free! 🌟"
+    ]
+  };
+  
+  // Food-related emojis for emoji rain
+  const foodEmojis = [
+    '🍪', '🍩', '🍰', '🧁', '🍫', '🍬', '🍭', '🍮', '🎂', '🍦', 
+    '🥧', '🍨', '🍧', '🍯', '🥞', '🧇', '🍓', '🍒', '🫐', '🥥'
+  ];
+  
+  // Create emoji rain container
+  const emojiRainContainer = document.createElement('div');
+  emojiRainContainer.className = 'emoji-rain';
+  document.body.appendChild(emojiRainContainer);
+  
+  function createEmojiRain(intensity = 20) {
+    emojiRainContainer.innerHTML = '';
     
-    const fortuneElement = document.createElement('div');
-    fortuneElement.className = 'cookie-fortune';
-    fortuneElement.style.display = 'none';
-    document.body.appendChild(fortuneElement);
+    for (let i = 0; i < intensity; i++) {
+      const emoji = document.createElement('div');
+      emoji.className = 'emoji-drop';
+      emoji.textContent = foodEmojis[Math.floor(Math.random() * foodEmojis.length)];
+      emoji.style.left = `${Math.random() * 100}vw`;
+      emoji.style.animationDuration = `${3 + Math.random() * 5}s`;
+      emoji.style.animationDelay = `${Math.random() * 2}s`;
+      emoji.style.transform = `scale(${0.7 + Math.random() * 0.6})`;
+      emojiRainContainer.appendChild(emoji);
+    }
     
-    const fortuneOverlay = document.createElement('div');
-    fortuneOverlay.className = 'fortune-overlay';
-    document.body.appendChild(fortuneOverlay);
-    
-    const fortunes = [
-      "Your smile is as sweet as our cookies!",
-      "Your day will be as delightful as our cinnamon rolls!",
-      "Happiness awaits in our cake selection!",
-      "Your future holds a Special cookie cake!",
-      "Good fortune comes with our yummy slices!",
-      "A cheesecake will bring you joy today!",
-      "Luck favors those who try our ice cream!",
-      "Your wisdom tells you to explore our drinks menu!",
-      "The stars align for you to discover our add-ons!"
-    ];
-    
-    const secretMenuItems = [
-      "🌟 SECRET MENU: Ask about our Cookie Dough Milkshake! 🌟",
-      "🌟 SECRET MENU: Try our Brownie Cheesecake Fusion! 🌟",
-      "🌟 SPECIAL OFFER: Show this message for 10% off today! 🌟",
-      "🌟 SECRET MENU: The Triple Chocolate Experience awaits! 🌟"
-    ];
-    
-    const sections = ["cookies", "rolls", "slices","cakes","cookie cakes", "cups", 
-                     "cheesecakes", "ice-cream", "drinks", "add-ons"];
-    
-    button.addEventListener('click', function(e) {
-      e.stopPropagation();
-      button.classList.add('cookie-crumble');
-      createSparkles(e.clientX, e.clientY);
+    setTimeout(() => {
+      emojiRainContainer.innerHTML = '';
+    }, 8000);
+  }
+  
+  function createSparkles(x, y, count = 20) {
+    for (let i = 0; i < count; i++) {
+      const sparkle = document.createElement('div');
+      sparkle.className = 'cookie-sparkle';
+      const posX = x + (Math.random() - 0.5) * 100;
+      const posY = y + (Math.random() - 0.5) * 100;
+      sparkle.style.left = `${posX}px`;
+      sparkle.style.top = `${posY}px`;
+      const hue = Math.floor(Math.random() * 360);
+      sparkle.style.backgroundColor = `hsl(${hue}, 100%, 65%)`;
+      const size = 4 + Math.random() * 10;
+      sparkle.style.width = `${size}px`;
+      sparkle.style.height = `${size}px`;
+      sparkle.style.animationDuration = `${0.5 + Math.random() * 1}s`;
+      document.body.appendChild(sparkle);
       
-      const randomIndex = Math.floor(Math.random() * fortunes.length);
-      const randomSection = sections[randomIndex] || sections[0];
-      let fortune = fortunes[randomIndex];
-      
-      if (Math.random() < 0.2) {
-        fortune = secretMenuItems[Math.floor(Math.random() * secretMenuItems.length)];
-      }
-      
-      fortuneOverlay.classList.add('show');
-      fortuneElement.style.display = 'block';
-      fortuneElement.textContent = '';
-      typeWriter(fortuneElement, fortune, 0, 50);
+      // Set random transform direction
+      const tx = (Math.random() - 0.5) * 100;
+      const ty = (Math.random() - 0.5) * 100;
+      sparkle.style.setProperty('--tx', `${tx}px`);
+      sparkle.style.setProperty('--ty', `${ty}px`);
       
       setTimeout(() => {
-        const section = document.getElementById(randomSection);
-        if (section) {
-          window.scrollTo({
-            top: section.offsetTop - 80,
-            behavior: 'smooth'
-          });
-        }
-        
-        setTimeout(() => {
-          fortuneElement.style.display = 'none';
-          fortuneElement.textContent = '';
-          fortuneOverlay.classList.remove('show'); 
-          button.classList.remove('cookie-crumble');
-        }, 1000);
-      }, fortune.length * 50 + 1000);
-    });
+        document.body.removeChild(sparkle);
+      }, 1500);
+    }
+  }
+  
+  function getRandomFortune() {
+    // Weighted random selection with only 5% chance of offers
+    const rand = Math.random();
+    let category;
     
-    document.addEventListener('click', function(event) {
-      if (!button.contains(event.target) && !dropdown.contains(event.target)) {
-        dropdown.classList.remove('show');
+    if (rand < 0.05) {
+      category = 'offers';
+    } else if (rand < 0.40) {
+      category = 'tips';
+    } else if (rand < 0.70) {
+      category = 'motivation';
+    } else {
+      category = 'inspiration';
+    }
+    
+    const categoryFortunes = fortunes[category];
+    const fortuneText = categoryFortunes[Math.floor(Math.random() * categoryFortunes.length)];
+    
+    return {
+      text: fortuneText,
+      category: category
+    };
+  }
+  
+  function typeWriter(element, text, i, speed, callback) {
+    if (i < text.length) {
+      element.textContent += text.charAt(i);
+      i++;
+      setTimeout(() => typeWriter(element, text, i, speed, callback), speed);
+    } else if (callback) {
+      callback();
+    }
+  }
+  
+  button.addEventListener('click', function(e) {
+    e.stopPropagation();
+    button.style.display = 'none'; // Hide the button temporarily
+    
+    // Show overlay
+    fortuneOverlay.classList.add('show');
+    
+    // Show fortune cookie
+    fortuneCookie.style.display = 'block';
+    
+    // Add click event to fortune cookie
+// Add click event to fortune cookie
+fortuneCookie.onclick = function() {
+  // Crack the cookie
+  this.classList.add('crack');
+  createSparkles(window.innerWidth / 2, window.innerHeight / 2, 30);
+  
+  // Show fortune paper after a short delay
+  setTimeout(() => {
+    // Clear any existing content
+    fortunePaper.innerHTML = '';
+    fortunePaper.style.display = 'block';
+    
+    setTimeout(() => {
+      fortunePaper.classList.add('show');
+      
+      // Get a random fortune
+      const fortune = getRandomFortune();
+      
+      // Create icon based on category
+      const icon = document.createElement('div');
+      icon.className = 'fortune-icon';
+      
+      switch(fortune.category) {
+        case 'tips':
+          icon.textContent = '💡';
+          break;
+        case 'motivation':
+          icon.textContent = '✨';
+          break;
+        case 'inspiration':
+          icon.textContent = '🌈';
+          break;
+        case 'offers':
+          icon.textContent = '🎁';
+          createEmojiRain(20);
+          break;
       }
-    });
+      
+      // Create text container
+      const textContainer = document.createElement('div');
+      textContainer.className = 'fortune-text-container';
+      
+      // Append elements
+      fortunePaper.appendChild(icon);
+      fortunePaper.appendChild(textContainer);
+      
+      // Type out the fortune
+      let i = 0;
+      function typeText() {
+        if (i < fortune.text.length) {
+          textContainer.textContent += fortune.text.charAt(i);
+          i++;
+          setTimeout(typeText, 40);
+        } else {
+          // After typing is complete, allow clicking anywhere to close
+          document.addEventListener('click', closeFortune);
+        }
+      }
+      
+      typeText();
+    }, 200);
+  }, 800);
+};
+    
+    function closeFortune() {
+      document.removeEventListener('click', closeFortune);
+      fortuneElement.style.display = 'none';
+      fortunePaper.classList.remove('show');
+      
+      setTimeout(() => {
+        fortunePaper.style.display = 'none';
+        fortuneCookie.classList.remove('crack');
+        fortuneCookie.style.display = 'none';
+        fortuneOverlay.classList.remove('show');
+        button.style.display = 'flex'; // Show the button again
+      }, 500);
+    }
+  });
+  
+  // For the dropdown menu functionality
+  document.addEventListener('click', function(event) {
+    if (!button.contains(event.target) && !dropdown.contains(event.target)) {
+      dropdown.classList.remove('show');
+    }
+  });
+}
+  
+  // For the dropdown menu functionality
+  document.addEventListener('click', function(event) {
+    if (!button.contains(event.target) && !dropdown.contains(event.target)) {
+      dropdown.classList.remove('show');
+    }
+  });
+
     
     function typeWriter(element, text, i, speed) {
       if (i < text.length) {
@@ -1573,7 +1886,7 @@
         }, 500);
       }
     }
-  }
+  
 
   async function loadMenu() {
     try {
@@ -1666,6 +1979,9 @@
         }
 
         // Create item cards
+        // Add preorder tag for Cookie Cakes and Cakes sections
+        // Add preorder tag for Cookie Cakes and Cakes sections
+        const needsPreorder = ['Cakes', 'Cookie Cakes'].includes(category);
         grouped[category].forEach(item => {
           const card = document.createElement('div');
           card.className = 'item-card';
@@ -1687,6 +2003,13 @@
             badge.textContent = specialBadges[item.item_name];
             card.appendChild(badge);
           }
+          // Add preorder tag for specific categories
+if (needsPreorder) {
+  const preorderTag = document.createElement('div');
+  preorderTag.className = 'preorder-tag';
+  preorderTag.textContent = 'Preorder';
+  card.appendChild(preorderTag);
+}
 
           // Content
           const content = document.createElement('div');
@@ -1783,7 +2106,7 @@
       
       // Initialize features
       createFloatingCookies();
-      setupCategoryScrollButton();
+ 
       
     } catch (error) {
       console.error('Error loading menu:', error);
@@ -1800,6 +2123,7 @@
   document.addEventListener('DOMContentLoaded', function() {
     loadMenu();
      loadFeaturedItems();
+     setupCategoryScrollButton();
     // Slideshow
     const slideImages = [
       "images/cake.jpeg",
@@ -1815,6 +2139,7 @@
     const slideshowContainer = document.querySelector('.slideshow-container');
     const dotsContainer = document.querySelector('.slideshow-dots');
     let currentSlide = 0;
+    let slideInterval; 
     
     // Create slides and dots
     slideImages.forEach((image, index) => {
@@ -1851,7 +2176,7 @@
     }
     
     // Slideshow controls
-    const slideInterval = setInterval(nextSlide, 5000);
+   slideInterval = setInterval(nextSlide, 5000);  // This should be just setInterval
     
     document.querySelector('.slideshow-container').addEventListener('mouseover', () => {
       clearInterval(slideInterval);
@@ -1859,7 +2184,7 @@
     
     document.querySelector('.slideshow-container').addEventListener('mouseleave', () => {
       clearInterval(slideInterval);
-      setInterval(nextSlide, 5000);
+      slideInterval = setInterval(nextSlide, 5000);
     });
     
     // Parallax effect
@@ -1911,79 +2236,8 @@
       tag: "Weekend Special"
     }
   ];
-    function loadFeaturedItems() {
-    const slider = document.getElementById('featuredSlider');
-    
-    featuredItems.forEach(item => {
-      const featuredItem = document.createElement('div');
-      featuredItem.className = 'featured-item';
-      
-      const limitedTag = document.createElement('div');
-      limitedTag.className = 'limited-tag';
-      limitedTag.textContent = item.tag;
-      
-      const imgContainer = document.createElement('div');
-      imgContainer.className = 'featured-img';
-      
-      const img = document.createElement('img');
-      img.src = item.image;
-      img.alt = item.name;
-      imgContainer.appendChild(img);
-      
-      const content = document.createElement('div');
-      content.className = 'featured-content';
-      
-      const name = document.createElement('div');
-      name.className = 'featured-name';
-      name.textContent = item.name;
-      
-      const desc = document.createElement('div');
-      desc.className = 'featured-desc';
-      desc.textContent = item.description;
-      
-      const footer = document.createElement('div');
-      footer.className = 'featured-footer';
-      
-      const price = document.createElement('div');
-      price.className = 'featured-price';
-      price.textContent = `$${item.price.toFixed(2)}`;
-      
-      const button = document.createElement('button');
-      button.className = 'featured-button';
-      button.textContent = 'Order Now';
-      button.addEventListener('click', () => {
-        // You can add WhatsApp link here
-        window.open(`https://wa.me/96170006252?text=Hi! I'd like to order the ${item.name}`, '_blank');
-      });
-      
-      footer.appendChild(price);
-      footer.appendChild(button);
-      
-      content.appendChild(name);
-      content.appendChild(desc);
-      content.appendChild(footer);
-      
-      featuredItem.appendChild(limitedTag);
-      featuredItem.appendChild(imgContainer);
-      featuredItem.appendChild(content);
-      
-      slider.appendChild(featuredItem);
-    });
-    
-    // Set up slider navigation
-    const sliderPrev = document.getElementById('sliderPrev');
-    const sliderNext = document.getElementById('sliderNext');
-    
-document.getElementById('sliderPrev').addEventListener('click', () => {
-  document.getElementById('featuredSlider').scrollBy({ left: -175, behavior: 'smooth' });
-});
-
-document.getElementById('sliderNext').addEventListener('click', () => {
-  document.getElementById('featuredSlider').scrollBy({ left: 175, behavior: 'smooth' });
-   enhanceNavigation();
-});
-    }
-  function enhanceNavigation() {
+  // Add this function BEFORE loadFeaturedItems() function
+function enhanceNavigation() {
   // Function to scroll the active link into view
   function scrollActiveCategoryIntoView() {
     const activeLink = document.querySelector('nav a.active');
@@ -2025,6 +2279,76 @@ document.getElementById('sliderNext').addEventListener('click', () => {
   
   nav.addEventListener('touchend', () => {
     isScrolling = false;
+  });
+}
+
+function loadFeaturedItems() {
+  const slider = document.getElementById('featuredSlider');
+  
+  featuredItems.forEach(item => {
+    const featuredItem = document.createElement('div');
+    featuredItem.className = 'featured-item';
+    
+    const limitedTag = document.createElement('div');
+    limitedTag.className = 'limited-tag';
+    limitedTag.textContent = item.tag;
+    
+    const imgContainer = document.createElement('div');
+    imgContainer.className = 'featured-img';
+    
+    const img = document.createElement('img');
+    img.src = item.image;
+    img.alt = item.name;
+    imgContainer.appendChild(img);
+    
+    const content = document.createElement('div');
+    content.className = 'featured-content';
+    
+    const name = document.createElement('div');
+    name.className = 'featured-name';
+    name.textContent = item.name;
+    
+    const desc = document.createElement('div');
+    desc.className = 'featured-desc';
+    desc.textContent = item.description;
+    
+    const footer = document.createElement('div');
+    footer.className = 'featured-footer';
+    
+    const price = document.createElement('div');
+    price.className = 'featured-price';
+    price.textContent = `$${item.price.toFixed(2)}`;
+    
+    const button = document.createElement('button');
+    button.className = 'featured-button';
+    button.textContent = 'Order Now';
+    button.addEventListener('click', () => {
+      // You can add WhatsApp link here
+      window.open(`https://wa.me/96170006252?text=Hi! I'd like to order the ${item.name}`, '_blank');
+    });
+    
+    footer.appendChild(price);
+    footer.appendChild(button);
+    
+    content.appendChild(name);
+    content.appendChild(desc);
+    content.appendChild(footer);
+    
+    featuredItem.appendChild(limitedTag);
+    featuredItem.appendChild(imgContainer);
+    featuredItem.appendChild(content);
+    
+    slider.appendChild(featuredItem);
+  });
+  
+  // Set up slider navigation
+  document.getElementById('sliderPrev').addEventListener('click', () => {
+    document.getElementById('featuredSlider').scrollBy({ left: -175, behavior: 'smooth' });
+  });
+
+  document.getElementById('sliderNext').addEventListener('click', () => {
+    document.getElementById('featuredSlider').scrollBy({ left: 175, behavior: 'smooth' });
+    enhanceNavigation();
   });
 }
 </script>
