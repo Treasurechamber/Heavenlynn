@@ -2021,7 +2021,13 @@ if (needsPreorder) {
           
           const desc = document.createElement('div');
           desc.className = 'item-desc';
+          // Only show description if it's not the Add-ons category
+          if (category !== 'Add-ons') {
           desc.textContent = item.description || 'A delicious treat made with the finest ingredients.';
+         } else {
+          desc.style.display = 'none'; // Hide description for Add-ons
+    }
+          
           
           const footer = document.createElement('div');
           footer.className = 'item-footer';
