@@ -1425,7 +1425,7 @@
 
   // Special item badges
   const specialBadges = {
-     "Seal Salt Cookie": "Best Seller","Chocolate Chip Cookie": "Popular", "Cinnamon Roll": "Best Seller",
+     "Sea Salt Cookie": "Best Seller","Chocolate Chip Cookie": "Popular", "Cinnamon Roll": "Best Seller",
     "Red Velvet": "Featured", "Cappuccino": "New", "Strawberry Cheesecake": "Chef's Choice"
   };
 
@@ -1910,8 +1910,8 @@ fortuneCookie.onclick = function() {
 }
       if (grouped["Cookies"]) {
   grouped["Cookies"].sort((a, b) => {
-    if (a.item_name === "Seal Salt Cookie") return -1;
-    if (b.item_name === "Seal Salt Cookie") return 1;
+    if (a.item_name === "Sea Salt Cookie") return -1;
+    if (b.item_name === "Sea Salt Cookie") return 1;
     return 0;
   });
 }
