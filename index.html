@@ -1887,9 +1887,12 @@ fortuneCookie.onclick = function() {
         .from('menu_items')
         .select('*')
         .order('category', { ascending: true });
+        .limit(100);
 
       if (error) throw error;
       document.querySelector('.loader').style.display = 'none';
+      document.getElementById('menuSections').style.display = 'block';
+
 
       // Group items by category
       const grouped = {};
@@ -1993,6 +1996,7 @@ fortuneCookie.onclick = function() {
           const img = document.createElement('img');
           img.src = imgSrc;
           img.alt = item.item_name;
+          img.loading = 'lazy';
           imageContainer.appendChild(img);
           card.appendChild(imageContainer);
 
@@ -2111,7 +2115,10 @@ if (needsPreorder) {
       });
       
       // Initialize features
-      createFloatingCookies();
+     requestIdleCallback(() => {
+  createFloatingCookies();
+});
+
  
       
     } catch (error) {
@@ -2314,6 +2321,7 @@ function loadFeaturedItems() {
     const img = document.createElement('img');
     img.src = item.image;
     img.alt = item.name;
+    img.loading = 'lazy';
     imgContainer.appendChild(img);
     
     const content = document.createElement('div');
