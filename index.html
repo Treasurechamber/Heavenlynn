@@ -2155,13 +2155,14 @@ if (needsPreorder) {
 
   // Initialize
   <script>
+
   document.addEventListener('DOMContentLoaded', function () {
     const slideImages = [
       "images/cc_dec.jpg",
-      "images/date_cke_again.jpg", 
+      "images/date_cke_again.jpg",
       "images/fruit_cake.jpg",
       "images/heavenlynn_spec.jpg",
-      "images/heavenly_cup.jpg",  
+      "images/heavenly_cup.jpg",
       "images/birthday.jpg",
       "images/cookies.jpeg",
       "images/tartes.jpeg",
@@ -2170,17 +2171,17 @@ if (needsPreorder) {
       "images/san.jpeg"
     ];
 
-    // Filter out invalid entries
-    const validSlideImages = slideImages.filter(src => typeof src === 'string' && src.trim() !== '');
-
+    const validSlideImages = slideImages.filter(src => src && typeof src === 'string' && src.trim() !== '');
     let currentSlide = 0;
+
     const slideshowContainer = document.querySelector('.slideshow');
     const dotsContainer = document.querySelector('.dots');
 
-    // Return early if container doesn't exist
-    if (!slideshowContainer || !dotsContainer) return;
+    if (!slideshowContainer || !dotsContainer) {
+      console.log('Slideshow container is missing.');
+      return;
+    }
 
-    // Populate slides and dots
     validSlideImages.forEach((image, index) => {
       const slide = document.createElement('div');
       slide.className = `slide ${index === 0 ? 'active' : ''}`;
@@ -2205,15 +2206,14 @@ if (needsPreorder) {
       dots[currentSlide].classList.add('active');
     }
 
-    // Start the slideshow
-    if (slides.length > 1) {
-      setInterval(() => {
-        const nextSlide = (currentSlide + 1) % slides.length;
-        goToSlide(nextSlide);
-      }, 4000);
-    }
+    setInterval(() => {
+      const next = (currentSlide + 1) % slides.length;
+      goToSlide(next);
+    }, 4000);
   });
-</script>
+
+
+
 
     
 function goToSlide(n) {
