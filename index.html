@@ -156,28 +156,25 @@
       overflow: hidden;
     }
   
-.slide {
-  width: 100%;
-  height: 100%;
-  background-position: center;
-  background-size: cover;
-  background-repeat: no-repeat;
-  position: absolute;
-  top: 0;
-  left: 0;
-  opacity: 0;
-  transition: opacity 1s ease-in-out;
-}
-  .slideshow {
-  position: relative;
-  width: 100%;
-  height: 400px;
-  overflow: hidden;
-}
-  .slide.active {
-  opacity: 1;
-  z-index: 1;
-}
+    .slide {
+      position: absolute;
+      top: -20px;  /* Add negative margin to prevent white space */
+      left: -20px;  /* Add negative margin to prevent white space */
+      width: calc(100% + 40px);  /* Expand width to compensate for negative margins */
+      height: calc(100% + 40px);  /* Expand height to compensate for negative margins */
+      opacity: 0;
+      transform: scale(1.05);
+      transition: opacity 1s ease-in-out, transform 1.5s ease-in-out;
+      background-size: cover;
+      background-position: center;
+      z-index: -1;
+    }
+  
+    .slide.active {
+      opacity: 1;
+      transform: scale(1);
+      z-index: 0;
+    }
 
     .hero-video {
       position: absolute;
@@ -457,24 +454,6 @@
     .slider-btn:focus {
   outline: none;
   box-shadow: none;
-}
-    .dots {
-  display: flex;
-  justify-content: center;
-  margin-top: 1rem;
-}
-    .dot {
-  width: 12px;
-  height: 12px;
-  margin: 0 5px;
-  background-color: #bbb;
-  border-radius: 50%;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.dot.active {
-  background-color: #333;
 }
 
   .slider-btn:hover {
@@ -1908,12 +1887,9 @@ fortuneCookie.onclick = function() {
         .from('menu_items')
         .select('*')
         .order('category', { ascending: true });
-        .limit(100);
 
       if (error) throw error;
       document.querySelector('.loader').style.display = 'none';
-      document.getElementById('menuSections').style.display = 'block';
-
 
       // Group items by category
       const grouped = {};
@@ -2017,7 +1993,6 @@ fortuneCookie.onclick = function() {
           const img = document.createElement('img');
           img.src = imgSrc;
           img.alt = item.item_name;
-          img.loading = 'lazy';
           imageContainer.appendChild(img);
           card.appendChild(imageContainer);
 
@@ -2136,10 +2111,7 @@ if (needsPreorder) {
       });
       
       // Initialize features
-     requestIdleCallback(() => {
-  createFloatingCookies();
-});
-
+      createFloatingCookies();
  
       
     } catch (error) {
@@ -2154,67 +2126,46 @@ if (needsPreorder) {
   }
 
   // Initialize
-  <script>
-
-  document.addEventListener('DOMContentLoaded', function () {
-    const slideImages = [
-      "images/cc_dec.jpg",
-      "images/date_cke_again.jpg",
-      "images/fruit_cake.jpg",
-      "images/heavenlynn_spec.jpg",
-      "images/heavenly_cup.jpg",
-      "images/birthday.jpg",
-      "images/cookies.jpeg",
-      "images/tartes.jpeg",
-      "images/cookie-choc.jpg",
-      "images/cookie-ice.jpg",
-      "images/san.jpeg"
-    ];
-
+  document.addEventListener('DOMContentLoaded', function() {
+    loadMenu();
+     loadFeaturedItems();
+     setupCategoryScrollButton();
+    // Slideshow
+   const slideImages = [
+  "images/cc_dec.jpg",
+  "images/date_cke_again.jpg", 
+  "images/fruit_cake.jpg",
+  "images/heavenlynn_spec.jpg",
+  "images/heavenly_cup.jpg",  
+  "images/birthday.jpg",
+  "images/cookies.jpeg",
+  "images/tartes.jpeg",
+  "images/cookie-choc.jpg",
+  "images/cookie-ice.jpg",
+  "images/san.jpeg"
+];
     const validSlideImages = slideImages.filter(src => src && typeof src === 'string' && src.trim() !== '');
+
+    const slideshowContainer = document.querySelector('.slideshow-container');
+    const dotsContainer = document.querySelector('.slideshow-dots');
     let currentSlide = 0;
-
-    const slideshowContainer = document.querySelector('.slideshow');
-    const dotsContainer = document.querySelector('.dots');
-
-    if (!slideshowContainer || !dotsContainer) {
-      console.log('Slideshow container is missing.');
-      return;
-    }
-
+    let slideInterval; 
+    
+    // Create slides and dots
     validSlideImages.forEach((image, index) => {
+
+      // Create slide
       const slide = document.createElement('div');
       slide.className = `slide ${index === 0 ? 'active' : ''}`;
       slide.style.backgroundImage = `url(${image})`;
       slideshowContainer.appendChild(slide);
-
+      
+      // Create navigation dot
       const dot = document.createElement('div');
       dot.className = `dot ${index === 0 ? 'active' : ''}`;
       dot.addEventListener('click', () => goToSlide(index));
       dotsContainer.appendChild(dot);
     });
-
-    const slides = document.querySelectorAll('.slide');
-    const dots = document.querySelectorAll('.dot');
-
-    function goToSlide(n) {
-      if (!slides[n]) return;
-      slides[currentSlide].classList.remove('active');
-      dots[currentSlide].classList.remove('active');
-      currentSlide = n;
-      slides[currentSlide].classList.add('active');
-      dots[currentSlide].classList.add('active');
-    }
-
-    setInterval(() => {
-      const next = (currentSlide + 1) % slides.length;
-      goToSlide(next);
-    }, 4000);
-  });
-
-
-
-
     
 function goToSlide(n) {
   const slides = document.querySelectorAll('.slide');
@@ -2363,7 +2314,6 @@ function loadFeaturedItems() {
     const img = document.createElement('img');
     img.src = item.image;
     img.alt = item.name;
-    img.loading = 'lazy';
     imgContainer.appendChild(img);
     
     const content = document.createElement('div');
