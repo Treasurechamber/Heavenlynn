@@ -345,11 +345,12 @@
     border-color: var(--primary);
   }
 
-  .featured-img {
-    height: 160px;
-    overflow: hidden;
-    position: relative;
-  }
+.featured-img {
+  height: 160px;
+  overflow: hidden;
+  position: relative;
+  background: transparent; /* No background */
+}
 
 .featured-img img {
   width: 100%;
@@ -357,7 +358,6 @@
   object-fit: cover;
   transition: transform 0.5s ease;
   filter: saturate(1.2) contrast(1.1);
-  mix-blend-mode: darken;
 }
 
   .featured-item:hover .featured-img img {
@@ -794,7 +794,7 @@
   overflow: hidden;
   position: relative;
   box-shadow: var(--shadow-sm);
-  background: transparent; /* Add this line */
+  background: transparent; /* No background */
 }
 
 .item-card img {
@@ -803,11 +803,6 @@
   object-fit: cover;
   transition: transform 0.5s ease;
   filter: saturate(1.2) contrast(1.1);
-  mix-blend-mode: darken;
-}
-    .featured-img,
-.item-image {
-  background: linear-gradient(135deg, #f8f9ff, #e4d7ff);
 }
 
     .item-card:hover img {
