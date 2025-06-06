@@ -156,24 +156,26 @@
       overflow: hidden;
     }
   
-.slide {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  opacity: 0;
-  transform: scale(1.05);
-  transition: opacity 1s ease-in-out, transform 1.5s ease-in-out;
-  z-index: -1;
-  /* Remove background-size and background-position */
-}
+    .slide {
+      position: absolute;
+      top: -20px;  /* Add negative margin to prevent white space */
+      left: -20px;  /* Add negative margin to prevent white space */
+      width: calc(100% + 40px);  /* Expand width to compensate for negative margins */
+      height: calc(100% + 40px);  /* Expand height to compensate for negative margins */
+      opacity: 0;
+      transform: scale(1.05);
+      transition: opacity 1s ease-in-out, transform 1.5s ease-in-out;
+      background-size: cover;
+      background-position: center;
+      z-index: -1;
+    }
   
-   .slide.active {
-  opacity: 1;
-  transform: scale(1);
-  z-index: 0;
-}
+    .slide.active {
+      opacity: 1;
+      transform: scale(1);
+      z-index: 0;
+    }
+
     .hero-video {
       position: absolute;
       top: 50%;
@@ -2153,21 +2155,10 @@ if (needsPreorder) {
     validSlideImages.forEach((image, index) => {
 
       // Create slide
-     // Create slide
-const slide = document.createElement('div');
-slide.className = `slide ${index === 0 ? 'active' : ''}`;
-
-// Create img element instead of background image
-const img = document.createElement('img');
-img.src = image;
-img.alt = `Slide ${index + 1}`;
-img.style.width = '100%';
-img.style.height = '100%';
-img.style.objectFit = 'cover';
-img.style.display = 'block';
-
-slide.appendChild(img);
-slideshowContainer.appendChild(slide);
+      const slide = document.createElement('div');
+      slide.className = `slide ${index === 0 ? 'active' : ''}`;
+      slide.style.backgroundImage = `url(${image})`;
+      slideshowContainer.appendChild(slide);
       
       // Create navigation dot
       const dot = document.createElement('div');
@@ -2213,14 +2204,13 @@ function goToSlide(n) {
     
     // Parallax effect
     document.addEventListener('mousemove', (e) => {
-  const mouseX = e.clientX / window.innerWidth;
-  const mouseY = e.clientY / window.innerHeight;
-  
-  document.querySelectorAll('.slide img').forEach(img => { // Changed from .slide to .slide img
-    const offsetX = (mouseX - 0.5) * 20;
-    const offsetY = (mouseY - 0.5) * 20;
-    const isActive = img.parentElement.classList.contains('active');
-    img.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(${isActive ? 1 : 1.05})`;
+      const mouseX = e.clientX / window.innerWidth;
+      const mouseY = e.clientY / window.innerHeight;
+      
+      document.querySelectorAll('.slide').forEach(slide => {
+        const offsetX = (mouseX - 0.5) * 20;
+        const offsetY = (mouseY - 0.5) * 20;
+        slide.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(${slide.classList.contains('active') ? 1 : 1.05})`;
       });
     });
   });
