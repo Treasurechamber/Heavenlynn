@@ -2144,14 +2144,16 @@ if (needsPreorder) {
   "images/cookie-ice.jpg",
   "images/san.jpeg"
 ];
-    
+    const validSlideImages = slideImages.filter(src => src && typeof src === 'string' && src.trim() !== '');
+
     const slideshowContainer = document.querySelector('.slideshow-container');
     const dotsContainer = document.querySelector('.slideshow-dots');
     let currentSlide = 0;
     let slideInterval; 
     
     // Create slides and dots
-    slideImages.forEach((image, index) => {
+    validSlideImages.forEach((image, index) => {
+
       // Create slide
       const slide = document.createElement('div');
       slide.className = `slide ${index === 0 ? 'active' : ''}`;
@@ -2165,18 +2167,22 @@ if (needsPreorder) {
       dotsContainer.appendChild(dot);
     });
     
-    function goToSlide(n) {
-      const slides = document.querySelectorAll('.slide');
-      const dots = document.querySelectorAll('.dot');
-      
-      slides[currentSlide].classList.remove('active');
-      dots[currentSlide].classList.remove('active');
-      
-      currentSlide = n;
-      
-      slides[currentSlide].classList.add('active');
-      dots[currentSlide].classList.add('active');
-    }
+function goToSlide(n) {
+  const slides = document.querySelectorAll('.slide');
+  const dots = document.querySelectorAll('.dot');
+
+  // Prevent blank slide if index is invalid
+  if (!slides[n]) return;
+
+  slides[currentSlide].classList.remove('active');
+  dots[currentSlide].classList.remove('active');
+
+  currentSlide = n;
+
+  slides[currentSlide].classList.add('active');
+  dots[currentSlide].classList.add('active');
+}
+
     
     function nextSlide() {
       const slides = document.querySelectorAll('.slide');
