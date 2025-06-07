@@ -159,12 +159,12 @@
   
     .slide {
       position: absolute;
-      top: -20px;  /* Add negative margin to prevent white space */
-      left: -20px;  /* Add negative margin to prevent white space */
-      width: calc(100% + 40px);  /* Expand width to compensate for negative margins */
-      height: calc(100% + 40px);  /* Expand height to compensate for negative margins */
       opacity: 0;
-      transform: scale(1.05);
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      transform: scale(1) !important;
       transition: opacity 1s ease-in-out, transform 1.5s ease-in-out;
       background-size: cover;
       background-position: center;
@@ -173,7 +173,7 @@
   
     .slide.active {
       opacity: 1;
-      transform: scale(1);
+      transform: scale(1) !important;
       z-index: 0;
     }
 
@@ -1560,11 +1560,11 @@ section#drinks .item-card:hover .item-image img {
 
 <footer role="contentinfo">
   <div class="footer-content">
-    <div class="footer-logo">Heavenlynn</div>
+    <div class="footer-logo">heavenlynn</div>
     <div class="social-links">
       <a href="https://www.instagram.com/heavenlynn.lb/" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
     </div>
-    <p class="footer-text">© 2025 Heavenlynn Bakery. All rights reserved.</p>
+    <p class="footer-text">© 2025 heavenlynn Bakery. All rights reserved.</p>
     <p class="footer-text">Tyre, Lebanon • 81955816</p>
   </div>
 </footer>
@@ -2381,17 +2381,7 @@ function goToSlide(n) {
     });
     
     // Parallax effect
-    document.addEventListener('mousemove', (e) => {
-      const mouseX = e.clientX / window.innerWidth;
-      const mouseY = e.clientY / window.innerHeight;
-      
-      document.querySelectorAll('.slide').forEach(slide => {
-        const offsetX = (mouseX - 0.5) * 20;
-        const offsetY = (mouseY - 0.5) * 20;
-        slide.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(${slide.classList.contains('active') ? 1 : 1.05})`;
-      });
-    });
-  });
+
     const featuredItems = [
           {
       name: "Zesty Lemon ",
