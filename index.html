@@ -773,6 +773,7 @@
       padding: 1.5rem 0;
       border-bottom: 1px solid #e0d7ff;
       margin: 0;
+      background: rgba(255, 255, 255, 0.95);
     }
 
     .item-card:first-child {
@@ -792,7 +793,31 @@
       overflow: hidden;
       position: relative;
       box-shadow: var(--shadow-sm);
+      background: none !important;
+      background-color: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+      border-radius: 0 !important;
+      padding: 0 !important;
+      overflow: visible !important;
     }
+    .item-image img {
+  background: none !important;
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  object-fit: contain !important; /* This is the key for transparent PNGs */
+  width: 100% !important;
+  height: 100% !important;
+  filter: none !important;
+  mix-blend-mode: normal !important;
+}
+    .item-card:hover .item-image img {
+  transform: scale(1.05);
+  filter: none !important;
+  background: none !important;
+}
 
     .item-card img {
       width: 100%;
@@ -881,6 +906,18 @@ section#cups .item-card {
 }
 
 @media (min-width: 768px) {
+    .item-image {
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    /* Don't override width/height here - let existing CSS handle sizing */
+  }
+  
+  .item-image img {
+    object-fit: contain !important;
+    background: none !important;
+  }
   section#cups .item-image {
     background: none !important;
     border: none !important;
@@ -896,7 +933,18 @@ section#cups .item-card {
 
 /* ===== END OF NEW CODE ===== */
     
-    
+    .featured-img {
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+}
+
+.featured-img img {
+  background: none !important;
+  object-fit: contain !important;
+  border-radius: 0 !important;
+}
 
     .badge {
       position: absolute;
