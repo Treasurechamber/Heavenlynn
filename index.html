@@ -843,21 +843,58 @@
   overflow: hidden;
   position: relative;
   box-shadow: var(--shadow-sm);
-        background: transparent !important;
-  backdrop-filter: none;
 }
-    section#cups .item-card {
-  background: rgba(255, 255, 255, 0.95) !important; /* Slightly transparent card background */
+/* ===== ADD THIS NEW CODE HERE ===== */
+
+/* Complete solution for transparent cup images after remove.bg */
+section#cups .item-image {
+  background: none !important;
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  overflow: visible !important;
 }
-    section#cups .item-image img {
-  background: transparent !important;
-  mix-blend-mode: multiply; /* This removes white backgrounds */
-   filter: 
-    saturate(1.4) 
-    contrast(1.2) 
-    brightness(1.1)
-    drop-shadow(0 4px 8px rgba(0,0,0,0.1)); /* Add subtle shadow for depth */
+
+section#cups .item-image img {
+  background: none !important;
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  object-fit: contain !important;
+  width: 100% !important;
+  height: 100% !important;
+  filter: none !important;
+  mix-blend-mode: normal !important;
 }
+
+section#cups .item-card:hover .item-image img {
+  transform: scale(1.05);
+  filter: none !important;
+  background: none !important;
+}
+
+section#cups .item-card {
+  background: rgba(255, 255, 255, 0.95);
+}
+
+@media (min-width: 768px) {
+  section#cups .item-image {
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+  }
+  
+  section#cups .item-image img {
+    object-fit: contain !important;
+    background: none !important;
+  }
+}
+
+/* ===== END OF NEW CODE ===== */
     
     
 
