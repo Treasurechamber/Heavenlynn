@@ -793,31 +793,7 @@
       overflow: hidden;
       position: relative;
       box-shadow: var(--shadow-sm);
-      background: none !important;
-      background-color: transparent !important;
-      border: none !important;
-      box-shadow: none !important;
-      border-radius: 0 !important;
-      padding: 0 !important;
-      overflow: visible !important;
     }
-    .item-image img {
-  background: none !important;
-  background-color: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
-  border-radius: 0 !important;
-  object-fit: contain !important; /* This is the key for transparent PNGs */
-  width: 100% !important;
-  height: 100% !important;
-  filter: none !important;
-  mix-blend-mode: normal !important;
-}
-    .item-card:hover .item-image img {
-  transform: scale(1.05);
-  filter: none !important;
-  background: none !important;
-}
 
     .item-card img {
       width: 100%;
@@ -933,17 +909,89 @@ section#cups .item-card {
 
 /* ===== END OF NEW CODE ===== */
     
-    .featured-img {
+section#cookies .item-image,
+section#rolls .item-image,
+section#slices .item-image,
+section#cakes .item-image,
+section#cookie-cakes .item-image,
+section#cups .item-image,
+section#cheesecakes .item-image,
+section#ice-cream .item-image,
+section#drinks .item-image {
   background: none !important;
+  background-color: transparent !important;
   border: none !important;
   box-shadow: none !important;
   border-radius: 0 !important;
+  padding: 0 !important;
+  overflow: visible !important;
 }
 
-.featured-img img {
+section#cookies .item-image img,
+section#rolls .item-image img,
+section#slices .item-image img,
+section#cakes .item-image img,
+section#cookie-cakes .item-image img,
+section#cups .item-image img,
+section#cheesecakes .item-image img,
+section#ice-cream .item-image img,
+section#drinks .item-image img {
   background: none !important;
-  object-fit: contain !important;
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
   border-radius: 0 !important;
+  object-fit: contain !important;
+  width: 100% !important;
+  height: 100% !important;
+  filter: none !important;
+  mix-blend-mode: normal !important;
+}
+
+/* Remove hover effects that might add backgrounds - except add-ons */
+section#cookies .item-card:hover .item-image img,
+section#rolls .item-card:hover .item-image img,
+section#slices .item-card:hover .item-image img,
+section#cakes .item-card:hover .item-image img,
+section#cookie-cakes .item-card:hover .item-image img,
+section#cups .item-card:hover .item-image img,
+section#cheesecakes .item-card:hover .item-image img,
+section#ice-cream .item-card:hover .item-image img,
+section#drinks .item-card:hover .item-image img {
+  transform: scale(1.05);
+  filter: none !important;
+  background: none !important;
+}
+
+/* For responsive design - apply to specific sections only */
+@media (min-width: 768px) {
+  section#cookies .item-image,
+  section#rolls .item-image,
+  section#slices .item-image,
+  section#cakes .item-image,
+  section#cookie-cakes .item-image,
+  section#cups .item-image,
+  section#cheesecakes .item-image,
+  section#ice-cream .item-image,
+  section#drinks .item-image {
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+  }
+  
+  section#cookies .item-image img,
+  section#rolls .item-image img,
+  section#slices .item-image img,
+  section#cakes .item-image img,
+  section#cookie-cakes .item-image img,
+  section#cups .item-image img,
+  section#cheesecakes .item-image img,
+  section#ice-cream .item-image img,
+  section#drinks .item-image img {
+    object-fit: contain !important;
+    background: none !important;
+  }
 }
 
     .badge {
