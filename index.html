@@ -2064,17 +2064,26 @@ fortuneCookie.onclick = function() {
         if (!grouped[item.category]) grouped[item.category] = [];
         grouped[item.category].push(item);
       });
-      if (grouped["Rolls"]) {
+if (grouped["Rolls"]) {
   grouped["Rolls"].sort((a, b) => {
     if (a.item_name === "Cinnamon Roll") return -1;
     if (b.item_name === "Cinnamon Roll") return 1;
     return 0;
   });
 }
-      if (grouped["Cookies"]) {
+
+if (grouped["Cookies"]) {
   grouped["Cookies"].sort((a, b) => {
     if (a.item_name === "Sea Salt Cookie") return -1;
     if (b.item_name === "Sea Salt Cookie") return 1;
+    return 0;
+  });
+}
+
+if (grouped["Cheesecakes"]) {
+  grouped["Cheesecakes"].sort((a, b) => {
+    if (a.item_name === "San Sebastian") return 1;
+    if (b.item_name === "San Sebastian") return -1;
     return 0;
   });
 }
@@ -2382,6 +2391,14 @@ function goToSlide(n) {
     });
   });
     const featuredItems = [
+          {
+      name: "Zesty Lemon ",
+      description: "Tangy, Creamy and full of lemony love",
+      price: 6.50,
+      image: "images/Lemon-Chee.jpg",
+      tag: "Fresh Drop"
+    },
+      
     {
       name: "Healthy Chia Pudding",
       description: "Celebration in every bite! Vanilla cookies with colorful sprinkles and white chocolate.",
@@ -2409,14 +2426,8 @@ function goToSlide(n) {
       price: 4.25,
       image: "images/heavenlynn_spec.jpg",
       tag: "Trending"
-    },
-    {
-      name: "Lemon",
-      description: "Colorful layers of creamy cheesecake with a graham cracker crust.",
-      price: 6.50,
-      image: "images/Lemon-Chee.jpg",
-      tag: "Fresh Drop"
     }
+
   ];
   // Add this function BEFORE loadFeaturedItems() function
 function enhanceNavigation() {
