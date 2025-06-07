@@ -843,7 +843,22 @@
   overflow: hidden;
   position: relative;
   box-shadow: var(--shadow-sm);
+        background: transparent !important;
+  backdrop-filter: none;
 }
+    section#cups .item-card {
+  background: rgba(255, 255, 255, 0.95) !important; /* Slightly transparent card background */
+}
+    section#cups .item-image img {
+  background: transparent !important;
+  mix-blend-mode: multiply; /* This removes white backgrounds */
+   filter: 
+    saturate(1.4) 
+    contrast(1.2) 
+    brightness(1.1)
+    drop-shadow(0 4px 8px rgba(0,0,0,0.1)); /* Add subtle shadow for depth */
+}
+    
     
 
     .badge {
