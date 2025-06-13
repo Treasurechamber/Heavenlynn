@@ -145,6 +145,49 @@
   }
 }
 
+/* Cookie Trail Cursor */
+.cookie-crumb {
+  position: fixed;
+  pointer-events: none;
+  font-size: 12px;
+  z-index: 100;
+  animation: crumb-trail 2s forwards;
+  user-select: none;
+}
+
+@keyframes crumb-trail {
+  0% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.3) rotate(180deg) translateY(-30px);
+  }
+}
+
+/* Bakery Hours Mood - CSS Variables for different times */
+:root.morning {
+  --primary: #f4a261;
+  --primary-light: #ffeaa7;
+  --primary-dark: #e76f51;
+  --accent: #ff7eb5;
+  --gradient: linear-gradient(135deg, #f4a261, #ffeaa7);
+}
+
+:root.evening {
+  --primary: #ff6b35;
+  --primary-light: #ffb88c;
+  --primary-dark: #c44536;
+  --accent: #ff7eb5;
+  --gradient: linear-gradient(135deg, #ff6b35, #ffb88c);
+}
+
+/* Smooth transitions for mood changes */
+* {
+  transition: background-color 0.8s ease, border-color 0.8s ease, color 0.8s ease;
+}
+
     * {
       box-sizing: border-box;
       margin: 0;
@@ -2681,6 +2724,49 @@ window.addEventListener('load', function() {
 window.addEventListener('beforeunload', function() {
   document.getElementById('cookieLoader')?.classList.remove('hide');
 });
+  // Cookie Trail Cursor
+let isMouseMoving = false;
+let mouseTimer;
+
+document.addEventListener('mousemove', function(e) {
+  if (!isMouseMoving) {
+    isMouseMoving = true;
+    
+    const crumb = document.createElement('div');
+    crumb.className = 'cookie-crumb';
+    crumb.textContent = Math.random() > 0.5 ? '🍪' : '🥐';
+    crumb.style.left = e.clientX + 'px';
+    crumb.style.top = e.clientY + 'px';
+    
+    document.body.appendChild(crumb);
+    
+    setTimeout(() => {
+      crumb.remove();
+    }, 2000);
+    
+    setTimeout(() => {
+      isMouseMoving = false;
+    }, 100);
+  }
+});
+
+// Bakery Hours Mood
+function setBakeryMood() {
+  const now = new Date();
+  const hour = now.getHours();
+  const root = document.documentElement;
+  
+  root.classList.remove('morning', 'evening');
+  
+  if (hour >= 6 && hour < 12) {
+    root.classList.add('morning');
+  } else if (hour >= 18 && hour < 24) {
+    root.classList.add('evening');
+  }
+}
+
+setBakeryMood();
+setInterval(setBakeryMood, 3600000);
 </script>
 </body>
 </html>
