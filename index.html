@@ -47,48 +47,7 @@
   visibility: hidden;
 }
 
-.cookie-loader {
-  position: relative;
-  margin-bottom: 2rem;
-}
 
-.cookie-bite {
-  width: 120px;
-  height: 120px;
-  background: #8B4513;
-  border-radius: 50%;
-  position: relative;
-  animation: cookie-spin 2s linear infinite;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-}
-
-.cookie-bite::before {
-  content: '';
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  width: 25px;
-  height: 25px;
-  background: linear-gradient(135deg, #a18cd1, #fbc2eb);
-  border-radius: 50%;
-  box-shadow: 
-    -20px 10px 0 -5px #654321,
-    -10px -15px 0 -8px #654321,
-    15px -20px 0 -6px #654321,
-    -25px -5px 0 -7px #654321,
-    10px 25px 0 -4px #654321;
-}
-
-.cookie-bite::after {
-  content: '';
-  position: absolute;
-  top: -10px;
-  right: -10px;
-  width: 40px;
-  height: 40px;
-  background: linear-gradient(135deg, #a18cd1, #fbc2eb);
-  border-radius: 50%;
-}
 
 .loading-text {
   font-family: 'Dancing Script', cursive;
@@ -124,73 +83,214 @@
 .loading-dot:nth-child(2) { animation-delay: -0.16s; }
 .loading-dot:nth-child(3) { animation-delay: 0s; }
     /* Cookie Jar Loading Animation */
+/* Enhanced Cookie Jar Animation */
 .cookie-jar {
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-top: 1rem;
+  position: relative;
 }
 
 .jar {
   position: relative;
-  width: 120px;
-  height: 140px;
+  width: 140px;
+  height: 160px;
+  animation: jar-wiggle 4s ease-in-out infinite;
 }
 
 .jar-lid {
-  width: 130px;
-  height: 20px;
-  background: linear-gradient(135deg, #8B4513, #A0522D);
-  border-radius: 15px 15px 8px 8px;
+  width: 150px;
+  height: 25px;
+  background: linear-gradient(135deg, #8B4513, #A0522D, #CD853F);
+  border-radius: 20px 20px 10px 10px;
   position: absolute;
-  top: -10px;
+  top: -12px;
   left: -5px;
-  border: 3px solid #654321;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+  border: 4px solid #654321;
+  box-shadow: 
+    0 5px 15px rgba(0,0,0,0.4),
+    inset 0 2px 5px rgba(255,255,255,0.3);
+  z-index: 10;
+}
+
+.jar-lid::before {
+  content: '🍪';
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.2rem;
+  animation: lid-cookie-spin 4s linear infinite;
+}
+
+.jar-lid::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 20px;
+  height: 8px;
+  background: #654321;
+  border-radius: 10px;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
 }
 
 .jar-body {
-  width: 120px;
-  height: 130px;
-  background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(255,255,255,0.7));
-  border-radius: 8px 8px 25px 25px;
-  border: 4px solid #8B4513;
+  width: 140px;
+  height: 150px;
+  background: linear-gradient(135deg, 
+    rgba(255,255,255,0.95) 0%, 
+    rgba(255,255,255,0.85) 50%, 
+    rgba(240,240,255,0.9) 100%);
+  border-radius: 12px 12px 30px 30px;
+  border: 5px solid #8B4513;
   position: relative;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  padding: 10px;
+  padding: 15px 10px;
   overflow: hidden;
+  box-shadow: 
+    0 8px 25px rgba(0,0,0,0.3),
+    inset 0 0 20px rgba(255,255,255,0.2);
+}
+
+.jar-body::before {
+  content: '';
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 15px;
+  height: 80px;
+  background: linear-gradient(to right, 
+    rgba(255,255,255,0.6), 
+    rgba(255,255,255,0.1));
+  border-radius: 8px;
+  transform: skew(-10deg);
 }
 
 .cookie-in-jar {
-  font-size: 1.8rem;
-  margin: 2px;
-  transition: all 0.8s ease;
-  animation: cookie-float 2s ease-in-out infinite alternate;
+  font-size: 2rem;
+  margin: 3px;
+  transition: all 1s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  animation: cookie-float 3s ease-in-out infinite alternate;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+  cursor: pointer;
 }
+
+.cookie-in-jar:nth-child(1) { animation-delay: 0s; }
+.cookie-in-jar:nth-child(2) { animation-delay: 0.5s; }
+.cookie-in-jar:nth-child(3) { animation-delay: 1s; }
+.cookie-in-jar:nth-child(4) { animation-delay: 1.5s; }
+.cookie-in-jar:nth-child(5) { animation-delay: 2s; }
 
 .cookie-in-jar.eaten {
   opacity: 0;
-  transform: scale(0) rotate(360deg);
+  transform: scale(0) rotate(720deg) translateY(-50px);
+  animation: cookie-poof 0.8s ease-out forwards;
 }
 
 .loading-text-small {
-  margin-top: 10px;
-  font-size: 0.9rem;
-  color: rgba(255,255,255,0.8);
+  margin-top: 15px;
+  font-size: 1rem;
+  color: rgba(255,255,255,0.9);
   font-style: italic;
+  font-family: 'Dancing Script', cursive;
+  animation: text-bounce 2s ease-in-out infinite;
 }
 
+/* Cute particle effects */
+.cookie-jar::after {
+  content: '✨';
+  position: absolute;
+  top: -20px;
+  right: -20px;
+  font-size: 1.5rem;
+  animation: sparkle-dance 3s ease-in-out infinite;
+}
+
+.cookie-jar::before {
+  content: '💕';
+  position: absolute;
+  top: -15px;
+  left: -25px;
+  font-size: 1.2rem;
+  animation: heart-float 4s ease-in-out infinite reverse;
+}
+
+/* New Animations */
 @keyframes cookie-float {
-  0% { transform: translateY(0px) rotate(0deg); }
-  100% { transform: translateY(-5px) rotate(3deg); }
+  0% { 
+    transform: translateY(0px) rotate(0deg) scale(1); 
+  }
+  100% { 
+    transform: translateY(-8px) rotate(5deg) scale(1.05); 
+  }
 }
 
-@keyframes cookie-spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+@keyframes jar-wiggle {
+  0%, 100% { 
+    transform: rotate(0deg) scale(1); 
+  }
+  25% { 
+    transform: rotate(1deg) scale(1.02); 
+  }
+  50% { 
+    transform: rotate(0deg) scale(1); 
+  }
+  75% { 
+    transform: rotate(-1deg) scale(1.02); 
+  }
+}
+
+@keyframes cookie-poof {
+  0% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg) translateY(0);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.3) rotate(180deg) translateY(-20px);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0) rotate(720deg) translateY(-80px);
+  }
+}
+
+@keyframes lid-cookie-spin {
+  0% { transform: translateX(-50%) rotate(0deg); }
+  100% { transform: translateX(-50%) rotate(360deg); }
+}
+
+@keyframes sparkle-dance {
+  0%, 100% { 
+    transform: translateY(0px) rotate(0deg) scale(1); 
+    opacity: 0.8;
+  }
+  50% { 
+    transform: translateY(-10px) rotate(180deg) scale(1.2); 
+    opacity: 1;
+  }
+}
+
+@keyframes heart-float {
+  0%, 100% { 
+    transform: translateY(0px) scale(1); 
+    opacity: 0.7;
+  }
+  50% { 
+    transform: translateY(-15px) scale(1.3); 
+    opacity: 1;
+  }
+}
+
+@keyframes text-bounce {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-5px); }
 }
 
 @keyframes text-glow {
@@ -1713,6 +1813,7 @@ section#drinks .item-card:hover .item-image img {
   <div class="loading-subtitle">Baking something delicious...</div>
   
   <!-- NEW: Cookie jar with decreasing cookies -->
+  
   <div class="cookie-jar">
     <div class="jar">
       <div class="jar-lid"></div>
