@@ -26,6 +26,124 @@
       --radius-md: 20px;
       --radius-lg: 30px;
     }
+    /* Cookie Loading Screen Styles */
+.cookie-loading-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #a18cd1, #fbc2eb);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  transition: opacity 0.8s ease, visibility 0.8s ease;
+}
+
+.cookie-loading-screen.hide {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.cookie-loader {
+  position: relative;
+  margin-bottom: 2rem;
+}
+
+.cookie-bite {
+  width: 120px;
+  height: 120px;
+  background: #8B4513;
+  border-radius: 50%;
+  position: relative;
+  animation: cookie-spin 2s linear infinite;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.cookie-bite::before {
+  content: '';
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  width: 25px;
+  height: 25px;
+  background: linear-gradient(135deg, #a18cd1, #fbc2eb);
+  border-radius: 50%;
+  box-shadow: 
+    -20px 10px 0 -5px #654321,
+    -10px -15px 0 -8px #654321,
+    15px -20px 0 -6px #654321,
+    -25px -5px 0 -7px #654321,
+    10px 25px 0 -4px #654321;
+}
+
+.cookie-bite::after {
+  content: '';
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #a18cd1, #fbc2eb);
+  border-radius: 50%;
+}
+
+.loading-text {
+  font-family: 'Dancing Script', cursive;
+  font-size: 2.5rem;
+  color: white;
+  text-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+  margin-bottom: 1rem;
+  animation: text-glow 2s ease-in-out infinite alternate;
+}
+
+.loading-subtitle {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.9);
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.loading-dots {
+  display: flex;
+  gap: 8px;
+}
+
+.loading-dot {
+  width: 12px;
+  height: 12px;
+  background: white;
+  border-radius: 50%;
+  animation: dot-bounce 1.4s ease-in-out infinite both;
+}
+
+.loading-dot:nth-child(1) { animation-delay: -0.32s; }
+.loading-dot:nth-child(2) { animation-delay: -0.16s; }
+.loading-dot:nth-child(3) { animation-delay: 0s; }
+
+@keyframes cookie-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes text-glow {
+  0% { text-shadow: 0 3px 6px rgba(0, 0, 0, 0.3); }
+  100% { text-shadow: 0 3px 20px rgba(255, 255, 255, 0.5); }
+}
+
+@keyframes dot-bounce {
+  0%, 80%, 100% {
+    transform: scale(0);
+    opacity: 0.5;
+  }
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
 
     * {
       box-sizing: border-box;
@@ -1480,6 +1598,18 @@ section#drinks .item-card:hover .item-image img {
   </style>
 </head>
 <body>
+  <div class="cookie-loading-screen" id="cookieLoader">
+  <div class="cookie-loader">
+    <div class="cookie-bite"></div>
+  </div>
+  <div class="loading-text">heavenlynn</div>
+  <div class="loading-subtitle">Baking something delicious...</div>
+  <div class="loading-dots">
+    <div class="loading-dot"></div>
+    <div class="loading-dot"></div>  
+    <div class="loading-dot"></div>
+  </div>
+</div>
   <div class="hero" role="banner">
   <div class="hero-overlay" aria-hidden="true"></div>
   <div class="slideshow-container"></div>
@@ -2536,6 +2666,21 @@ function loadFeaturedItems() {
     enhanceNavigation();
   });
 }
+  // Cookie Loading Screen
+window.addEventListener('load', function() {
+  setTimeout(function() {
+    const loader = document.getElementById('cookieLoader');
+    loader.classList.add('hide');
+    
+    setTimeout(() => {
+      loader.remove();
+    }, 800);
+  }, 2500);
+});
+
+window.addEventListener('beforeunload', function() {
+  document.getElementById('cookieLoader')?.classList.remove('hide');
+});
 </script>
 </body>
 </html>
