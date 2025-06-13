@@ -123,6 +123,70 @@
 .loading-dot:nth-child(1) { animation-delay: -0.32s; }
 .loading-dot:nth-child(2) { animation-delay: -0.16s; }
 .loading-dot:nth-child(3) { animation-delay: 0s; }
+    /* Cookie Jar Loading Animation */
+.cookie-jar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+.jar {
+  position: relative;
+  width: 120px;
+  height: 140px;
+}
+
+.jar-lid {
+  width: 130px;
+  height: 20px;
+  background: linear-gradient(135deg, #8B4513, #A0522D);
+  border-radius: 15px 15px 8px 8px;
+  position: absolute;
+  top: -10px;
+  left: -5px;
+  border: 3px solid #654321;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+}
+
+.jar-body {
+  width: 120px;
+  height: 130px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(255,255,255,0.7));
+  border-radius: 8px 8px 25px 25px;
+  border: 4px solid #8B4513;
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  overflow: hidden;
+}
+
+.cookie-in-jar {
+  font-size: 1.8rem;
+  margin: 2px;
+  transition: all 0.8s ease;
+  animation: cookie-float 2s ease-in-out infinite alternate;
+}
+
+.cookie-in-jar.eaten {
+  opacity: 0;
+  transform: scale(0) rotate(360deg);
+}
+
+.loading-text-small {
+  margin-top: 10px;
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.8);
+  font-style: italic;
+}
+
+@keyframes cookie-float {
+  0% { transform: translateY(0px) rotate(0deg); }
+  100% { transform: translateY(-5px) rotate(3deg); }
+}
 
 @keyframes cookie-spin {
   0% { transform: rotate(0deg); }
@@ -1641,16 +1705,26 @@ section#drinks .item-card:hover .item-image img {
   </style>
 </head>
 <body>
-  <div class="cookie-loading-screen" id="cookieLoader">
+ <div class="cookie-loading-screen" id="cookieLoader">
   <div class="cookie-loader">
     <div class="cookie-bite"></div>
   </div>
   <div class="loading-text">heavenlynn</div>
   <div class="loading-subtitle">Baking something delicious...</div>
-  <div class="loading-dots">
-    <div class="loading-dot"></div>
-    <div class="loading-dot"></div>  
-    <div class="loading-dot"></div>
+  
+  <!-- NEW: Cookie jar with decreasing cookies -->
+  <div class="cookie-jar">
+    <div class="jar">
+      <div class="jar-lid"></div>
+      <div class="jar-body">
+        <div class="cookie-in-jar" id="cookie1">🍪</div>
+        <div class="cookie-in-jar" id="cookie2">🍪</div>
+        <div class="cookie-in-jar" id="cookie3">🍪</div>
+        <div class="cookie-in-jar" id="cookie4">🍪</div>
+        <div class="cookie-in-jar" id="cookie5">🍪</div>
+      </div>
+    </div>
+    <div class="loading-text-small">Loading treats...</div>
   </div>
 </div>
   <div class="hero" role="banner">
@@ -2711,14 +2785,36 @@ function loadFeaturedItems() {
 }
   // Cookie Loading Screen
 window.addEventListener('load', function() {
-  setTimeout(function() {
-    const loader = document.getElementById('cookieLoader');
-    loader.classList.add('hide');
-    
-    setTimeout(() => {
-      loader.remove();
-    }, 800);
-  }, 2500);
+  // Start eating cookies one by one
+  const cookies = ['cookie1', 'cookie2', 'cookie3', 'cookie4', 'cookie5'];
+  let eatenCount = 0;
+  
+  const eatCookie = () => {
+    if (eatenCount < cookies.length) {
+      const cookie = document.getElementById(cookies[eatenCount]);
+      if (cookie) {
+        cookie.classList.add('eaten');
+      }
+      eatenCount++;
+      
+      if (eatenCount < cookies.length) {
+        setTimeout(eatCookie, 500); // Eat one cookie every 500ms
+      } else {
+        // All cookies eaten, hide loader
+        setTimeout(() => {
+          const loader = document.getElementById('cookieLoader');
+          loader.classList.add('hide');
+          
+          setTimeout(() => {
+            loader.remove();
+          }, 800);
+        }, 300);
+      }
+    }
+  };
+  
+  // Start eating cookies after a short delay
+  setTimeout(eatCookie, 500);
 });
 
 window.addEventListener('beforeunload', function() {
@@ -2734,7 +2830,7 @@ document.addEventListener('mousemove', function(e) {
     
     const crumb = document.createElement('div');
     crumb.className = 'cookie-crumb';
-    crumb.textContent = Math.random() > 0.5 ? '🍪' : '🥐';
+    crumb.textContent = '🍪';
     crumb.style.left = e.clientX + 'px';
     crumb.style.top = e.clientY + 'px';
     
