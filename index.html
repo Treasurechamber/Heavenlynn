@@ -330,26 +330,86 @@
   }
 }
 
-/* Bakery Hours Mood - CSS Variables for different times */
+/* Bakery Hours Mood - Subtle warmth enhancement */
 :root.morning {
-  --primary: #f4a261;
-  --primary-light: #ffeaa7;
-  --primary-dark: #e76f51;
-  --accent: #ff7eb5;
-  --gradient: linear-gradient(135deg, #f4a261, #ffeaa7);
+  /* Slightly warmer purples with golden undertones */
+  --primary: #9a5fff; /* Slightly warmer purple */
+  --primary-light: #f0e7ff; /* Warmer light purple */
+  --primary-dark: #5e4184; /* Warmer dark purple */
+  --accent: #ff8bc5; /* Slightly warmer pink */
+  --gradient: linear-gradient(135deg, #a98cd1, #f5c8eb); /* Warmer gradient */
+  --shadow-sm: 0 4px 12px rgba(154, 95, 255, 0.1); /* Warmer shadows */
+  --shadow-md: 0 6px 16px rgba(154, 95, 255, 0.15);
+  --shadow-lg: 0 12px 24px rgba(154, 95, 255, 0.2);
+  
+  /* Add subtle warmth to backgrounds */
+  --card-bg: #fefefe;
+  --background: #fefefe;
+  
+  /* Warm contact bar */
+  filter: sepia(0.05) saturate(1.1) brightness(1.02);
 }
 
 :root.evening {
-  --primary: #ff6b35;
-  --primary-light: #ffb88c;
-  --primary-dark: #c44536;
-  --accent: #ff7eb5;
-  --gradient: linear-gradient(135deg, #ff6b35, #ffb88c);
+  /* Deeper, cozier purples */
+  --primary: #7a3fff; /* Deeper purple */
+  --primary-light: #ddd0ff; /* Softer evening light */
+  --primary-dark: #4a2960; /* Richer dark purple */
+  --accent: #ff6bb0; /* Deeper pink */
+  --gradient: linear-gradient(135deg, #8a7bc1, #e5b8db); /* Deeper gradient */
+  --shadow-sm: 0 4px 12px rgba(122, 63, 255, 0.12); /* Deeper shadows */
+  --shadow-md: 0 6px 16px rgba(122, 63, 255, 0.18);
+  --shadow-lg: 0 12px 24px rgba(122, 63, 255, 0.25);
+  
+  /* Cozy evening backgrounds */
+  --card-bg: #fdfcff;
+  --background: #fdfcff;
+  
+  /* Evening warmth filter */
+  filter: sepia(0.08) saturate(1.05) contrast(1.02);
 }
 
-/* Smooth transitions for mood changes */
+/* Enhanced cozy effects for different times */
+:root.morning .hero {
+  filter: sepia(0.03) saturate(1.05) brightness(1.03);
+}
+
+:root.evening .hero {
+  filter: sepia(0.05) saturate(1.02) contrast(1.05);
+}
+
+/* Subtle glow effects for cozy feeling */
+:root.morning .item-card:hover {
+  box-shadow: var(--shadow-lg), 0 0 20px rgba(154, 95, 255, 0.08);
+}
+
+:root.evening .item-card:hover {
+  box-shadow: var(--shadow-lg), 0 0 25px rgba(122, 63, 255, 0.1);
+}
+
+/* Warm contact bar enhancement */
+:root.morning .contact-bar {
+  background: linear-gradient(135deg, #D9AFE1, #E8C5EC);
+}
+
+:root.evening .contact-bar {
+  background: linear-gradient(135deg, #D5ABE1, #E0BBE8);
+}
+
+/* Cozy navigation warmth */
+:root.morning nav a:hover,
+:root.morning nav a.active {
+  box-shadow: var(--shadow-md), 0 0 15px rgba(154, 95, 255, 0.1);
+}
+
+:root.evening nav a:hover,
+:root.evening nav a.active {
+  box-shadow: var(--shadow-md), 0 0 18px rgba(122, 63, 255, 0.12);
+}
+
+/* Smooth transitions remain the same */
 * {
-  transition: background-color 0.8s ease, border-color 0.8s ease, color 0.8s ease;
+  transition: background-color 0.8s ease, border-color 0.8s ease, color 0.8s ease, filter 0.8s ease;
 }
 
     * {
