@@ -1780,6 +1780,79 @@ section#drinks .item-card:hover .item-image img {
   position: relative;
   box-shadow: var(--shadow-sm);
 }
+      /* BIG EMOJI COOKIE LOADING SCREEN */
+.cookie-container {
+  position: relative;
+  margin: 2rem 0;
+  width: 350px;
+  height: 350px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* BIG EMOJI COOKIE */
+.emoji-cookie {
+  font-size: 20rem;
+  line-height: 1;
+  filter: drop-shadow(0 15px 35px rgba(0,0,0,0.4));
+  animation: cookie-pulse 2s ease-in-out infinite;
+  user-select: none;
+  position: relative;
+  z-index: 1;
+}
+
+/* 4 MASSIVE OVERLAPPING Triangle Slices - NO HAIRLINES AT ALL */
+.slice {
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  width: 370px;
+  height: 370px;
+  background: var(--gradient);
+  transition: all 0.8s ease;
+  transform-origin: center;
+  opacity: 0;
+  transform: scale(0) rotate(45deg);
+  z-index: 2;
+  border-radius: 50%;
+}
+
+/* Slice 1 - Top triangle (MASSIVE overlap) */
+.slice-1 {
+  clip-path: polygon(50% 50%, -10% -10%, 110% -10%);
+}
+
+/* Slice 2 - Right triangle (MASSIVE overlap) */
+.slice-2 {
+  clip-path: polygon(50% 50%, 110% -10%, 110% 110%);
+}
+
+/* Slice 3 - Bottom triangle (MASSIVE overlap) */
+.slice-3 {
+  clip-path: polygon(50% 50%, 110% 110%, -10% 110%);
+}
+
+/* Slice 4 - Left triangle (MASSIVE overlap) */
+.slice-4 {
+  clip-path: polygon(50% 50%, -10% 110%, -10% -10%);
+}
+
+/* EATEN slices (they appear to cover/remove parts of cookie) */
+.slice.eaten {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+}
+
+/* Cookie pulse animation */
+@keyframes cookie-pulse {
+  0%, 100% { 
+    transform: scale(1) rotate(0deg); 
+  }
+  50% { 
+    transform: scale(1.05) rotate(2deg); 
+  }
+}
       
       .contact-info {
         gap: 8px;
@@ -1862,38 +1935,38 @@ section#drinks .item-card:hover .item-image img {
   </style>
 </head>
 <body>
- <div class="cookie-loading-screen" id="cookieLoader">
-  <div class="cookie-loader">
-    <div class="cookie-bite"></div>
-  </div>
+<div class="cookie-loading-screen" id="cookieLoader">
   <div class="loading-text">heavenlynn</div>
   <div class="loading-subtitle">Baking something delicious...</div>
   
-  <!-- NEW: Cookie jar with decreasing cookies -->
+  <div class="cookie-container">
+    <!-- BIG EMOJI COOKIE that starts FULL -->
+    <div class="emoji-cookie">🍪</div>
+    
+    <!-- 4 Triangle slices that will COVER parts (get eaten) -->
+    <div class="slice slice-1" id="slice1"></div>
+    <div class="slice slice-2" id="slice2"></div>
+    <div class="slice slice-3" id="slice3"></div>
+    <div class="slice slice-4" id="slice4"></div>
+  </div>
   
-  <div class="cookie-jar">
-    <div class="jar">
-      <div class="jar-lid"></div>
-      <div class="jar-body">
-        <div class="cookie-in-jar" id="cookie1">🍪</div>
-        <div class="cookie-in-jar" id="cookie2">🍪</div>
-        <div class="cookie-in-jar" id="cookie3">🍪</div>
-        <div class="cookie-in-jar" id="cookie4">🍪</div>
-        <div class="cookie-in-jar" id="cookie5">🍪</div>
-      </div>
-    </div>
-    <div class="loading-text-small">Loading treats...</div>
+  <div class="loading-text-small" id="loadingText">Full cookie ready...</div>
+  
+  <div class="loading-dots">
+    <div class="loading-dot"></div>
+    <div class="loading-dot"></div>
+    <div class="loading-dot"></div>
   </div>
 </div>
   <div class="hero" role="banner">
   <div class="hero-overlay" aria-hidden="true"></div>
   <div class="slideshow-container"></div>
-  <div class="promo-badge">
+ <!-- <div class="promo-badge">
     <div class="promo-badge-inner">
       <span class="promo-text">10% OFF</span>
       <span class="promo-subtext">Today Only!</span>
     </div>
-  </div>
+  </div>-->
   <div class="hero-content">
     <h1>heavenlynn</h1>
     <p class="hero-tagline">Artisanal Treats Made with Love</p>
@@ -2950,37 +3023,61 @@ function loadFeaturedItems() {
   });
 }
   // Cookie Loading Screen
+// BIG Cookie Loading Screen with Triangle Slices
 window.addEventListener('load', function() {
-  // Start eating cookies one by one
-  const cookies = ['cookie1', 'cookie2', 'cookie3', 'cookie4', 'cookie5'];
-  let eatenCount = 0;
+  const loader = document.getElementById('cookieLoader');
+  const loadingText = document.getElementById('loadingText');
   
-  const eatCookie = () => {
-    if (eatenCount < cookies.length) {
-      const cookie = document.getElementById(cookies[eatenCount]);
-      if (cookie) {
-        cookie.classList.add('eaten');
-      }
-      eatenCount++;
+  // Reset all slices to NOT eaten
+  for (let i = 1; i <= 4; i++) {
+    document.getElementById(`slice${i}`).classList.remove('eaten');
+  }
+  
+  const messages = [
+    "Full cookie ready...",
+    "Eating slice 1! *CHOMP*",
+    "Eating slice 2! *MUNCH*",
+    "Eating slice 3! *CRUNCH*", 
+    "Eating slice 4! *NOM*",
+    "Cookie all eaten! Loading..."
+  ];
+  
+  // EAT slice 1 (top) - slice covers part of cookie
+  setTimeout(() => {
+    document.getElementById('slice1').classList.add('eaten');
+    loadingText.textContent = messages[1];
+  }, 1500);
+  
+  // EAT slice 2 (right)
+  setTimeout(() => {
+    document.getElementById('slice2').classList.add('eaten');
+    loadingText.textContent = messages[2];
+  }, 3000);
+  
+  // EAT slice 3 (bottom)
+  setTimeout(() => {
+    document.getElementById('slice3').classList.add('eaten');
+    loadingText.textContent = messages[3];
+  }, 4500);
+  
+  // EAT slice 4 (left) - now almost all cookie eaten
+  setTimeout(() => {
+    document.getElementById('slice4').classList.add('eaten');
+    loadingText.textContent = messages[4];
+  }, 6000);
+  
+  // All cookie eaten - hide and show website
+  setTimeout(() => {
+    loadingText.textContent = messages[5];
+    
+    setTimeout(() => {
+      loader.classList.add('hide');
       
-      if (eatenCount < cookies.length) {
-        setTimeout(eatCookie, 500); // Eat one cookie every 500ms
-      } else {
-        // All cookies eaten, hide loader
-        setTimeout(() => {
-          const loader = document.getElementById('cookieLoader');
-          loader.classList.add('hide');
-          
-          setTimeout(() => {
-            loader.remove();
-          }, 800);
-        }, 300);
-      }
-    }
-  };
-  
-  // Start eating cookies after a short delay
-  setTimeout(eatCookie, 500);
+      setTimeout(() => {
+        loader.remove();
+      }, 800);
+    }, 1000);
+  }, 7500);
 });
 
 window.addEventListener('beforeunload', function() {
