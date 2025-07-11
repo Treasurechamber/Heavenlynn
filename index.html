@@ -812,6 +812,254 @@
     transform: rotate(5deg);
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
   }
+    /* Shopping Cart Styles */
+.cart-btn {
+  position: fixed;
+  right: 20px;
+  bottom: 150px;
+  width: 60px;
+  height: 60px;
+  background: var(--accent);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  box-shadow: var(--shadow-md);
+  cursor: pointer;
+  z-index: 20;
+  transition: var(--transition);
+  border: none;
+}
+
+.cart-btn:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lg);
+}
+
+.cart-count {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: #ff4444;
+  color: white;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: bold;
+  border: 2px solid white;
+}
+
+.cart-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: none;
+  overflow-y: auto;
+}
+
+.cart-content {
+  background: white;
+  margin: 20px auto;
+  padding: 2rem;
+  border-radius: var(--radius-md);
+  max-width: 500px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-lg);
+}
+
+.cart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid var(--primary-light);
+  padding-bottom: 1rem;
+}
+
+.cart-close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--text-light);
+}
+
+.cart-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--primary-light);
+}
+
+.cart-item-info {
+  flex: 1;
+}
+
+.cart-item-name {
+  font-weight: 600;
+  color: var(--primary-dark);
+}
+
+.cart-item-price {
+  color: var(--text-light);
+  font-size: 0.9rem;
+}
+
+.cart-item-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.quantity-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.qty-btn {
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--primary);
+  background: white;
+  color: var(--primary);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.qty-btn:hover {
+  background: var(--primary);
+  color: white;
+}
+
+.remove-item {
+  background: #ff4444;
+  color: white;
+  border: none;
+  padding: 0.3rem 0.6rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+.cart-total {
+  text-align: center;
+  margin: 1.5rem 0;
+  padding: 1rem;
+  background: var(--primary-light);
+  border-radius: var(--radius-sm);
+}
+
+.cart-total-amount {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--primary-dark);
+}
+
+.order-btn {
+  width: 100%;
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 1rem;
+  border-radius: var(--radius-sm);
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.order-btn:hover {
+  background: var(--primary-dark);
+}
+
+.order-btn:disabled {
+  background: var(--text-light);
+  cursor: not-allowed;
+}
+
+.empty-cart {
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-light);
+}
+
+.add-to-cart-btn {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.add-to-cart-btn:hover {
+  background: var(--primary-dark);
+  transform: translateY(-2px);
+}
+
+/* Thank you animation */
+.thank-you-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 2000;
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+
+.thank-you-content {
+  background: white;
+  padding: 3rem;
+  border-radius: var(--radius-lg);
+  text-align: center;
+  max-width: 400px;
+  animation: bounce-in 0.6s ease-out;
+}
+
+.thank-you-cookie {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  animation: cookie-spin 2s ease-in-out infinite;
+}
+
+@keyframes bounce-in {
+  0% { transform: scale(0.3); opacity: 0; }
+  50% { transform: scale(1.05); }
+  70% { transform: scale(0.9); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes cookie-spin {
+  0%, 100% { transform: rotate(0deg) scale(1); }
+  25% { transform: rotate(5deg) scale(1.1); }
+  50% { transform: rotate(0deg) scale(1); }
+  75% { transform: rotate(-5deg) scale(1.1); }
+}
 
   .slider-controls {
     display: flex;
@@ -2611,14 +2859,26 @@ if (needsPreorder) {
     }
           
           
-          const footer = document.createElement('div');
-          footer.className = 'item-footer';
-          
-          const price = document.createElement('div');
-          price.className = 'item-price';
-          price.textContent = `$${parseFloat(item.price).toFixed(2)}`;
-          
-          footer.appendChild(price);
+         const footer = document.createElement('div');
+footer.className = 'item-footer';
+
+const price = document.createElement('div');
+price.className = 'item-price';
+price.textContent = `$${parseFloat(item.price).toFixed(2)}`;
+
+const addToCartBtn = document.createElement('button');
+addToCartBtn.className = 'add-to-cart-btn';
+addToCartBtn.textContent = 'Add to Cart';
+addToCartBtn.addEventListener('click', () => {
+  addToCart({
+    name: item.item_name,
+    price: parseFloat(item.price),
+    category: category
+  });
+});
+
+footer.appendChild(price);
+footer.appendChild(addToCartBtn);
           content.appendChild(name);
           content.appendChild(desc);
           content.appendChild(footer);
@@ -2707,11 +2967,201 @@ if (needsPreorder) {
     }
   }
 
+  // Shopping Cart Functionality
+let cart = [];
+
+function addToCart(item) {
+  const existingItem = cart.find(cartItem => cartItem.name === item.name);
+  
+  if (existingItem) {
+    existingItem.quantity += 1;
+  } else {
+    cart.push({
+      ...item,
+      quantity: 1
+    });
+  }
+  
+  updateCartUI();
+  showCartButton();
+  
+  // Add a little animation to the cart button
+  const cartBtn = document.getElementById('cartBtn');
+  cartBtn.style.transform = 'scale(1.2)';
+  setTimeout(() => {
+    cartBtn.style.transform = 'scale(1)';
+  }, 200);
+}
+
+function removeFromCart(itemName) {
+  cart = cart.filter(item => item.name !== itemName);
+  updateCartUI();
+}
+
+function updateQuantity(itemName, change) {
+  const item = cart.find(cartItem => cartItem.name === itemName);
+  if (item) {
+    item.quantity += change;
+    if (item.quantity <= 0) {
+      removeFromCart(itemName);
+    } else {
+      updateCartUI();
+    }
+  }
+}
+
+function updateCartUI() {
+  const cartCount = document.getElementById('cartCount');
+  const cartItems = document.getElementById('cartItems');
+  const cartTotal = document.getElementById('cartTotal');
+  const totalAmount = document.getElementById('totalAmount');
+  const orderBtn = document.getElementById('orderBtn');
+  
+  const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+  const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  
+  // Update cart count
+  if (totalItems > 0) {
+    cartCount.style.display = 'flex';
+    cartCount.textContent = totalItems;
+  } else {
+    cartCount.style.display = 'none';
+  }
+  
+  // Update cart items display
+  if (cart.length === 0) {
+    cartItems.innerHTML = '<div class="empty-cart">Your cart is empty</div>';
+    cartTotal.style.display = 'none';
+    orderBtn.disabled = true;
+    orderBtn.textContent = 'Order via WhatsApp';
+  } else {
+    cartItems.innerHTML = cart.map(item => `
+      <div class="cart-item">
+        <div class="cart-item-info">
+          <div class="cart-item-name">${item.name}</div>
+          <div class="cart-item-price">$${item.price.toFixed(2)} each</div>
+        </div>
+        <div class="cart-item-controls">
+          <div class="quantity-controls">
+            <button class="qty-btn" onclick="updateQuantity('${item.name}', -1)">-</button>
+            <span>${item.quantity}</span>
+            <button class="qty-btn" onclick="updateQuantity('${item.name}', 1)">+</button>
+          </div>
+          <button class="remove-item" onclick="removeFromCart('${item.name}')">Remove</button>
+        </div>
+      </div>
+    `).join('');
+    
+    cartTotal.style.display = 'block';
+    totalAmount.textContent = `$${totalPrice.toFixed(2)}`;
+    orderBtn.disabled = false;
+    orderBtn.textContent = `Order via WhatsApp ($${totalPrice.toFixed(2)})`;
+  }
+}
+
+function showCartButton() {
+  const cartBtn = document.getElementById('cartBtn');
+  cartBtn.style.display = 'flex';
+}
+
+function generateWhatsAppMessage() {
+  const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  
+  let message = "Hi! I'd like to place an order from Heavenlynn:\n\n";
+  
+  cart.forEach(item => {
+    message += `• ${item.name} x${item.quantity} - $${(item.price * item.quantity).toFixed(2)}\n`;
+  });
+  
+  message += `\nTotal: $${totalPrice.toFixed(2)}\n\nThank you!`;
+  
+  return encodeURIComponent(message);
+}
+
+function showThankYou() {
+  const thankYouModal = document.getElementById('thankYouModal');
+  thankYouModal.style.display = 'flex';
+  
+  // Create floating cookies animation
+  for (let i = 0; i < 20; i++) {
+    setTimeout(() => {
+      const cookie = document.createElement('div');
+      cookie.textContent = '🍪';
+      cookie.style.position = 'fixed';
+      cookie.style.left = Math.random() * window.innerWidth + 'px';
+      cookie.style.top = '-50px';
+      cookie.style.fontSize = (20 + Math.random() * 20) + 'px';
+      cookie.style.zIndex = '2001';
+      cookie.style.pointerEvents = 'none';
+      cookie.style.animation = 'floatUp 3s linear forwards';
+      document.body.appendChild(cookie);
+      
+      setTimeout(() => {
+        document.body.removeChild(cookie);
+      }, 3000);
+    }, i * 100);
+  }
+  
+  setTimeout(() => {
+    thankYouModal.style.display = 'none';
+  }, 4000);
+}
+
+// Initialize cart functionality
+function initializeCart() {
+  const cartBtn = document.getElementById('cartBtn');
+  const cartModal = document.getElementById('cartModal');
+  const cartClose = document.getElementById('cartClose');
+  const orderBtn = document.getElementById('orderBtn');
+  
+  // Show cart modal
+  cartBtn.addEventListener('click', () => {
+    cartModal.style.display = 'block';
+  });
+  
+  // Close cart modal
+  cartClose.addEventListener('click', () => {
+    cartModal.style.display = 'none';
+  });
+  
+  // Close modal when clicking outside
+  cartModal.addEventListener('click', (e) => {
+    if (e.target === cartModal) {
+      cartModal.style.display = 'none';
+    }
+  });
+  
+  // Order via WhatsApp
+  orderBtn.addEventListener('click', () => {
+    if (cart.length === 0) return;
+    
+    const message = generateWhatsAppMessage();
+    const whatsappUrl = `https://wa.me/96181955816?text=${message}`;
+    
+    // Open WhatsApp
+    window.open(whatsappUrl, '_blank');
+    
+    // Clear cart
+    cart = [];
+    updateCartUI();
+    
+    // Close cart modal
+    cartModal.style.display = 'none';
+    
+    // Show thank you animation
+    showThankYou();
+  });
+  
+  // Hide cart button initially
+  cartBtn.style.display = 'none';
+}
+
   // Initialize
   document.addEventListener('DOMContentLoaded', function() {
     loadMenu();
      loadFeaturedItems();
      setupCategoryScrollButton();
+    initializeCart();
     // Slideshow
    const slideImages = [
   "images/lemon-cheesec.jpg",
@@ -2920,10 +3370,13 @@ function loadFeaturedItems() {
     const button = document.createElement('button');
     button.className = 'featured-button';
     button.textContent = 'Order Now';
-    button.addEventListener('click', () => {
-      // You can add WhatsApp link here
-      window.open(`https://wa.me/96181955816?text=Hi! I'd like to order the ${item.name}`, '_blank');
-    });
+button.addEventListener('click', () => {
+  addToCart({
+    name: item.name,
+    price: item.price,
+    category: 'Featured'
+  });
+});
     
     footer.appendChild(price);
     footer.appendChild(button);
@@ -3030,5 +3483,34 @@ function setBakeryMood() {
 setBakeryMood();
 setInterval(setBakeryMood, 3600000);
 </script>
+  <!-- Shopping Cart Button -->
+<button class="cart-btn" id="cartBtn">
+  <i class="fas fa-shopping-cart"></i>
+  <div class="cart-count" id="cartCount" style="display: none;">0</div>
+</button>
+
+<!-- Cart Modal -->
+<div class="cart-modal" id="cartModal">
+  <div class="cart-content">
+    <div class="cart-header">
+      <h2>Your Order</h2>
+      <button class="cart-close" id="cartClose">&times;</button>
+    </div>
+    <div id="cartItems"></div>
+    <div class="cart-total" id="cartTotal" style="display: none;">
+      <div>Total: <span class="cart-total-amount" id="totalAmount">$0.00</span></div>
+    </div>
+    <button class="order-btn" id="orderBtn" disabled>Order via WhatsApp</button>
+  </div>
+</div>
+
+<!-- Thank You Modal -->
+<div class="thank-you-modal" id="thankYouModal">
+  <div class="thank-you-content">
+    <div class="thank-you-cookie">🍪</div>
+    <h2>Thank You!</h2>
+    <p>Your order has been sent to WhatsApp. We'll get back to you soon with confirmation!</p>
+  </div>
+</div>
 </body>
 </html>
