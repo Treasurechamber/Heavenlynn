@@ -2841,22 +2841,19 @@ if (needsPreorder) {
   card.appendChild(preorderTag);
 }
 
-          // Content
-          const content = document.createElement('div');
-          content.className = 'item-content';
-          
-          const name = document.createElement('div');
-          name.className = 'item-name';
-          name.textContent = item.item_name;
-          
-          const desc = document.createElement('div');
-          desc.className = 'item-desc';
-          // Only show description if it's not the Add-ons category
-          if (category !== 'Add-ons') {
-          desc.textContent = item.description || 'A delicious treat made with the finest ingredients.';
-         } else {
-          desc.style.display = 'none'; // Hide description for Add-ons
-    }
+const desc = document.createElement('div');
+desc.className = 'item-desc';
+// Only show description if it's not the Add-ons category
+if (category !== 'Add-ons') {
+  if (category === 'Cookie Cakes') {
+    desc.innerHTML = (item.description || 'A delicious treat made with the finest ingredients.') + 
+      '<br><span style="font-style: italic; color: var(--primary-dark); margin-top: 0.5rem; display: block;">Starting from $22 • Decorations <strong>$2-$5 extra</strong></span>';
+  } else {
+    desc.textContent = item.description || 'A delicious treat made with the finest ingredients.';
+  }
+} else {
+  desc.style.display = 'none'; // Hide description for Add-ons
+}
           
           
          const footer = document.createElement('div');
@@ -3514,3 +3511,4 @@ setInterval(setBakeryMood, 3600000);
 </div>
 </body>
 </html>
+
