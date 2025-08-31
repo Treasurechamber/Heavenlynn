@@ -2858,12 +2858,14 @@ if (category !== 'Add-ons') {
     const isMiniCookie = item.item_name.toLowerCase().includes('mini');
     
     if (isMiniCookie) {
-      // Just show regular description for mini cookies
-      desc.textContent = item.description || 'A delicious treat made with the finest ingredients.';
-    } else {
-      // Show the $22 pricing for regular cookie cakes
+      // Show regular description + bold decorations text for mini cookies
       desc.innerHTML = (item.description || 'A delicious treat made with the finest ingredients.') + 
-        '<br><span style="font-style: italic; color: var(--primary-dark); margin-top: 0.5rem; display: block;">Starting from $22 • Decorations <strong>$2-$5 extra</strong></span>';
+        '<br><span style="font-style: italic; color: var(--primary-dark); margin-top: 0.5rem; display: block;">Decorations <strong>$2-$5 extra</strong></span>';
+    } else {
+      // Show the $22 pricing for regular cookie cakes with decorations on new line
+      desc.innerHTML = (item.description || 'A delicious treat made with the finest ingredients.') + 
+        '<br><span style="font-style: italic; color: var(--primary-dark); margin-top: 0.5rem; display: block;">Starting from $22</span>' +
+        '<br><span style="font-style: italic; color: var(--primary-dark); display: block;">Decorations <strong>$2-$5 extra</strong></span>';
     }
   } else {
     // Show regular description for all other categories except Add-ons
@@ -3529,6 +3531,7 @@ setInterval(setBakeryMood, 3600000);
 </div>
 </body>
 </html>
+
 
 
 
