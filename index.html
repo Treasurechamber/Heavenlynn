@@ -3792,7 +3792,11 @@ async function loadBoxItems() {
     if (error) throw error;
 
     // Filter out Lemon Cheesecake (it's a full cake, not for gift boxes)
-    const filteredData = data.filter(item => item.item_name !== 'Lemon Cheesecake');
+    // Filter out Lemon Cheesecake and any other full-sized cakes
+    const filteredData = data.filter(item => {
+      const itemName = item.item_name.toLowerCase().trim();
+      return !itemName.includes('lemon cheesecake') || item.price < 20;
+    });
 
     // Group by category
     const grouped = {};
@@ -4538,6 +4542,7 @@ setInterval(setBakeryMood, 3600000);
 </div>
 </body>
 </html>
+
 
 
 
