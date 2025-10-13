@@ -2532,16 +2532,201 @@ section#drinks .item-card:hover .item-image img {
 }
 
 @media (max-width: 768px) {
-  .box-display-area {
-    grid-template-columns: 1fr;
+  /* Make modal take full screen on mobile */
+  .box-modal {
+    padding: 10px;
   }
   
+  .box-content {
+    padding: 1rem;
+    max-height: 95vh;
+    overflow-y: auto;
+  }
+  
+  /* Compact header */
+  .box-header {
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+  }
+  
+  .box-header h2 {
+    font-size: 1.5rem;
+  }
+  
+  .box-header p {
+    font-size: 0.85rem;
+  }
+  
+  /* Compact box size selector */
+  .box-size-selector {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .size-option {
+    padding: 0.8rem 0.5rem;
+  }
+  
+  .size-emoji {
+    font-size: 1.5rem;
+    margin-bottom: 0.3rem;
+  }
+  
+  .size-name {
+    font-size: 0.9rem;
+  }
+  
+  .size-details {
+    font-size: 0.75rem;
+  }
+  
+  .size-price {
+    font-size: 0.85rem;
+    margin-top: 0.3rem;
+  }
+  
+  /* Single column layout but more compact */
+  .box-display-area {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  /* Smaller visual box */
+  .visual-box-container {
+    padding: 1rem;
+    min-height: 200px;
+  }
+  
+  .box-lid {
+    font-size: 0.8rem;
+    padding: 5px 15px;
+    top: -10px;
+  }
+  
+  .box-grid {
+    gap: 6px;
+  }
+  
+  .box-slot {
+    min-height: 60px;
+    padding: 0.3rem;
+  }
+  
+  .box-slot img {
+    width: 30px !important;
+    height: 30px !important;
+  }
+  
+  .box-slot-name {
+    font-size: 0.6rem;
+  }
+  
+  .box-slot-remove {
+    width: 20px;
+    height: 20px;
+    font-size: 0.7rem;
+    top: -6px;
+    right: -6px;
+  }
+  
+  /* Compact item selection area */
+  .item-selection-area {
+    padding: 1rem;
+    max-height: 250px;
+  }
+  
+  .selection-header {
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+  
+  .selection-header h3 {
+    font-size: 1.1rem;
+  }
+  
+  .selection-header p {
+    font-size: 0.85rem;
+  }
+  
+  /* Compact category tabs */
+  .category-tabs {
+    gap: 0.3rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .category-tab {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.75rem;
+    border-radius: 15px;
+  }
+  
+  /* Smaller selectable items */
+  .selectable-items {
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: 0.5rem;
+  }
+  
+  .selectable-item {
+    padding: 0.5rem 0.3rem;
+  }
+  
+  .selectable-item img {
+    width: 45px !important;
+    height: 45px !important;
+    margin-bottom: 0.3rem !important;
+  }
+  
+  .item-name {
+    font-size: 0.7rem;
+  }
+  
+  .item-price-tag {
+    font-size: 0.65rem;
+  }
+  
+  /* Compact summary */
+  .box-summary {
+    padding: 1rem;
+    margin-top: 1rem;
+  }
+  
+  .summary-row {
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .summary-row.total {
+    font-size: 1.1rem;
+    padding-top: 0.5rem;
+    margin-top: 0.5rem;
+  }
+  
+  /* Compact action buttons */
+  .box-actions {
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+  
+  .box-action-btn {
+    padding: 0.8rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* Extra small phones */
+@media (max-width: 380px) {
   .box-size-selector {
     grid-template-columns: 1fr;
   }
   
   .selectable-items {
-    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .box-content {
+    padding: 0.8rem;
   }
 }
   </style>
@@ -4346,6 +4531,7 @@ setInterval(setBakeryMood, 3600000);
 </div>
 </body>
 </html>
+
 
 
 
