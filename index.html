@@ -2673,23 +2673,23 @@ section#drinks .item-card:hover .item-image img {
 
     <!-- Box Size Selection -->
     <div class="box-size-selector" id="boxSizeSelector">
-      <div class="size-option" data-size="small" data-slots="4" data-price="15">
+      <div class="size-option" data-size="small" data-slots="4">
         <span class="size-emoji">📦</span>
         <div class="size-name">Small Box</div>
         <div class="size-details">4 items</div>
-        <div class="size-price">$15</div>
+        <div class="size-price">Free Box</div>
       </div>
-      <div class="size-option" data-size="medium" data-slots="6" data-price="22">
+      <div class="size-option" data-size="medium" data-slots="6">
         <span class="size-emoji">📦📦</span>
         <div class="size-name">Medium Box</div>
         <div class="size-details">6 items</div>
-        <div class="size-price">$22</div>
+        <div class="size-price">Free Box</div>
       </div>
-      <div class="size-option" data-size="large" data-slots="8" data-price="28">
+      <div class="size-option" data-size="large" data-slots="8">
         <span class="size-emoji">📦📦📦</span>
         <div class="size-name">Large Box</div>
         <div class="size-details">8 items</div>
-        <div class="size-price">$28</div>
+        <div class="size-price">Free Box</div>
       </div>
     </div>
 
@@ -3498,30 +3498,16 @@ footer.appendChild(addToCartBtn);
   }
 
   // Build Your Box Functionality
+// Build Your Box Functionality - IMPROVED VERSION
 let currentBox = {
   size: null,
   slots: 0,
-  price: 0,
-  items: []
-};
-
-const boxItemEmojis = {
-  'Cookies': '🍪',
-  'Rolls': '🥐',
-  'Slices': '🍰',
-  'Cakes': '🎂',
-  'Cookie Cakes': '🍪',
-  'Cups': '🥤',
-  'Cheesecakes': '🧁',
-  'Ice Cream': '🍦',
-  'Drinks': '☕',
-  'Add-ons': '✨'
+  items: [] // Now stores: { name, price, image, quantity }
 };
 
 function initializeBoxBuilder() {
   const boxBtn = document.getElementById('boxBuilderBtn');
   const boxModal = document.getElementById('boxModal');
-  const boxSizeSelector = document.getElementById('boxSizeSelector');
   const boxDisplayArea = document.getElementById('boxDisplayArea');
   const cancelBtn = document.getElementById('cancelBox');
   const addBoxToCartBtn = document.getElementById('addBoxToCart');
@@ -3555,7 +3541,6 @@ function initializeBoxBuilder() {
       
       currentBox.size = option.dataset.size;
       currentBox.slots = parseInt(option.dataset.slots);
-      currentBox.price = parseFloat(option.dataset.price);
       currentBox.items = [];
       
       setupBoxGrid();
@@ -3568,13 +3553,20 @@ function initializeBoxBuilder() {
 
   // Add box to cart
   addBoxToCartBtn.addEventListener('click', () => {
-    if (currentBox.items.length === currentBox.slots) {
+    const totalItems = currentBox.items.reduce((sum, item) => sum + item.quantity, 0);
+    
+    if (totalItems === currentBox.slots) {
       const boxName = `${currentBox.size.charAt(0).toUpperCase() + currentBox.size.slice(1)} Box`;
-      const itemsList = currentBox.items.map(item => item.name).join(', ');
+      const itemsList = currentBox.items.map(item => 
+        `${item.quantity}x ${item.name}`
+      ).join(', ');
+      const totalPrice = currentBox.items.reduce((sum, item) => 
+        sum + (item.price * item.quantity), 0
+      );
       
       addToCart({
         name: `${boxName} (${itemsList})`,
-        price: currentBox.price,
+        price: totalPrice,
         category: 'Gift Box'
       });
       
@@ -3602,10 +3594,11 @@ function setupBoxGrid() {
 
 async function loadBoxItems() {
   try {
+    // FIX 3: Removed 'Drinks' from categories
     const { data, error } = await supabase
       .from('menu_items')
       .select('*')
-      .in('category', ['Cookies', 'Rolls', 'Slices', 'Cups', 'Drinks']);
+      .in('category', ['Cookies', 'Rolls', 'Slices', 'Cups']);
 
     if (error) throw error;
 
@@ -3649,28 +3642,30 @@ function displayCategoryItems(items, category) {
     const itemDiv = document.createElement('div');
     itemDiv.className = 'selectable-item';
     
-    // Check if item is already in box
-    const isInBox = currentBox.items.some(boxItem => boxItem.name === item.item_name);
-    const boxFull = currentBox.items.length >= currentBox.slots;
+    // Check total items in box
+    const totalItems = currentBox.items.reduce((sum, boxItem) => sum + boxItem.quantity, 0);
+    const boxFull = totalItems >= currentBox.slots;
     
-    if (isInBox || (boxFull && !isInBox)) {
+    if (boxFull) {
       itemDiv.classList.add('disabled');
     }
     
-    const emoji = boxItemEmojis[category] || '🍪';
+    // FIX 4: Use real images instead of emojis
+    const imgUrl = item.image_url || '/api/placeholder/100/100';
     
     itemDiv.innerHTML = `
-      <span class="item-emoji">${emoji}</span>
+      <img src="${imgUrl}" alt="${item.item_name}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px; margin-bottom: 0.5rem;">
       <div class="item-name">${item.item_name}</div>
-      <div class="item-price-tag">Included</div>
+      <div class="item-price-tag">$${parseFloat(item.price).toFixed(2)}</div>
     `;
     
+    // FIX 2: Allow adding multiple of the same item
     itemDiv.addEventListener('click', () => {
       if (!itemDiv.classList.contains('disabled')) {
         addItemToBox({
           name: item.item_name,
-          emoji: emoji,
-          category: category
+          price: parseFloat(item.price),
+          image: imgUrl
         });
       }
     });
@@ -3682,12 +3677,25 @@ function displayCategoryItems(items, category) {
 }
 
 function addItemToBox(item) {
-  if (currentBox.items.length < currentBox.slots) {
-    currentBox.items.push(item);
+  const totalItems = currentBox.items.reduce((sum, boxItem) => sum + boxItem.quantity, 0);
+  
+  if (totalItems < currentBox.slots) {
+    // FIX 2: Check if item already exists, increment quantity
+    const existingItem = currentBox.items.find(boxItem => boxItem.name === item.name);
+    
+    if (existingItem) {
+      existingItem.quantity += 1;
+    } else {
+      currentBox.items.push({
+        ...item,
+        quantity: 1
+      });
+    }
+    
     updateBoxDisplay();
     updateBoxSummary();
     
-    // Refresh item list to show disabled states
+    // Refresh item list to show disabled state if box is full
     const activeTab = document.querySelector('.category-tab.active');
     if (activeTab) {
       activeTab.click();
@@ -3695,8 +3703,16 @@ function addItemToBox(item) {
   }
 }
 
-function removeItemFromBox(index) {
-  currentBox.items.splice(index, 1);
+function removeItemFromBox(itemName) {
+  const item = currentBox.items.find(boxItem => boxItem.name === itemName);
+  
+  if (item) {
+    item.quantity -= 1;
+    if (item.quantity <= 0) {
+      currentBox.items = currentBox.items.filter(boxItem => boxItem.name !== itemName);
+    }
+  }
+  
   updateBoxDisplay();
   updateBoxSummary();
   
@@ -3709,30 +3725,41 @@ function removeItemFromBox(index) {
 
 function updateBoxDisplay() {
   const slots = document.querySelectorAll('.box-slot');
+  let currentSlot = 0;
   
-  slots.forEach((slot, index) => {
-    if (currentBox.items[index]) {
-      slot.className = 'box-slot filled';
-      slot.innerHTML = `
-        <div class="box-slot-emoji">${currentBox.items[index].emoji}</div>
-        <div class="box-slot-name">${currentBox.items[index].name}</div>
-        <div class="box-slot-remove">×</div>
-      `;
-      
-      slot.querySelector('.box-slot-remove').addEventListener('click', (e) => {
-        e.stopPropagation();
-        removeItemFromBox(index);
-      });
-    } else {
-      slot.className = 'box-slot empty';
-      slot.innerHTML = '';
+  slots.forEach(slot => {
+    slot.className = 'box-slot empty';
+    slot.innerHTML = '';
+  });
+  
+  // Fill slots with items (considering quantities)
+  currentBox.items.forEach(item => {
+    for (let i = 0; i < item.quantity; i++) {
+      if (currentSlot < currentBox.slots) {
+        const slot = slots[currentSlot];
+        slot.className = 'box-slot filled';
+        slot.innerHTML = `
+          <img src="${item.image}" alt="${item.name}" style="width: 40px; height: 40px; object-fit: cover; border-radius: 6px; margin-bottom: 0.2rem;">
+          <div class="box-slot-name">${item.name}</div>
+          <div class="box-slot-remove">×</div>
+        `;
+        
+        slot.querySelector('.box-slot-remove').addEventListener('click', (e) => {
+          e.stopPropagation();
+          removeItemFromBox(item.name);
+        });
+        
+        currentSlot++;
+      }
     }
   });
 }
 
 function updateSlotsRemaining() {
-  const remaining = currentBox.slots - currentBox.items.length;
+  const totalItems = currentBox.items.reduce((sum, item) => sum + item.quantity, 0);
+  const remaining = currentBox.slots - totalItems;
   const slotsText = document.getElementById('slotsRemaining');
+  
   slotsText.textContent = remaining === 0 
     ? '✅ Box is full!' 
     : `${remaining} slot${remaining !== 1 ? 's' : ''} remaining`;
@@ -3742,15 +3769,20 @@ function updateBoxSummary() {
   const boxSizeName = currentBox.size ? 
     currentBox.size.charAt(0).toUpperCase() + currentBox.size.slice(1) : '-';
   
+  const totalItems = currentBox.items.reduce((sum, item) => sum + item.quantity, 0);
+  
+  // FIX 1: Calculate total price from items
+  const totalPrice = currentBox.items.reduce((sum, item) => 
+    sum + (item.price * item.quantity), 0
+  );
+  
   document.getElementById('summaryBoxSize').textContent = boxSizeName;
-  document.getElementById('summaryItemCount').textContent = 
-    `${currentBox.items.length}/${currentBox.slots}`;
-  document.getElementById('summaryTotal').textContent = 
-    `$${currentBox.price.toFixed(2)}`;
+  document.getElementById('summaryItemCount').textContent = `${totalItems}/${currentBox.slots}`;
+  document.getElementById('summaryTotal').textContent = `$${totalPrice.toFixed(2)}`;
   
   // Enable/disable add to cart button
   const addBtn = document.getElementById('addBoxToCart');
-  addBtn.disabled = currentBox.items.length !== currentBox.slots;
+  addBtn.disabled = totalItems !== currentBox.slots;
   
   updateSlotsRemaining();
 }
@@ -3759,7 +3791,6 @@ function resetBoxBuilder() {
   currentBox = {
     size: null,
     slots: 0,
-    price: 0,
     items: []
   };
   
@@ -4315,6 +4346,7 @@ setInterval(setBakeryMood, 3600000);
 </div>
 </body>
 </html>
+
 
 
 
