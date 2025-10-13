@@ -3784,7 +3784,6 @@ function setupBoxGrid() {
 
 async function loadBoxItems() {
   try {
-    // FIX 3: Removed 'Drinks' from categories
     const { data, error } = await supabase
       .from('menu_items')
       .select('*')
@@ -3792,9 +3791,12 @@ async function loadBoxItems() {
 
     if (error) throw error;
 
+    // Filter out Lemon Cheesecake (it's a full cake, not for gift boxes)
+    const filteredData = data.filter(item => item.item_name !== 'Lemon Cheesecake');
+
     // Group by category
     const grouped = {};
-    data.forEach(item => {
+    filteredData.forEach(item => {
       if (!grouped[item.category]) grouped[item.category] = [];
       grouped[item.category].push(item);
     });
@@ -4536,6 +4538,7 @@ setInterval(setBakeryMood, 3600000);
 </div>
 </body>
 </html>
+
 
 
 
