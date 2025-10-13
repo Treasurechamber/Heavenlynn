@@ -2107,6 +2107,443 @@ section#drinks .item-card:hover .item-image img {
         grid-template-columns: repeat(4, 1fr);
       }
     }
+    /* Build Your Box Styles */
+.box-builder-btn {
+  position: fixed;
+  right: 20px;
+  bottom: 220px;
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #ff9a56, #ff6b6b);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  box-shadow: var(--shadow-md);
+  cursor: pointer;
+  z-index: 20;
+  transition: var(--transition);
+  border: 3px solid white;
+  animation: box-wiggle 3s infinite;
+}
+
+.box-builder-btn:hover {
+  transform: translateY(-5px) scale(1.1);
+  box-shadow: var(--shadow-lg);
+}
+
+@keyframes box-wiggle {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-5deg); }
+  50% { transform: rotate(0deg); }
+  75% { transform: rotate(5deg); }
+}
+
+.box-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 1000;
+  display: none;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+.box-modal.show {
+  display: block;
+  animation: fade-in 0.3s ease;
+}
+
+.box-content {
+  background: white;
+  margin: 0 auto;
+  padding: 2rem;
+  border-radius: var(--radius-lg);
+  max-width: 900px;
+  width: 100%;
+  box-shadow: var(--shadow-lg);
+  animation: slide-up 0.4s ease;
+}
+
+.box-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  border-bottom: 3px dashed var(--primary-light);
+  padding-bottom: 1.5rem;
+}
+
+.box-header h2 {
+  color: var(--primary-dark);
+  font-size: 2.2rem;
+  margin-bottom: 0.5rem;
+}
+
+.box-header p {
+  color: var(--text-light);
+  font-size: 1rem;
+}
+
+.box-size-selector {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.size-option {
+  background: var(--primary-light);
+  border: 3px solid transparent;
+  padding: 1.5rem 1rem;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: var(--transition);
+  text-align: center;
+  position: relative;
+}
+
+.size-option:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-md);
+}
+
+.size-option.selected {
+  border-color: var(--primary);
+  background: white;
+  box-shadow: var(--shadow-md);
+}
+
+.size-option.selected::after {
+  content: "✓";
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: var(--primary);
+  color: white;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.size-emoji {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.size-name {
+  font-weight: 600;
+  color: var(--primary-dark);
+  font-size: 1.1rem;
+  margin-bottom: 0.3rem;
+}
+
+.size-details {
+  font-size: 0.85rem;
+  color: var(--text-light);
+}
+
+.size-price {
+  font-weight: bold;
+  color: var(--primary);
+  font-size: 1rem;
+  margin-top: 0.5rem;
+}
+
+.box-display-area {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.visual-box-container {
+  background: linear-gradient(135deg, #ffeaa7, #fdcb6e);
+  border: 4px solid var(--primary);
+  border-radius: var(--radius-md);
+  padding: 2rem;
+  position: relative;
+  min-height: 300px;
+  box-shadow: inset 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.box-lid {
+  position: absolute;
+  top: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--primary);
+  color: white;
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-weight: 600;
+  box-shadow: var(--shadow-sm);
+  font-size: 0.9rem;
+}
+
+.box-grid {
+  display: grid;
+  gap: 10px;
+  height: 100%;
+}
+
+.box-grid.small { grid-template-columns: repeat(2, 1fr); }
+.box-grid.medium { grid-template-columns: repeat(3, 1fr); }
+.box-grid.large { grid-template-columns: repeat(4, 1fr); }
+
+.box-slot {
+  background: rgba(255, 255, 255, 0.6);
+  border: 2px dashed var(--primary);
+  border-radius: var(--radius-sm);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  min-height: 80px;
+  position: relative;
+  transition: var(--transition);
+}
+
+.box-slot.filled {
+  background: white;
+  border-style: solid;
+  border-color: var(--accent);
+  box-shadow: var(--shadow-sm);
+}
+
+.box-slot-emoji {
+  font-size: 2rem;
+  margin-bottom: 0.3rem;
+}
+
+.box-slot-name {
+  font-size: 0.7rem;
+  text-align: center;
+  font-weight: 500;
+  color: var(--primary-dark);
+  line-height: 1.2;
+}
+
+.box-slot-remove {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: #ff4444;
+  color: white;
+  border: 2px solid white;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: bold;
+  opacity: 0;
+  transition: var(--transition);
+}
+
+.box-slot.filled:hover .box-slot-remove {
+  opacity: 1;
+}
+
+.box-slot.empty::before {
+  content: "+";
+  font-size: 2rem;
+  color: var(--primary);
+  opacity: 0.4;
+}
+
+.item-selection-area {
+  background: var(--primary-light);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.selection-header {
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid white;
+}
+
+.selection-header h3 {
+  color: var(--primary-dark);
+  font-size: 1.3rem;
+  margin-bottom: 0.5rem;
+}
+
+.category-tabs {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.category-tab {
+  background: white;
+  border: 2px solid var(--primary);
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--primary-dark);
+  transition: var(--transition);
+}
+
+.category-tab:hover {
+  background: var(--primary);
+  color: white;
+}
+
+.category-tab.active {
+  background: var(--primary);
+  color: white;
+}
+
+.selectable-items {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 0.8rem;
+}
+
+.selectable-item {
+  background: white;
+  border: 2px solid transparent;
+  border-radius: var(--radius-sm);
+  padding: 1rem 0.5rem;
+  cursor: pointer;
+  transition: var(--transition);
+  text-align: center;
+  position: relative;
+}
+
+.selectable-item:hover {
+  border-color: var(--accent);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-sm);
+}
+
+.selectable-item.disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.selectable-item.disabled:hover {
+  transform: none;
+  border-color: transparent;
+}
+
+.item-emoji {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.item-name {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--primary-dark);
+  line-height: 1.2;
+  margin-bottom: 0.3rem;
+}
+
+.item-price-tag {
+  font-size: 0.75rem;
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.box-summary {
+  background: var(--primary-light);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  margin-top: 2rem;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.8rem;
+  font-size: 1rem;
+}
+
+.summary-row.total {
+  border-top: 2px dashed var(--primary);
+  padding-top: 1rem;
+  margin-top: 1rem;
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: var(--primary-dark);
+}
+
+.box-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.box-action-btn {
+  flex: 1;
+  padding: 1rem;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.add-to-cart-box-btn {
+  background: var(--primary);
+  color: white;
+}
+
+.add-to-cart-box-btn:hover {
+  background: var(--primary-dark);
+}
+
+.add-to-cart-box-btn:disabled {
+  background: var(--text-light);
+  cursor: not-allowed;
+}
+
+.cancel-box-btn {
+  background: white;
+  color: var(--primary);
+  border: 2px solid var(--primary);
+}
+
+.cancel-box-btn:hover {
+  background: var(--primary-light);
+}
+
+@media (max-width: 768px) {
+  .box-display-area {
+    grid-template-columns: 1fr;
+  }
+  
+  .box-size-selector {
+    grid-template-columns: 1fr;
+  }
+  
+  .selectable-items {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  }
+}
   </style>
 </head>
 <body>
@@ -2221,7 +2658,83 @@ section#drinks .item-card:hover .item-image img {
     <p class="footer-text">Tyre, Lebanon • 81955816</p>
   </div>
 </footer>
+<!-- Build Your Box Button -->
+<button class="box-builder-btn" id="boxBuilderBtn" aria-label="Build Your Box">
+  🎁
+</button>
 
+<!-- Build Your Box Modal -->
+<div class="box-modal" id="boxModal">
+  <div class="box-content">
+    <div class="box-header">
+      <h2>🎁 Build Your Perfect Box</h2>
+      <p>Choose a box size and fill it with your favorite treats!</p>
+    </div>
+
+    <!-- Box Size Selection -->
+    <div class="box-size-selector" id="boxSizeSelector">
+      <div class="size-option" data-size="small" data-slots="4" data-price="15">
+        <span class="size-emoji">📦</span>
+        <div class="size-name">Small Box</div>
+        <div class="size-details">4 items</div>
+        <div class="size-price">$15</div>
+      </div>
+      <div class="size-option" data-size="medium" data-slots="6" data-price="22">
+        <span class="size-emoji">📦📦</span>
+        <div class="size-name">Medium Box</div>
+        <div class="size-details">6 items</div>
+        <div class="size-price">$22</div>
+      </div>
+      <div class="size-option" data-size="large" data-slots="8" data-price="28">
+        <span class="size-emoji">📦📦📦</span>
+        <div class="size-name">Large Box</div>
+        <div class="size-details">8 items</div>
+        <div class="size-price">$28</div>
+      </div>
+    </div>
+
+    <!-- Box Display Area -->
+    <div class="box-display-area" id="boxDisplayArea" style="display: none;">
+      <div class="visual-box-container">
+        <div class="box-lid">Your Heavenlynn Box</div>
+        <div class="box-grid" id="boxGrid"></div>
+      </div>
+
+      <div class="item-selection-area">
+        <div class="selection-header">
+          <h3>Choose Your Treats</h3>
+          <p id="slotsRemaining">Select items to fill your box</p>
+        </div>
+        <div class="category-tabs" id="categoryTabs"></div>
+        <div class="selectable-items" id="selectableItems"></div>
+      </div>
+    </div>
+
+    <!-- Box Summary -->
+    <div class="box-summary" id="boxSummary" style="display: none;">
+      <div class="summary-row">
+        <span>Box Size:</span>
+        <span id="summaryBoxSize">-</span>
+      </div>
+      <div class="summary-row">
+        <span>Items Selected:</span>
+        <span id="summaryItemCount">0</span>
+      </div>
+      <div class="summary-row total">
+        <span>Total:</span>
+        <span id="summaryTotal">$0.00</span>
+      </div>
+      <div class="box-actions">
+        <button class="box-action-btn add-to-cart-box-btn" id="addBoxToCart" disabled>
+          Add Box to Cart
+        </button>
+        <button class="box-action-btn cancel-box-btn" id="cancelBox">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
 <a href="https://wa.me/96181955816" class="whatsapp-cookie-btn" target="_blank" aria-label="Contact us on WhatsApp">
   <i class="fab fa-whatsapp"></i>
 </a>
@@ -2984,6 +3497,276 @@ footer.appendChild(addToCartBtn);
     }
   }
 
+  // Build Your Box Functionality
+let currentBox = {
+  size: null,
+  slots: 0,
+  price: 0,
+  items: []
+};
+
+const boxItemEmojis = {
+  'Cookies': '🍪',
+  'Rolls': '🥐',
+  'Slices': '🍰',
+  'Cakes': '🎂',
+  'Cookie Cakes': '🍪',
+  'Cups': '🥤',
+  'Cheesecakes': '🧁',
+  'Ice Cream': '🍦',
+  'Drinks': '☕',
+  'Add-ons': '✨'
+};
+
+function initializeBoxBuilder() {
+  const boxBtn = document.getElementById('boxBuilderBtn');
+  const boxModal = document.getElementById('boxModal');
+  const boxSizeSelector = document.getElementById('boxSizeSelector');
+  const boxDisplayArea = document.getElementById('boxDisplayArea');
+  const cancelBtn = document.getElementById('cancelBox');
+  const addBoxToCartBtn = document.getElementById('addBoxToCart');
+
+  // Open box builder
+  boxBtn.addEventListener('click', () => {
+    boxModal.classList.add('show');
+    resetBoxBuilder();
+  });
+
+  // Close box builder
+  cancelBtn.addEventListener('click', () => {
+    boxModal.classList.remove('show');
+    resetBoxBuilder();
+  });
+
+  // Close on outside click
+  boxModal.addEventListener('click', (e) => {
+    if (e.target === boxModal) {
+      boxModal.classList.remove('show');
+      resetBoxBuilder();
+    }
+  });
+
+  // Box size selection
+  const sizeOptions = document.querySelectorAll('.size-option');
+  sizeOptions.forEach(option => {
+    option.addEventListener('click', () => {
+      sizeOptions.forEach(opt => opt.classList.remove('selected'));
+      option.classList.add('selected');
+      
+      currentBox.size = option.dataset.size;
+      currentBox.slots = parseInt(option.dataset.slots);
+      currentBox.price = parseFloat(option.dataset.price);
+      currentBox.items = [];
+      
+      setupBoxGrid();
+      loadBoxItems();
+      boxDisplayArea.style.display = 'grid';
+      document.getElementById('boxSummary').style.display = 'block';
+      updateBoxSummary();
+    });
+  });
+
+  // Add box to cart
+  addBoxToCartBtn.addEventListener('click', () => {
+    if (currentBox.items.length === currentBox.slots) {
+      const boxName = `${currentBox.size.charAt(0).toUpperCase() + currentBox.size.slice(1)} Box`;
+      const itemsList = currentBox.items.map(item => item.name).join(', ');
+      
+      addToCart({
+        name: `${boxName} (${itemsList})`,
+        price: currentBox.price,
+        category: 'Gift Box'
+      });
+      
+      boxModal.classList.remove('show');
+      resetBoxBuilder();
+      
+      // Show success message
+      alert('🎁 Your custom box has been added to cart!');
+    }
+  });
+}
+
+function setupBoxGrid() {
+  const boxGrid = document.getElementById('boxGrid');
+  boxGrid.innerHTML = '';
+  boxGrid.className = `box-grid ${currentBox.size}`;
+  
+  for (let i = 0; i < currentBox.slots; i++) {
+    const slot = document.createElement('div');
+    slot.className = 'box-slot empty';
+    slot.dataset.slotIndex = i;
+    boxGrid.appendChild(slot);
+  }
+}
+
+async function loadBoxItems() {
+  try {
+    const { data, error } = await supabase
+      .from('menu_items')
+      .select('*')
+      .in('category', ['Cookies', 'Rolls', 'Slices', 'Cups', 'Drinks']);
+
+    if (error) throw error;
+
+    // Group by category
+    const grouped = {};
+    data.forEach(item => {
+      if (!grouped[item.category]) grouped[item.category] = [];
+      grouped[item.category].push(item);
+    });
+
+    // Create category tabs
+    const categoryTabs = document.getElementById('categoryTabs');
+    categoryTabs.innerHTML = '';
+    
+    Object.keys(grouped).forEach((category, index) => {
+      const tab = document.createElement('div');
+      tab.className = `category-tab ${index === 0 ? 'active' : ''}`;
+      tab.textContent = category;
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        displayCategoryItems(grouped[category], category);
+      });
+      categoryTabs.appendChild(tab);
+    });
+
+    // Display first category
+    const firstCategory = Object.keys(grouped)[0];
+    displayCategoryItems(grouped[firstCategory], firstCategory);
+
+  } catch (error) {
+    console.error('Error loading box items:', error);
+  }
+}
+
+function displayCategoryItems(items, category) {
+  const selectableItems = document.getElementById('selectableItems');
+  selectableItems.innerHTML = '';
+  
+  items.forEach(item => {
+    const itemDiv = document.createElement('div');
+    itemDiv.className = 'selectable-item';
+    
+    // Check if item is already in box
+    const isInBox = currentBox.items.some(boxItem => boxItem.name === item.item_name);
+    const boxFull = currentBox.items.length >= currentBox.slots;
+    
+    if (isInBox || (boxFull && !isInBox)) {
+      itemDiv.classList.add('disabled');
+    }
+    
+    const emoji = boxItemEmojis[category] || '🍪';
+    
+    itemDiv.innerHTML = `
+      <span class="item-emoji">${emoji}</span>
+      <div class="item-name">${item.item_name}</div>
+      <div class="item-price-tag">Included</div>
+    `;
+    
+    itemDiv.addEventListener('click', () => {
+      if (!itemDiv.classList.contains('disabled')) {
+        addItemToBox({
+          name: item.item_name,
+          emoji: emoji,
+          category: category
+        });
+      }
+    });
+    
+    selectableItems.appendChild(itemDiv);
+  });
+  
+  updateSlotsRemaining();
+}
+
+function addItemToBox(item) {
+  if (currentBox.items.length < currentBox.slots) {
+    currentBox.items.push(item);
+    updateBoxDisplay();
+    updateBoxSummary();
+    
+    // Refresh item list to show disabled states
+    const activeTab = document.querySelector('.category-tab.active');
+    if (activeTab) {
+      activeTab.click();
+    }
+  }
+}
+
+function removeItemFromBox(index) {
+  currentBox.items.splice(index, 1);
+  updateBoxDisplay();
+  updateBoxSummary();
+  
+  // Refresh item list
+  const activeTab = document.querySelector('.category-tab.active');
+  if (activeTab) {
+    activeTab.click();
+  }
+}
+
+function updateBoxDisplay() {
+  const slots = document.querySelectorAll('.box-slot');
+  
+  slots.forEach((slot, index) => {
+    if (currentBox.items[index]) {
+      slot.className = 'box-slot filled';
+      slot.innerHTML = `
+        <div class="box-slot-emoji">${currentBox.items[index].emoji}</div>
+        <div class="box-slot-name">${currentBox.items[index].name}</div>
+        <div class="box-slot-remove">×</div>
+      `;
+      
+      slot.querySelector('.box-slot-remove').addEventListener('click', (e) => {
+        e.stopPropagation();
+        removeItemFromBox(index);
+      });
+    } else {
+      slot.className = 'box-slot empty';
+      slot.innerHTML = '';
+    }
+  });
+}
+
+function updateSlotsRemaining() {
+  const remaining = currentBox.slots - currentBox.items.length;
+  const slotsText = document.getElementById('slotsRemaining');
+  slotsText.textContent = remaining === 0 
+    ? '✅ Box is full!' 
+    : `${remaining} slot${remaining !== 1 ? 's' : ''} remaining`;
+}
+
+function updateBoxSummary() {
+  const boxSizeName = currentBox.size ? 
+    currentBox.size.charAt(0).toUpperCase() + currentBox.size.slice(1) : '-';
+  
+  document.getElementById('summaryBoxSize').textContent = boxSizeName;
+  document.getElementById('summaryItemCount').textContent = 
+    `${currentBox.items.length}/${currentBox.slots}`;
+  document.getElementById('summaryTotal').textContent = 
+    `$${currentBox.price.toFixed(2)}`;
+  
+  // Enable/disable add to cart button
+  const addBtn = document.getElementById('addBoxToCart');
+  addBtn.disabled = currentBox.items.length !== currentBox.slots;
+  
+  updateSlotsRemaining();
+}
+
+function resetBoxBuilder() {
+  currentBox = {
+    size: null,
+    slots: 0,
+    price: 0,
+    items: []
+  };
+  
+  document.querySelectorAll('.size-option').forEach(opt => opt.classList.remove('selected'));
+  document.getElementById('boxDisplayArea').style.display = 'none';
+  document.getElementById('boxSummary').style.display = 'none';
+}
   // Shopping Cart Functionality
 let cart = [];
 
@@ -3179,6 +3962,7 @@ function initializeCart() {
      loadFeaturedItems();
      setupCategoryScrollButton();
     initializeCart();
+    initializeBoxBuilder();
     // Slideshow
    const slideImages = [
   "images/lemon-cheesec.jpg",
@@ -3531,6 +4315,7 @@ setInterval(setBakeryMood, 3600000);
 </div>
 </body>
 </html>
+
 
 
 
