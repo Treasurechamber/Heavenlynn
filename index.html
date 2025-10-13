@@ -3788,7 +3788,7 @@ async function loadBoxItems() {
     const { data, error } = await supabase
       .from('menu_items')
       .select('*')
-      .in('category', ['Cookies', 'Rolls', 'Slices', 'Cups']);
+      .in('category', ['Cookies', 'Rolls', 'Slices', 'Cups', 'Cheesecakes']);
 
     if (error) throw error;
 
@@ -4536,6 +4536,7 @@ setInterval(setBakeryMood, 3600000);
 </div>
 </body>
 </html>
+
 
 
 
