@@ -569,16 +569,38 @@
 
     let allItems = [];
 
-    // Check authentication
+    // Check authentication - FIXED TO PREVENT LOOPS
     async function checkAuth() {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        window.location.href = 'admin.html';
-        return;
+      try {
+        const { data: { session }, error } = await supabase.auth.getSession();
+        
+        if (error) {
+          console.error('Auth error:', error);
+          // Don't redirect on error, just log it
+          document.getElementById('adminEmail').textContent = 'Guest';
+          return;
+        }
+        
+        if (!session) {
+          console.log('No session found, redirecting to login...');
+          // Add a delay to prevent rapid redirects
+          setTimeout(() => {
+            window.location.replace('admin.html');
+          }, 100);
+          return;
+        }
+        
+        // Session exists
+        document.getElementById('adminEmail').textContent = session.user.email;
+        console.log('Authenticated as:', session.user.email);
+        
+      } catch (error) {
+        console.error('Auth check failed:', error);
+        document.getElementById('adminEmail').textContent = 'Error';
       }
-      document.getElementById('adminEmail').textContent = session.user.email;
     }
 
+    // Only check auth once
     checkAuth();
 
     // Logout - FIXED VERSION
@@ -594,26 +616,21 @@
         const { error } = await supabase.auth.signOut();
         
         if (error) {
-          throw error;
+          console.error('Signout error:', error);
         }
         
         // Clear local storage
         localStorage.clear();
         sessionStorage.clear();
         
-        // Redirect
-        window.location.href = 'admin.html';
+        // Force redirect with replace (can't go back)
+        window.location.replace('admin.html');
         
       } catch (error) {
         console.error('Logout error:', error);
-        btn.disabled = false;
-        btn.innerHTML = '<i class="fas fa-sign-out-alt"></i> Logout';
-        alert('Logout failed. Redirecting to login...');
         
         // Force redirect anyway
-        setTimeout(() => {
-          window.location.href = 'admin.html';
-        }, 1000);
+        window.location.replace('admin.html');
       }
     });
 
