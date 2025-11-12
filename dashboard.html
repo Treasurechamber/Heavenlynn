@@ -327,6 +327,12 @@
       min-width: 200px;
     }
 
+    .optional-label {
+      color: #6b6b6b;
+      font-size: 0.85rem;
+      font-weight: normal;
+    }
+
     @media (max-width: 768px) {
       .header {
         flex-direction: column;
@@ -416,23 +422,24 @@
         </div>
 
         <div class="form-group">
-          <label for="description">Description</label>
+          <label for="description">Description <span class="optional-label">(optional)</span></label>
           <textarea id="description"></textarea>
         </div>
 
         <div class="form-group">
-          <label>Item Image</label>
+          <label>Item Image <span class="optional-label">(optional - leave blank for emoji)</span></label>
           <div class="image-upload" id="imageUpload">
             <i class="fas fa-cloud-upload-alt" style="font-size: 3rem; color: #8a4fff;"></i>
             <p>Click to upload image or paste image URL below</p>
+            <p style="font-size: 0.85rem; color: #6b6b6b; margin-top: 0.5rem;">Leave empty to use emoji placeholder 🍪</p>
             <input type="file" id="imageFile" accept="image/*">
           </div>
           <img id="imagePreview" class="image-preview" alt="Preview">
         </div>
 
         <div class="form-group">
-          <label for="imageUrl">Or paste image URL</label>
-          <input type="url" id="imageUrl" placeholder="https://example.com/image.jpg">
+          <label for="imageUrl">Or paste image URL <span class="optional-label">(optional)</span></label>
+          <input type="url" id="imageUrl" placeholder="https://example.com/image.jpg or images/cookie.jpg">
         </div>
 
         <button type="submit" class="btn btn-primary" style="width: 100%;">
@@ -530,12 +537,12 @@
         </div>
 
         <div class="form-group">
-          <label for="editDescription">Description</label>
+          <label for="editDescription">Description <span class="optional-label">(optional)</span></label>
           <textarea id="editDescription"></textarea>
         </div>
 
         <div class="form-group">
-          <label for="editImageUrl">Image URL</label>
+          <label for="editImageUrl">Image URL <span class="optional-label">(optional)</span></label>
           <input type="url" id="editImageUrl">
           <img id="editImagePreview" class="image-preview" alt="Preview">
         </div>
@@ -625,13 +632,8 @@
       const description = document.getElementById('description').value;
       let finalImageUrl = document.getElementById('imageUrl').value;
 
-      // If file is uploaded, you would need to upload to Supabase Storage
-      // For now, we'll use the URL if provided
-      if (!finalImageUrl && imageFile.files[0]) {
-        // For this example, we'll need the user to provide URL
-        // In production, implement Supabase Storage upload
-        showMessage('addMessage', 'Please provide an image URL for now', 'error');
-        return;
+      if (!finalImageUrl) {
+        finalImageUrl = null;
       }
 
       try {
@@ -642,21 +644,21 @@
               item_name: itemName,
               category: category,
               price: price,
-              description: description,
+              description: description || null,
               image_url: finalImageUrl
             }
           ]);
 
         if (error) throw error;
 
-        showMessage('addMessage', 'Item added successfully!', 'success');
+        showMessage('addMessage', '✅ Item added successfully!', 'success');
         document.getElementById('addItemForm').reset();
         imagePreview.classList.remove('show');
         loadItems();
         updateStats();
 
       } catch (error) {
-        showMessage('addMessage', `Error: ${error.message}`, 'error');
+        showMessage('addMessage', `❌ Error: ${error.message}`, 'error');
       }
     });
 
@@ -682,7 +684,7 @@
       }
     }
 
-    // Display items
+    // Display items - FIXED WITH EVENT LISTENERS
     function displayItems(items) {
       const tbody = document.getElementById('itemsTable');
       
@@ -691,34 +693,75 @@
         return;
       }
 
-      tbody.innerHTML = items.map(item => `
-        <tr>
-          <td>
-            ${item.image_url ? `<img src="${item.image_url}" class="item-image-thumb" alt="${item.item_name}">` : '📷'}
-          </td>
-          <td><strong>${item.item_name}</strong></td>
-          <td><span style="background: #e4d7ff; padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.85rem;">${item.category}</span></td>
-          <td><strong>$${parseFloat(item.price).toFixed(2)}</strong></td>
-          <td style="max-width: 300px;">${item.description || '-'}</td>
-          <td>
-            <div class="action-btns">
-              <button class="btn-icon btn-edit" onclick="editItem(${item.id})">
-                <i class="fas fa-edit"></i>
-              </button>
-              <button class="btn-icon btn-delete" onclick="deleteItem(${item.id}, '${item.item_name}')">
-                <i class="fas fa-trash"></i>
-              </button>
-            </div>
-          </td>
-        </tr>
-      `).join('');
+      tbody.innerHTML = items.map(item => {
+        // Escape HTML to prevent XSS
+        const escapedName = escapeHtml(item.item_name);
+        const escapedDesc = escapeHtml(item.description || '-');
+        
+        return `
+          <tr>
+            <td>
+              ${item.image_url ? `<img src="${item.image_url}" class="item-image-thumb" alt="${escapedName}">` : '<div style="font-size: 2rem;">🍪</div>'}
+            </td>
+            <td><strong>${escapedName}</strong></td>
+            <td><span style="background: #e4d7ff; padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.85rem;">${item.category}</span></td>
+            <td><strong>$${parseFloat(item.price).toFixed(2)}</strong></td>
+            <td style="max-width: 300px;">${escapedDesc}</td>
+            <td>
+              <div class="action-btns">
+                <button class="btn-icon btn-edit" data-action="edit" data-id="${item.id}">
+                  <i class="fas fa-edit"></i>
+                </button>
+                <button class="btn-icon btn-delete" data-action="delete" data-id="${item.id}" data-name="${escapedName}">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      // Add event listeners to all buttons - THIS FIXES THE ISSUE!
+      attachActionButtons();
+    }
+
+    // Escape HTML to prevent XSS
+    function escapeHtml(text) {
+      const map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+      };
+      return text.replace(/[&<>"']/g, m => map[m]);
+    }
+
+    // Attach event listeners to action buttons - NEW FUNCTION!
+    function attachActionButtons() {
+      // Edit buttons
+      document.querySelectorAll('[data-action="edit"]').forEach(button => {
+        button.addEventListener('click', function() {
+          const itemId = parseInt(this.dataset.id);
+          editItem(itemId);
+        });
+      });
+
+      // Delete buttons
+      document.querySelectorAll('[data-action="delete"]').forEach(button => {
+        button.addEventListener('click', function() {
+          const itemId = parseInt(this.dataset.id);
+          const itemName = this.dataset.name;
+          deleteItem(itemId, itemName);
+        });
+      });
     }
 
     // Update stats
     function updateStats() {
       const totalItems = allItems.length;
       const categories = [...new Set(allItems.map(item => item.category))].length;
-      const avgPrice = allItems.reduce((sum, item) => sum + parseFloat(item.price), 0) / totalItems;
+      const avgPrice = totalItems > 0 ? allItems.reduce((sum, item) => sum + parseFloat(item.price), 0) / totalItems : 0;
 
       document.getElementById('totalItems').textContent = totalItems;
       document.getElementById('totalCategories').textContent = categories;
@@ -750,7 +793,7 @@
     }
 
     // Edit item
-    window.editItem = async function(id) {
+    function editItem(id) {
       const item = allItems.find(i => i.id === id);
       if (!item) return;
 
@@ -764,10 +807,12 @@
       if (item.image_url) {
         document.getElementById('editImagePreview').src = item.image_url;
         document.getElementById('editImagePreview').classList.add('show');
+      } else {
+        document.getElementById('editImagePreview').classList.remove('show');
       }
 
       document.getElementById('editModal').classList.add('show');
-    };
+    }
 
     // Close edit modal
     document.getElementById('closeEditModal').addEventListener('click', () => {
@@ -783,7 +828,11 @@
       const category = document.getElementById('editCategory').value;
       const price = parseFloat(document.getElementById('editPrice').value);
       const description = document.getElementById('editDescription').value;
-      const imageUrl = document.getElementById('editImageUrl').value;
+      let imageUrl = document.getElementById('editImageUrl').value;
+
+      if (!imageUrl) {
+        imageUrl = null;
+      }
 
       try {
         const { error } = await supabase
@@ -792,43 +841,41 @@
             item_name: itemName,
             category: category,
             price: price,
-            description: description,
+            description: description || null,
             image_url: imageUrl
           })
           .eq('id', id);
 
         if (error) throw error;
 
-        showMessage('editMessage', 'Item updated successfully!', 'success');
+        showMessage('editMessage', '✅ Item updated successfully!', 'success');
         setTimeout(() => {
           document.getElementById('editModal').classList.remove('show');
           loadItems();
         }, 1500);
 
       } catch (error) {
-        showMessage('editMessage', `Error: ${error.message}`, 'error');
+        showMessage('editMessage', `❌ Error: ${error.message}`, 'error');
       }
     });
 
     // Delete item
-    window.deleteItem = async function(id, name) {
+    function deleteItem(id, name) {
       if (!confirm(`Are you sure you want to delete "${name}"?`)) return;
 
-      try {
-        const { error } = await supabase
-          .from('menu_items')
-          .delete()
-          .eq('id', id);
-
-        if (error) throw error;
-
-        alert('Item deleted successfully!');
-        loadItems();
-
-      } catch (error) {
-        alert(`Error: ${error.message}`);
-      }
-    };
+      supabase
+        .from('menu_items')
+        .delete()
+        .eq('id', id)
+        .then(({ error }) => {
+          if (error) {
+            alert(`❌ Error: ${error.message}`);
+          } else {
+            alert('✅ Item deleted successfully!');
+            loadItems();
+          }
+        });
+    }
 
     // Refresh button
     document.getElementById('refreshBtn').addEventListener('click', loadItems);
