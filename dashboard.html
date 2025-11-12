@@ -684,7 +684,7 @@
       }
     }
 
-    // Display items - FIXED WITH EVENT LISTENERS
+    // Display items - FIXED FOR UUID
     function displayItems(items) {
       const tbody = document.getElementById('itemsTable');
       
@@ -694,7 +694,6 @@
       }
 
       tbody.innerHTML = items.map(item => {
-        // Escape HTML to prevent XSS
         const escapedName = escapeHtml(item.item_name);
         const escapedDesc = escapeHtml(item.description || '-');
         
@@ -721,11 +720,10 @@
         `;
       }).join('');
 
-      // Add event listeners to all buttons - THIS FIXES THE ISSUE!
       attachActionButtons();
     }
 
-    // Escape HTML to prevent XSS
+    // Escape HTML
     function escapeHtml(text) {
       const map = {
         '&': '&amp;',
@@ -737,20 +735,18 @@
       return text.replace(/[&<>"']/g, m => map[m]);
     }
 
-    // Attach event listeners to action buttons - NEW FUNCTION!
+    // Attach event listeners - FIXED FOR UUID
     function attachActionButtons() {
-      // Edit buttons
       document.querySelectorAll('[data-action="edit"]').forEach(button => {
         button.addEventListener('click', function() {
-          const itemId = parseInt(this.dataset.id);
+          const itemId = this.dataset.id; // Keep as string (UUID)
           editItem(itemId);
         });
       });
 
-      // Delete buttons
       document.querySelectorAll('[data-action="delete"]').forEach(button => {
         button.addEventListener('click', function() {
-          const itemId = parseInt(this.dataset.id);
+          const itemId = this.dataset.id; // Keep as string (UUID)
           const itemName = this.dataset.name;
           deleteItem(itemId, itemName);
         });
@@ -792,12 +788,15 @@
       displayItems(filtered);
     }
 
-    // Edit item
+    // Edit item - FIXED FOR UUID
     function editItem(id) {
-      const item = allItems.find(i => i.id === id);
-      if (!item) return;
+      const item = allItems.find(i => i.id === id); // Compare UUIDs as strings
+      if (!item) {
+        console.error('Item not found:', id);
+        return;
+      }
 
-      document.getElementById('editItemId').value = item.id;
+      document.getElementById('editItemId').value = item.id; // Store UUID as string
       document.getElementById('editItemName').value = item.item_name;
       document.getElementById('editCategory').value = item.category;
       document.getElementById('editPrice').value = item.price;
@@ -819,11 +818,11 @@
       document.getElementById('editModal').classList.remove('show');
     });
 
-    // Update item
+    // Update item - FIXED FOR UUID
     document.getElementById('editItemForm').addEventListener('submit', async (e) => {
       e.preventDefault();
 
-      const id = document.getElementById('editItemId').value;
+      const id = document.getElementById('editItemId').value; // UUID as string
       const itemName = document.getElementById('editItemName').value;
       const category = document.getElementById('editCategory').value;
       const price = parseFloat(document.getElementById('editPrice').value);
@@ -844,7 +843,7 @@
             description: description || null,
             image_url: imageUrl
           })
-          .eq('id', id);
+          .eq('id', id); // UUID comparison works as string
 
         if (error) throw error;
 
@@ -856,20 +855,22 @@
 
       } catch (error) {
         showMessage('editMessage', `❌ Error: ${error.message}`, 'error');
+        console.error('Update error:', error);
       }
     });
 
-    // Delete item
+    // Delete item - FIXED FOR UUID
     function deleteItem(id, name) {
       if (!confirm(`Are you sure you want to delete "${name}"?`)) return;
 
       supabase
         .from('menu_items')
         .delete()
-        .eq('id', id)
+        .eq('id', id) // UUID comparison works as string
         .then(({ error }) => {
           if (error) {
             alert(`❌ Error: ${error.message}`);
+            console.error('Delete error:', error);
           } else {
             alert('✅ Item deleted successfully!');
             loadItems();
