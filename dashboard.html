@@ -64,6 +64,12 @@
       color: white;
     }
 
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+
     .container {
       max-width: 1400px;
       margin: 0 auto;
@@ -575,10 +581,40 @@
 
     checkAuth();
 
-    // Logout
+    // Logout - FIXED VERSION
     document.getElementById('logoutBtn').addEventListener('click', async () => {
-      await supabase.auth.signOut();
-      window.location.href = 'admin.html';
+      const btn = document.getElementById('logoutBtn');
+      
+      try {
+        // Disable button and show loading
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging out...';
+        
+        // Sign out
+        const { error } = await supabase.auth.signOut();
+        
+        if (error) {
+          throw error;
+        }
+        
+        // Clear local storage
+        localStorage.clear();
+        sessionStorage.clear();
+        
+        // Redirect
+        window.location.href = 'admin.html';
+        
+      } catch (error) {
+        console.error('Logout error:', error);
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-sign-out-alt"></i> Logout';
+        alert('Logout failed. Redirecting to login...');
+        
+        // Force redirect anyway
+        setTimeout(() => {
+          window.location.href = 'admin.html';
+        }, 1000);
+      }
     });
 
     // Show message
