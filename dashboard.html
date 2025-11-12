@@ -48,6 +48,8 @@
       cursor: pointer;
       transition: transform 0.3s;
       font-size: 0.9rem;
+      text-decoration: none;
+      display: inline-block;
     }
 
     .btn:hover {
@@ -62,12 +64,6 @@
     .btn-danger {
       background: #ff4444;
       color: white;
-    }
-
-    .btn:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-      transform: none !important;
     }
 
     .container {
@@ -163,36 +159,6 @@
     textarea {
       resize: vertical;
       min-height: 100px;
-    }
-
-    .image-upload {
-      border: 2px dashed #e4d7ff;
-      border-radius: 8px;
-      padding: 2rem;
-      text-align: center;
-      cursor: pointer;
-      transition: all 0.3s;
-    }
-
-    .image-upload:hover {
-      border-color: #8a4fff;
-      background: #f9f6ff;
-    }
-
-    .image-upload input {
-      display: none;
-    }
-
-    .image-preview {
-      max-width: 200px;
-      max-height: 200px;
-      margin: 1rem auto;
-      border-radius: 8px;
-      display: none;
-    }
-
-    .image-preview.show {
-      display: block;
     }
 
     .table-container {
@@ -348,10 +314,6 @@
       .form-grid {
         grid-template-columns: 1fr;
       }
-
-      .table-container {
-        overflow-x: scroll;
-      }
     }
   </style>
 </head>
@@ -359,11 +321,11 @@
   <div class="header">
     <div class="logo">heavenlynn Dashboard</div>
     <div class="header-actions">
-      <span id="adminEmail"></span>
+      <span id="adminEmail">Admin</span>
       <a href="index.html" class="btn btn-primary" target="_blank">
         <i class="fas fa-external-link-alt"></i> View Menu
       </a>
-      <button class="btn btn-danger" id="logoutBtn">
+      <button class="btn btn-danger" onclick="logout()">
         <i class="fas fa-sign-out-alt"></i> Logout
       </button>
     </div>
@@ -397,7 +359,7 @@
 
       <div class="message" id="addMessage"></div>
 
-      <form id="addItemForm">
+      <form id="addItemForm" onsubmit="addItem(event)">
         <div class="form-grid">
           <div class="form-group">
             <label for="itemName">Item Name *</label>
@@ -433,19 +395,8 @@
         </div>
 
         <div class="form-group">
-          <label>Item Image <span class="optional-label">(optional - leave blank for emoji)</span></label>
-          <div class="image-upload" id="imageUpload">
-            <i class="fas fa-cloud-upload-alt" style="font-size: 3rem; color: #8a4fff;"></i>
-            <p>Click to upload image or paste image URL below</p>
-            <p style="font-size: 0.85rem; color: #6b6b6b; margin-top: 0.5rem;">Leave empty to use emoji placeholder 🍪</p>
-            <input type="file" id="imageFile" accept="image/*">
-          </div>
-          <img id="imagePreview" class="image-preview" alt="Preview">
-        </div>
-
-        <div class="form-group">
-          <label for="imageUrl">Or paste image URL <span class="optional-label">(optional)</span></label>
-          <input type="url" id="imageUrl" placeholder="https://example.com/image.jpg or images/cookie.jpg">
+          <label for="imageUrl">Image URL <span class="optional-label">(optional)</span></label>
+          <input type="url" id="imageUrl" placeholder="images/cookie.jpg">
         </div>
 
         <button type="submit" class="btn btn-primary" style="width: 100%;">
@@ -458,14 +409,14 @@
     <div class="section">
       <div class="section-header">
         <h2 class="section-title">Menu Items</h2>
-        <button class="btn btn-primary" id="refreshBtn">
+        <button class="btn btn-primary" onclick="loadItems()">
           <i class="fas fa-sync"></i> Refresh
         </button>
       </div>
 
       <div class="filter-container">
-        <input type="text" class="search-input" id="searchInput" placeholder="Search items...">
-        <select id="filterCategory">
+        <input type="text" class="search-input" id="searchInput" placeholder="Search items..." onkeyup="filterItems()">
+        <select id="filterCategory" onchange="filterItems()">
           <option value="">All Categories</option>
           <option value="Cookies">Cookies</option>
           <option value="Rolls">Rolls</option>
@@ -507,12 +458,12 @@
     <div class="modal-content">
       <div class="modal-header">
         <h2>Edit Item</h2>
-        <button class="modal-close" id="closeEditModal">&times;</button>
+        <button class="modal-close" onclick="closeEditModal()">&times;</button>
       </div>
 
       <div class="message" id="editMessage"></div>
 
-      <form id="editItemForm">
+      <form id="editItemForm" onsubmit="updateItem(event)">
         <input type="hidden" id="editItemId">
 
         <div class="form-group">
@@ -543,14 +494,13 @@
         </div>
 
         <div class="form-group">
-          <label for="editDescription">Description <span class="optional-label">(optional)</span></label>
+          <label for="editDescription">Description</label>
           <textarea id="editDescription"></textarea>
         </div>
 
         <div class="form-group">
-          <label for="editImageUrl">Image URL <span class="optional-label">(optional)</span></label>
+          <label for="editImageUrl">Image URL</label>
           <input type="url" id="editImageUrl">
-          <img id="editImagePreview" class="image-preview" alt="Preview">
         </div>
 
         <button type="submit" class="btn btn-primary" style="width: 100%;">
@@ -569,151 +519,54 @@
 
     let allItems = [];
 
-    // Check authentication - FIXED TO PREVENT LOOPS
-    async function checkAuth() {
-      try {
-        const { data: { session }, error } = await supabase.auth.getSession();
-        
-        if (error) {
-          console.error('Auth error:', error);
-          // Don't redirect on error, just log it
-          document.getElementById('adminEmail').textContent = 'Guest';
-          return;
-        }
-        
-        if (!session) {
-          console.log('No session found, redirecting to login...');
-          // Add a delay to prevent rapid redirects
-          setTimeout(() => {
-            window.location.replace('admin.html');
-          }, 100);
-          return;
-        }
-        
-        // Session exists
-        document.getElementById('adminEmail').textContent = session.user.email;
-        console.log('Authenticated as:', session.user.email);
-        
-      } catch (error) {
-        console.error('Auth check failed:', error);
-        document.getElementById('adminEmail').textContent = 'Error';
+    // Simple logout
+    function logout() {
+      if (confirm('Are you sure you want to logout?')) {
+        supabase.auth.signOut();
+        localStorage.clear();
+        window.location.href = 'admin.html';
       }
     }
-
-    // Only check auth once
-    checkAuth();
-
-    // Logout - FIXED VERSION
-    document.getElementById('logoutBtn').addEventListener('click', async () => {
-      const btn = document.getElementById('logoutBtn');
-      
-      try {
-        // Disable button and show loading
-        btn.disabled = true;
-        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging out...';
-        
-        // Sign out
-        const { error } = await supabase.auth.signOut();
-        
-        if (error) {
-          console.error('Signout error:', error);
-        }
-        
-        // Clear local storage
-        localStorage.clear();
-        sessionStorage.clear();
-        
-        // Force redirect with replace (can't go back)
-        window.location.replace('admin.html');
-        
-      } catch (error) {
-        console.error('Logout error:', error);
-        
-        // Force redirect anyway
-        window.location.replace('admin.html');
-      }
-    });
 
     // Show message
     function showMessage(elementId, message, type) {
-      const messageEl = document.getElementById(elementId);
-      messageEl.textContent = message;
-      messageEl.className = `message show ${type}`;
-      setTimeout(() => {
-        messageEl.classList.remove('show');
-      }, 5000);
+      const el = document.getElementById(elementId);
+      el.textContent = message;
+      el.className = `message show ${type}`;
+      setTimeout(() => el.classList.remove('show'), 5000);
     }
 
-    // Image upload preview
-    const imageUpload = document.getElementById('imageUpload');
-    const imageFile = document.getElementById('imageFile');
-    const imagePreview = document.getElementById('imagePreview');
-    const imageUrl = document.getElementById('imageUrl');
-
-    imageUpload.addEventListener('click', () => {
-      imageFile.click();
-    });
-
-    imageFile.addEventListener('change', (e) => {
-      const file = e.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          imagePreview.src = e.target.result;
-          imagePreview.classList.add('show');
-        };
-        reader.readAsDataURL(file);
-      }
-    });
-
-    imageUrl.addEventListener('input', (e) => {
-      if (e.target.value) {
-        imagePreview.src = e.target.value;
-        imagePreview.classList.add('show');
-      } else {
-        imagePreview.classList.remove('show');
-      }
-    });
-
     // Add item
-    document.getElementById('addItemForm').addEventListener('submit', async (e) => {
+    async function addItem(e) {
       e.preventDefault();
 
       const itemName = document.getElementById('itemName').value;
       const category = document.getElementById('category').value;
       const price = parseFloat(document.getElementById('price').value);
       const description = document.getElementById('description').value;
-      let finalImageUrl = document.getElementById('imageUrl').value;
-
-      if (!finalImageUrl) {
-        finalImageUrl = null;
-      }
+      const imageUrl = document.getElementById('imageUrl').value;
 
       try {
-        const { data, error } = await supabase
+        const { error } = await supabase
           .from('menu_items')
-          .insert([
-            {
-              item_name: itemName,
-              category: category,
-              price: price,
-              description: description || null,
-              image_url: finalImageUrl
-            }
-          ]);
+          .insert([{
+            item_name: itemName,
+            category: category,
+            price: price,
+            description: description || null,
+            image_url: imageUrl || null
+          }]);
 
         if (error) throw error;
 
         showMessage('addMessage', '✅ Item added successfully!', 'success');
         document.getElementById('addItemForm').reset();
-        imagePreview.classList.remove('show');
         loadItems();
-        updateStats();
 
       } catch (error) {
         showMessage('addMessage', `❌ Error: ${error.message}`, 'error');
       }
-    });
+    }
 
     // Load items
     async function loadItems() {
@@ -721,7 +574,7 @@
         const { data, error } = await supabase
           .from('menu_items')
           .select('*')
-          .order('category', { ascending: true });
+          .order('category');
 
         if (error) throw error;
 
@@ -730,14 +583,13 @@
         updateStats();
 
       } catch (error) {
-        console.error('Error loading items:', error);
         document.getElementById('itemsTable').innerHTML = `
-          <tr><td colspan="6" style="text-align: center; color: red;">Error loading items</td></tr>
+          <tr><td colspan="6" style="text-align: center; color: red;">Error: ${error.message}</td></tr>
         `;
       }
     }
 
-    // Display items - FIXED FOR UUID
+    // Display items
     function displayItems(items) {
       const tbody = document.getElementById('itemsTable');
       
@@ -746,145 +598,91 @@
         return;
       }
 
-      tbody.innerHTML = items.map(item => {
-        const escapedName = escapeHtml(item.item_name);
-        const escapedDesc = escapeHtml(item.description || '-');
-        
-        return `
-          <tr>
-            <td>
-              ${item.image_url ? `<img src="${item.image_url}" class="item-image-thumb" alt="${escapedName}">` : '<div style="font-size: 2rem;">🍪</div>'}
-            </td>
-            <td><strong>${escapedName}</strong></td>
-            <td><span style="background: #e4d7ff; padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.85rem;">${item.category}</span></td>
-            <td><strong>$${parseFloat(item.price).toFixed(2)}</strong></td>
-            <td style="max-width: 300px;">${escapedDesc}</td>
-            <td>
-              <div class="action-btns">
-                <button class="btn-icon btn-edit" data-action="edit" data-id="${item.id}">
-                  <i class="fas fa-edit"></i>
-                </button>
-                <button class="btn-icon btn-delete" data-action="delete" data-id="${item.id}" data-name="${escapedName}">
-                  <i class="fas fa-trash"></i>
-                </button>
-              </div>
-            </td>
-          </tr>
-        `;
-      }).join('');
-
-      attachActionButtons();
-    }
-
-    // Escape HTML
-    function escapeHtml(text) {
-      const map = {
-        '&': '&amp;',
-        '<': '&lt;',
-        '>': '&gt;',
-        '"': '&quot;',
-        "'": '&#039;'
-      };
-      return text.replace(/[&<>"']/g, m => map[m]);
-    }
-
-    // Attach event listeners - FIXED FOR UUID
-    function attachActionButtons() {
-      document.querySelectorAll('[data-action="edit"]').forEach(button => {
-        button.addEventListener('click', function() {
-          const itemId = this.dataset.id; // Keep as string (UUID)
-          editItem(itemId);
-        });
-      });
-
-      document.querySelectorAll('[data-action="delete"]').forEach(button => {
-        button.addEventListener('click', function() {
-          const itemId = this.dataset.id; // Keep as string (UUID)
-          const itemName = this.dataset.name;
-          deleteItem(itemId, itemName);
-        });
-      });
+      tbody.innerHTML = items.map(item => `
+        <tr>
+          <td>
+            ${item.image_url ? `<img src="${item.image_url}" class="item-image-thumb">` : '🍪'}
+          </td>
+          <td><strong>${item.item_name}</strong></td>
+          <td><span style="background: #e4d7ff; padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.85rem;">${item.category}</span></td>
+          <td><strong>$${parseFloat(item.price).toFixed(2)}</strong></td>
+          <td style="max-width: 300px;">${item.description || '-'}</td>
+          <td>
+            <div class="action-btns">
+              <button class="btn-icon btn-edit" onclick='editItem("${item.id}")'>
+                <i class="fas fa-edit"></i>
+              </button>
+              <button class="btn-icon btn-delete" onclick='deleteItem("${item.id}", "${item.item_name.replace(/'/g, "\\'")}}")'>
+                <i class="fas fa-trash"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
     }
 
     // Update stats
     function updateStats() {
-      const totalItems = allItems.length;
-      const categories = [...new Set(allItems.map(item => item.category))].length;
-      const avgPrice = totalItems > 0 ? allItems.reduce((sum, item) => sum + parseFloat(item.price), 0) / totalItems : 0;
+      const total = allItems.length;
+      const categories = [...new Set(allItems.map(i => i.category))].length;
+      const avgPrice = total > 0 ? allItems.reduce((sum, i) => sum + parseFloat(i.price), 0) / total : 0;
 
-      document.getElementById('totalItems').textContent = totalItems;
+      document.getElementById('totalItems').textContent = total;
       document.getElementById('totalCategories').textContent = categories;
       document.getElementById('avgPrice').textContent = `$${avgPrice.toFixed(2)}`;
     }
 
-    // Search and filter
-    document.getElementById('searchInput').addEventListener('input', filterItems);
-    document.getElementById('filterCategory').addEventListener('change', filterItems);
-
+    // Filter items
     function filterItems() {
-      const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-      const categoryFilter = document.getElementById('filterCategory').value;
+      const search = document.getElementById('searchInput').value.toLowerCase();
+      const category = document.getElementById('filterCategory').value;
 
       let filtered = allItems;
 
-      if (searchTerm) {
-        filtered = filtered.filter(item => 
-          item.item_name.toLowerCase().includes(searchTerm) ||
-          item.description?.toLowerCase().includes(searchTerm)
+      if (search) {
+        filtered = filtered.filter(i => 
+          i.item_name.toLowerCase().includes(search) ||
+          (i.description && i.description.toLowerCase().includes(search))
         );
       }
 
-      if (categoryFilter) {
-        filtered = filtered.filter(item => item.category === categoryFilter);
+      if (category) {
+        filtered = filtered.filter(i => i.category === category);
       }
 
       displayItems(filtered);
     }
 
-    // Edit item - FIXED FOR UUID
+    // Edit item
     function editItem(id) {
-      const item = allItems.find(i => i.id === id); // Compare UUIDs as strings
-      if (!item) {
-        console.error('Item not found:', id);
-        return;
-      }
+      const item = allItems.find(i => i.id === id);
+      if (!item) return;
 
-      document.getElementById('editItemId').value = item.id; // Store UUID as string
+      document.getElementById('editItemId').value = item.id;
       document.getElementById('editItemName').value = item.item_name;
       document.getElementById('editCategory').value = item.category;
       document.getElementById('editPrice').value = item.price;
       document.getElementById('editDescription').value = item.description || '';
       document.getElementById('editImageUrl').value = item.image_url || '';
 
-      if (item.image_url) {
-        document.getElementById('editImagePreview').src = item.image_url;
-        document.getElementById('editImagePreview').classList.add('show');
-      } else {
-        document.getElementById('editImagePreview').classList.remove('show');
-      }
-
       document.getElementById('editModal').classList.add('show');
     }
 
     // Close edit modal
-    document.getElementById('closeEditModal').addEventListener('click', () => {
+    function closeEditModal() {
       document.getElementById('editModal').classList.remove('show');
-    });
+    }
 
-    // Update item - FIXED FOR UUID
-    document.getElementById('editItemForm').addEventListener('submit', async (e) => {
+    // Update item
+    async function updateItem(e) {
       e.preventDefault();
 
-      const id = document.getElementById('editItemId').value; // UUID as string
+      const id = document.getElementById('editItemId').value;
       const itemName = document.getElementById('editItemName').value;
       const category = document.getElementById('editCategory').value;
       const price = parseFloat(document.getElementById('editPrice').value);
       const description = document.getElementById('editDescription').value;
-      let imageUrl = document.getElementById('editImageUrl').value;
-
-      if (!imageUrl) {
-        imageUrl = null;
-      }
+      const imageUrl = document.getElementById('editImageUrl').value;
 
       try {
         const { error } = await supabase
@@ -894,47 +692,42 @@
             category: category,
             price: price,
             description: description || null,
-            image_url: imageUrl
+            image_url: imageUrl || null
           })
-          .eq('id', id); // UUID comparison works as string
+          .eq('id', id);
 
         if (error) throw error;
 
-        showMessage('editMessage', '✅ Item updated successfully!', 'success');
+        showMessage('editMessage', '✅ Item updated!', 'success');
         setTimeout(() => {
-          document.getElementById('editModal').classList.remove('show');
+          closeEditModal();
           loadItems();
         }, 1500);
 
       } catch (error) {
         showMessage('editMessage', `❌ Error: ${error.message}`, 'error');
-        console.error('Update error:', error);
       }
-    });
+    }
 
-    // Delete item - FIXED FOR UUID
+    // Delete item
     function deleteItem(id, name) {
-      if (!confirm(`Are you sure you want to delete "${name}"?`)) return;
+      if (!confirm(`Delete "${name}"?`)) return;
 
       supabase
         .from('menu_items')
         .delete()
-        .eq('id', id) // UUID comparison works as string
+        .eq('id', id)
         .then(({ error }) => {
           if (error) {
             alert(`❌ Error: ${error.message}`);
-            console.error('Delete error:', error);
           } else {
-            alert('✅ Item deleted successfully!');
+            alert('✅ Deleted!');
             loadItems();
           }
         });
     }
 
-    // Refresh button
-    document.getElementById('refreshBtn').addEventListener('click', loadItems);
-
-    // Initial load
+    // Load on start
     loadItems();
   </script>
 </body>
