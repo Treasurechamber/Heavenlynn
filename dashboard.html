@@ -8,914 +8,215 @@
   <link href="https://fonts.googleapis.com/css2?family=Mountains+of+Christmas:wght@700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(180deg, #e0f2fe 0%, #ffffff 50%, #f0f9ff 100%);
-      min-height: 100vh;
-      position: relative;
-    }
-
-    /* Snowflakes */
-    .snowflake {
-      position: fixed;
-      top: -10px;
-      z-index: 9999;
-      user-select: none;
-      animation: snowfall linear infinite;
-      color: white;
-      text-shadow: 0 0 8px rgba(186, 230, 253, 1);
-      pointer-events: none;
-    }
-
-    @keyframes snowfall {
-      0% { transform: translateY(0) rotate(0deg); opacity: 0; }
-      10% { opacity: 0.8; }
-      90% { opacity: 0.7; }
-      100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
-    }
-
-    /* Header */
-    .header {
-      background: linear-gradient(135deg, #c41e3a, #8b0000);
-      color: white;
-      padding: 1.5rem 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 4px 20px rgba(196, 30, 58, 0.3);
-      border-bottom: 3px solid rgba(212, 175, 55, 0.6);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-
-    .header-left {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-    }
-
-    .header h1 {
-      font-family: 'Mountains of Christmas', cursive;
-      font-size: 2.2rem;
-      letter-spacing: 2px;
-      text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
-    }
-
-    .header-right {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-    }
-
-    .btn {
-      padding: 0.7rem 1.2rem;
-      border: none;
-      border-radius: 10px;
-      font-size: 0.95rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .btn-menu {
-      background: linear-gradient(135deg, #165b33, #0f4d2c);
-      color: white;
-      border: 2px solid rgba(212, 175, 55, 0.5);
-    }
-
-    .btn-menu:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(22, 91, 51, 0.4);
-    }
-
-    .btn-logout {
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
-      color: white;
-      border: 2px solid rgba(255, 255, 255, 0.4);
-    }
-
-    .btn-logout:hover {
-      background: rgba(255, 255, 255, 0.3);
-    }
-
-    /* Main Content */
-    .main-content {
-      padding: 2rem;
-      max-width: 1400px;
-      margin: 0 auto;
-    }
-
-    /* Stats */
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 1.5rem;
-      margin-bottom: 2rem;
-    }
-
-    .stat-card {
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(240, 249, 255, 0.95));
-      backdrop-filter: blur(10px);
-      padding: 1.5rem;
-      border-radius: 20px;
-      border: 2px solid rgba(212, 175, 55, 0.3);
-      box-shadow: 0 8px 25px rgba(14, 165, 233, 0.15);
-      text-align: center;
-      transition: all 0.3s;
-    }
-
-    .stat-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 12px 35px rgba(14, 165, 233, 0.25);
-    }
-
-    .stat-icon {
-      font-size: 2.5rem;
-      margin-bottom: 0.8rem;
-    }
-
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Poppins', sans-serif; background: linear-gradient(180deg, #e0f2fe 0%, #ffffff 50%, #f0f9ff 100%); min-height: 100vh; }
+    .snowflake { position: fixed; top: -10px; z-index: 9999; user-select: none; animation: snowfall linear infinite; color: white; text-shadow: 0 0 8px rgba(186, 230, 253, 1); pointer-events: none; }
+    @keyframes snowfall { 0% { transform: translateY(0) rotate(0deg); opacity: 0; } 10% { opacity: 0.8; } 90% { opacity: 0.7; } 100% { transform: translateY(100vh) rotate(360deg); opacity: 0; } }
+    .header { background: linear-gradient(135deg, #c41e3a, #8b0000); color: white; padding: 1.5rem 2rem; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 20px rgba(196, 30, 58, 0.3); border-bottom: 3px solid rgba(212, 175, 55, 0.6); position: sticky; top: 0; z-index: 100; flex-wrap: wrap; gap: 1rem; }
+    .header-left { display: flex; align-items: center; gap: 15px; }
+    .header h1 { font-family: 'Mountains of Christmas', cursive; font-size: 2.2rem; letter-spacing: 2px; }
+    .header-right { display: flex; align-items: center; gap: 15px; flex-wrap: wrap; }
+    .btn { padding: 0.7rem 1.2rem; border: none; border-radius: 10px; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; gap: 8px; text-decoration: none; }
+    .btn-menu { background: linear-gradient(135deg, #165b33, #0f4d2c); color: white; border: 2px solid rgba(212, 175, 55, 0.5); }
+    .btn-menu:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(22, 91, 51, 0.4); }
+    .btn-logout { background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1)); color: white; border: 2px solid rgba(255, 255, 255, 0.4); }
+    .btn-logout:hover { background: rgba(255, 255, 255, 0.3); }
+    .main-content { padding: 2rem; max-width: 1400px; margin: 0 auto; }
+    .tabs-nav { display: flex; gap: 0.5rem; margin-bottom: 2rem; flex-wrap: wrap; background: white; padding: 0.5rem; border-radius: 15px; box-shadow: 0 4px 15px rgba(14, 165, 233, 0.1); }
+    .tab-btn { padding: 1rem 1.5rem; border: none; border-radius: 10px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; gap: 8px; background: transparent; color: #64748b; }
+    .tab-btn:hover { background: #e0f2fe; color: #0c4a6e; }
+    .tab-btn.active { background: linear-gradient(135deg, #c41e3a, #8b0000); color: white; box-shadow: 0 4px 15px rgba(196, 30, 58, 0.3); }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+    .stat-card { background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(240, 249, 255, 0.95)); padding: 1.5rem; border-radius: 20px; border: 2px solid rgba(212, 175, 55, 0.3); box-shadow: 0 8px 25px rgba(14, 165, 233, 0.15); text-align: center; transition: all 0.3s; }
+    .stat-card:hover { transform: translateY(-5px); }
+    .stat-icon { font-size: 2.5rem; margin-bottom: 0.8rem; }
     .stat-card:nth-child(1) .stat-icon { color: #c41e3a; }
     .stat-card:nth-child(2) .stat-icon { color: #165b33; }
     .stat-card:nth-child(3) .stat-icon { color: #d4af37; }
-
-    .stat-value {
-      font-size: 2.2rem;
-      font-weight: 700;
-      color: #0c4a6e;
-      font-family: 'Mountains of Christmas', cursive;
-    }
-
-    .stat-label {
-      color: #64748b;
-      font-size: 0.95rem;
-      font-weight: 500;
-    }
-
-    /* Sections */
-    .section {
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(240, 249, 255, 0.95));
-      backdrop-filter: blur(10px);
-      border-radius: 25px;
-      padding: 2rem;
-      margin-bottom: 2rem;
-      border: 2px solid rgba(212, 175, 55, 0.3);
-      box-shadow: 0 8px 30px rgba(14, 165, 233, 0.15);
-    }
-
-    .section-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1.5rem;
-      padding-bottom: 1rem;
-      border-bottom: 2px solid rgba(212, 175, 55, 0.3);
-    }
-
-    .section-title {
-      font-family: 'Mountains of Christmas', cursive;
-      font-size: 1.8rem;
-      color: #c41e3a;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    /* Form */
-    .form-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1.2rem;
-    }
-
-    .form-group {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .form-group.full-width {
-      grid-column: 1 / -1;
-    }
-
-    label {
-      font-weight: 600;
-      color: #0c4a6e;
-      margin-bottom: 0.5rem;
-      font-size: 0.9rem;
-    }
-
-    input, select, textarea {
-      padding: 0.9rem 1rem;
-      border: 2px solid rgba(186, 230, 253, 0.6);
-      border-radius: 12px;
-      font-size: 1rem;
-      transition: all 0.3s;
-      background: white;
-    }
-
-    input:focus, select:focus, textarea:focus {
-      outline: none;
-      border-color: #c41e3a;
-      box-shadow: 0 0 15px rgba(196, 30, 58, 0.2);
-    }
-
-    textarea {
-      resize: vertical;
-      min-height: 80px;
-    }
-
-    .btn-add {
-      background: linear-gradient(135deg, #c41e3a, #8b0000);
-      color: white;
-      padding: 1rem 2rem;
-      border: 2px solid rgba(212, 175, 55, 0.5);
-      border-radius: 12px;
-      font-size: 1rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.3s;
-      margin-top: 1rem;
-    }
-
-    .btn-add:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 25px rgba(196, 30, 58, 0.4);
-    }
-
-    /* Table */
-    .table-controls {
-      display: flex;
-      gap: 1rem;
-      margin-bottom: 1.5rem;
-      flex-wrap: wrap;
-    }
-
-    .search-box {
-      flex: 1;
-      min-width: 200px;
-      position: relative;
-    }
-
-    .search-box input {
-      width: 100%;
-      padding-left: 3rem;
-    }
-
-    .search-box i {
-      position: absolute;
-      left: 1rem;
-      top: 50%;
-      transform: translateY(-50%);
-      color: #0ea5e9;
-    }
-
-    .filter-select {
-      min-width: 180px;
-    }
-
-    .items-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 1rem;
-    }
-
-    .items-table th,
-    .items-table td {
-      padding: 1rem;
-      text-align: left;
-      border-bottom: 1px solid rgba(186, 230, 253, 0.4);
-    }
-
-    .items-table th {
-      background: linear-gradient(135deg, rgba(224, 242, 254, 0.8), rgba(186, 230, 253, 0.8));
-      color: #0c4a6e;
-      font-weight: 700;
-      font-size: 0.9rem;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .items-table tr:hover {
-      background: rgba(224, 242, 254, 0.5);
-    }
-
-    .item-image {
-      width: 60px;
-      height: 60px;
-      object-fit: cover;
-      border-radius: 10px;
-      border: 2px solid rgba(212, 175, 55, 0.4);
-    }
-
-    .item-name {
-      font-weight: 600;
-      color: #c41e3a;
-      font-family: 'Mountains of Christmas', cursive;
-      font-size: 1.1rem;
-    }
-
-    .item-category {
-      background: linear-gradient(135deg, #165b33, #0f4d2c);
-      color: white;
-      padding: 0.3rem 0.8rem;
-      border-radius: 20px;
-      font-size: 0.8rem;
-      display: inline-block;
-    }
-
-    .item-price {
-      font-weight: 700;
-      color: #165b33;
-      font-size: 1.1rem;
-    }
-
-    .action-btns {
-      display: flex;
-      gap: 8px;
-    }
-
-    .btn-edit, .btn-delete {
-      width: 38px;
-      height: 38px;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: all 0.3s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1rem;
-    }
-
-    .btn-edit {
-      background: linear-gradient(135deg, #0ea5e9, #0369a1);
-      color: white;
-    }
-
-    .btn-delete {
-      background: linear-gradient(135deg, #ef4444, #dc2626);
-      color: white;
-    }
-
-    .btn-edit:hover, .btn-delete:hover {
-      transform: scale(1.1);
-    }
-
-    /* Modal */
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(12, 74, 110, 0.6);
-      backdrop-filter: blur(5px);
-      z-index: 1000;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .modal.show {
-      display: flex;
-    }
-
-    .modal-content {
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(240, 249, 255, 0.98));
-      padding: 2.5rem;
-      border-radius: 25px;
-      max-width: 500px;
-      width: 90%;
-      border: 3px solid rgba(212, 175, 55, 0.5);
-      box-shadow: 0 20px 60px rgba(14, 165, 233, 0.3);
-      position: relative;
-    }
-
-    .modal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1.5rem;
-    }
-
-    .modal-title {
-      font-family: 'Mountains of Christmas', cursive;
-      font-size: 1.8rem;
-      color: #c41e3a;
-    }
-
-    .close-modal {
-      background: none;
-      border: none;
-      font-size: 1.8rem;
-      color: #64748b;
-      cursor: pointer;
-      transition: all 0.3s;
-    }
-
-    .close-modal:hover {
-      color: #c41e3a;
-      transform: rotate(90deg);
-    }
-
-    .btn-save {
-      background: linear-gradient(135deg, #165b33, #0f4d2c);
-      color: white;
-      padding: 1rem 2rem;
-      border: 2px solid rgba(212, 175, 55, 0.5);
-      border-radius: 12px;
-      font-size: 1rem;
-      font-weight: 700;
-      cursor: pointer;
-      width: 100%;
-      margin-top: 1rem;
-      transition: all 0.3s;
-    }
-
-    .btn-save:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 25px rgba(22, 91, 51, 0.4);
-    }
-
-    /* Loading */
-    .loading {
-      text-align: center;
-      padding: 3rem;
-      color: #0ea5e9;
-    }
-
-    .loading i {
-      font-size: 2.5rem;
-      animation: spin 1s linear infinite;
-    }
-
-    @keyframes spin {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-
-    /* Responsive */
-    @media (max-width: 768px) {
-      .header {
-        flex-direction: column;
-        gap: 1rem;
-        text-align: center;
-      }
-
-      .header h1 {
-        font-size: 1.8rem;
-      }
-
-      .main-content {
-        padding: 1rem;
-      }
-
-      .items-table {
-        font-size: 0.85rem;
-      }
-
-      .items-table th,
-      .items-table td {
-        padding: 0.7rem 0.5rem;
-      }
-
-      .item-image {
-        width: 45px;
-        height: 45px;
-      }
-    }
+    .stat-card:nth-child(4) .stat-icon { color: #0ea5e9; }
+    .stat-value { font-size: 2rem; font-weight: 700; color: #0c4a6e; font-family: 'Mountains of Christmas', cursive; }
+    .stat-label { color: #64748b; font-size: 0.9rem; }
+    .section { background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(240, 249, 255, 0.95)); border-radius: 25px; padding: 2rem; margin-bottom: 2rem; border: 2px solid rgba(212, 175, 55, 0.3); box-shadow: 0 8px 30px rgba(14, 165, 233, 0.15); }
+    .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 2px solid rgba(212, 175, 55, 0.3); flex-wrap: wrap; gap: 1rem; }
+    .section-title { font-family: 'Mountains of Christmas', cursive; font-size: 1.8rem; color: #c41e3a; display: flex; align-items: center; gap: 12px; }
+    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.2rem; }
+    .form-group { display: flex; flex-direction: column; }
+    .form-group.full-width { grid-column: 1 / -1; }
+    label { font-weight: 600; color: #0c4a6e; margin-bottom: 0.5rem; font-size: 0.9rem; }
+    input, select, textarea { padding: 0.9rem 1rem; border: 2px solid rgba(186, 230, 253, 0.6); border-radius: 12px; font-size: 1rem; transition: all 0.3s; background: white; font-family: inherit; }
+    input:focus, select:focus, textarea:focus { outline: none; border-color: #c41e3a; box-shadow: 0 0 15px rgba(196, 30, 58, 0.2); }
+    textarea { resize: vertical; min-height: 80px; }
+    .btn-add { background: linear-gradient(135deg, #c41e3a, #8b0000); color: white; padding: 1rem 2rem; border: 2px solid rgba(212, 175, 55, 0.5); border-radius: 12px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.3s; margin-top: 1rem; }
+    .btn-add:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(196, 30, 58, 0.4); }
+    .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 1.5rem; }
+    .manage-card { background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 15px rgba(14, 165, 233, 0.1); border: 2px solid rgba(212, 175, 55, 0.2); transition: all 0.3s; }
+    .manage-card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(14, 165, 233, 0.2); }
+    .manage-card-image { width: 100%; height: 180px; object-fit: cover; background: #e0f2fe; }
+    .manage-card-content { padding: 1rem; }
+    .manage-card-title { font-weight: 600; color: #0c4a6e; margin-bottom: 0.5rem; font-size: 1.1rem; }
+    .manage-card-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; font-size: 0.9rem; color: #64748b; }
+    .manage-card-tag { background: linear-gradient(135deg, #c41e3a, #8b0000); color: white; padding: 0.2rem 0.6rem; border-radius: 10px; font-size: 0.75rem; font-weight: 600; }
+    .manage-card-price { font-weight: 700; color: #165b33; font-size: 1.1rem; }
+    .manage-card-actions { display: flex; gap: 0.5rem; margin-top: 1rem; }
+    .manage-card-actions button { flex: 1; padding: 0.6rem; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; transition: all 0.3s; display: flex; align-items: center; justify-content: center; gap: 5px; }
+    .btn-card-edit { background: linear-gradient(135deg, #0ea5e9, #0369a1); color: white; }
+    .btn-card-delete { background: linear-gradient(135deg, #ef4444, #dc2626); color: white; }
+    .btn-card-edit:hover, .btn-card-delete:hover { transform: scale(1.02); }
+    .table-controls { display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+    .search-box { flex: 1; min-width: 200px; position: relative; }
+    .search-box input { width: 100%; padding-left: 3rem; }
+    .search-box i { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: #0ea5e9; }
+    .filter-select { min-width: 180px; }
+    .items-table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+    .items-table th, .items-table td { padding: 1rem; text-align: left; border-bottom: 1px solid rgba(186, 230, 253, 0.4); }
+    .items-table th { background: linear-gradient(135deg, rgba(224, 242, 254, 0.8), rgba(186, 230, 253, 0.8)); color: #0c4a6e; font-weight: 700; font-size: 0.85rem; text-transform: uppercase; }
+    .items-table tr:hover { background: rgba(224, 242, 254, 0.5); }
+    .item-image { width: 60px; height: 60px; object-fit: cover; border-radius: 10px; border: 2px solid rgba(212, 175, 55, 0.4); }
+    .item-name { font-weight: 600; color: #c41e3a; font-family: 'Mountains of Christmas', cursive; font-size: 1.1rem; }
+    .item-category { background: linear-gradient(135deg, #165b33, #0f4d2c); color: white; padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.8rem; }
+    .item-price { font-weight: 700; color: #165b33; font-size: 1.1rem; }
+    .action-btns { display: flex; gap: 8px; }
+    .btn-edit, .btn-delete { width: 38px; height: 38px; border: none; border-radius: 10px; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: center; font-size: 1rem; }
+    .btn-edit { background: linear-gradient(135deg, #0ea5e9, #0369a1); color: white; }
+    .btn-delete { background: linear-gradient(135deg, #ef4444, #dc2626); color: white; }
+    .btn-edit:hover, .btn-delete:hover { transform: scale(1.1); }
+    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(12, 74, 110, 0.6); backdrop-filter: blur(5px); z-index: 1000; justify-content: center; align-items: center; padding: 1rem; }
+    .modal.show { display: flex; }
+    .modal-content { background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(240, 249, 255, 0.98)); padding: 2rem; border-radius: 25px; max-width: 500px; width: 100%; max-height: 90vh; overflow-y: auto; border: 3px solid rgba(212, 175, 55, 0.5); box-shadow: 0 20px 60px rgba(14, 165, 233, 0.3); }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+    .modal-title { font-family: 'Mountains of Christmas', cursive; font-size: 1.6rem; color: #c41e3a; }
+    .close-modal { background: none; border: none; font-size: 1.8rem; color: #64748b; cursor: pointer; transition: all 0.3s; }
+    .close-modal:hover { color: #c41e3a; transform: rotate(90deg); }
+    .btn-save { background: linear-gradient(135deg, #165b33, #0f4d2c); color: white; padding: 1rem 2rem; border: 2px solid rgba(212, 175, 55, 0.5); border-radius: 12px; font-size: 1rem; font-weight: 700; cursor: pointer; width: 100%; margin-top: 1rem; transition: all 0.3s; }
+    .btn-save:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(22, 91, 51, 0.4); }
+    .loading { text-align: center; padding: 3rem; color: #0ea5e9; }
+    .loading i { font-size: 2.5rem; animation: spin 1s linear infinite; }
+    @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    .empty-state { text-align: center; padding: 3rem; color: #64748b; }
+    .empty-state i { font-size: 4rem; margin-bottom: 1rem; opacity: 0.5; }
+    @media (max-width: 768px) { .header { flex-direction: column; text-align: center; } .header h1 { font-size: 1.6rem; } .main-content { padding: 1rem; } .tab-btn { padding: 0.7rem 1rem; font-size: 0.85rem; } .items-table { font-size: 0.8rem; } .items-table th, .items-table td { padding: 0.6rem 0.4rem; } .item-image { width: 40px; height: 40px; } }
   </style>
 </head>
 <body>
   <div id="snowContainer"></div>
-
-  <!-- Header -->
   <header class="header">
-    <div class="header-left">
-      <span style="font-size: 2.5rem;">🎄</span>
-      <h1>heavenlynn Dashboard</h1>
-    </div>
+    <div class="header-left"><span style="font-size: 2.5rem;">🎄</span><h1>heavenlynn Dashboard</h1></div>
     <div class="header-right">
-      <a href="index.html" class="btn btn-menu">
-        <i class="fas fa-store"></i> View Menu
-      </a>
-      <button class="btn btn-logout" onclick="logout()">
-        <i class="fas fa-sign-out-alt"></i> Logout
-      </button>
+      <a href="index.html" class="btn btn-menu"><i class="fas fa-store"></i> View Menu</a>
+      <button class="btn btn-logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
     </div>
   </header>
-
-  <!-- Main Content -->
   <div class="main-content">
-    <!-- Stats -->
-    <div class="stats-grid">
-      <div class="stat-card">
-        <div class="stat-icon"><i class="fas fa-cookie-bite"></i></div>
-        <div class="stat-value" id="totalItems">0</div>
-        <div class="stat-label">Total Items</div>
+    <div class="tabs-nav">
+      <button class="tab-btn active" onclick="showTab('menu')"><i class="fas fa-cookie-bite"></i> Menu Items</button>
+      <button class="tab-btn" onclick="showTab('slideshow')"><i class="fas fa-images"></i> Slideshow</button>
+      <button class="tab-btn" onclick="showTab('specials')"><i class="fas fa-star"></i> Weekly Specials</button>
+    </div>
+    <!-- Menu Items Tab -->
+    <div class="tab-content active" id="tab-menu">
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-icon"><i class="fas fa-cookie-bite"></i></div><div class="stat-value" id="totalItems">0</div><div class="stat-label">Total Items</div></div>
+        <div class="stat-card"><div class="stat-icon"><i class="fas fa-layer-group"></i></div><div class="stat-value" id="totalCategories">0</div><div class="stat-label">Categories</div></div>
+        <div class="stat-card"><div class="stat-icon"><i class="fas fa-dollar-sign"></i></div><div class="stat-value" id="avgPrice">$0</div><div class="stat-label">Avg Price</div></div>
+        <div class="stat-card"><div class="stat-icon"><i class="fas fa-images"></i></div><div class="stat-value" id="totalSlides">0</div><div class="stat-label">Slides</div></div>
       </div>
-      <div class="stat-card">
-        <div class="stat-icon"><i class="fas fa-layer-group"></i></div>
-        <div class="stat-value" id="totalCategories">0</div>
-        <div class="stat-label">Categories</div>
+      <div class="section">
+        <div class="section-header"><h2 class="section-title"><i class="fas fa-plus-circle"></i> Add New Item</h2></div>
+        <form id="addForm">
+          <div class="form-grid">
+            <div class="form-group"><label>Item Name *</label><input type="text" id="itemName" required placeholder="e.g. Chocolate Chip Cookie"></div>
+            <div class="form-group"><label>Category *</label><select id="itemCategory" required><option value="">Select Category</option><option value="Cookies">Cookies</option><option value="Rolls">Rolls</option><option value="Slices">Slices</option><option value="Cakes">Cakes</option><option value="Cookie Cakes">Cookie Cakes</option><option value="Cups">Cups</option><option value="Cheesecakes">Cheesecakes</option><option value="Ice Cream">Ice Cream</option><option value="Drinks">Drinks</option><option value="Add-ons">Add-ons</option></select></div>
+            <div class="form-group"><label>Price ($) *</label><input type="number" id="itemPrice" step="0.01" min="0" required placeholder="0.00"></div>
+            <div class="form-group"><label>Image URL</label><input type="text" id="itemImage" placeholder="images/item.jpg"></div>
+            <div class="form-group full-width"><label>Description</label><textarea id="itemDesc" placeholder="Delicious description..."></textarea></div>
+          </div>
+          <button type="submit" class="btn-add"><i class="fas fa-plus"></i> Add Item</button>
+        </form>
       </div>
-      <div class="stat-card">
-        <div class="stat-icon"><i class="fas fa-dollar-sign"></i></div>
-        <div class="stat-value" id="avgPrice">$0</div>
-        <div class="stat-label">Avg Price</div>
+      <div class="section">
+        <div class="section-header"><h2 class="section-title"><i class="fas fa-list"></i> Menu Items</h2></div>
+        <div class="table-controls">
+          <div class="search-box"><i class="fas fa-search"></i><input type="text" id="searchInput" placeholder="Search items..." oninput="filterItems()"></div>
+          <select class="filter-select" id="filterCategory" onchange="filterItems()"><option value="">All Categories</option><option value="Cookies">Cookies</option><option value="Rolls">Rolls</option><option value="Slices">Slices</option><option value="Cakes">Cakes</option><option value="Cookie Cakes">Cookie Cakes</option><option value="Cups">Cups</option><option value="Cheesecakes">Cheesecakes</option><option value="Ice Cream">Ice Cream</option><option value="Drinks">Drinks</option><option value="Add-ons">Add-ons</option></select>
+        </div>
+        <div id="itemsContainer"><div class="loading"><i class="fas fa-snowflake"></i><p>Loading items...</p></div></div>
       </div>
     </div>
-
-    <!-- Add Item Section -->
-    <div class="section">
-      <div class="section-header">
-        <h2 class="section-title"><i class="fas fa-plus-circle"></i> Add New Item</h2>
+    <!-- Slideshow Tab -->
+    <div class="tab-content" id="tab-slideshow">
+      <div class="section">
+        <div class="section-header"><h2 class="section-title"><i class="fas fa-plus-circle"></i> Add Slideshow Image</h2></div>
+        <form id="addSlideForm">
+          <div class="form-grid">
+            <div class="form-group full-width"><label>Image URL *</label><input type="text" id="slideImage" required placeholder="images/slide.jpg"></div>
+            <div class="form-group"><label>Order Position</label><input type="number" id="slideOrder" value="0" min="0" placeholder="0"></div>
+          </div>
+          <button type="submit" class="btn-add"><i class="fas fa-plus"></i> Add Slide</button>
+        </form>
       </div>
-      <form id="addForm">
-        <div class="form-grid">
-          <div class="form-group">
-            <label>Item Name *</label>
-            <input type="text" id="itemName" required placeholder="e.g. Chocolate Chip Cookie">
-          </div>
-          <div class="form-group">
-            <label>Category *</label>
-            <select id="itemCategory" required>
-              <option value="">Select Category</option>
-              <option value="Cookies">Cookies</option>
-              <option value="Rolls">Rolls</option>
-              <option value="Slices">Slices</option>
-              <option value="Cakes">Cakes</option>
-              <option value="Cookie Cakes">Cookie Cakes</option>
-              <option value="Cups">Cups</option>
-              <option value="Cheesecakes">Cheesecakes</option>
-              <option value="Ice Cream">Ice Cream</option>
-              <option value="Drinks">Drinks</option>
-              <option value="Add-ons">Add-ons</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>Price ($) *</label>
-            <input type="number" id="itemPrice" step="0.01" min="0" required placeholder="0.00">
-          </div>
-          <div class="form-group">
-            <label>Image URL (optional)</label>
-            <input type="text" id="itemImage" placeholder="images/item.jpg">
-          </div>
-          <div class="form-group full-width">
-            <label>Description (optional)</label>
-            <textarea id="itemDesc" placeholder="Delicious description..."></textarea>
-          </div>
-        </div>
-        <button type="submit" class="btn-add">
-          <i class="fas fa-plus"></i> Add Item
-        </button>
-      </form>
+      <div class="section">
+        <div class="section-header"><h2 class="section-title"><i class="fas fa-images"></i> Slideshow Images</h2></div>
+        <div class="cards-grid" id="slideshowContainer"><div class="loading"><i class="fas fa-snowflake"></i><p>Loading slides...</p></div></div>
+      </div>
     </div>
-
-    <!-- Items List -->
-    <div class="section">
-      <div class="section-header">
-        <h2 class="section-title"><i class="fas fa-list"></i> Menu Items</h2>
+    <!-- Weekly Specials Tab -->
+    <div class="tab-content" id="tab-specials">
+      <div class="section">
+        <div class="section-header"><h2 class="section-title"><i class="fas fa-plus-circle"></i> Add Weekly Special</h2></div>
+        <form id="addSpecialForm">
+          <div class="form-grid">
+            <div class="form-group"><label>Item Name *</label><input type="text" id="specialName" required placeholder="e.g. Holiday Cookie"></div>
+            <div class="form-group"><label>Price ($) *</label><input type="number" id="specialPrice" step="0.01" min="0" required placeholder="0.00"></div>
+            <div class="form-group"><label>Tag *</label><input type="text" id="specialTag" required placeholder="e.g. New, Best Seller, Limited"></div>
+            <div class="form-group"><label>Image URL</label><input type="text" id="specialImage" placeholder="images/special.jpg"></div>
+            <div class="form-group full-width"><label>Description</label><textarea id="specialDesc" placeholder="Special description..."></textarea></div>
+            <div class="form-group"><label>Order Position</label><input type="number" id="specialOrder" value="0" min="0"></div>
+          </div>
+          <button type="submit" class="btn-add"><i class="fas fa-plus"></i> Add Special</button>
+        </form>
       </div>
-      
-      <div class="table-controls">
-        <div class="search-box">
-          <i class="fas fa-search"></i>
-          <input type="text" id="searchInput" placeholder="Search items..." oninput="filterItems()">
-        </div>
-        <select class="filter-select" id="filterCategory" onchange="filterItems()">
-          <option value="">All Categories</option>
-          <option value="Cookies">Cookies</option>
-          <option value="Rolls">Rolls</option>
-          <option value="Slices">Slices</option>
-          <option value="Cakes">Cakes</option>
-          <option value="Cookie Cakes">Cookie Cakes</option>
-          <option value="Cups">Cups</option>
-          <option value="Cheesecakes">Cheesecakes</option>
-          <option value="Ice Cream">Ice Cream</option>
-          <option value="Drinks">Drinks</option>
-          <option value="Add-ons">Add-ons</option>
-        </select>
-      </div>
-
-      <div id="itemsContainer">
-        <div class="loading">
-          <i class="fas fa-snowflake"></i>
-          <p>Loading items...</p>
-        </div>
+      <div class="section">
+        <div class="section-header"><h2 class="section-title"><i class="fas fa-star"></i> Weekly Specials</h2></div>
+        <div class="cards-grid" id="specialsContainer"><div class="loading"><i class="fas fa-snowflake"></i><p>Loading specials...</p></div></div>
       </div>
     </div>
   </div>
-
-  <!-- Edit Modal -->
-  <div class="modal" id="editModal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3 class="modal-title">🎄 Edit Item</h3>
-        <button class="close-modal" onclick="closeModal()">&times;</button>
-      </div>
-      <form id="editForm">
-        <input type="hidden" id="editId">
-        <div class="form-group">
-          <label>Item Name *</label>
-          <input type="text" id="editName" required>
-        </div>
-        <div class="form-group">
-          <label>Category *</label>
-          <select id="editCategory" required>
-            <option value="Cookies">Cookies</option>
-            <option value="Rolls">Rolls</option>
-            <option value="Slices">Slices</option>
-            <option value="Cakes">Cakes</option>
-            <option value="Cookie Cakes">Cookie Cakes</option>
-            <option value="Cups">Cups</option>
-            <option value="Cheesecakes">Cheesecakes</option>
-            <option value="Ice Cream">Ice Cream</option>
-            <option value="Drinks">Drinks</option>
-            <option value="Add-ons">Add-ons</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Price ($) *</label>
-          <input type="number" id="editPrice" step="0.01" min="0" required>
-        </div>
-        <div class="form-group">
-          <label>Image URL (optional)</label>
-          <input type="text" id="editImage">
-        </div>
-        <div class="form-group">
-          <label>Description (optional)</label>
-          <textarea id="editDesc"></textarea>
-        </div>
-        <button type="submit" class="btn-save">
-          <i class="fas fa-save"></i> Save Changes
-        </button>
-      </form>
-    </div>
-  </div>
-
+  <!-- Modals -->
+  <div class="modal" id="editModal"><div class="modal-content"><div class="modal-header"><h3 class="modal-title">🎄 Edit Item</h3><button class="close-modal" onclick="closeModal('editModal')">&times;</button></div><form id="editForm"><input type="hidden" id="editId"><div class="form-group"><label>Item Name *</label><input type="text" id="editName" required></div><div class="form-group"><label>Category *</label><select id="editCategory" required><option value="Cookies">Cookies</option><option value="Rolls">Rolls</option><option value="Slices">Slices</option><option value="Cakes">Cakes</option><option value="Cookie Cakes">Cookie Cakes</option><option value="Cups">Cups</option><option value="Cheesecakes">Cheesecakes</option><option value="Ice Cream">Ice Cream</option><option value="Drinks">Drinks</option><option value="Add-ons">Add-ons</option></select></div><div class="form-group"><label>Price ($) *</label><input type="number" id="editPrice" step="0.01" min="0" required></div><div class="form-group"><label>Image URL</label><input type="text" id="editImage"></div><div class="form-group"><label>Description</label><textarea id="editDesc"></textarea></div><button type="submit" class="btn-save"><i class="fas fa-save"></i> Save Changes</button></form></div></div>
+  <div class="modal" id="editSlideModal"><div class="modal-content"><div class="modal-header"><h3 class="modal-title">🖼️ Edit Slide</h3><button class="close-modal" onclick="closeModal('editSlideModal')">&times;</button></div><form id="editSlideForm"><input type="hidden" id="editSlideId"><div class="form-group"><label>Image URL *</label><input type="text" id="editSlideImage" required></div><div class="form-group"><label>Order Position</label><input type="number" id="editSlideOrder" min="0"></div><button type="submit" class="btn-save"><i class="fas fa-save"></i> Save Changes</button></form></div></div>
+  <div class="modal" id="editSpecialModal"><div class="modal-content"><div class="modal-header"><h3 class="modal-title">⭐ Edit Special</h3><button class="close-modal" onclick="closeModal('editSpecialModal')">&times;</button></div><form id="editSpecialForm"><input type="hidden" id="editSpecialId"><div class="form-group"><label>Item Name *</label><input type="text" id="editSpecialName" required></div><div class="form-group"><label>Price ($) *</label><input type="number" id="editSpecialPrice" step="0.01" min="0" required></div><div class="form-group"><label>Tag *</label><input type="text" id="editSpecialTag" required></div><div class="form-group"><label>Image URL</label><input type="text" id="editSpecialImage"></div><div class="form-group"><label>Description</label><textarea id="editSpecialDesc"></textarea></div><div class="form-group"><label>Order Position</label><input type="number" id="editSpecialOrder" min="0"></div><button type="submit" class="btn-save"><i class="fas fa-save"></i> Save Changes</button></form></div></div>
   <script>
-    // Initialize Supabase
-    const supabase = window.supabase.createClient(
-      'https://cfvsxnvvkdskbkljqicw.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNmdnN4bnZ2a2Rza2JrbGpxaWN3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ1MzU0MTcsImV4cCI6MjA2MDExMTQxN30.dNZsSOJyW1bE4bDQP-AIEYV7Z6hlw_iVMN6LZ2IdPio'
-    );
-
-    let allItems = [];
-
-    // Snowflakes
-    function createSnowflake() {
-      const snowflake = document.createElement('div');
-      snowflake.className = 'snowflake';
-      const types = ['❄', '❅', '❆'];
-      snowflake.textContent = types[Math.floor(Math.random() * types.length)];
-      snowflake.style.left = Math.random() * window.innerWidth + 'px';
-      snowflake.style.fontSize = (Math.random() * 20 + 12) + 'px';
-      snowflake.style.opacity = Math.random() * 0.5 + 0.3;
-      snowflake.style.animationDuration = (Math.random() * 15 + 15) + 's';
-      document.getElementById('snowContainer').appendChild(snowflake);
-      setTimeout(() => snowflake.remove(), 30000);
-    }
-
-    setInterval(createSnowflake, 300);
-    for (let i = 0; i < 30; i++) {
-      setTimeout(createSnowflake, i * 100);
-    }
-
-    // Load items
-    async function loadItems() {
-      try {
-        const { data, error } = await supabase
-          .from('menu_items')
-          .select('*')
-          .order('category', { ascending: true });
-
-        if (error) throw error;
-
-        allItems = data;
-        updateStats(data);
-        renderItems(data);
-      } catch (error) {
-        console.error('Error:', error);
-        document.getElementById('itemsContainer').innerHTML = `
-          <div class="loading" style="color: #c41e3a;">
-            <i class="fas fa-exclamation-circle"></i>
-            <p>Error loading items. Please refresh.</p>
-          </div>
-        `;
-      }
-    }
-
-    // Update stats
-    function updateStats(items) {
-      document.getElementById('totalItems').textContent = items.length;
-      
-      const categories = [...new Set(items.map(i => i.category))];
-      document.getElementById('totalCategories').textContent = categories.length;
-      
-      const avg = items.length > 0 
-        ? items.reduce((sum, i) => sum + parseFloat(i.price), 0) / items.length 
-        : 0;
-      document.getElementById('avgPrice').textContent = '$' + avg.toFixed(2);
-    }
-
-    // Render items
-    function renderItems(items) {
-      if (items.length === 0) {
-        document.getElementById('itemsContainer').innerHTML = `
-          <div class="loading">
-            <i class="fas fa-snowflake"></i>
-            <p>No items found</p>
-          </div>
-        `;
-        return;
-      }
-
-      document.getElementById('itemsContainer').innerHTML = `
-        <table class="items-table">
-          <thead>
-            <tr>
-              <th>Image</th>
-              <th>Name</th>
-              <th>Category</th>
-              <th>Price</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${items.map(item => `
-              <tr>
-                <td>
-                  <img src="${item.image_url || 'https://via.placeholder.com/60?text=🍪'}" 
-                       alt="${item.item_name}" 
-                       class="item-image"
-                       onerror="this.src='https://via.placeholder.com/60?text=🍪'">
-                </td>
-                <td class="item-name">${item.item_name}</td>
-                <td><span class="item-category">${item.category}</span></td>
-                <td class="item-price">$${parseFloat(item.price).toFixed(2)}</td>
-                <td>
-                  <div class="action-btns">
-                    <button class="btn-edit" onclick="editItem('${item.id}')">
-                      <i class="fas fa-edit"></i>
-                    </button>
-                    <button class="btn-delete" onclick="deleteItem('${item.id}')">
-                      <i class="fas fa-trash"></i>
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            `).join('')}
-          </tbody>
-        </table>
-      `;
-    }
-
-    // Filter items
-    function filterItems() {
-      const search = document.getElementById('searchInput').value.toLowerCase();
-      const category = document.getElementById('filterCategory').value;
-
-      let filtered = allItems;
-
-      if (search) {
-        filtered = filtered.filter(item => 
-          item.item_name.toLowerCase().includes(search) ||
-          (item.description && item.description.toLowerCase().includes(search))
-        );
-      }
-
-      if (category) {
-        filtered = filtered.filter(item => item.category === category);
-      }
-
-      renderItems(filtered);
-    }
-
-    // Add item
-    document.getElementById('addForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      
-      const btn = e.target.querySelector('button');
-      btn.innerHTML = '<i class="fas fa-snowflake fa-spin"></i> Adding...';
-      btn.disabled = true;
-
-      try {
-        const { error } = await supabase.from('menu_items').insert({
-          item_name: document.getElementById('itemName').value,
-          category: document.getElementById('itemCategory').value,
-          price: parseFloat(document.getElementById('itemPrice').value),
-          description: document.getElementById('itemDesc').value || null,
-          image_url: document.getElementById('itemImage').value || null
-        });
-
-        if (error) throw error;
-
-        e.target.reset();
-        loadItems();
-        alert('🎄 Item added successfully!');
-      } catch (error) {
-        alert('Error: ' + error.message);
-      }
-
-      btn.innerHTML = '<i class="fas fa-plus"></i> Add Item';
-      btn.disabled = false;
-    });
-
-    // Edit item
-    function editItem(id) {
-      const item = allItems.find(i => i.id === id);
-      if (!item) return;
-
-      document.getElementById('editId').value = item.id;
-      document.getElementById('editName').value = item.item_name;
-      document.getElementById('editCategory').value = item.category;
-      document.getElementById('editPrice').value = item.price;
-      document.getElementById('editImage').value = item.image_url || '';
-      document.getElementById('editDesc').value = item.description || '';
-
-      document.getElementById('editModal').classList.add('show');
-    }
-
-    // Save edit
-    document.getElementById('editForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      
-      const btn = e.target.querySelector('button');
-      btn.innerHTML = '<i class="fas fa-snowflake fa-spin"></i> Saving...';
-      btn.disabled = true;
-
-      try {
-        const id = document.getElementById('editId').value;
-        
-        const { error } = await supabase
-          .from('menu_items')
-          .update({
-            item_name: document.getElementById('editName').value,
-            category: document.getElementById('editCategory').value,
-            price: parseFloat(document.getElementById('editPrice').value),
-            description: document.getElementById('editDesc').value || null,
-            image_url: document.getElementById('editImage').value || null
-          })
-          .eq('id', id);
-
-        if (error) throw error;
-
-        closeModal();
-        loadItems();
-        alert('✨ Item updated successfully!');
-      } catch (error) {
-        alert('Error: ' + error.message);
-      }
-
-      btn.innerHTML = '<i class="fas fa-save"></i> Save Changes';
-      btn.disabled = false;
-    });
-
-    // Delete item
-    async function deleteItem(id) {
-      if (!confirm('🗑️ Are you sure you want to delete this item?')) return;
-
-      try {
-        const { error } = await supabase
-          .from('menu_items')
-          .delete()
-          .eq('id', id);
-
-        if (error) throw error;
-
-        loadItems();
-        alert('🎄 Item deleted!');
-      } catch (error) {
-        alert('Error: ' + error.message);
-      }
-    }
-
-    // Close modal
-    function closeModal() {
-      document.getElementById('editModal').classList.remove('show');
-    }
-
-    // Logout
-    function logout() {
-      if (confirm('Are you sure you want to logout?')) {
-        localStorage.clear();
-        supabase.auth.signOut();
-        window.location.href = 'admin.html';
-      }
-    }
-
-    // Initialize
-    loadItems();
+    const supabase = window.supabase.createClient('https://cfvsxnvvkdskbkljqicw.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNmdnN4bnZ2a2Rza2JrbGpxaWN3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ1MzU0MTcsImV4cCI6MjA2MDExMTQxN30.dNZsSOJyW1bE4bDQP-AIEYV7Z6hlw_iVMN6LZ2IdPio');
+    let allItems = [], allSlides = [], allSpecials = [];
+    function createSnowflake() { const s = document.createElement('div'); s.className = 'snowflake'; s.textContent = ['❄','❅','❆'][Math.floor(Math.random()*3)]; s.style.left = Math.random()*window.innerWidth+'px'; s.style.fontSize = (Math.random()*18+10)+'px'; s.style.opacity = Math.random()*0.5+0.3; s.style.animationDuration = (Math.random()*15+15)+'s'; document.getElementById('snowContainer').appendChild(s); setTimeout(()=>s.remove(),30000); }
+    setInterval(createSnowflake,400); for(let i=0;i<20;i++) setTimeout(createSnowflake,i*100);
+    function showTab(t) { document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active')); document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active')); document.querySelector(`[onclick="showTab('${t}')"]`).classList.add('active'); document.getElementById(`tab-${t}`).classList.add('active'); }
+    async function loadAllData() { await Promise.all([loadItems(),loadSlides(),loadSpecials()]); }
+    async function loadItems() { try { const {data,error} = await supabase.from('menu_items').select('*').order('category'); if(error) throw error; allItems=data; updateStats(data); renderItems(data); } catch(e) { console.error(e); document.getElementById('itemsContainer').innerHTML='<div class="empty-state"><i class="fas fa-exclamation-circle"></i><p>Error loading items</p></div>'; } }
+    function updateStats(items) { document.getElementById('totalItems').textContent=items.length; document.getElementById('totalCategories').textContent=[...new Set(items.map(i=>i.category))].length; const avg=items.length>0?items.reduce((s,i)=>s+parseFloat(i.price),0)/items.length:0; document.getElementById('avgPrice').textContent='$'+avg.toFixed(2); document.getElementById('totalSlides').textContent=allSlides.length; }
+    function renderItems(items) { if(items.length===0) { document.getElementById('itemsContainer').innerHTML='<div class="empty-state"><i class="fas fa-cookie-bite"></i><p>No items found</p></div>'; return; } document.getElementById('itemsContainer').innerHTML=`<table class="items-table"><thead><tr><th>Image</th><th>Name</th><th>Category</th><th>Price</th><th>Actions</th></tr></thead><tbody>${items.map(i=>`<tr><td><img src="${i.image_url||'https://via.placeholder.com/60?text=🍪'}" alt="${i.item_name}" class="item-image" onerror="this.src='https://via.placeholder.com/60?text=🍪'"></td><td class="item-name">${i.item_name}</td><td><span class="item-category">${i.category}</span></td><td class="item-price">$${parseFloat(i.price).toFixed(2)}</td><td><div class="action-btns"><button class="btn-edit" onclick="editItem('${i.id}')"><i class="fas fa-edit"></i></button><button class="btn-delete" onclick="deleteItem('${i.id}')"><i class="fas fa-trash"></i></button></div></td></tr>`).join('')}</tbody></table>`; }
+    function filterItems() { const s=document.getElementById('searchInput').value.toLowerCase(),c=document.getElementById('filterCategory').value; let f=allItems; if(s) f=f.filter(i=>i.item_name.toLowerCase().includes(s)); if(c) f=f.filter(i=>i.category===c); renderItems(f); }
+    document.getElementById('addForm').addEventListener('submit',async e=>{e.preventDefault();const b=e.target.querySelector('button');b.innerHTML='<i class="fas fa-snowflake fa-spin"></i> Adding...';b.disabled=true;try{const{error}=await supabase.from('menu_items').insert({item_name:document.getElementById('itemName').value,category:document.getElementById('itemCategory').value,price:parseFloat(document.getElementById('itemPrice').value),description:document.getElementById('itemDesc').value||null,image_url:document.getElementById('itemImage').value||null});if(error)throw error;e.target.reset();loadItems();alert('🎄 Item added!');}catch(e){alert('Error: '+e.message);}b.innerHTML='<i class="fas fa-plus"></i> Add Item';b.disabled=false;});
+    function editItem(id){const i=allItems.find(x=>x.id===id);if(!i)return;document.getElementById('editId').value=i.id;document.getElementById('editName').value=i.item_name;document.getElementById('editCategory').value=i.category;document.getElementById('editPrice').value=i.price;document.getElementById('editImage').value=i.image_url||'';document.getElementById('editDesc').value=i.description||'';document.getElementById('editModal').classList.add('show');}
+    document.getElementById('editForm').addEventListener('submit',async e=>{e.preventDefault();const b=e.target.querySelector('button');b.innerHTML='<i class="fas fa-snowflake fa-spin"></i> Saving...';b.disabled=true;try{const{error}=await supabase.from('menu_items').update({item_name:document.getElementById('editName').value,category:document.getElementById('editCategory').value,price:parseFloat(document.getElementById('editPrice').value),description:document.getElementById('editDesc').value||null,image_url:document.getElementById('editImage').value||null}).eq('id',document.getElementById('editId').value);if(error)throw error;closeModal('editModal');loadItems();alert('✨ Item updated!');}catch(e){alert('Error: '+e.message);}b.innerHTML='<i class="fas fa-save"></i> Save Changes';b.disabled=false;});
+    async function deleteItem(id){if(!confirm('Delete this item?'))return;try{const{error}=await supabase.from('menu_items').delete().eq('id',id);if(error)throw error;loadItems();}catch(e){alert('Error: '+e.message);}}
+    async function loadSlides(){try{const{data,error}=await supabase.from('slideshow_images').select('*').order('order_position');if(error)throw error;allSlides=data||[];renderSlides(allSlides);document.getElementById('totalSlides').textContent=allSlides.length;}catch(e){console.error(e);document.getElementById('slideshowContainer').innerHTML='<div class="empty-state"><i class="fas fa-exclamation-circle"></i><p>Error loading slides. Create the table first.</p></div>';}}
+    function renderSlides(slides){if(!slides||slides.length===0){document.getElementById('slideshowContainer').innerHTML='<div class="empty-state"><i class="fas fa-images"></i><p>No slideshow images yet</p></div>';return;}document.getElementById('slideshowContainer').innerHTML=slides.map(s=>`<div class="manage-card"><img src="${s.image_url}" alt="Slide" class="manage-card-image" onerror="this.src='https://via.placeholder.com/300x180?text=Image+Error'"><div class="manage-card-content"><div class="manage-card-meta"><span>Order: ${s.order_position}</span></div><div class="manage-card-actions"><button class="btn-card-edit" onclick="editSlide('${s.id}')"><i class="fas fa-edit"></i> Edit</button><button class="btn-card-delete" onclick="deleteSlide('${s.id}')"><i class="fas fa-trash"></i> Delete</button></div></div></div>`).join('');}
+    document.getElementById('addSlideForm').addEventListener('submit',async e=>{e.preventDefault();const b=e.target.querySelector('button');b.innerHTML='<i class="fas fa-snowflake fa-spin"></i> Adding...';b.disabled=true;try{const{error}=await supabase.from('slideshow_images').insert({image_url:document.getElementById('slideImage').value,order_position:parseInt(document.getElementById('slideOrder').value)||0});if(error)throw error;e.target.reset();loadSlides();alert('🖼️ Slide added!');}catch(e){alert('Error: '+e.message);}b.innerHTML='<i class="fas fa-plus"></i> Add Slide';b.disabled=false;});
+    function editSlide(id){const s=allSlides.find(x=>x.id===id);if(!s)return;document.getElementById('editSlideId').value=s.id;document.getElementById('editSlideImage').value=s.image_url;document.getElementById('editSlideOrder').value=s.order_position;document.getElementById('editSlideModal').classList.add('show');}
+    document.getElementById('editSlideForm').addEventListener('submit',async e=>{e.preventDefault();const b=e.target.querySelector('button');b.innerHTML='<i class="fas fa-snowflake fa-spin"></i> Saving...';b.disabled=true;try{const{error}=await supabase.from('slideshow_images').update({image_url:document.getElementById('editSlideImage').value,order_position:parseInt(document.getElementById('editSlideOrder').value)||0}).eq('id',document.getElementById('editSlideId').value);if(error)throw error;closeModal('editSlideModal');loadSlides();alert('✨ Slide updated!');}catch(e){alert('Error: '+e.message);}b.innerHTML='<i class="fas fa-save"></i> Save Changes';b.disabled=false;});
+    async function deleteSlide(id){if(!confirm('Delete this slide?'))return;try{const{error}=await supabase.from('slideshow_images').delete().eq('id',id);if(error)throw error;loadSlides();}catch(e){alert('Error: '+e.message);}}
+    async function loadSpecials(){try{const{data,error}=await supabase.from('weekly_specials').select('*').order('order_position');if(error)throw error;allSpecials=data||[];renderSpecials(allSpecials);}catch(e){console.error(e);document.getElementById('specialsContainer').innerHTML='<div class="empty-state"><i class="fas fa-exclamation-circle"></i><p>Error loading specials. Create the table first.</p></div>';}}
+    function renderSpecials(specials){if(!specials||specials.length===0){document.getElementById('specialsContainer').innerHTML='<div class="empty-state"><i class="fas fa-star"></i><p>No weekly specials yet</p></div>';return;}document.getElementById('specialsContainer').innerHTML=specials.map(s=>`<div class="manage-card"><img src="${s.image_url||'https://via.placeholder.com/300x180?text=🍪'}" alt="${s.name}" class="manage-card-image" onerror="this.src='https://via.placeholder.com/300x180?text=🍪'"><div class="manage-card-content"><div class="manage-card-title">${s.name}</div><div class="manage-card-meta"><span class="manage-card-tag">${s.tag}</span><span class="manage-card-price">$${parseFloat(s.price).toFixed(2)}</span></div><p style="font-size:0.85rem;color:#64748b;margin-top:0.5rem;">${s.description||''}</p><div class="manage-card-actions"><button class="btn-card-edit" onclick="editSpecial('${s.id}')"><i class="fas fa-edit"></i> Edit</button><button class="btn-card-delete" onclick="deleteSpecial('${s.id}')"><i class="fas fa-trash"></i> Delete</button></div></div></div>`).join('');}
+    document.getElementById('addSpecialForm').addEventListener('submit',async e=>{e.preventDefault();const b=e.target.querySelector('button');b.innerHTML='<i class="fas fa-snowflake fa-spin"></i> Adding...';b.disabled=true;try{const{error}=await supabase.from('weekly_specials').insert({name:document.getElementById('specialName').value,price:parseFloat(document.getElementById('specialPrice').value),tag:document.getElementById('specialTag').value,image_url:document.getElementById('specialImage').value||null,description:document.getElementById('specialDesc').value||null,order_position:parseInt(document.getElementById('specialOrder').value)||0});if(error)throw error;e.target.reset();loadSpecials();alert('⭐ Special added!');}catch(e){alert('Error: '+e.message);}b.innerHTML='<i class="fas fa-plus"></i> Add Special';b.disabled=false;});
+    function editSpecial(id){const s=allSpecials.find(x=>x.id===id);if(!s)return;document.getElementById('editSpecialId').value=s.id;document.getElementById('editSpecialName').value=s.name;document.getElementById('editSpecialPrice').value=s.price;document.getElementById('editSpecialTag').value=s.tag;document.getElementById('editSpecialImage').value=s.image_url||'';document.getElementById('editSpecialDesc').value=s.description||'';document.getElementById('editSpecialOrder').value=s.order_position;document.getElementById('editSpecialModal').classList.add('show');}
+    document.getElementById('editSpecialForm').addEventListener('submit',async e=>{e.preventDefault();const b=e.target.querySelector('button');b.innerHTML='<i class="fas fa-snowflake fa-spin"></i> Saving...';b.disabled=true;try{const{error}=await supabase.from('weekly_specials').update({name:document.getElementById('editSpecialName').value,price:parseFloat(document.getElementById('editSpecialPrice').value),tag:document.getElementById('editSpecialTag').value,image_url:document.getElementById('editSpecialImage').value||null,description:document.getElementById('editSpecialDesc').value||null,order_position:parseInt(document.getElementById('editSpecialOrder').value)||0}).eq('id',document.getElementById('editSpecialId').value);if(error)throw error;closeModal('editSpecialModal');loadSpecials();alert('✨ Special updated!');}catch(e){alert('Error: '+e.message);}b.innerHTML='<i class="fas fa-save"></i> Save Changes';b.disabled=false;});
+    async function deleteSpecial(id){if(!confirm('Delete this special?'))return;try{const{error}=await supabase.from('weekly_specials').delete().eq('id',id);if(error)throw error;loadSpecials();}catch(e){alert('Error: '+e.message);}}
+    function closeModal(id){document.getElementById(id).classList.remove('show');}
+    function logout(){if(confirm('Logout?')){localStorage.clear();supabase.auth.signOut();window.location.href='admin.html';}}
+    loadAllData();
   </script>
 </body>
 </html>
