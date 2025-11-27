@@ -59,21 +59,9 @@
     /* Cookie Jar - Santa Sleigh */
     .cookie-jar { display: flex; flex-direction: column; align-items: center; margin-top: 1rem; position: relative; }
     .jar { position: relative; width: 200px; height: 120px; animation: sleigh-float 3s ease-in-out infinite; }
-    .jar-lid {
-      width: 200px; height: 60px; background: transparent;
-      border-radius: 0; position: absolute; top: 0; left: 0;
-      border: none; box-shadow: none; z-index: 10; font-size: 3rem; text-align: center; line-height: 60px;
-    }
-    .jar-lid::after {
-      content: '🦌🦌🦌'; position: absolute; top: 10px; left: -60px; transform: none;
-      font-size: 1.8rem; animation: reindeer-run 0.5s steps(2) infinite;
-    }
-    .jar-body {
-      width: 200px; height: 80px; background: transparent;
-      border-radius: 0; border: none; position: absolute; top: 40px; left: 20px;
-      display: flex; flex-wrap: nowrap; justify-content: center; align-items: center; padding: 0;
-      overflow: visible; box-shadow: none;
-    }
+    .jar-lid { width: 200px; height: 60px; background: transparent; border-radius: 0; position: absolute; top: 0; left: 0; border: none; box-shadow: none; z-index: 10; font-size: 3rem; text-align: center; line-height: 60px; }
+    .jar-lid::after { content: '🦌🦌🦌'; position: absolute; top: 10px; left: -60px; transform: none; font-size: 1.8rem; animation: reindeer-run 0.5s steps(2) infinite; }
+    .jar-body { width: 200px; height: 80px; background: transparent; border-radius: 0; border: none; position: absolute; top: 40px; left: 20px; display: flex; flex-wrap: nowrap; justify-content: center; align-items: center; padding: 0; overflow: visible; box-shadow: none; }
     .cookie-in-jar { font-size: 1.5rem; margin: 2px; animation: cookie-float 2s ease-in-out infinite alternate; cursor: pointer; }
     .cookie-in-jar:nth-child(1) { animation-delay: 0s; position: absolute; top: -20px; left: 80px; }
     .cookie-in-jar:nth-child(2) { animation-delay: .3s; position: absolute; top: -15px; left: 100px; }
@@ -141,7 +129,6 @@
     .slider-controls { display: flex; justify-content: center; gap: 15px; margin-top: 1rem; }
     .slider-btn { width: 40px; height: 40px; border-radius: 50%; background: #fff; border: 2px solid var(--primary); color: var(--primary-dark); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: var(--transition); }
     .slider-btn:hover { background: var(--primary); color: #fff; transform: scale(1.1); }
-    .slider-btn:focus { outline: none; }
 
     /* Main Content */
     main { padding: 2rem 1rem; max-width: 1200px; margin: 0 auto; }
@@ -219,7 +206,6 @@
     .category-dropdown li { margin-bottom: 5px; }
     .category-dropdown a { display: flex; align-items: center; gap: 8px; padding: 8px 10px; color: var(--text); text-decoration: none; border-radius: var(--radius-sm); transition: var(--transition); }
     .category-dropdown a:hover { background: var(--primary-light); color: var(--primary-dark); }
-    .category-dropdown a i { color: var(--primary); }
 
     /* WhatsApp Button */
     .whatsapp-cookie-btn { position: fixed; left: 20px; bottom: 80px; width: 60px; height: 60px; background: #25D366; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; box-shadow: var(--shadow-md); cursor: pointer; z-index: 20; transition: var(--transition); border: 2px solid #fff; text-decoration: none; }
@@ -234,7 +220,6 @@
     .box-content { background: #fff; margin: 0 auto; padding: 2rem; border-radius: var(--radius-lg); max-width: 900px; width: 100%; animation: slide-up .4s; }
     .box-header { text-align: center; margin-bottom: 2rem; border-bottom: 3px dashed #2d4a3e; padding-bottom: 1.5rem; }
     .box-header h2 { color: var(--primary-dark); font-size: 2.2rem; margin-bottom: .5rem; }
-    .box-header p { color: var(--text-light); }
     .box-size-selector { display: grid; grid-template-columns: repeat(auto-fit,minmax(150px,1fr)); gap: 1rem; margin-bottom: 2rem; }
     .size-option { background: var(--primary-light); border: 3px solid transparent; padding: 1.5rem 1rem; border-radius: var(--radius-md); cursor: pointer; transition: var(--transition); text-align: center; position: relative; }
     .size-option:hover { transform: translateY(-5px); box-shadow: var(--shadow-md); }
@@ -312,18 +297,15 @@
     @keyframes cookie-float { 0% { transform: translateY(0) rotate(0); } 100% { transform: translateY(-8px) rotate(5deg) scale(1.05); } }
     @keyframes cookie-poof { 0% { opacity: 1; transform: scale(1) rotate(0) translateY(0); } 50% { opacity: .8; transform: scale(1.3) rotate(180deg) translateY(-20px); } 100% { opacity: 0; transform: scale(0) rotate(720deg) translateY(-80px); } }
     @keyframes cookie-spin { 0%,100% { transform: rotate(0) scale(1); } 25% { transform: rotate(5deg) scale(1.1); } 75% { transform: rotate(-5deg) scale(1.1); } }
-    @keyframes jar-wiggle { 0%,100% { transform: rotate(0) scale(1); } 25% { transform: rotate(1deg) scale(1.02); } 75% { transform: rotate(-1deg) scale(1.02); } }
     @keyframes sleigh-float { 0%,100% { transform: translateY(0) translateX(0); } 50% { transform: translateY(-15px) translateX(10px); } }
     @keyframes reindeer-run { 0% { transform: translateY(0); } 100% { transform: translateY(-3px); } }
     @keyframes sparkle-dance { 0%,100% { transform: translateY(0) rotate(0) scale(1); opacity: .8; } 50% { transform: translateY(-10px) rotate(180deg) scale(1.2); opacity: 1; } }
-    @keyframes heart-float { 0%,100% { transform: translateY(0) scale(1); opacity: .7; } 50% { transform: translateY(-15px) scale(1.3); opacity: 1; } }
     @keyframes sparkle-fade { 0% { transform: scale(0); opacity: 1; } 100% { transform: scale(1) translate(var(--tx,50px),var(--ty,-50px)); opacity: 0; } }
     @keyframes crack-cookie { 0% { transform: translate(-50%,-50%) scale(1); } 40% { transform: translate(-50%,-50%) scale(1.1) rotate(5deg); } 100% { transform: translate(-50%,-50%) scale(0); opacity: 0; } }
     @keyframes box-wiggle { 0%,100% { transform: rotate(0); } 25% { transform: rotate(-5deg); } 75% { transform: rotate(5deg); } }
     @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
     @keyframes slide-up { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
     @keyframes gentle-float { 0% { transform: rotate(-5deg) translateY(0); } 100% { transform: rotate(-3deg) translateY(-3px); } }
-    @keyframes floatUp { 0% { transform: translateY(0) rotate(0); opacity: 0; } 10% { opacity: .7; } 90% { opacity: .4; } 100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; } }
 
     /* Scrollbar */
     ::-webkit-scrollbar { width: 8px; height: 6px; }
@@ -396,16 +378,9 @@
 <body>
   <!-- Snowflakes -->
   <div class="snowflakes" aria-hidden="true">
-    <div class="snowflake">❄</div>
-    <div class="snowflake">❅</div>
-    <div class="snowflake">❆</div>
-    <div class="snowflake">❄</div>
-    <div class="snowflake">❅</div>
-    <div class="snowflake">❆</div>
-    <div class="snowflake">❄</div>
-    <div class="snowflake">❅</div>
-    <div class="snowflake">❆</div>
-    <div class="snowflake">❄</div>
+    <div class="snowflake">❄</div><div class="snowflake">❅</div><div class="snowflake">❆</div>
+    <div class="snowflake">❄</div><div class="snowflake">❅</div><div class="snowflake">❆</div>
+    <div class="snowflake">❄</div><div class="snowflake">❅</div><div class="snowflake">❆</div><div class="snowflake">❄</div>
   </div>
 
   <!-- Loading Screen -->
@@ -491,15 +466,9 @@
         <p>Choose a box size and fill it with your favorite treats!</p>
       </div>
       <div class="box-size-selector" id="boxSizeSelector">
-        <div class="size-option" data-size="small" data-slots="4">
-          <span class="size-emoji">📦</span><div class="size-name">Small Box</div><div class="size-details">4 items</div><div class="size-price">Free Box</div>
-        </div>
-        <div class="size-option" data-size="medium" data-slots="6">
-          <span class="size-emoji">📦📦</span><div class="size-name">Medium Box</div><div class="size-details">6 items</div><div class="size-price">Free Box</div>
-        </div>
-        <div class="size-option" data-size="large" data-slots="8">
-          <span class="size-emoji">📦📦📦</span><div class="size-name">Large Box</div><div class="size-details">8 items</div><div class="size-price">Free Box</div>
-        </div>
+        <div class="size-option" data-size="small" data-slots="4"><span class="size-emoji">📦</span><div class="size-name">Small Box</div><div class="size-details">4 items</div><div class="size-price">Free Box</div></div>
+        <div class="size-option" data-size="medium" data-slots="6"><span class="size-emoji">📦📦</span><div class="size-name">Medium Box</div><div class="size-details">6 items</div><div class="size-price">Free Box</div></div>
+        <div class="size-option" data-size="large" data-slots="8"><span class="size-emoji">📦📦📦</span><div class="size-name">Large Box</div><div class="size-details">8 items</div><div class="size-price">Free Box</div></div>
       </div>
       <div class="box-display-area" id="boxDisplayArea" style="display:none">
         <div class="visual-box-container">
@@ -580,7 +549,14 @@ const specialBadges = {
 
 const categoryOrder = ["Cookies", "Rolls", "Slices", "Cakes", "Cookie Cakes", "Cups", "Cheesecakes", "Ice Cream", "Drinks", "Add-ons"];
 
-const featuredItems = [
+// FALLBACK DATA (used if database tables are empty)
+const fallbackSlideImages = [
+  "images/lemon-cheesec.jpg", "images/zesty_fullpic.jpg", "images/cc_dec.jpg", "images/date_cke_again.jpg",
+  "images/fruit_cake.jpg", "images/heavenlynn_spec.jpg", "images/heavenly_cup.jpg", "images/birthday.jpg",
+  "images/cookies.jpeg", "images/tartes.jpeg", "images/cookie-choc.jpg", "images/cookie-ice.jpg", "images/san.jpeg"
+];
+
+const fallbackFeaturedItems = [
   { name: "Lemon Cheesecake", description: "Creamy lemon cheesecake with a zesty lemon curd topping.", price: 30, image: "images/lemon-cheesec.jpg", tag: "Sun-Kissed Slice!" },
   { name: "Zesty Lemon Cheesecake Jar", description: "Tangy, Creamy and full of lemony love", price: 4, image: "images/Lemon-Chee.jpg", tag: "New" },
   { name: "Healthy Chia Pudding", description: "Creamy chia-almond blend, naturally sweet and nutrient-rich.", price: 5, image: "images/healthy_chiapudd.jpg", tag: "Healthy Treat" },
@@ -589,11 +565,9 @@ const featuredItems = [
   { name: "Heavenlynn Special", description: "Warm brownie, vanilla ice cream, and caramel drizzle pure indulgence.", price: 5, image: "images/heavenlynn_spec.jpg", tag: "Trending" }
 ];
 
-const slideImages = [
-  "images/lemon-cheesec.jpg", "images/zesty_fullpic.jpg", "images/cc_dec.jpg", "images/date_cke_again.jpg",
-  "images/fruit_cake.jpg", "images/heavenlynn_spec.jpg", "images/heavenly_cup.jpg", "images/birthday.jpg",
-  "images/cookies.jpeg", "images/tartes.jpeg", "images/cookie-choc.jpg", "images/cookie-ice.jpg", "images/san.jpeg"
-];
+// DYNAMIC DATA (loaded from database)
+let slideImages = [];
+let featuredItems = [];
 
 const fortunes = {
   tips: ["Pro Tip: Our cookies taste best when shared with friends!", "Tip: Try our desserts with coffee for perfect pairing.", "Baker's Tip: Store cookies in an airtight container!", "Tip: Visit us before 10am for the freshest pastries!", "Pro Tip: Weekly specials announced every Wednesday on Instagram!"],
@@ -607,6 +581,59 @@ let cart = [];
 let currentBox = { size: null, slots: 0, items: [] };
 let currentSlide = 0;
 let slideInterval;
+
+// ==================== LOAD FROM DATABASE ====================
+async function loadSlideshowFromDB() {
+  try {
+    const { data, error } = await supabase
+      .from('slideshow_images')
+      .select('*')
+      .eq('active', true)
+      .order('order_position');
+    
+    if (error) throw error;
+    
+    if (data && data.length > 0) {
+      slideImages = data.map(s => s.image_url);
+      console.log('✅ Loaded', slideImages.length, 'slides from database');
+    } else {
+      slideImages = fallbackSlideImages;
+      console.log('ℹ️ Using fallback slideshow images');
+    }
+  } catch (e) {
+    console.log('⚠️ Could not load slides from DB, using fallback:', e.message);
+    slideImages = fallbackSlideImages;
+  }
+}
+
+async function loadFeaturedFromDB() {
+  try {
+    const { data, error } = await supabase
+      .from('weekly_specials')
+      .select('*')
+      .eq('active', true)
+      .order('order_position');
+    
+    if (error) throw error;
+    
+    if (data && data.length > 0) {
+      featuredItems = data.map(s => ({
+        name: s.name,
+        description: s.description || '',
+        price: parseFloat(s.price),
+        image: s.image_url || 'images/placeholder.jpg',
+        tag: s.tag || 'Special'
+      }));
+      console.log('✅ Loaded', featuredItems.length, 'specials from database');
+    } else {
+      featuredItems = fallbackFeaturedItems;
+      console.log('ℹ️ Using fallback featured items');
+    }
+  } catch (e) {
+    console.log('⚠️ Could not load specials from DB, using fallback:', e.message);
+    featuredItems = fallbackFeaturedItems;
+  }
+}
 
 // Cart Functions
 function addToCart(item) {
@@ -796,7 +823,6 @@ async function loadMenu() {
   const grouped = {};
   data.forEach(i => { if (!grouped[i.category]) grouped[i.category] = []; grouped[i.category].push(i); });
   
-  // Sort specific categories
   ['Rolls', 'Cookies', 'Cheesecakes'].forEach(cat => {
     if (grouped[cat]) {
       const priority = { 'Cinnamon Roll': -1, 'Sea Salt Cookie': -1, 'San Sebastian': 1 };
@@ -819,19 +845,16 @@ async function loadMenu() {
     const icon = iconMap[category] || 'fa-utensils';
     const needsPreorder = ['Cakes', 'Cookie Cakes'].includes(category);
     
-    // Nav link
     const link = document.createElement('a');
     link.href = `#${catId}`;
     link.innerHTML = `<i class="fas ${icon}"></i>${category}`;
     nav.appendChild(link);
     
-    // Dropdown link
     const li = document.createElement('li');
     li.innerHTML = `<a href="#${catId}"><i class="fas ${icon}"></i>${category}</a>`;
     li.querySelector('a').onclick = () => document.getElementById('categoryDropdown').classList.remove('show');
     dropdown.appendChild(li);
     
-    // Section
     const section = document.createElement('section');
     section.id = catId;
     section.innerHTML = `<div class="section-title"><h2>${category}</h2></div>`;
@@ -872,7 +895,6 @@ async function loadMenu() {
     sections.appendChild(section);
   });
   
-  // Navigation highlighting
   const navLinks = document.querySelectorAll('nav a');
   if ('IntersectionObserver' in window) {
     const observer = new IntersectionObserver(entries => {
@@ -888,11 +910,9 @@ async function loadMenu() {
   }
   navLinks[0]?.classList.add('active');
   
-  // Scroll effects
   const navWrapper = document.querySelector('.nav-wrapper');
   window.addEventListener('scroll', () => navWrapper.classList.toggle('scrolled', window.scrollY > 100));
   
-  // Smooth scrolling
   document.querySelectorAll('a[href^="#"]').forEach(a => {
     a.addEventListener('click', e => {
       e.preventDefault();
@@ -902,15 +922,17 @@ async function loadMenu() {
   });
 }
 
-// Featured Items
+// Featured Items - NOW DYNAMIC!
 function loadFeaturedItems() {
   const slider = document.getElementById('featuredSlider');
+  slider.innerHTML = ''; // Clear any existing items
+  
   featuredItems.forEach(item => {
     const div = document.createElement('div');
     div.className = 'featured-item';
     div.innerHTML = `
       <div class="limited-tag">${item.tag}</div>
-      <div class="featured-img"><img src="${item.image}" alt="${item.name}"></div>
+      <div class="featured-img"><img src="${item.image}" alt="${item.name}" onerror="this.src='images/placeholder.jpg'"></div>
       <div class="featured-content">
         <div class="featured-name">${item.name}</div>
         <div class="featured-desc">${item.description}</div>
@@ -928,10 +950,13 @@ function loadFeaturedItems() {
   document.getElementById('sliderNext').onclick = () => slider.scrollBy({ left: 175, behavior: 'smooth' });
 }
 
-// Slideshow
+// Slideshow - NOW DYNAMIC!
 function initSlideshow() {
   const container = document.querySelector('.slideshow-container');
   const dots = document.querySelector('.slideshow-dots');
+  
+  container.innerHTML = '';
+  dots.innerHTML = '';
   
   slideImages.forEach((img, i) => {
     const slide = document.createElement('div');
@@ -954,11 +979,11 @@ function goToSlide(n) {
   const slides = document.querySelectorAll('.slide');
   const dots = document.querySelectorAll('.dot');
   if (!slides[n]) return;
-  slides[currentSlide].classList.remove('active');
-  dots[currentSlide].classList.remove('active');
+  slides[currentSlide]?.classList.remove('active');
+  dots[currentSlide]?.classList.remove('active');
   currentSlide = n;
-  slides[n].classList.add('active');
-  dots[n].classList.add('active');
+  slides[n]?.classList.add('active');
+  dots[n]?.classList.add('active');
 }
 
 // Fortune Cookie
@@ -1041,8 +1066,15 @@ window.onload = () => {
   setTimeout(eat, 500);
 };
 
-// Init
-document.addEventListener('DOMContentLoaded', () => {
+// Init - LOAD FROM DATABASE FIRST!
+document.addEventListener('DOMContentLoaded', async () => {
+  // Load dynamic content from database first
+  await Promise.all([
+    loadSlideshowFromDB(),
+    loadFeaturedFromDB()
+  ]);
+  
+  // Then initialize everything
   loadMenu();
   loadFeaturedItems();
   initSlideshow();
