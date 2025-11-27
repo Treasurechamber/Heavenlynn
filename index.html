@@ -113,9 +113,9 @@
     .featured-badge { position: absolute; top: -20px; left: 50%; transform: translateX(-50%); background: #2d4a3e; color: #fff; padding: 4px 15px; border-radius: 20px; font-size: .8rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; }
     .featured-slider { overflow-x: auto; scroll-behavior: smooth; display: flex; gap: 20px; padding: .5rem .5rem 1.5rem; scrollbar-width: none; }
     .featured-slider::-webkit-scrollbar { display: none; }
-    .featured-item { min-width: 250px; width: 250px; flex: 0 0 auto; border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--shadow-md); transition: var(--transition); background: #fff; border: 2px solid var(--primary-light); position: relative; }
+    .featured-item { min-width: 250px; width: 250px; flex: 0 0 auto; border-radius: var(--radius-md); overflow: visible; box-shadow: var(--shadow-md); transition: var(--transition); background: #fff; border: 2px solid var(--primary-light); position: relative; }
     .featured-item:hover { transform: translateY(-8px); box-shadow: var(--shadow-lg); border-color: #d4a574; }
-    .featured-img { height: 160px; overflow: hidden; }
+    .featured-img { height: 160px; overflow: hidden; border-radius: var(--radius-md) var(--radius-md) 0 0; }
     .featured-img img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s; filter: saturate(1.2); }
     .featured-item:hover .featured-img img { transform: scale(1.1); }
     .featured-content { padding: 1rem; text-align: center; }
@@ -927,15 +927,22 @@ function loadFeaturedItems() {
   const slider = document.getElementById('featuredSlider');
   slider.innerHTML = ''; // Clear any existing items
   
+  console.log('Loading featured items:', featuredItems); // Debug
+  
   featuredItems.forEach(item => {
     const div = document.createElement('div');
     div.className = 'featured-item';
+    
+    // Make sure tag exists and has a value
+    const tagText = item.tag && item.tag.trim() ? item.tag : 'Special';
+    const imageUrl = item.image || 'images/placeholder.jpg';
+    
     div.innerHTML = `
-      <div class="limited-tag">${item.tag}</div>
-      <div class="featured-img"><img src="${item.image}" alt="${item.name}" onerror="this.src='images/placeholder.jpg'"></div>
+      <div class="limited-tag" style="position:absolute;top:10px;right:10px;background:#2d4a3e;color:#fff;padding:4px 12px;border-radius:12px;font-size:0.75rem;font-weight:600;z-index:10;transform:rotate(3deg);box-shadow:0 2px 6px rgba(0,0,0,0.2);">${tagText}</div>
+      <div class="featured-img"><img src="${imageUrl}" alt="${item.name}" onerror="this.src='images/placeholder.jpg'"></div>
       <div class="featured-content">
         <div class="featured-name">${item.name}</div>
-        <div class="featured-desc">${item.description}</div>
+        <div class="featured-desc">${item.description || ''}</div>
         <div class="featured-footer">
           <div class="featured-price">$${item.price.toFixed(2)}</div>
           <button class="featured-button">Order Now</button>
