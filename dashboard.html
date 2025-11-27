@@ -50,6 +50,23 @@
     textarea { resize: vertical; min-height: 80px; }
     .btn-add { background: linear-gradient(135deg, #c41e3a, #8b0000); color: white; padding: 1rem 2rem; border: 2px solid rgba(212, 175, 55, 0.5); border-radius: 12px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.3s; margin-top: 1rem; }
     .btn-add:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(196, 30, 58, 0.4); }
+    .btn-add:disabled { background: #9ca3af; cursor: not-allowed; transform: none; }
+    
+    /* File Upload Styles */
+    .file-upload-wrapper { position: relative; }
+    .file-upload-input { display: none; }
+    .file-upload-btn { display: flex; align-items: center; gap: 10px; padding: 0.9rem 1rem; border: 2px dashed rgba(14, 165, 233, 0.5); border-radius: 12px; background: linear-gradient(135deg, #f0f9ff, #e0f2fe); cursor: pointer; transition: all 0.3s; color: #0c4a6e; font-weight: 500; }
+    .file-upload-btn:hover { border-color: #c41e3a; background: linear-gradient(135deg, #fff1f2, #ffe4e6); }
+    .file-upload-btn i { font-size: 1.5rem; color: #0ea5e9; }
+    .file-upload-btn.has-file { border-style: solid; border-color: #165b33; background: linear-gradient(135deg, #f0fdf4, #dcfce7); }
+    .file-upload-btn.has-file i { color: #165b33; }
+    .file-preview { margin-top: 0.5rem; }
+    .file-preview img { max-width: 150px; max-height: 100px; border-radius: 8px; border: 2px solid rgba(212, 175, 55, 0.4); object-fit: cover; }
+    .file-preview-name { font-size: 0.85rem; color: #64748b; margin-top: 0.3rem; }
+    .upload-progress { height: 4px; background: #e0f2fe; border-radius: 2px; margin-top: 0.5rem; overflow: hidden; display: none; }
+    .upload-progress.show { display: block; }
+    .upload-progress-bar { height: 100%; background: linear-gradient(90deg, #c41e3a, #165b33); width: 0%; transition: width 0.3s; }
+    
     .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 1.5rem; }
     .manage-card { background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 15px rgba(14, 165, 233, 0.1); border: 2px solid rgba(212, 175, 55, 0.2); transition: all 0.3s; }
     .manage-card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(14, 165, 233, 0.2); }
@@ -91,6 +108,7 @@
     .close-modal:hover { color: #c41e3a; transform: rotate(90deg); }
     .btn-save { background: linear-gradient(135deg, #165b33, #0f4d2c); color: white; padding: 1rem 2rem; border: 2px solid rgba(212, 175, 55, 0.5); border-radius: 12px; font-size: 1rem; font-weight: 700; cursor: pointer; width: 100%; margin-top: 1rem; transition: all 0.3s; }
     .btn-save:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(22, 91, 51, 0.4); }
+    .btn-save:disabled { background: #9ca3af; cursor: not-allowed; transform: none; }
     .loading { text-align: center; padding: 3rem; color: #0ea5e9; }
     .loading i { font-size: 2.5rem; animation: spin 1s linear infinite; }
     @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
@@ -114,6 +132,7 @@
       <button class="tab-btn" onclick="showTab('slideshow')"><i class="fas fa-images"></i> Slideshow</button>
       <button class="tab-btn" onclick="showTab('specials')"><i class="fas fa-star"></i> Weekly Specials</button>
     </div>
+
     <!-- Menu Items Tab -->
     <div class="tab-content active" id="tab-menu">
       <div class="stats-grid">
@@ -129,7 +148,18 @@
             <div class="form-group"><label>Item Name *</label><input type="text" id="itemName" required placeholder="e.g. Chocolate Chip Cookie"></div>
             <div class="form-group"><label>Category *</label><select id="itemCategory" required><option value="">Select Category</option><option value="Cookies">Cookies</option><option value="Rolls">Rolls</option><option value="Slices">Slices</option><option value="Cakes">Cakes</option><option value="Cookie Cakes">Cookie Cakes</option><option value="Cups">Cups</option><option value="Cheesecakes">Cheesecakes</option><option value="Ice Cream">Ice Cream</option><option value="Drinks">Drinks</option><option value="Add-ons">Add-ons</option></select></div>
             <div class="form-group"><label>Price ($) *</label><input type="number" id="itemPrice" step="0.01" min="0" required placeholder="0.00"></div>
-            <div class="form-group"><label>Image URL</label><input type="text" id="itemImage" placeholder="images/item.jpg"></div>
+            <div class="form-group">
+              <label>Image</label>
+              <div class="file-upload-wrapper">
+                <input type="file" id="itemImageFile" class="file-upload-input" accept="image/*" onchange="handleFileSelect(this, 'itemImagePreview')">
+                <div class="file-upload-btn" onclick="document.getElementById('itemImageFile').click()">
+                  <i class="fas fa-cloud-upload-alt"></i>
+                  <span>Browse Image...</span>
+                </div>
+                <div class="file-preview" id="itemImagePreview"></div>
+                <div class="upload-progress" id="itemUploadProgress"><div class="upload-progress-bar"></div></div>
+              </div>
+            </div>
             <div class="form-group full-width"><label>Description</label><textarea id="itemDesc" placeholder="Delicious description..."></textarea></div>
           </div>
           <button type="submit" class="btn-add"><i class="fas fa-plus"></i> Add Item</button>
@@ -144,13 +174,25 @@
         <div id="itemsContainer"><div class="loading"><i class="fas fa-snowflake"></i><p>Loading items...</p></div></div>
       </div>
     </div>
+
     <!-- Slideshow Tab -->
     <div class="tab-content" id="tab-slideshow">
       <div class="section">
         <div class="section-header"><h2 class="section-title"><i class="fas fa-plus-circle"></i> Add Slideshow Image</h2></div>
         <form id="addSlideForm">
           <div class="form-grid">
-            <div class="form-group full-width"><label>Image URL *</label><input type="text" id="slideImage" required placeholder="images/slide.jpg"></div>
+            <div class="form-group full-width">
+              <label>Image *</label>
+              <div class="file-upload-wrapper">
+                <input type="file" id="slideImageFile" class="file-upload-input" accept="image/*" onchange="handleFileSelect(this, 'slideImagePreview')" required>
+                <div class="file-upload-btn" onclick="document.getElementById('slideImageFile').click()">
+                  <i class="fas fa-cloud-upload-alt"></i>
+                  <span>Browse Image...</span>
+                </div>
+                <div class="file-preview" id="slideImagePreview"></div>
+                <div class="upload-progress" id="slideUploadProgress"><div class="upload-progress-bar"></div></div>
+              </div>
+            </div>
             <div class="form-group"><label>Order Position</label><input type="number" id="slideOrder" value="0" min="0" placeholder="0"></div>
           </div>
           <button type="submit" class="btn-add"><i class="fas fa-plus"></i> Add Slide</button>
@@ -161,6 +203,7 @@
         <div class="cards-grid" id="slideshowContainer"><div class="loading"><i class="fas fa-snowflake"></i><p>Loading slides...</p></div></div>
       </div>
     </div>
+
     <!-- Weekly Specials Tab -->
     <div class="tab-content" id="tab-specials">
       <div class="section">
@@ -170,7 +213,18 @@
             <div class="form-group"><label>Item Name *</label><input type="text" id="specialName" required placeholder="e.g. Holiday Cookie"></div>
             <div class="form-group"><label>Price ($) *</label><input type="number" id="specialPrice" step="0.01" min="0" required placeholder="0.00"></div>
             <div class="form-group"><label>Tag *</label><input type="text" id="specialTag" required placeholder="e.g. New, Best Seller, Limited"></div>
-            <div class="form-group"><label>Image URL</label><input type="text" id="specialImage" placeholder="images/special.jpg"></div>
+            <div class="form-group">
+              <label>Image</label>
+              <div class="file-upload-wrapper">
+                <input type="file" id="specialImageFile" class="file-upload-input" accept="image/*" onchange="handleFileSelect(this, 'specialImagePreview')">
+                <div class="file-upload-btn" onclick="document.getElementById('specialImageFile').click()">
+                  <i class="fas fa-cloud-upload-alt"></i>
+                  <span>Browse Image...</span>
+                </div>
+                <div class="file-preview" id="specialImagePreview"></div>
+                <div class="upload-progress" id="specialUploadProgress"><div class="upload-progress-bar"></div></div>
+              </div>
+            </div>
             <div class="form-group full-width"><label>Description</label><textarea id="specialDesc" placeholder="Special description..."></textarea></div>
             <div class="form-group"><label>Order Position</label><input type="number" id="specialOrder" value="0" min="0"></div>
           </div>
@@ -183,39 +237,499 @@
       </div>
     </div>
   </div>
+
   <!-- Modals -->
-  <div class="modal" id="editModal"><div class="modal-content"><div class="modal-header"><h3 class="modal-title">🎄 Edit Item</h3><button class="close-modal" onclick="closeModal('editModal')">&times;</button></div><form id="editForm"><input type="hidden" id="editId"><div class="form-group"><label>Item Name *</label><input type="text" id="editName" required></div><div class="form-group"><label>Category *</label><select id="editCategory" required><option value="Cookies">Cookies</option><option value="Rolls">Rolls</option><option value="Slices">Slices</option><option value="Cakes">Cakes</option><option value="Cookie Cakes">Cookie Cakes</option><option value="Cups">Cups</option><option value="Cheesecakes">Cheesecakes</option><option value="Ice Cream">Ice Cream</option><option value="Drinks">Drinks</option><option value="Add-ons">Add-ons</option></select></div><div class="form-group"><label>Price ($) *</label><input type="number" id="editPrice" step="0.01" min="0" required></div><div class="form-group"><label>Image URL</label><input type="text" id="editImage"></div><div class="form-group"><label>Description</label><textarea id="editDesc"></textarea></div><button type="submit" class="btn-save"><i class="fas fa-save"></i> Save Changes</button></form></div></div>
-  <div class="modal" id="editSlideModal"><div class="modal-content"><div class="modal-header"><h3 class="modal-title">🖼️ Edit Slide</h3><button class="close-modal" onclick="closeModal('editSlideModal')">&times;</button></div><form id="editSlideForm"><input type="hidden" id="editSlideId"><div class="form-group"><label>Image URL *</label><input type="text" id="editSlideImage" required></div><div class="form-group"><label>Order Position</label><input type="number" id="editSlideOrder" min="0"></div><button type="submit" class="btn-save"><i class="fas fa-save"></i> Save Changes</button></form></div></div>
-  <div class="modal" id="editSpecialModal"><div class="modal-content"><div class="modal-header"><h3 class="modal-title">⭐ Edit Special</h3><button class="close-modal" onclick="closeModal('editSpecialModal')">&times;</button></div><form id="editSpecialForm"><input type="hidden" id="editSpecialId"><div class="form-group"><label>Item Name *</label><input type="text" id="editSpecialName" required></div><div class="form-group"><label>Price ($) *</label><input type="number" id="editSpecialPrice" step="0.01" min="0" required></div><div class="form-group"><label>Tag *</label><input type="text" id="editSpecialTag" required></div><div class="form-group"><label>Image URL</label><input type="text" id="editSpecialImage"></div><div class="form-group"><label>Description</label><textarea id="editSpecialDesc"></textarea></div><div class="form-group"><label>Order Position</label><input type="number" id="editSpecialOrder" min="0"></div><button type="submit" class="btn-save"><i class="fas fa-save"></i> Save Changes</button></form></div></div>
+  <div class="modal" id="editModal"><div class="modal-content"><div class="modal-header"><h3 class="modal-title">🎄 Edit Item</h3><button class="close-modal" onclick="closeModal('editModal')">&times;</button></div><form id="editForm"><input type="hidden" id="editId"><div class="form-group"><label>Item Name *</label><input type="text" id="editName" required></div><div class="form-group"><label>Category *</label><select id="editCategory" required><option value="Cookies">Cookies</option><option value="Rolls">Rolls</option><option value="Slices">Slices</option><option value="Cakes">Cakes</option><option value="Cookie Cakes">Cookie Cakes</option><option value="Cups">Cups</option><option value="Cheesecakes">Cheesecakes</option><option value="Ice Cream">Ice Cream</option><option value="Drinks">Drinks</option><option value="Add-ons">Add-ons</option></select></div><div class="form-group"><label>Price ($) *</label><input type="number" id="editPrice" step="0.01" min="0" required></div><div class="form-group"><label>New Image (optional)</label><div class="file-upload-wrapper"><input type="file" id="editImageFile" class="file-upload-input" accept="image/*" onchange="handleFileSelect(this, 'editImagePreview')"><div class="file-upload-btn" onclick="document.getElementById('editImageFile').click()"><i class="fas fa-cloud-upload-alt"></i><span>Browse Image...</span></div><div class="file-preview" id="editImagePreview"></div></div></div><div class="form-group"><label>Description</label><textarea id="editDesc"></textarea></div><button type="submit" class="btn-save"><i class="fas fa-save"></i> Save Changes</button></form></div></div>
+  
+  <div class="modal" id="editSlideModal"><div class="modal-content"><div class="modal-header"><h3 class="modal-title">🖼️ Edit Slide</h3><button class="close-modal" onclick="closeModal('editSlideModal')">&times;</button></div><form id="editSlideForm"><input type="hidden" id="editSlideId"><input type="hidden" id="editSlideCurrentImage"><div class="form-group"><label>Current Image</label><div id="editSlideCurrentPreview"></div></div><div class="form-group"><label>New Image (optional)</label><div class="file-upload-wrapper"><input type="file" id="editSlideImageFile" class="file-upload-input" accept="image/*" onchange="handleFileSelect(this, 'editSlideImagePreview')"><div class="file-upload-btn" onclick="document.getElementById('editSlideImageFile').click()"><i class="fas fa-cloud-upload-alt"></i><span>Browse New Image...</span></div><div class="file-preview" id="editSlideImagePreview"></div></div></div><div class="form-group"><label>Order Position</label><input type="number" id="editSlideOrder" min="0"></div><button type="submit" class="btn-save"><i class="fas fa-save"></i> Save Changes</button></form></div></div>
+  
+  <div class="modal" id="editSpecialModal"><div class="modal-content"><div class="modal-header"><h3 class="modal-title">⭐ Edit Special</h3><button class="close-modal" onclick="closeModal('editSpecialModal')">&times;</button></div><form id="editSpecialForm"><input type="hidden" id="editSpecialId"><div class="form-group"><label>Item Name *</label><input type="text" id="editSpecialName" required></div><div class="form-group"><label>Price ($) *</label><input type="number" id="editSpecialPrice" step="0.01" min="0" required></div><div class="form-group"><label>Tag *</label><input type="text" id="editSpecialTag" required></div><div class="form-group"><label>New Image (optional)</label><div class="file-upload-wrapper"><input type="file" id="editSpecialImageFile" class="file-upload-input" accept="image/*" onchange="handleFileSelect(this, 'editSpecialImagePreview')"><div class="file-upload-btn" onclick="document.getElementById('editSpecialImageFile').click()"><i class="fas fa-cloud-upload-alt"></i><span>Browse Image...</span></div><div class="file-preview" id="editSpecialImagePreview"></div></div></div><div class="form-group"><label>Description</label><textarea id="editSpecialDesc"></textarea></div><div class="form-group"><label>Order Position</label><input type="number" id="editSpecialOrder" min="0"></div><button type="submit" class="btn-save"><i class="fas fa-save"></i> Save Changes</button></form></div></div>
+
   <script>
-    const supabase = window.supabase.createClient('https://cfvsxnvvkdskbkljqicw.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNmdnN4bnZ2a2Rza2JrbGpxaWN3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ1MzU0MTcsImV4cCI6MjA2MDExMTQxN30.dNZsSOJyW1bE4bDQP-AIEYV7Z6hlw_iVMN6LZ2IdPio');
+    const SUPABASE_URL = 'https://cfvsxnvvkdskbkljqicw.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNmdnN4bnZ2a2Rza2JrbGpxaWN3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ1MzU0MTcsImV4cCI6MjA2MDExMTQxN30.dNZsSOJyW1bE4bDQP-AIEYV7Z6hlw_iVMN6LZ2IdPio';
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    
     let allItems = [], allSlides = [], allSpecials = [];
+
+    // Snowflakes
     function createSnowflake() { const s = document.createElement('div'); s.className = 'snowflake'; s.textContent = ['❄','❅','❆'][Math.floor(Math.random()*3)]; s.style.left = Math.random()*window.innerWidth+'px'; s.style.fontSize = (Math.random()*18+10)+'px'; s.style.opacity = Math.random()*0.5+0.3; s.style.animationDuration = (Math.random()*15+15)+'s'; document.getElementById('snowContainer').appendChild(s); setTimeout(()=>s.remove(),30000); }
-    setInterval(createSnowflake,400); for(let i=0;i<20;i++) setTimeout(createSnowflake,i*100);
-    function showTab(t) { document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active')); document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active')); document.querySelector(`[onclick="showTab('${t}')"]`).classList.add('active'); document.getElementById(`tab-${t}`).classList.add('active'); }
-    async function loadAllData() { await Promise.all([loadItems(),loadSlides(),loadSpecials()]); }
-    async function loadItems() { try { const {data,error} = await supabase.from('menu_items').select('*').order('category'); if(error) throw error; allItems=data; updateStats(data); renderItems(data); } catch(e) { console.error(e); document.getElementById('itemsContainer').innerHTML='<div class="empty-state"><i class="fas fa-exclamation-circle"></i><p>Error loading items</p></div>'; } }
-    function updateStats(items) { document.getElementById('totalItems').textContent=items.length; document.getElementById('totalCategories').textContent=[...new Set(items.map(i=>i.category))].length; const avg=items.length>0?items.reduce((s,i)=>s+parseFloat(i.price),0)/items.length:0; document.getElementById('avgPrice').textContent='$'+avg.toFixed(2); document.getElementById('totalSlides').textContent=allSlides.length; }
-    function renderItems(items) { if(items.length===0) { document.getElementById('itemsContainer').innerHTML='<div class="empty-state"><i class="fas fa-cookie-bite"></i><p>No items found</p></div>'; return; } document.getElementById('itemsContainer').innerHTML=`<table class="items-table"><thead><tr><th>Image</th><th>Name</th><th>Category</th><th>Price</th><th>Actions</th></tr></thead><tbody>${items.map(i=>`<tr><td><img src="${i.image_url||'https://via.placeholder.com/60?text=🍪'}" alt="${i.item_name}" class="item-image" onerror="this.src='https://via.placeholder.com/60?text=🍪'"></td><td class="item-name">${i.item_name}</td><td><span class="item-category">${i.category}</span></td><td class="item-price">$${parseFloat(i.price).toFixed(2)}</td><td><div class="action-btns"><button class="btn-edit" onclick="editItem('${i.id}')"><i class="fas fa-edit"></i></button><button class="btn-delete" onclick="deleteItem('${i.id}')"><i class="fas fa-trash"></i></button></div></td></tr>`).join('')}</tbody></table>`; }
-    function filterItems() { const s=document.getElementById('searchInput').value.toLowerCase(),c=document.getElementById('filterCategory').value; let f=allItems; if(s) f=f.filter(i=>i.item_name.toLowerCase().includes(s)); if(c) f=f.filter(i=>i.category===c); renderItems(f); }
-    document.getElementById('addForm').addEventListener('submit',async e=>{e.preventDefault();const b=e.target.querySelector('button');b.innerHTML='<i class="fas fa-snowflake fa-spin"></i> Adding...';b.disabled=true;try{const{error}=await supabase.from('menu_items').insert({item_name:document.getElementById('itemName').value,category:document.getElementById('itemCategory').value,price:parseFloat(document.getElementById('itemPrice').value),description:document.getElementById('itemDesc').value||null,image_url:document.getElementById('itemImage').value||null});if(error)throw error;e.target.reset();loadItems();alert('🎄 Item added!');}catch(e){alert('Error: '+e.message);}b.innerHTML='<i class="fas fa-plus"></i> Add Item';b.disabled=false;});
-    function editItem(id){const i=allItems.find(x=>x.id===id);if(!i)return;document.getElementById('editId').value=i.id;document.getElementById('editName').value=i.item_name;document.getElementById('editCategory').value=i.category;document.getElementById('editPrice').value=i.price;document.getElementById('editImage').value=i.image_url||'';document.getElementById('editDesc').value=i.description||'';document.getElementById('editModal').classList.add('show');}
-    document.getElementById('editForm').addEventListener('submit',async e=>{e.preventDefault();const b=e.target.querySelector('button');b.innerHTML='<i class="fas fa-snowflake fa-spin"></i> Saving...';b.disabled=true;try{const{error}=await supabase.from('menu_items').update({item_name:document.getElementById('editName').value,category:document.getElementById('editCategory').value,price:parseFloat(document.getElementById('editPrice').value),description:document.getElementById('editDesc').value||null,image_url:document.getElementById('editImage').value||null}).eq('id',document.getElementById('editId').value);if(error)throw error;closeModal('editModal');loadItems();alert('✨ Item updated!');}catch(e){alert('Error: '+e.message);}b.innerHTML='<i class="fas fa-save"></i> Save Changes';b.disabled=false;});
-    async function deleteItem(id){if(!confirm('Delete this item?'))return;try{const{error}=await supabase.from('menu_items').delete().eq('id',id);if(error)throw error;loadItems();}catch(e){alert('Error: '+e.message);}}
-    async function loadSlides(){try{const{data,error}=await supabase.from('slideshow_images').select('*').order('order_position');if(error)throw error;allSlides=data||[];renderSlides(allSlides);document.getElementById('totalSlides').textContent=allSlides.length;}catch(e){console.error(e);document.getElementById('slideshowContainer').innerHTML='<div class="empty-state"><i class="fas fa-exclamation-circle"></i><p>Error loading slides. Create the table first.</p></div>';}}
-    function renderSlides(slides){if(!slides||slides.length===0){document.getElementById('slideshowContainer').innerHTML='<div class="empty-state"><i class="fas fa-images"></i><p>No slideshow images yet</p></div>';return;}document.getElementById('slideshowContainer').innerHTML=slides.map(s=>`<div class="manage-card"><img src="${s.image_url}" alt="Slide" class="manage-card-image" onerror="this.src='https://via.placeholder.com/300x180?text=Image+Error'"><div class="manage-card-content"><div class="manage-card-meta"><span>Order: ${s.order_position}</span></div><div class="manage-card-actions"><button class="btn-card-edit" onclick="editSlide('${s.id}')"><i class="fas fa-edit"></i> Edit</button><button class="btn-card-delete" onclick="deleteSlide('${s.id}')"><i class="fas fa-trash"></i> Delete</button></div></div></div>`).join('');}
-    document.getElementById('addSlideForm').addEventListener('submit',async e=>{e.preventDefault();const b=e.target.querySelector('button');b.innerHTML='<i class="fas fa-snowflake fa-spin"></i> Adding...';b.disabled=true;try{const{error}=await supabase.from('slideshow_images').insert({image_url:document.getElementById('slideImage').value,order_position:parseInt(document.getElementById('slideOrder').value)||0});if(error)throw error;e.target.reset();loadSlides();alert('🖼️ Slide added!');}catch(e){alert('Error: '+e.message);}b.innerHTML='<i class="fas fa-plus"></i> Add Slide';b.disabled=false;});
-    function editSlide(id){const s=allSlides.find(x=>x.id===id);if(!s)return;document.getElementById('editSlideId').value=s.id;document.getElementById('editSlideImage').value=s.image_url;document.getElementById('editSlideOrder').value=s.order_position;document.getElementById('editSlideModal').classList.add('show');}
-    document.getElementById('editSlideForm').addEventListener('submit',async e=>{e.preventDefault();const b=e.target.querySelector('button');b.innerHTML='<i class="fas fa-snowflake fa-spin"></i> Saving...';b.disabled=true;try{const{error}=await supabase.from('slideshow_images').update({image_url:document.getElementById('editSlideImage').value,order_position:parseInt(document.getElementById('editSlideOrder').value)||0}).eq('id',document.getElementById('editSlideId').value);if(error)throw error;closeModal('editSlideModal');loadSlides();alert('✨ Slide updated!');}catch(e){alert('Error: '+e.message);}b.innerHTML='<i class="fas fa-save"></i> Save Changes';b.disabled=false;});
-    async function deleteSlide(id){if(!confirm('Delete this slide?'))return;try{const{error}=await supabase.from('slideshow_images').delete().eq('id',id);if(error)throw error;loadSlides();}catch(e){alert('Error: '+e.message);}}
-    async function loadSpecials(){try{const{data,error}=await supabase.from('weekly_specials').select('*').order('order_position');if(error)throw error;allSpecials=data||[];renderSpecials(allSpecials);}catch(e){console.error(e);document.getElementById('specialsContainer').innerHTML='<div class="empty-state"><i class="fas fa-exclamation-circle"></i><p>Error loading specials. Create the table first.</p></div>';}}
-    function renderSpecials(specials){if(!specials||specials.length===0){document.getElementById('specialsContainer').innerHTML='<div class="empty-state"><i class="fas fa-star"></i><p>No weekly specials yet</p></div>';return;}document.getElementById('specialsContainer').innerHTML=specials.map(s=>`<div class="manage-card"><img src="${s.image_url||'https://via.placeholder.com/300x180?text=🍪'}" alt="${s.name}" class="manage-card-image" onerror="this.src='https://via.placeholder.com/300x180?text=🍪'"><div class="manage-card-content"><div class="manage-card-title">${s.name}</div><div class="manage-card-meta"><span class="manage-card-tag">${s.tag}</span><span class="manage-card-price">$${parseFloat(s.price).toFixed(2)}</span></div><p style="font-size:0.85rem;color:#64748b;margin-top:0.5rem;">${s.description||''}</p><div class="manage-card-actions"><button class="btn-card-edit" onclick="editSpecial('${s.id}')"><i class="fas fa-edit"></i> Edit</button><button class="btn-card-delete" onclick="deleteSpecial('${s.id}')"><i class="fas fa-trash"></i> Delete</button></div></div></div>`).join('');}
-    document.getElementById('addSpecialForm').addEventListener('submit',async e=>{e.preventDefault();const b=e.target.querySelector('button');b.innerHTML='<i class="fas fa-snowflake fa-spin"></i> Adding...';b.disabled=true;try{const{error}=await supabase.from('weekly_specials').insert({name:document.getElementById('specialName').value,price:parseFloat(document.getElementById('specialPrice').value),tag:document.getElementById('specialTag').value,image_url:document.getElementById('specialImage').value||null,description:document.getElementById('specialDesc').value||null,order_position:parseInt(document.getElementById('specialOrder').value)||0});if(error)throw error;e.target.reset();loadSpecials();alert('⭐ Special added!');}catch(e){alert('Error: '+e.message);}b.innerHTML='<i class="fas fa-plus"></i> Add Special';b.disabled=false;});
-    function editSpecial(id){const s=allSpecials.find(x=>x.id===id);if(!s)return;document.getElementById('editSpecialId').value=s.id;document.getElementById('editSpecialName').value=s.name;document.getElementById('editSpecialPrice').value=s.price;document.getElementById('editSpecialTag').value=s.tag;document.getElementById('editSpecialImage').value=s.image_url||'';document.getElementById('editSpecialDesc').value=s.description||'';document.getElementById('editSpecialOrder').value=s.order_position;document.getElementById('editSpecialModal').classList.add('show');}
-    document.getElementById('editSpecialForm').addEventListener('submit',async e=>{e.preventDefault();const b=e.target.querySelector('button');b.innerHTML='<i class="fas fa-snowflake fa-spin"></i> Saving...';b.disabled=true;try{const{error}=await supabase.from('weekly_specials').update({name:document.getElementById('editSpecialName').value,price:parseFloat(document.getElementById('editSpecialPrice').value),tag:document.getElementById('editSpecialTag').value,image_url:document.getElementById('editSpecialImage').value||null,description:document.getElementById('editSpecialDesc').value||null,order_position:parseInt(document.getElementById('editSpecialOrder').value)||0}).eq('id',document.getElementById('editSpecialId').value);if(error)throw error;closeModal('editSpecialModal');loadSpecials();alert('✨ Special updated!');}catch(e){alert('Error: '+e.message);}b.innerHTML='<i class="fas fa-save"></i> Save Changes';b.disabled=false;});
-    async function deleteSpecial(id){if(!confirm('Delete this special?'))return;try{const{error}=await supabase.from('weekly_specials').delete().eq('id',id);if(error)throw error;loadSpecials();}catch(e){alert('Error: '+e.message);}}
-    function closeModal(id){document.getElementById(id).classList.remove('show');}
-    function logout(){if(confirm('Logout?')){localStorage.clear();supabase.auth.signOut();window.location.href='admin.html';}}
+    setInterval(createSnowflake, 400);
+    for(let i=0; i<20; i++) setTimeout(createSnowflake, i*100);
+
+    // Tab switching
+    function showTab(t) { 
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active')); 
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); 
+      document.querySelector(`[onclick="showTab('${t}')"]`).classList.add('active'); 
+      document.getElementById(`tab-${t}`).classList.add('active'); 
+    }
+
+    // File handling
+    function handleFileSelect(input, previewId) {
+      const file = input.files[0];
+      const preview = document.getElementById(previewId);
+      const btn = input.parentElement.querySelector('.file-upload-btn');
+      
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          preview.innerHTML = `<img src="${e.target.result}" alt="Preview"><div class="file-preview-name">${file.name}</div>`;
+          btn.classList.add('has-file');
+          btn.querySelector('span').textContent = file.name;
+        };
+        reader.readAsDataURL(file);
+      } else {
+        preview.innerHTML = '';
+        btn.classList.remove('has-file');
+        btn.querySelector('span').textContent = 'Browse Image...';
+      }
+    }
+
+    // Upload image to Supabase Storage
+    async function uploadImage(file, folder = 'menu') {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${folder}/${Date.now()}_${Math.random().toString(36).substr(2, 9)}.${fileExt}`;
+      
+      const { data, error } = await supabase.storage
+        .from('images')
+        .upload(fileName, file, { cacheControl: '3600', upsert: false });
+      
+      if (error) throw error;
+      
+      const { data: urlData } = supabase.storage.from('images').getPublicUrl(fileName);
+      return urlData.publicUrl;
+    }
+
+    // Load all data
+    async function loadAllData() { 
+      await Promise.all([loadItems(), loadSlides(), loadSpecials()]); 
+    }
+
+    // ==================== MENU ITEMS ====================
+    async function loadItems() {
+      try {
+        const { data, error } = await supabase.from('menu_items').select('*').order('category');
+        if (error) throw error;
+        allItems = data;
+        updateStats(data);
+        renderItems(data);
+      } catch (e) {
+        console.error(e);
+        document.getElementById('itemsContainer').innerHTML = '<div class="empty-state"><i class="fas fa-exclamation-circle"></i><p>Error loading items</p></div>';
+      }
+    }
+
+    function updateStats(items) {
+      document.getElementById('totalItems').textContent = items.length;
+      document.getElementById('totalCategories').textContent = [...new Set(items.map(i => i.category))].length;
+      const avg = items.length > 0 ? items.reduce((s, i) => s + parseFloat(i.price), 0) / items.length : 0;
+      document.getElementById('avgPrice').textContent = '$' + avg.toFixed(2);
+      document.getElementById('totalSlides').textContent = allSlides.length;
+    }
+
+    function renderItems(items) {
+      if (items.length === 0) {
+        document.getElementById('itemsContainer').innerHTML = '<div class="empty-state"><i class="fas fa-cookie-bite"></i><p>No items found</p></div>';
+        return;
+      }
+      document.getElementById('itemsContainer').innerHTML = `
+        <table class="items-table">
+          <thead><tr><th>Image</th><th>Name</th><th>Category</th><th>Price</th><th>Actions</th></tr></thead>
+          <tbody>${items.map(i => `
+            <tr>
+              <td><img src="${i.image_url || 'https://via.placeholder.com/60?text=🍪'}" alt="${i.item_name}" class="item-image" onerror="this.src='https://via.placeholder.com/60?text=🍪'"></td>
+              <td class="item-name">${i.item_name}</td>
+              <td><span class="item-category">${i.category}</span></td>
+              <td class="item-price">$${parseFloat(i.price).toFixed(2)}</td>
+              <td><div class="action-btns">
+                <button class="btn-edit" onclick="editItem('${i.id}')"><i class="fas fa-edit"></i></button>
+                <button class="btn-delete" onclick="deleteItem('${i.id}')"><i class="fas fa-trash"></i></button>
+              </div></td>
+            </tr>
+          `).join('')}</tbody>
+        </table>`;
+    }
+
+    function filterItems() {
+      const s = document.getElementById('searchInput').value.toLowerCase();
+      const c = document.getElementById('filterCategory').value;
+      let f = allItems;
+      if (s) f = f.filter(i => i.item_name.toLowerCase().includes(s));
+      if (c) f = f.filter(i => i.category === c);
+      renderItems(f);
+    }
+
+    document.getElementById('addForm').addEventListener('submit', async e => {
+      e.preventDefault();
+      const btn = e.target.querySelector('button');
+      btn.innerHTML = '<i class="fas fa-snowflake fa-spin"></i> Adding...';
+      btn.disabled = true;
+      
+      try {
+        let imageUrl = null;
+        const fileInput = document.getElementById('itemImageFile');
+        
+        if (fileInput.files[0]) {
+          imageUrl = await uploadImage(fileInput.files[0], 'menu');
+        }
+        
+        const { error } = await supabase.from('menu_items').insert({
+          item_name: document.getElementById('itemName').value,
+          category: document.getElementById('itemCategory').value,
+          price: parseFloat(document.getElementById('itemPrice').value),
+          description: document.getElementById('itemDesc').value || null,
+          image_url: imageUrl
+        });
+        
+        if (error) throw error;
+        e.target.reset();
+        document.getElementById('itemImagePreview').innerHTML = '';
+        document.querySelector('#addForm .file-upload-btn').classList.remove('has-file');
+        document.querySelector('#addForm .file-upload-btn span').textContent = 'Browse Image...';
+        loadItems();
+        alert('🎄 Item added!');
+      } catch (e) {
+        alert('Error: ' + e.message);
+      }
+      
+      btn.innerHTML = '<i class="fas fa-plus"></i> Add Item';
+      btn.disabled = false;
+    });
+
+    function editItem(id) {
+      const i = allItems.find(x => x.id === id);
+      if (!i) return;
+      document.getElementById('editId').value = i.id;
+      document.getElementById('editName').value = i.item_name;
+      document.getElementById('editCategory').value = i.category;
+      document.getElementById('editPrice').value = i.price;
+      document.getElementById('editDesc').value = i.description || '';
+      document.getElementById('editImagePreview').innerHTML = i.image_url ? `<img src="${i.image_url}" alt="Current"><div class="file-preview-name">Current image</div>` : '';
+      document.getElementById('editModal').classList.add('show');
+    }
+
+    document.getElementById('editForm').addEventListener('submit', async e => {
+      e.preventDefault();
+      const btn = e.target.querySelector('button');
+      btn.innerHTML = '<i class="fas fa-snowflake fa-spin"></i> Saving...';
+      btn.disabled = true;
+      
+      try {
+        let imageUrl = null;
+        const fileInput = document.getElementById('editImageFile');
+        
+        if (fileInput.files[0]) {
+          imageUrl = await uploadImage(fileInput.files[0], 'menu');
+        }
+        
+        const updateData = {
+          item_name: document.getElementById('editName').value,
+          category: document.getElementById('editCategory').value,
+          price: parseFloat(document.getElementById('editPrice').value),
+          description: document.getElementById('editDesc').value || null
+        };
+        
+        if (imageUrl) updateData.image_url = imageUrl;
+        
+        const { error } = await supabase.from('menu_items').update(updateData).eq('id', document.getElementById('editId').value);
+        if (error) throw error;
+        
+        closeModal('editModal');
+        loadItems();
+        alert('✨ Item updated!');
+      } catch (e) {
+        alert('Error: ' + e.message);
+      }
+      
+      btn.innerHTML = '<i class="fas fa-save"></i> Save Changes';
+      btn.disabled = false;
+    });
+
+    async function deleteItem(id) {
+      if (!confirm('Delete this item?')) return;
+      try {
+        const { error } = await supabase.from('menu_items').delete().eq('id', id);
+        if (error) throw error;
+        loadItems();
+      } catch (e) {
+        alert('Error: ' + e.message);
+      }
+    }
+
+    // ==================== SLIDESHOW ====================
+    async function loadSlides() {
+      try {
+        const { data, error } = await supabase.from('slideshow_images').select('*').order('order_position');
+        if (error) throw error;
+        allSlides = data || [];
+        renderSlides(allSlides);
+        document.getElementById('totalSlides').textContent = allSlides.length;
+      } catch (e) {
+        console.error(e);
+        document.getElementById('slideshowContainer').innerHTML = '<div class="empty-state"><i class="fas fa-exclamation-circle"></i><p>Error loading slides. Create the table first.</p></div>';
+      }
+    }
+
+    function renderSlides(slides) {
+      if (!slides || slides.length === 0) {
+        document.getElementById('slideshowContainer').innerHTML = '<div class="empty-state"><i class="fas fa-images"></i><p>No slideshow images yet</p></div>';
+        return;
+      }
+      document.getElementById('slideshowContainer').innerHTML = slides.map(s => `
+        <div class="manage-card">
+          <img src="${s.image_url}" alt="Slide" class="manage-card-image" onerror="this.src='https://via.placeholder.com/300x180?text=Image+Error'">
+          <div class="manage-card-content">
+            <div class="manage-card-meta"><span>Order: ${s.order_position}</span></div>
+            <div class="manage-card-actions">
+              <button class="btn-card-edit" onclick="editSlide('${s.id}')"><i class="fas fa-edit"></i> Edit</button>
+              <button class="btn-card-delete" onclick="deleteSlide('${s.id}')"><i class="fas fa-trash"></i> Delete</button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    document.getElementById('addSlideForm').addEventListener('submit', async e => {
+      e.preventDefault();
+      const btn = e.target.querySelector('button');
+      const fileInput = document.getElementById('slideImageFile');
+      
+      if (!fileInput.files[0]) {
+        alert('Please select an image');
+        return;
+      }
+      
+      btn.innerHTML = '<i class="fas fa-snowflake fa-spin"></i> Uploading...';
+      btn.disabled = true;
+      
+      try {
+        const imageUrl = await uploadImage(fileInput.files[0], 'slideshow');
+        
+        const { error } = await supabase.from('slideshow_images').insert({
+          image_url: imageUrl,
+          order_position: parseInt(document.getElementById('slideOrder').value) || 0
+        });
+        
+        if (error) throw error;
+        e.target.reset();
+        document.getElementById('slideImagePreview').innerHTML = '';
+        document.querySelector('#addSlideForm .file-upload-btn').classList.remove('has-file');
+        document.querySelector('#addSlideForm .file-upload-btn span').textContent = 'Browse Image...';
+        loadSlides();
+        alert('🖼️ Slide added!');
+      } catch (e) {
+        alert('Error: ' + e.message);
+      }
+      
+      btn.innerHTML = '<i class="fas fa-plus"></i> Add Slide';
+      btn.disabled = false;
+    });
+
+    function editSlide(id) {
+      const s = allSlides.find(x => x.id === id);
+      if (!s) return;
+      document.getElementById('editSlideId').value = s.id;
+      document.getElementById('editSlideCurrentImage').value = s.image_url;
+      document.getElementById('editSlideOrder').value = s.order_position;
+      document.getElementById('editSlideCurrentPreview').innerHTML = `<img src="${s.image_url}" alt="Current" style="max-width:200px;border-radius:8px;">`;
+      document.getElementById('editSlideImagePreview').innerHTML = '';
+      document.getElementById('editSlideModal').classList.add('show');
+    }
+
+    document.getElementById('editSlideForm').addEventListener('submit', async e => {
+      e.preventDefault();
+      const btn = e.target.querySelector('button');
+      btn.innerHTML = '<i class="fas fa-snowflake fa-spin"></i> Saving...';
+      btn.disabled = true;
+      
+      try {
+        let imageUrl = document.getElementById('editSlideCurrentImage').value;
+        const fileInput = document.getElementById('editSlideImageFile');
+        
+        if (fileInput.files[0]) {
+          imageUrl = await uploadImage(fileInput.files[0], 'slideshow');
+        }
+        
+        const { error } = await supabase.from('slideshow_images').update({
+          image_url: imageUrl,
+          order_position: parseInt(document.getElementById('editSlideOrder').value) || 0
+        }).eq('id', document.getElementById('editSlideId').value);
+        
+        if (error) throw error;
+        closeModal('editSlideModal');
+        loadSlides();
+        alert('✨ Slide updated!');
+      } catch (e) {
+        alert('Error: ' + e.message);
+      }
+      
+      btn.innerHTML = '<i class="fas fa-save"></i> Save Changes';
+      btn.disabled = false;
+    });
+
+    async function deleteSlide(id) {
+      if (!confirm('Delete this slide?')) return;
+      try {
+        const { error } = await supabase.from('slideshow_images').delete().eq('id', id);
+        if (error) throw error;
+        loadSlides();
+      } catch (e) {
+        alert('Error: ' + e.message);
+      }
+    }
+
+    // ==================== WEEKLY SPECIALS ====================
+    async function loadSpecials() {
+      try {
+        const { data, error } = await supabase.from('weekly_specials').select('*').order('order_position');
+        if (error) throw error;
+        allSpecials = data || [];
+        renderSpecials(allSpecials);
+      } catch (e) {
+        console.error(e);
+        document.getElementById('specialsContainer').innerHTML = '<div class="empty-state"><i class="fas fa-exclamation-circle"></i><p>Error loading specials. Create the table first.</p></div>';
+      }
+    }
+
+    function renderSpecials(specials) {
+      if (!specials || specials.length === 0) {
+        document.getElementById('specialsContainer').innerHTML = '<div class="empty-state"><i class="fas fa-star"></i><p>No weekly specials yet</p></div>';
+        return;
+      }
+      document.getElementById('specialsContainer').innerHTML = specials.map(s => `
+        <div class="manage-card">
+          <img src="${s.image_url || 'https://via.placeholder.com/300x180?text=🍪'}" alt="${s.name}" class="manage-card-image" onerror="this.src='https://via.placeholder.com/300x180?text=🍪'">
+          <div class="manage-card-content">
+            <div class="manage-card-title">${s.name}</div>
+            <div class="manage-card-meta">
+              <span class="manage-card-tag">${s.tag}</span>
+              <span class="manage-card-price">$${parseFloat(s.price).toFixed(2)}</span>
+            </div>
+            <p style="font-size:0.85rem;color:#64748b;margin-top:0.5rem;">${s.description || ''}</p>
+            <div class="manage-card-actions">
+              <button class="btn-card-edit" onclick="editSpecial('${s.id}')"><i class="fas fa-edit"></i> Edit</button>
+              <button class="btn-card-delete" onclick="deleteSpecial('${s.id}')"><i class="fas fa-trash"></i> Delete</button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    document.getElementById('addSpecialForm').addEventListener('submit', async e => {
+      e.preventDefault();
+      const btn = e.target.querySelector('button');
+      btn.innerHTML = '<i class="fas fa-snowflake fa-spin"></i> Adding...';
+      btn.disabled = true;
+      
+      try {
+        let imageUrl = null;
+        const fileInput = document.getElementById('specialImageFile');
+        
+        if (fileInput.files[0]) {
+          imageUrl = await uploadImage(fileInput.files[0], 'specials');
+        }
+        
+        const { error } = await supabase.from('weekly_specials').insert({
+          name: document.getElementById('specialName').value,
+          price: parseFloat(document.getElementById('specialPrice').value),
+          tag: document.getElementById('specialTag').value,
+          image_url: imageUrl,
+          description: document.getElementById('specialDesc').value || null,
+          order_position: parseInt(document.getElementById('specialOrder').value) || 0
+        });
+        
+        if (error) throw error;
+        e.target.reset();
+        document.getElementById('specialImagePreview').innerHTML = '';
+        document.querySelector('#addSpecialForm .file-upload-btn').classList.remove('has-file');
+        document.querySelector('#addSpecialForm .file-upload-btn span').textContent = 'Browse Image...';
+        loadSpecials();
+        alert('⭐ Special added!');
+      } catch (e) {
+        alert('Error: ' + e.message);
+      }
+      
+      btn.innerHTML = '<i class="fas fa-plus"></i> Add Special';
+      btn.disabled = false;
+    });
+
+    function editSpecial(id) {
+      const s = allSpecials.find(x => x.id === id);
+      if (!s) return;
+      document.getElementById('editSpecialId').value = s.id;
+      document.getElementById('editSpecialName').value = s.name;
+      document.getElementById('editSpecialPrice').value = s.price;
+      document.getElementById('editSpecialTag').value = s.tag;
+      document.getElementById('editSpecialDesc').value = s.description || '';
+      document.getElementById('editSpecialOrder').value = s.order_position;
+      document.getElementById('editSpecialImagePreview').innerHTML = s.image_url ? `<img src="${s.image_url}" alt="Current"><div class="file-preview-name">Current image</div>` : '';
+      document.getElementById('editSpecialModal').classList.add('show');
+    }
+
+    document.getElementById('editSpecialForm').addEventListener('submit', async e => {
+      e.preventDefault();
+      const btn = e.target.querySelector('button');
+      btn.innerHTML = '<i class="fas fa-snowflake fa-spin"></i> Saving...';
+      btn.disabled = true;
+      
+      try {
+        let imageUrl = null;
+        const fileInput = document.getElementById('editSpecialImageFile');
+        const currentSpecial = allSpecials.find(x => x.id === document.getElementById('editSpecialId').value);
+        
+        if (fileInput.files[0]) {
+          imageUrl = await uploadImage(fileInput.files[0], 'specials');
+        } else {
+          imageUrl = currentSpecial?.image_url || null;
+        }
+        
+        const { error } = await supabase.from('weekly_specials').update({
+          name: document.getElementById('editSpecialName').value,
+          price: parseFloat(document.getElementById('editSpecialPrice').value),
+          tag: document.getElementById('editSpecialTag').value,
+          image_url: imageUrl,
+          description: document.getElementById('editSpecialDesc').value || null,
+          order_position: parseInt(document.getElementById('editSpecialOrder').value) || 0
+        }).eq('id', document.getElementById('editSpecialId').value);
+        
+        if (error) throw error;
+        closeModal('editSpecialModal');
+        loadSpecials();
+        alert('✨ Special updated!');
+      } catch (e) {
+        alert('Error: ' + e.message);
+      }
+      
+      btn.innerHTML = '<i class="fas fa-save"></i> Save Changes';
+      btn.disabled = false;
+    });
+
+    async function deleteSpecial(id) {
+      if (!confirm('Delete this special?')) return;
+      try {
+        const { error } = await supabase.from('weekly_specials').delete().eq('id', id);
+        if (error) throw error;
+        loadSpecials();
+      } catch (e) {
+        alert('Error: ' + e.message);
+      }
+    }
+
+    // ==================== UTILITIES ====================
+    function closeModal(id) { 
+      document.getElementById(id).classList.remove('show'); 
+    }
+
+    function logout() {
+      if (confirm('Logout?')) {
+        localStorage.clear();
+        supabase.auth.signOut();
+        window.location.href = 'admin.html';
+      }
+    }
+
+    // Initialize
     loadAllData();
   </script>
 </body>
