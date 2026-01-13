@@ -512,13 +512,23 @@
 
   <script>
     // Initialize Supabase - Safe from duplicate declarations
-    if (typeof window.dashboardSupabase === 'undefined') {
-      window.dashboardSupabase = window.supabase.createClient(
-        'https://cfvsxnvvkdskbkljqicw.supabase.co',
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNmdnN4bnZ2a2Rza2JrbGpxaWN3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ1MzU0MTcsImV4cCI6MjA2MDExMTQxN30.dNZsSOJyW1bE4bDQP-AIEYV7Z6hlw_iVMN6LZ2IdPio'
-      );
+    let supabase;
+    
+    function initSupabase() {
+      if (typeof window.supabase === 'undefined') {
+        console.error('Supabase library not loaded yet');
+        return false;
+      }
+      
+      if (typeof window.dashboardSupabase === 'undefined') {
+        window.dashboardSupabase = window.supabase.createClient(
+          'https://cfvsxnvvkdskbkljqicw.supabase.co',
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNmdnN4bnZ2a2Rza2JrbGpxaWN3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ1MzU0MTcsImV4cCI6MjA2MDExMTQxN30.dNZsSOJyW1bE4bDQP-AIEYV7Z6hlw_iVMN6LZ2IdPio'
+        );
+      }
+      supabase = window.dashboardSupabase;
+      return true;
     }
-    const supabase = window.dashboardSupabase;
 
     let allItems = [];
 
@@ -573,21 +583,36 @@
 
     // Load items
     async function loadItems() {
+      if (!supabase) {
+        document.getElementById('itemsTable').innerHTML = `
+          <tr><td colspan="6" style="text-align: center; color: red;">Error: Supabase not initialized. Please refresh the page.</td></tr>
+        `;
+        return;
+      }
+      
       try {
         const { data, error } = await supabase
           .from('menu_items')
           .select('*')
           .order('category');
 
-        if (error) throw error;
+        if (error) {
+          console.error('Supabase error:', error);
+          throw error;
+        }
+
+        if (!data) {
+          throw new Error('No data returned from Supabase');
+        }
 
         allItems = data;
         displayItems(data);
         updateStats();
 
       } catch (error) {
+        console.error('Error loading items:', error);
         document.getElementById('itemsTable').innerHTML = `
-          <tr><td colspan="6" style="text-align: center; color: red;">Error: ${error.message}</td></tr>
+          <tr><td colspan="6" style="text-align: center; color: red;">Error: ${error.message || 'Failed to load items'}</td></tr>
         `;
       }
     }
@@ -730,8 +755,26 @@
         });
     }
 
-    // Load on start
-    loadItems();
+    // Initialize and load on start
+    document.addEventListener('DOMContentLoaded', () => {
+      // Wait for Supabase to load
+      if (typeof window.supabase !== 'undefined') {
+        if (initSupabase()) {
+          loadItems();
+        }
+      } else {
+        // Retry after a short delay if Supabase isn't loaded yet
+        setTimeout(() => {
+          if (initSupabase()) {
+            loadItems();
+          } else {
+            document.getElementById('itemsTable').innerHTML = `
+              <tr><td colspan="6" style="text-align: center; color: red;">Error: Failed to load Supabase library. Please refresh the page.</td></tr>
+            `;
+          }
+        }, 500);
+      }
+    });
   </script>
 </body>
 </html>
