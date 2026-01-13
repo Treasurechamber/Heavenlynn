@@ -151,47 +151,68 @@
   </div>
 
   <script>
-    // Initialize Supabase - Safe from duplicate declarations
-    if (typeof window.adminSupabase === 'undefined') {
-      window.adminSupabase = window.supabase.createClient(
-        'https://cfvsxnvvkdskbkljqicw.supabase.co',
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNmdnN4bnZ2a2Rza2JrbGpxaWN3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ1MzU0MTcsImV4cCI6MjA2MDExMTQxN30.dNZsSOJyW1bE4bDQP-AIEYV7Z6hlw_iVMN6LZ2IdPio'
-      );
+    // Initialize Supabase - Wait for library to load
+    let supabase;
+    
+    function initSupabase() {
+      if (typeof window.supabase === 'undefined') {
+        console.error('Supabase library not loaded yet');
+        return false;
+      }
+      
+      if (typeof window.adminSupabase === 'undefined') {
+        try {
+          window.adminSupabase = window.supabase.createClient(
+            'https://cfvsxnvvkdskbkljqicw.supabase.co',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNmdnN4bnZ2a2Rza2JrbGpxaWN3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ1MzU0MTcsImV4cCI6MjA2MDExMTQxN30.dNZsSOJyW1bE4bDQP-AIEYV7Z6hlw_iVMN6LZ2IdPio'
+          );
+          console.log('Supabase client initialized successfully');
+        } catch (err) {
+          console.error('Error creating Supabase client:', err);
+          return false;
+        }
+      }
+      supabase = window.adminSupabase;
+      return true;
     }
-    const supabase = window.adminSupabase;
 
     const loginForm = document.getElementById('loginForm');
     const errorMessage = document.getElementById('errorMessage');
     const loginBtn = document.getElementById('loginBtn');
 
-    // Check if already logged in - FIXED TO PREVENT LOOPS
+    // Check if already logged in
     async function checkAuth() {
+      if (!supabase) {
+        console.log('Supabase not ready, skipping auth check');
+        return;
+      }
+      
       try {
         const { data: { session }, error } = await supabase.auth.getSession();
         
         if (error) {
           console.error('Auth check error:', error);
-          return; // Stay on login page
+          return;
         }
         
         if (session) {
-          console.log('Already logged in, redirecting to dashboard...');
-          // Use replace to prevent back button issues
-          window.location.replace('dashboard.html');
-        } else {
-          console.log('No session, showing login form');
+          console.log('Already logged in, redirecting...');
+          window.location.replace('admin.html');
         }
       } catch (error) {
         console.error('Auth check failed:', error);
-        // Stay on login page if error
       }
     }
 
-    // Check auth once
-    checkAuth();
-
-    loginForm.addEventListener('submit', async (e) => {
+    // Login function
+    async function handleLogin(e) {
       e.preventDefault();
+      
+      if (!supabase) {
+        errorMessage.textContent = 'Supabase not initialized. Please refresh the page.';
+        errorMessage.classList.add('show');
+        return;
+      }
       
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
@@ -213,19 +234,45 @@
           throw error;
         }
         
-        console.log('Login successful, redirecting...');
+        console.log('Login successful!', data);
         
-        // Small delay to ensure session is saved
         setTimeout(() => {
-          window.location.replace('dashboard.html');
+          window.location.replace('admin.html');
         }, 500);
         
       } catch (error) {
         console.error('Login failed:', error);
-        errorMessage.textContent = error.message || 'Invalid email or password';
+        errorMessage.textContent = error.message || 'Invalid email or password. Please check your credentials.';
         errorMessage.classList.add('show');
         loginBtn.disabled = false;
         loginBtn.textContent = 'Login';
+      }
+    }
+
+    // Wait for DOM and Supabase to be ready
+    document.addEventListener('DOMContentLoaded', () => {
+      // Try to initialize immediately
+      if (initSupabase()) {
+        checkAuth();
+        loginForm.addEventListener('submit', handleLogin);
+      } else {
+        // Retry after a delay if Supabase isn't loaded yet
+        let retries = 0;
+        const maxRetries = 10;
+        const checkInterval = setInterval(() => {
+          retries++;
+          if (initSupabase()) {
+            clearInterval(checkInterval);
+            checkAuth();
+            loginForm.addEventListener('submit', handleLogin);
+            console.log('Supabase initialized after', retries, 'retries');
+          } else if (retries >= maxRetries) {
+            clearInterval(checkInterval);
+            errorMessage.textContent = 'Failed to connect to Supabase. Please check your internet connection and refresh the page.';
+            errorMessage.classList.add('show');
+            console.error('Failed to initialize Supabase after', maxRetries, 'retries');
+          }
+        }, 200);
       }
     });
   </script>
