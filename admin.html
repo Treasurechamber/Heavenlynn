@@ -511,11 +511,14 @@
   </div>
 
   <script>
-    // Initialize Supabase
-    const supabase = window.supabase.createClient(
-      'https://cfvsxnvvkdskbkljqicw.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNmdnN4bnZ2a2Rza2JrbGpxaWN3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ1MzU0MTcsImV4cCI6MjA2MDExMTQxN30.dNZsSOJyW1bE4bDQP-AIEYV7Z6hlw_iVMN6LZ2IdPio'
-    );
+    // Initialize Supabase - Safe from duplicate declarations
+    if (typeof window.dashboardSupabase === 'undefined') {
+      window.dashboardSupabase = window.supabase.createClient(
+        'https://cfvsxnvvkdskbkljqicw.supabase.co',
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNmdnN4bnZ2a2Rza2JrbGpxaWN3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ1MzU0MTcsImV4cCI6MjA2MDExMTQxN30.dNZsSOJyW1bE4bDQP-AIEYV7Z6hlw_iVMN6LZ2IdPio'
+      );
+    }
+    const supabase = window.dashboardSupabase;
 
     let allItems = [];
 
