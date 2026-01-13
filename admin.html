@@ -368,8 +368,30 @@
       color: #6b6b6b;
     }
 
-    .file-url-input {
-      margin-top: 1rem;
+    .upload-status {
+      margin-top: 0.5rem;
+      padding: 0.5rem;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      display: none;
+    }
+
+    .upload-status.uploading {
+      display: block;
+      background: #fff3cd;
+      color: #856404;
+    }
+
+    .upload-status.success {
+      display: block;
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .upload-status.error {
+      display: block;
+      background: #f8d7da;
+      color: #721c24;
     }
 
     /* Mobile Responsive Styles */
@@ -596,20 +618,19 @@
         </div>
 
         <div class="form-group">
-          <label for="imageUrl">Image URL <span class="optional-label">(optional)</span></label>
+          <label for="imageFile">Image *</label>
           <div class="file-upload-wrapper">
             <label for="imageFile" class="file-upload-label">
               <i class="fas fa-upload"></i> Choose Image File
             </label>
-            <input type="file" id="imageFile" accept="image/*" onchange="handleImageUpload(this, 'imageUrl', 'imagePreview')">
+            <input type="file" id="imageFile" accept="image/*" required onchange="handleImageUpload(this, 'imagePreview', 'imageUploadStatus')">
             <div class="file-preview" id="imagePreview">
               <img id="imagePreviewImg" src="" alt="Preview">
               <div class="file-preview-info" id="imagePreviewInfo"></div>
             </div>
+            <div class="upload-status" id="imageUploadStatus"></div>
           </div>
-          <div class="file-url-input">
-            <input type="url" id="imageUrl" placeholder="Or enter image URL: images/cookie.jpg">
-          </div>
+          <input type="hidden" id="imageUrl">
         </div>
 
         <button type="submit" class="btn btn-primary" style="width: 100%;">
@@ -631,20 +652,19 @@
 
       <form id="addHeroSlideForm" onsubmit="addHeroSlide(event)" style="margin-bottom: 2rem;">
         <div class="form-group">
-          <label for="heroImageUrl">Image URL *</label>
+          <label for="heroImageFile">Image *</label>
           <div class="file-upload-wrapper">
             <label for="heroImageFile" class="file-upload-label">
               <i class="fas fa-upload"></i> Choose Image File
             </label>
-            <input type="file" id="heroImageFile" accept="image/*" onchange="handleImageUpload(this, 'heroImageUrl', 'heroImagePreview')">
+            <input type="file" id="heroImageFile" accept="image/*" required onchange="handleImageUpload(this, 'heroImagePreview', 'heroImageUploadStatus')">
             <div class="file-preview" id="heroImagePreview">
               <img id="heroImagePreviewImg" src="" alt="Preview">
               <div class="file-preview-info" id="heroImagePreviewInfo"></div>
             </div>
+            <div class="upload-status" id="heroImageUploadStatus"></div>
           </div>
-          <div class="file-url-input">
-            <input type="url" id="heroImageUrl" placeholder="Or enter image URL: images/slide.jpg" required>
-          </div>
+          <input type="hidden" id="heroImageUrl">
         </div>
         <div class="form-group">
           <label for="heroOrderPosition">Order Position (lower = first)</label>
@@ -708,20 +728,19 @@
           <textarea id="weeklySpecialDescription"></textarea>
         </div>
         <div class="form-group">
-          <label for="weeklySpecialImageUrl">Image URL *</label>
+          <label for="weeklySpecialImageFile">Image *</label>
           <div class="file-upload-wrapper">
             <label for="weeklySpecialImageFile" class="file-upload-label">
               <i class="fas fa-upload"></i> Choose Image File
             </label>
-            <input type="file" id="weeklySpecialImageFile" accept="image/*" onchange="handleImageUpload(this, 'weeklySpecialImageUrl', 'weeklySpecialImagePreview')">
+            <input type="file" id="weeklySpecialImageFile" accept="image/*" required onchange="handleImageUpload(this, 'weeklySpecialImagePreview', 'weeklySpecialImageUploadStatus')">
             <div class="file-preview" id="weeklySpecialImagePreview">
               <img id="weeklySpecialImagePreviewImg" src="" alt="Preview">
               <div class="file-preview-info" id="weeklySpecialImagePreviewInfo"></div>
             </div>
+            <div class="upload-status" id="weeklySpecialImageUploadStatus"></div>
           </div>
-          <div class="file-url-input">
-            <input type="url" id="weeklySpecialImageUrl" placeholder="Or enter image URL: images/item.jpg" required>
-          </div>
+          <input type="hidden" id="weeklySpecialImageUrl">
         </div>
         <button type="submit" class="btn btn-primary">
           <i class="fas fa-plus"></i> Add Weekly Special
@@ -841,20 +860,19 @@
         </div>
 
         <div class="form-group">
-          <label for="editImageUrl">Image URL</label>
+          <label for="editImageFile">Image</label>
           <div class="file-upload-wrapper">
             <label for="editImageFile" class="file-upload-label">
-              <i class="fas fa-upload"></i> Choose Image File
+              <i class="fas fa-upload"></i> Choose Image File (leave empty to keep current)
             </label>
-            <input type="file" id="editImageFile" accept="image/*" onchange="handleImageUpload(this, 'editImageUrl', 'editImagePreview')">
+            <input type="file" id="editImageFile" accept="image/*" onchange="handleImageUpload(this, 'editImagePreview', 'editImageUploadStatus')">
             <div class="file-preview" id="editImagePreview">
               <img id="editImagePreviewImg" src="" alt="Preview">
               <div class="file-preview-info" id="editImagePreviewInfo"></div>
             </div>
+            <div class="upload-status" id="editImageUploadStatus"></div>
           </div>
-          <div class="file-url-input">
-            <input type="url" id="editImageUrl">
-          </div>
+          <input type="hidden" id="editImageUrl">
         </div>
 
         <button type="submit" class="btn btn-primary" style="width: 100%;">
@@ -964,6 +982,11 @@
       const description = document.getElementById('description').value;
       const imageUrl = document.getElementById('imageUrl').value;
 
+      if (!imageUrl) {
+        showMessage('addMessage', '❌ Please upload an image first', 'error');
+        return;
+      }
+
       try {
         const { error } = await supabaseClient
           .from('menu_items')
@@ -972,7 +995,7 @@
             category: category,
             price: price,
             description: description || null,
-            image_url: imageUrl || null
+            image_url: imageUrl
           }]);
 
         if (error) throw error;
@@ -1102,7 +1125,21 @@
       document.getElementById('editCategory').value = item.category;
       document.getElementById('editPrice').value = item.price;
       document.getElementById('editDescription').value = item.description || '';
-      document.getElementById('editImageUrl').value = item.image_url || '';
+      
+      // Set current image URL and show preview
+      const currentImageUrl = item.image_url || '';
+      document.getElementById('editImageUrl').value = currentImageUrl;
+      if (currentImageUrl) {
+        const previewImg = document.getElementById('editImagePreviewImg');
+        const preview = document.getElementById('editImagePreview');
+        if (previewImg) {
+          previewImg.src = currentImageUrl;
+          if (preview) preview.classList.add('show');
+        }
+      }
+      
+      // Clear file input
+      document.getElementById('editImageFile').value = '';
 
       document.getElementById('editModal').classList.add('show');
     }
@@ -1123,16 +1160,23 @@
       const description = document.getElementById('editDescription').value;
       const imageUrl = document.getElementById('editImageUrl').value;
 
+      // Build update object - only include image_url if a new image was uploaded
+      const updateData = {
+        item_name: itemName,
+        category: category,
+        price: price,
+        description: description || null
+      };
+
+      // Only update image if a new one was uploaded
+      if (imageUrl) {
+        updateData.image_url = imageUrl;
+      }
+
       try {
         const { error } = await supabaseClient
           .from('menu_items')
-          .update({
-            item_name: itemName,
-            category: category,
-            price: price,
-            description: description || null,
-            image_url: imageUrl || null
-          })
+          .update(updateData)
           .eq('id', id);
 
         if (error) throw error;
@@ -1220,6 +1264,11 @@
       e.preventDefault();
       const imageUrl = document.getElementById('heroImageUrl').value;
       const orderPosition = parseInt(document.getElementById('heroOrderPosition').value) || 0;
+
+      if (!imageUrl) {
+        showMessage('heroMessage', '❌ Please upload an image first', 'error');
+        return;
+      }
 
       try {
         const { error } = await supabaseClient
@@ -1327,6 +1376,11 @@
       const tag = document.getElementById('weeklySpecialTag').value;
       const orderPosition = parseInt(document.getElementById('weeklySpecialOrder').value) || 0;
 
+      if (!imageUrl) {
+        showMessage('weeklySpecialsMessage', '❌ Please upload an image first', 'error');
+        return;
+      }
+
       try {
         const { error } = await supabaseClient
           .from('weekly_specials')
@@ -1334,7 +1388,7 @@
             name: name,
             description: description || null,
             price: price,
-            image_url: imageUrl || null,
+            image_url: imageUrl,
             tag: tag || 'New',
             order_position: orderPosition
           }]);
@@ -1392,9 +1446,23 @@
         document.getElementById('weeklySpecialName').value = data.name;
         document.getElementById('weeklySpecialDescription').value = data.description || '';
         document.getElementById('weeklySpecialPrice').value = data.price;
-        document.getElementById('weeklySpecialImageUrl').value = data.image_url || '';
+        const currentImageUrl = data.image_url || '';
+        document.getElementById('weeklySpecialImageUrl').value = currentImageUrl;
         document.getElementById('weeklySpecialTag').value = data.tag || 'New';
         document.getElementById('weeklySpecialOrder').value = data.order_position;
+        
+        // Show current image preview
+        if (currentImageUrl) {
+          const previewImg = document.getElementById('weeklySpecialImagePreviewImg');
+          const preview = document.getElementById('weeklySpecialImagePreview');
+          if (previewImg) {
+            previewImg.src = currentImageUrl;
+            if (preview) preview.classList.add('show');
+          }
+        }
+        
+        // Clear file input
+        document.getElementById('weeklySpecialImageFile').value = '';
 
         // Scroll to form
         document.getElementById('addWeeklySpecialForm').scrollIntoView({ behavior: 'smooth' });
@@ -1423,17 +1491,24 @@
       const tag = document.getElementById('weeklySpecialTag').value;
       const orderPosition = parseInt(document.getElementById('weeklySpecialOrder').value) || 0;
 
+      // Build update object - only include image_url if a new image was uploaded
+      const updateData = {
+        name: name,
+        description: description || null,
+        price: price,
+        tag: tag || 'New',
+        order_position: orderPosition
+      };
+
+      // Only update image if a new one was uploaded
+      if (imageUrl) {
+        updateData.image_url = imageUrl;
+      }
+
       try {
         const { error } = await supabaseClient
           .from('weekly_specials')
-          .update({
-            name: name,
-            description: description || null,
-            price: price,
-            image_url: imageUrl || null,
-            tag: tag || 'New',
-            order_position: orderPosition
-          })
+          .update(updateData)
           .eq('id', id);
 
         if (error) throw error;
@@ -1447,8 +1522,63 @@
       }
     }
 
-    // File Upload Handler
-    function handleImageUpload(input, urlInputId, previewId) {
+    // Upload image to Supabase Storage
+    async function uploadImageToSupabase(file, folder = 'images') {
+      if (!supabaseClient) {
+        if (!initSupabase()) {
+          throw new Error('Supabase not initialized');
+        }
+      }
+
+      try {
+        const fileExt = file.name.split('.').pop();
+        const fileName = `${folder}/${Math.random().toString(36).substring(2)}_${Date.now()}.${fileExt}`;
+        const filePath = fileName;
+
+        // Upload to Supabase Storage
+        const { data: uploadData, error: uploadError } = await supabaseClient.storage
+          .from('images') // Storage bucket name - change if your bucket has a different name
+          .upload(filePath, file, {
+            cacheControl: '3600',
+            upsert: false
+          });
+
+        if (uploadError) {
+          // If bucket doesn't exist, try creating it or use base64 fallback
+          if (uploadError.message.includes('Bucket not found')) {
+            console.warn('Storage bucket not found, using base64 fallback');
+            // Fallback to base64
+            return await convertToBase64(file);
+          }
+          throw uploadError;
+        }
+
+        // Get public URL
+        const { data: urlData } = supabaseClient.storage
+          .from('images')
+          .getPublicUrl(filePath);
+
+        return urlData.publicUrl;
+      } catch (error) {
+        console.error('Upload error:', error);
+        // Fallback to base64 if storage fails
+        console.log('Falling back to base64 encoding');
+        return await convertToBase64(file);
+      }
+    }
+
+    // Convert file to base64 data URL (fallback if storage not available)
+    async function convertToBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    // File Upload Handler - Now uploads automatically
+    async function handleImageUpload(input, previewId, statusId) {
       const file = input.files[0];
       if (!file) return;
 
@@ -1466,36 +1596,58 @@
         return;
       }
 
+      const preview = document.getElementById(previewId);
+      const previewImg = document.getElementById(previewId + 'Img');
+      const previewInfo = document.getElementById(previewId + 'Info');
+      const statusEl = document.getElementById(statusId);
+      const urlInput = document.getElementById(input.id.replace('File', 'Url'));
+
+      // Show preview immediately
       const reader = new FileReader();
       reader.onload = function(e) {
-        const preview = document.getElementById(previewId);
-        const previewImg = document.getElementById(previewId + 'Img');
-        const previewInfo = document.getElementById(previewId + 'Info');
-        const urlInput = document.getElementById(urlInputId);
-
         if (previewImg) {
           previewImg.src = e.target.result;
           if (preview) preview.classList.add('show');
         }
-
         if (previewInfo) {
           previewInfo.textContent = `File: ${file.name} (${(file.size / 1024).toFixed(2)} KB)`;
         }
-
-        // Set the file name as a suggestion for the URL
-        // User can still manually enter a URL or upload to their server
-        if (urlInput) {
-          urlInput.value = `images/${file.name}`;
-          urlInput.placeholder = `Upload this file to your server as: images/${file.name}`;
-        }
       };
-
-      reader.onerror = function() {
-        alert('Error reading file');
-        input.value = '';
-      };
-
       reader.readAsDataURL(file);
+
+      // Show uploading status
+      if (statusEl) {
+        statusEl.textContent = '⏳ Uploading image...';
+        statusEl.className = 'upload-status uploading';
+      }
+
+      try {
+        // Upload to Supabase Storage
+        const imageUrl = await uploadImageToSupabase(file);
+        
+        // Store URL in hidden input
+        if (urlInput) {
+          urlInput.value = imageUrl;
+        }
+
+        // Show success
+        if (statusEl) {
+          statusEl.textContent = '✅ Image uploaded successfully!';
+          statusEl.className = 'upload-status success';
+          setTimeout(() => {
+            statusEl.className = 'upload-status';
+            statusEl.textContent = '';
+          }, 3000);
+        }
+      } catch (error) {
+        console.error('Upload failed:', error);
+        if (statusEl) {
+          statusEl.textContent = '❌ Upload failed: ' + error.message;
+          statusEl.className = 'upload-status error';
+        }
+        alert('Failed to upload image: ' + error.message);
+        input.value = '';
+      }
     }
 
     // Initialize and load on start
