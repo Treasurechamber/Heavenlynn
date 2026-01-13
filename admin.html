@@ -513,22 +513,70 @@
   <script>
     // Initialize Supabase - Safe from duplicate declarations
     let supabase;
+    let supabaseInitialized = false;
     
     function initSupabase() {
-      if (typeof window.supabase === 'undefined') {
-        console.error('Supabase library not loaded yet');
+      // Check if Supabase library is loaded
+      if (typeof window.supabase === 'undefined' || typeof window.supabase.createClient !== 'function') {
         return false;
       }
       
       if (typeof window.dashboardSupabase === 'undefined') {
-        window.dashboardSupabase = window.supabase.createClient(
-          'https://cfvsxnvvkdskbkljqicw.supabase.co',
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNmdnN4bnZ2a2Rza2JrbGpxaWN3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ1MzU0MTcsImV4cCI6MjA2MDExMTQxN30.dNZsSOJyW1bE4bDQP-AIEYV7Z6hlw_iVMN6LZ2IdPio'
-        );
+        try {
+          window.dashboardSupabase = window.supabase.createClient(
+            'https://cfvsxnvvkdskbkljqicw.supabase.co',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNmdnN4bnZ2a2Rza2JrbGpxaWN3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ1MzU0MTcsImV4cCI6MjA2MDExMTQxN30.dNZsSOJyW1bE4bDQP-AIEYV7Z6hlw_iVMN6LZ2IdPio'
+          );
+          console.log('✅ Admin: Supabase client initialized');
+        } catch (err) {
+          console.error('❌ Admin: Error creating Supabase client:', err);
+          return false;
+        }
       }
       supabase = window.dashboardSupabase;
+      supabaseInitialized = true;
       return true;
     }
+    
+    // Wait for Supabase library to load
+    function waitForSupabase() {
+      if (initSupabase()) {
+        // Supabase is ready, load items if DOM is ready
+        if (document.readyState === 'complete' || document.readyState === 'interactive') {
+          if (typeof loadItems === 'function') {
+            setTimeout(() => loadItems(), 100);
+          }
+        }
+        return;
+      }
+      
+      // Retry every 100ms, up to 50 times (5 seconds total)
+      let attempts = 0;
+      const maxAttempts = 50;
+      const retryInterval = setInterval(() => {
+        attempts++;
+        if (initSupabase()) {
+          clearInterval(retryInterval);
+          // Load items if DOM is ready
+          if (document.readyState === 'complete' || document.readyState === 'interactive') {
+            if (typeof loadItems === 'function') {
+              setTimeout(() => loadItems(), 100);
+            }
+          }
+        } else if (attempts >= maxAttempts) {
+          clearInterval(retryInterval);
+          console.error('❌ Admin: Failed to initialize Supabase after', maxAttempts, 'attempts');
+          document.getElementById('itemsTable').innerHTML = `
+            <tr><td colspan="6" style="text-align: center; color: red; padding: 2rem;">
+              ⚠️ Failed to connect to Supabase.<br>Please check your internet connection and refresh the page.
+            </td></tr>
+          `;
+        }
+      }, 100);
+    }
+    
+    // Start waiting for Supabase
+    waitForSupabase();
 
     let allItems = [];
 
@@ -586,6 +634,7 @@
       if (!supabase) {
         // Try to initialize
         if (!initSupabase()) {
+          console.error('❌ Admin: Cannot load items - Supabase not initialized');
           document.getElementById('itemsTable').innerHTML = `
             <tr><td colspan="6" style="text-align: center; color: red;">Error: Supabase not initialized. Please refresh the page.</td></tr>
           `;
@@ -593,6 +642,7 @@
         }
       }
       
+      console.log('📋 Admin: Loading menu items...');
       try {
         const { data, error } = await supabase
           .from('menu_items')
@@ -600,7 +650,7 @@
           .order('category');
 
         if (error) {
-          console.error('Supabase error:', error);
+          console.error('❌ Admin: Supabase error:', error);
           throw error;
         }
 
@@ -608,6 +658,7 @@
           throw new Error('No data returned from Supabase');
         }
 
+        console.log('✅ Admin: Menu loaded successfully:', data.length, 'items');
         allItems = data;
         displayItems(data);
         updateStats();
@@ -760,22 +811,10 @@
 
     // Initialize and load on start
     document.addEventListener('DOMContentLoaded', () => {
-      // Wait for Supabase to load
-      if (typeof window.supabase !== 'undefined') {
-        if (initSupabase()) {
-          loadItems();
-        }
-      } else {
-        // Retry after a short delay if Supabase isn't loaded yet
-        setTimeout(() => {
-          if (initSupabase()) {
-            loadItems();
-          } else {
-            document.getElementById('itemsTable').innerHTML = `
-              <tr><td colspan="6" style="text-align: center; color: red;">Error: Failed to load Supabase library. Please refresh the page.</td></tr>
-            `;
-          }
-        }, 500);
+      // Only load items if Supabase is already initialized
+      // Otherwise, waitForSupabase will call it when ready
+      if (supabaseInitialized && typeof supabase !== 'undefined') {
+        loadItems();
       }
     });
   </script>
