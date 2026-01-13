@@ -532,7 +532,11 @@
 // Config
 const SUPABASE_URL = 'https://cfvsxnvvkdskbkljqicw.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNmdnN4bnZ2a2Rza2JrbGpxaWN3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ1MzU0MTcsImV4cCI6MjA2MDExMTQxN30.dNZsSOJyW1bE4bDQP-AIEYV7Z6hlw_iVMN6LZ2IdPio';
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+   // Initialize Supabase client (safe from duplicates)
+   if (!window.supabaseClient) {
+     window.supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+   }
+   const supabase = window.supabaseClient;
 
 const iconMap = {
   "Cookies": "fa-cookie-bite", "Rolls": "fa-bread-slice", "Slices": "fa-chart-pie", 
@@ -1067,3 +1071,4 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
 </body>
 </html>
+
