@@ -575,6 +575,12 @@ function waitForSupabase() {
       if (typeof loadMenu === 'function') {
         setTimeout(() => loadMenu(), 100);
       }
+      if (typeof loadFeaturedItems === 'function') {
+        setTimeout(() => loadFeaturedItems(), 150);
+      }
+      if (typeof initSlideshow === 'function') {
+        setTimeout(() => initSlideshow(), 150);
+      }
     }
     return;
   }
@@ -590,6 +596,12 @@ function waitForSupabase() {
       if (document.readyState === 'complete' || document.readyState === 'interactive') {
         if (typeof loadMenu === 'function') {
           setTimeout(() => loadMenu(), 100);
+        }
+        if (typeof loadFeaturedItems === 'function') {
+          setTimeout(() => loadFeaturedItems(), 150);
+        }
+        if (typeof initSlideshow === 'function') {
+          setTimeout(() => initSlideshow(), 150);
         }
       }
     } else if (attempts >= maxAttempts) {
@@ -621,20 +633,7 @@ const specialBadges = {
 
 const categoryOrder = ["Cookies", "Rolls", "Slices", "Cakes", "Cookie Cakes", "Cups", "Cheesecakes", "Ice Cream", "Drinks", "Add-ons"];
 
-const featuredItems = [
-  { name: "Lemon Cheesecake", description: "Creamy lemon cheesecake with a zesty lemon curd topping.", price: 30, image: "images/lemon-cheesec.jpg", tag: "Sun-Kissed Slice!" },
-  { name: "Zesty Lemon Cheesecake Jar", description: "Tangy, Creamy and full of lemony love", price: 4, image: "images/Lemon-Chee.jpg", tag: "New" },
-  { name: "Healthy Chia Pudding", description: "Creamy chia-almond blend, naturally sweet and nutrient-rich.", price: 5, image: "images/healthy_chiapudd.jpg", tag: "Healthy Treat" },
-  { name: "The Heavenly Cup", description: "Layers of chocolate, brownies, and strawberries May's best-selling indulgence!", price: 6, image: "images/heavenly_cup.jpg", tag: "May Best Seller" },
-  { name: "Salted Caramel Jar", description: "Creamy caramel, rich mousse, and sea salt layered in a decadent jar.", price: 4.5, image: "images/saltedcaramel_cup.jpg", tag: "New" },
-  { name: "Heavenlynn Special", description: "Warm brownie, vanilla ice cream, and caramel drizzle pure indulgence.", price: 5, image: "images/heavenlynn_spec.jpg", tag: "Trending" }
-];
-
-const slideImages = [
-  "images/lemon-cheesec.jpg", "images/zesty_fullpic.jpg", "images/cc_dec.jpg", "images/date_cke_again.jpg",
-  "images/fruit_cake.jpg", "images/heavenlynn_spec.jpg", "images/heavenly_cup.jpg", "images/birthday.jpg",
-  "images/cookies.jpeg", "images/tartes.jpeg", "images/cookie-choc.jpg", "images/cookie-ice.jpg", "images/san.jpeg"
-];
+// Note: featuredItems and slideImages are now loaded from Supabase (weekly_specials and slideshow_images tables)
 
 const fortunes = {
   tips: ["Pro Tip: Our cookies taste best when shared with friends!", "Tip: Try our desserts with coffee for perfect pairing.", "Baker's Tip: Store cookies in an airtight container!", "Tip: Visit us before 10am for the freshest pastries!", "Pro Tip: Weekly specials announced every Wednesday on Instagram!"],
@@ -985,52 +984,132 @@ async function loadMenu() {
   }
 }
 
-// Featured Items
-function loadFeaturedItems() {
+// Featured Items (Weekly Specials) - Load from Supabase
+async function loadFeaturedItems() {
+  if (!supabaseInitialized || typeof sb === 'undefined') {
+    console.log('Supabase not ready for featured items');
+    return;
+  }
+
   const slider = document.getElementById('featuredSlider');
-  featuredItems.forEach(item => {
-    const div = document.createElement('div');
-    div.className = 'featured-item';
-    div.innerHTML = `
-      <div class="limited-tag">${item.tag}</div>
-      <div class="featured-img"><img src="${item.image}" alt="${item.name}"></div>
-      <div class="featured-content">
-        <div class="featured-name">${item.name}</div>
-        <div class="featured-desc">${item.description}</div>
-        <div class="featured-footer">
-          <div class="featured-price">$${item.price.toFixed(2)}</div>
-          <button class="featured-button">Order Now</button>
-        </div>
-      </div>
-    `;
-    div.querySelector('.featured-button').onclick = () => addToCart({ name: item.name, price: item.price, category: 'Featured' });
-    slider.appendChild(div);
-  });
   
-  document.getElementById('sliderPrev').onclick = () => slider.scrollBy({ left: -175, behavior: 'smooth' });
-  document.getElementById('sliderNext').onclick = () => slider.scrollBy({ left: 175, behavior: 'smooth' });
+  try {
+    const { data, error } = await sb
+      .from('weekly_specials')
+      .select('*')
+      .eq('active', true)
+      .order('order_position', { ascending: true });
+
+    if (error) throw error;
+
+    if (!data || data.length === 0) {
+      console.log('No weekly specials found');
+      return;
+    }
+
+    slider.innerHTML = '';
+
+    data.forEach(item => {
+      const div = document.createElement('div');
+      div.className = 'featured-item';
+      div.innerHTML = `
+        <div class="limited-tag">${item.tag || 'New'}</div>
+        <div class="featured-img"><img src="${item.image_url || ''}" alt="${item.name}" onerror="this.style.display='none'"></div>
+        <div class="featured-content">
+          <div class="featured-name">${item.name}</div>
+          <div class="featured-desc">${item.description || ''}</div>
+          <div class="featured-footer">
+            <div class="featured-price">$${parseFloat(item.price).toFixed(2)}</div>
+            <button class="featured-button">Order Now</button>
+          </div>
+        </div>
+      `;
+      div.querySelector('.featured-button').onclick = () => addToCart({
+        name: item.name,
+        price: parseFloat(item.price),
+        category: 'Featured'
+      });
+      slider.appendChild(div);
+    });
+
+    // Initialize slider controls
+    const prevBtn = document.getElementById('sliderPrev');
+    const nextBtn = document.getElementById('sliderNext');
+    if (prevBtn && nextBtn) {
+      prevBtn.onclick = () => slider.scrollBy({ left: -280, behavior: 'smooth' });
+      nextBtn.onclick = () => slider.scrollBy({ left: 280, behavior: 'smooth' });
+    }
+  } catch (error) {
+    console.error('Error loading weekly specials:', error);
+  }
 }
 
-// Slideshow
-function initSlideshow() {
+// Slideshow - Load from Supabase
+async function initSlideshow() {
+  if (!supabaseInitialized || typeof sb === 'undefined') {
+    console.log('Supabase not ready for slideshow');
+    return;
+  }
+
   const container = document.querySelector('.slideshow-container');
   const dots = document.querySelector('.slideshow-dots');
   
-  slideImages.forEach((img, i) => {
-    const slide = document.createElement('div');
-    slide.className = `slide ${i === 0 ? 'active' : ''}`;
-    slide.style.backgroundImage = `url(${img})`;
-    container.appendChild(slide);
-    
-    const dot = document.createElement('div');
-    dot.className = `dot ${i === 0 ? 'active' : ''}`;
-    dot.onclick = () => goToSlide(i);
-    dots.appendChild(dot);
-  });
-  
-  slideInterval = setInterval(() => goToSlide((currentSlide + 1) % slideImages.length), 5000);
-  container.onmouseover = () => clearInterval(slideInterval);
-  container.onmouseleave = () => slideInterval = setInterval(() => goToSlide((currentSlide + 1) % slideImages.length), 5000);
+  try {
+    const { data, error } = await sb
+      .from('slideshow_images')
+      .select('*')
+      .eq('active', true)
+      .order('order_position', { ascending: true });
+
+    if (error) throw error;
+
+    if (!data || data.length === 0) {
+      console.log('No hero slides found');
+      return;
+    }
+
+    // Clear existing slides
+    container.innerHTML = '';
+    dots.innerHTML = '';
+
+    // Create slides and dots
+    data.forEach((slide, index) => {
+      const slideDiv = document.createElement('div');
+      slideDiv.className = `slide ${index === 0 ? 'active' : ''}`;
+      slideDiv.style.backgroundImage = `url(${slide.image_url})`;
+      container.appendChild(slideDiv);
+
+      const dot = document.createElement('div');
+      dot.className = `dot ${index === 0 ? 'active' : ''}`;
+      dot.addEventListener('click', () => goToSlide(index));
+      dots.appendChild(dot);
+    });
+
+    // Initialize slideshow if we have slides
+    if (data.length > 0) {
+      currentSlide = 0;
+      slideInterval = setInterval(() => {
+        const slides = document.querySelectorAll('.slide');
+        if (slides.length > 0) {
+          const nextIndex = (currentSlide + 1) % slides.length;
+          goToSlide(nextIndex);
+        }
+      }, 5000);
+
+      container.addEventListener('mouseover', () => clearInterval(slideInterval));
+      container.addEventListener('mouseleave', () => {
+        slideInterval = setInterval(() => {
+          const slides = document.querySelectorAll('.slide');
+          if (slides.length > 0) {
+            const nextIndex = (currentSlide + 1) % slides.length;
+            goToSlide(nextIndex);
+          }
+        }, 5000);
+      });
+    }
+  } catch (error) {
+    console.error('Error loading hero slides:', error);
+  }
 }
 
 function goToSlide(n) {
@@ -1130,9 +1209,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // Otherwise, waitForSupabase will call it when ready
   if (supabaseInitialized && typeof sb !== 'undefined') {
     loadMenu();
+    loadFeaturedItems();
+    initSlideshow();
   }
-  loadFeaturedItems();
-  initSlideshow();
   setupFortuneCookie();
   
   // Cart modal
