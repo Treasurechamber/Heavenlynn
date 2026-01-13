@@ -152,8 +152,9 @@
 
   <script>
     // Initialize Supabase - Wait for library to load
-    let supabase;
-    let supabaseInitialized = false;
+    // Use supabaseClient to avoid conflicts with global supabase from library
+    var supabaseClient;
+    var supabaseInitialized = false;
     
     function initSupabase() {
       // Check if Supabase library is loaded
@@ -173,7 +174,7 @@
           return false;
         }
       }
-      supabase = window.adminSupabase;
+      supabaseClient = window.adminSupabase;
       supabaseInitialized = true;
       return true;
     }
@@ -220,13 +221,13 @@
 
     // Check if already logged in
     async function checkAuth() {
-      if (!supabase) {
+      if (!supabaseClient) {
         console.log('Supabase not ready, skipping auth check');
         return;
       }
       
       try {
-        const { data: { session }, error } = await supabase.auth.getSession();
+        const { data: { session }, error } = await supabaseClient.auth.getSession();
         
         if (error) {
           console.error('Auth check error:', error);
@@ -246,7 +247,7 @@
     async function handleLogin(e) {
       e.preventDefault();
       
-      if (!supabase) {
+      if (!supabaseClient) {
         errorMessage.textContent = 'Supabase not initialized. Please refresh the page.';
         errorMessage.classList.add('show');
         return;
@@ -262,7 +263,7 @@
       try {
         console.log('Attempting login for:', email);
         
-        const { data, error } = await supabase.auth.signInWithPassword({
+        const { data, error } = await supabaseClient.auth.signInWithPassword({
           email: email,
           password: password
         });
@@ -291,7 +292,7 @@
     document.addEventListener('DOMContentLoaded', () => {
       // Only check auth if Supabase is already initialized
       // Otherwise, waitForSupabase will call it when ready
-      if (supabaseInitialized && typeof supabase !== 'undefined') {
+      if (supabaseInitialized && typeof supabaseClient !== 'undefined') {
         checkAuth();
       }
       // Always set up the login form handler
