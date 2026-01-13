@@ -529,21 +529,10 @@
   </footer>
 
 <script>
-// Config - Safe from duplicate declarations
-if (typeof window.supabaseConfig === 'undefined') {
-  window.supabaseConfig = {
-    url: 'https://cfvsxnvvkdskbkljqicw.supabase.co',
-    key: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNmdnN4bnZ2a2Rza2JrbGpxaWN3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ1MzU0MTcsImV4cCI6MjA2MDExMTQxN30.dNZsSOJyW1bE4bDQP-AIEYV7Z6hlw_iVMN6LZ2IdPio'
-  };
-}
-// Use var instead of const to allow redeclaration (prevents errors if script runs twice)
-var SUPABASE_URL = window.supabaseConfig.url;
-var SUPABASE_KEY = window.supabaseConfig.key;
-
-// Use global supabase from script tag; create our own client named `sb`
-if (typeof sb === 'undefined') {
-  var sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-}
+// Config
+const SUPABASE_URL = 'https://cfvsxnvvkdskbkljqicw.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNmdnN4bnZ2a2Rza2JrbGpxaWN3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ1MzU0MTcsImV4cCI6MjA2MDExMTQxN30.dNZsSOJyW1bE4bDQP-AIEYV7Z6hlw_iVMN6LZ2IdPio';
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 const iconMap = {
   "Cookies": "fa-cookie-bite", "Rolls": "fa-bread-slice", "Slices": "fa-chart-pie", 
@@ -668,7 +657,7 @@ function setupBoxGrid() {
 }
 
 async function loadBoxItems() {
-  const { data } = await sb.from('menu_items').select('*').in('category', ['Cookies', 'Rolls', 'Slices', 'Cups', 'Cheesecakes']);
+  const { data } = await supabase.from('menu_items').select('*').in('category', ['Cookies', 'Rolls', 'Slices', 'Cups', 'Cheesecakes']);
   const filtered = data.filter(i => !i.item_name.toLowerCase().includes('lemon cheesecake') || i.price < 20);
   const grouped = {};
   filtered.forEach(i => { if (!grouped[i.category]) grouped[i.category] = []; grouped[i.category].push(i); });
@@ -766,7 +755,7 @@ function updateBoxSummary() {
 
 // Menu Loading
 async function loadMenu() {
-  const { data, error } = await sb.from('menu_items').select('*').order('category', { ascending: true });
+  const { data, error } = await supabase.from('menu_items').select('*').order('category', { ascending: true });
   if (error) { console.error(error); return; }
   
   document.querySelector('.loader').style.display = 'none';
