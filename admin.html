@@ -584,10 +584,13 @@
     // Load items
     async function loadItems() {
       if (!supabase) {
-        document.getElementById('itemsTable').innerHTML = `
-          <tr><td colspan="6" style="text-align: center; color: red;">Error: Supabase not initialized. Please refresh the page.</td></tr>
-        `;
-        return;
+        // Try to initialize
+        if (!initSupabase()) {
+          document.getElementById('itemsTable').innerHTML = `
+            <tr><td colspan="6" style="text-align: center; color: red;">Error: Supabase not initialized. Please refresh the page.</td></tr>
+          `;
+          return;
+        }
       }
       
       try {
