@@ -512,8 +512,9 @@
 
   <script>
     // Initialize Supabase - Safe from duplicate declarations
-    let supabase;
-    let supabaseInitialized = false;
+    // Use supabaseClient to avoid conflicts with global supabase from library
+    var supabaseClient;
+    var supabaseInitialized = false;
     
     function initSupabase() {
       // Check if Supabase library is loaded
@@ -533,7 +534,7 @@
           return false;
         }
       }
-      supabase = window.dashboardSupabase;
+      supabaseClient = window.dashboardSupabase;
       supabaseInitialized = true;
       return true;
     }
@@ -580,14 +581,16 @@
 
     let allItems = [];
 
-    // Simple logout
-    function logout() {
+    // Simple logout - make it global so onclick can access it
+    window.logout = function() {
       if (confirm('Are you sure you want to logout?')) {
-        supabase.auth.signOut();
+        if (supabaseClient) {
+          supabaseClient.auth.signOut();
+        }
         localStorage.clear();
-        window.location.href = 'admin.html';
+        window.location.href = 'dashboard.html';
       }
-    }
+    };
 
     // Show message
     function showMessage(elementId, message, type) {
@@ -608,7 +611,7 @@
       const imageUrl = document.getElementById('imageUrl').value;
 
       try {
-        const { error } = await supabase
+        const { error } = await supabaseClient
           .from('menu_items')
           .insert([{
             item_name: itemName,
@@ -631,7 +634,7 @@
 
     // Load items
     async function loadItems() {
-      if (!supabase) {
+      if (!supabaseClient) {
         // Try to initialize
         if (!initSupabase()) {
           console.error('❌ Admin: Cannot load items - Supabase not initialized');
@@ -644,7 +647,7 @@
       
       console.log('📋 Admin: Loading menu items...');
       try {
-        const { data, error } = await supabase
+        const { data, error } = await supabaseClient
           .from('menu_items')
           .select('*')
           .order('category');
@@ -767,7 +770,7 @@
       const imageUrl = document.getElementById('editImageUrl').value;
 
       try {
-        const { error } = await supabase
+        const { error } = await supabaseClient
           .from('menu_items')
           .update({
             item_name: itemName,
@@ -795,7 +798,7 @@
     function deleteItem(id, name) {
       if (!confirm(`Delete "${name}"?`)) return;
 
-      supabase
+      supabaseClient
         .from('menu_items')
         .delete()
         .eq('id', id)
@@ -813,7 +816,7 @@
     document.addEventListener('DOMContentLoaded', () => {
       // Only load items if Supabase is already initialized
       // Otherwise, waitForSupabase will call it when ready
-      if (supabaseInitialized && typeof supabase !== 'undefined') {
+      if (supabaseInitialized && typeof supabaseClient !== 'undefined') {
         loadItems();
       }
     });
