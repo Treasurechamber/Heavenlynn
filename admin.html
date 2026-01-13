@@ -405,6 +405,111 @@
       </form>
     </div>
 
+    <!-- Hero Slideshow Management Section -->
+    <div class="section">
+      <div class="section-header">
+        <h2 class="section-title">Hero Slideshow Images</h2>
+        <button class="btn btn-primary" onclick="loadHeroSlides()">
+          <i class="fas fa-sync"></i> Refresh
+        </button>
+      </div>
+
+      <div class="message" id="heroMessage"></div>
+
+      <form id="addHeroSlideForm" onsubmit="addHeroSlide(event)" style="margin-bottom: 2rem;">
+        <div class="form-group">
+          <label for="heroImageUrl">Image URL *</label>
+          <input type="url" id="heroImageUrl" placeholder="images/slide.jpg" required>
+        </div>
+        <div class="form-group">
+          <label for="heroOrderPosition">Order Position (lower = first)</label>
+          <input type="number" id="heroOrderPosition" value="0" min="0">
+        </div>
+        <button type="submit" class="btn btn-primary">
+          <i class="fas fa-plus"></i> Add Slide
+        </button>
+      </form>
+
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Preview</th>
+              <th>Image URL</th>
+              <th>Order</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="heroSlidesTable">
+            <tr><td colspan="5" style="text-align: center;">Loading...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Weekly Specials Management Section -->
+    <div class="section">
+      <div class="section-header">
+        <h2 class="section-title">Weekly Specials (Featured Items)</h2>
+        <button class="btn btn-primary" onclick="loadWeeklySpecials()">
+          <i class="fas fa-sync"></i> Refresh
+        </button>
+      </div>
+
+      <div class="message" id="weeklySpecialsMessage"></div>
+
+      <form id="addWeeklySpecialForm" onsubmit="addWeeklySpecial(event)" style="margin-bottom: 2rem;">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="weeklySpecialName">Item Name *</label>
+            <input type="text" id="weeklySpecialName" required>
+          </div>
+          <div class="form-group">
+            <label for="weeklySpecialPrice">Price ($) *</label>
+            <input type="number" id="weeklySpecialPrice" step="0.01" min="0" required>
+          </div>
+          <div class="form-group">
+            <label for="weeklySpecialTag">Tag (e.g., "New", "Trending")</label>
+            <input type="text" id="weeklySpecialTag" placeholder="New" value="New">
+          </div>
+          <div class="form-group">
+            <label for="weeklySpecialOrder">Order Position</label>
+            <input type="number" id="weeklySpecialOrder" value="0" min="0">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="weeklySpecialDescription">Description</label>
+          <textarea id="weeklySpecialDescription"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="weeklySpecialImageUrl">Image URL *</label>
+          <input type="url" id="weeklySpecialImageUrl" placeholder="images/item.jpg" required>
+        </div>
+        <button type="submit" class="btn btn-primary">
+          <i class="fas fa-plus"></i> Add Weekly Special
+        </button>
+      </form>
+
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Preview</th>
+              <th>Name</th>
+              <th>Price</th>
+              <th>Tag</th>
+              <th>Order</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="weeklySpecialsTable">
+            <tr><td colspan="6" style="text-align: center;">Loading...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
     <!-- Items List Section -->
     <div class="section">
       <div class="section-header">
@@ -812,12 +917,295 @@
         });
     }
 
+    // ========== HERO SLIDESHOW MANAGEMENT ==========
+
+    async function loadHeroSlides() {
+      if (!supabaseClient) {
+        if (!initSupabase()) {
+          document.getElementById('heroSlidesTable').innerHTML = `
+            <tr><td colspan="5" style="text-align: center; color: red;">Error: Supabase not initialized.</td></tr>
+          `;
+          return;
+        }
+      }
+
+      try {
+        const { data, error } = await supabaseClient
+          .from('slideshow_images')
+          .select('*')
+          .order('order_position', { ascending: true });
+
+        if (error) throw error;
+
+        const table = document.getElementById('heroSlidesTable');
+        if (!data || data.length === 0) {
+          table.innerHTML = '<tr><td colspan="5" style="text-align: center;">No slides added yet.</td></tr>';
+          return;
+        }
+
+        table.innerHTML = data.map(slide => `
+          <tr>
+            <td><img src="${slide.image_url}" alt="Slide" class="item-image-thumb" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2260%22 height=%2260%22%3E%3Crect fill=%22%23ddd%22 width=%2260%22 height=%2260%22/%3E%3Ctext fill=%22%23999%22 x=%2230%22 y=%2230%22 text-anchor=%22middle%22 dy=%22.3em%22%3ENo Image%3C/text%3E%3C/svg%3E'"></td>
+            <td>${slide.image_url}</td>
+            <td>${slide.order_position}</td>
+            <td>${slide.active ? '✅ Active' : '❌ Inactive'}</td>
+            <td class="action-btns">
+              <button class="btn-icon btn-danger" onclick="deleteHeroSlide('${slide.id}')" title="Delete">
+                <i class="fas fa-trash"></i>
+              </button>
+              <button class="btn-icon btn-primary" onclick="toggleHeroSlide('${slide.id}', ${!slide.active})" title="${slide.active ? 'Deactivate' : 'Activate'}">
+                <i class="fas fa-${slide.active ? 'eye-slash' : 'eye'}"></i>
+              </button>
+            </td>
+          </tr>
+        `).join('');
+      } catch (error) {
+        console.error('Error loading hero slides:', error);
+        document.getElementById('heroSlidesTable').innerHTML = `
+          <tr><td colspan="5" style="text-align: center; color: red;">Error: ${error.message}</td></tr>
+        `;
+      }
+    }
+
+    async function addHeroSlide(e) {
+      e.preventDefault();
+      const imageUrl = document.getElementById('heroImageUrl').value;
+      const orderPosition = parseInt(document.getElementById('heroOrderPosition').value) || 0;
+
+      try {
+        const { error } = await supabaseClient
+          .from('slideshow_images')
+          .insert([{ image_url: imageUrl, order_position: orderPosition }]);
+
+        if (error) throw error;
+
+        showMessage('heroMessage', '✅ Slide added successfully!', 'success');
+        document.getElementById('addHeroSlideForm').reset();
+        loadHeroSlides();
+      } catch (error) {
+        showMessage('heroMessage', `❌ Error: ${error.message}`, 'error');
+      }
+    }
+
+    async function deleteHeroSlide(id) {
+      if (!confirm('Delete this slide?')) return;
+      try {
+        const { error } = await supabaseClient
+          .from('slideshow_images')
+          .delete()
+          .eq('id', id);
+        if (error) throw error;
+        showMessage('heroMessage', '✅ Slide deleted!', 'success');
+        loadHeroSlides();
+      } catch (error) {
+        showMessage('heroMessage', `❌ Error: ${error.message}`, 'error');
+      }
+    }
+
+    async function toggleHeroSlide(id, isActive) {
+      try {
+        const { error } = await supabaseClient
+          .from('slideshow_images')
+          .update({ active: isActive })
+          .eq('id', id);
+        if (error) throw error;
+        loadHeroSlides();
+      } catch (error) {
+        showMessage('heroMessage', `❌ Error: ${error.message}`, 'error');
+      }
+    }
+
+    // ========== WEEKLY SPECIALS MANAGEMENT ==========
+
+    async function loadWeeklySpecials() {
+      if (!supabaseClient) {
+        if (!initSupabase()) {
+          document.getElementById('weeklySpecialsTable').innerHTML = `
+            <tr><td colspan="6" style="text-align: center; color: red;">Error: Supabase not initialized.</td></tr>
+          `;
+          return;
+        }
+      }
+
+      try {
+        const { data, error } = await supabaseClient
+          .from('weekly_specials')
+          .select('*')
+          .order('order_position', { ascending: true });
+
+        if (error) throw error;
+
+        const table = document.getElementById('weeklySpecialsTable');
+        if (!data || data.length === 0) {
+          table.innerHTML = '<tr><td colspan="6" style="text-align: center;">No weekly specials added yet.</td></tr>';
+          return;
+        }
+
+        table.innerHTML = data.map(item => `
+          <tr>
+            <td><img src="${item.image_url || ''}" alt="${item.name}" class="item-image-thumb" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2260%22 height=%2260%22%3E%3Crect fill=%22%23ddd%22 width=%2260%22 height=%2260%22/%3E%3Ctext fill=%22%23999%22 x=%2230%22 y=%2230%22 text-anchor=%22middle%22 dy=%22.3em%22%3ENo Image%3C/text%3E%3C/svg%3E'"></td>
+            <td>${item.name}</td>
+            <td>$${parseFloat(item.price).toFixed(2)}</td>
+            <td>${item.tag || 'New'}</td>
+            <td>${item.order_position}</td>
+            <td class="action-btns">
+              <button class="btn-icon btn-primary" onclick="editWeeklySpecial('${item.id}')" title="Edit">
+                <i class="fas fa-edit"></i>
+              </button>
+              <button class="btn-icon btn-danger" onclick="deleteWeeklySpecial('${item.id}')" title="Delete">
+                <i class="fas fa-trash"></i>
+              </button>
+              <button class="btn-icon btn-primary" onclick="toggleWeeklySpecial('${item.id}', ${!item.active})" title="${item.active ? 'Deactivate' : 'Activate'}">
+                <i class="fas fa-${item.active ? 'eye-slash' : 'eye'}"></i>
+              </button>
+            </td>
+          </tr>
+        `).join('');
+      } catch (error) {
+        console.error('Error loading weekly specials:', error);
+        document.getElementById('weeklySpecialsTable').innerHTML = `
+          <tr><td colspan="6" style="text-align: center; color: red;">Error: ${error.message}</td></tr>
+        `;
+      }
+    }
+
+    async function addWeeklySpecial(e) {
+      e.preventDefault();
+      const name = document.getElementById('weeklySpecialName').value;
+      const description = document.getElementById('weeklySpecialDescription').value;
+      const price = parseFloat(document.getElementById('weeklySpecialPrice').value);
+      const imageUrl = document.getElementById('weeklySpecialImageUrl').value;
+      const tag = document.getElementById('weeklySpecialTag').value;
+      const orderPosition = parseInt(document.getElementById('weeklySpecialOrder').value) || 0;
+
+      try {
+        const { error } = await supabaseClient
+          .from('weekly_specials')
+          .insert([{
+            name: name,
+            description: description || null,
+            price: price,
+            image_url: imageUrl || null,
+            tag: tag || 'New',
+            order_position: orderPosition
+          }]);
+
+        if (error) throw error;
+
+        showMessage('weeklySpecialsMessage', '✅ Weekly special added successfully!', 'success');
+        document.getElementById('addWeeklySpecialForm').reset();
+        document.getElementById('weeklySpecialTag').value = 'New'; // Reset tag to default
+        loadWeeklySpecials();
+      } catch (error) {
+        showMessage('weeklySpecialsMessage', `❌ Error: ${error.message}`, 'error');
+      }
+    }
+
+    async function deleteWeeklySpecial(id) {
+      if (!confirm('Delete this weekly special?')) return;
+      try {
+        const { error } = await supabaseClient
+          .from('weekly_specials')
+          .delete()
+          .eq('id', id);
+        if (error) throw error;
+        showMessage('weeklySpecialsMessage', '✅ Weekly special deleted!', 'success');
+        loadWeeklySpecials();
+      } catch (error) {
+        showMessage('weeklySpecialsMessage', `❌ Error: ${error.message}`, 'error');
+      }
+    }
+
+    async function toggleWeeklySpecial(id, isActive) {
+      try {
+        const { error } = await supabaseClient
+          .from('weekly_specials')
+          .update({ active: isActive })
+          .eq('id', id);
+        if (error) throw error;
+        loadWeeklySpecials();
+      } catch (error) {
+        showMessage('weeklySpecialsMessage', `❌ Error: ${error.message}`, 'error');
+      }
+    }
+
+    async function editWeeklySpecial(id) {
+      try {
+        const { data, error } = await supabaseClient
+          .from('weekly_specials')
+          .select('*')
+          .eq('id', id)
+          .single();
+
+        if (error) throw error;
+
+        // Populate form
+        document.getElementById('weeklySpecialName').value = data.name;
+        document.getElementById('weeklySpecialDescription').value = data.description || '';
+        document.getElementById('weeklySpecialPrice').value = data.price;
+        document.getElementById('weeklySpecialImageUrl').value = data.image_url || '';
+        document.getElementById('weeklySpecialTag').value = data.tag || 'New';
+        document.getElementById('weeklySpecialOrder').value = data.order_position;
+
+        // Scroll to form
+        document.getElementById('addWeeklySpecialForm').scrollIntoView({ behavior: 'smooth' });
+        
+        // Change submit button to update
+        const form = document.getElementById('addWeeklySpecialForm');
+        const submitBtn = form.querySelector('button[type="submit"]');
+        const originalText = submitBtn.innerHTML;
+        submitBtn.innerHTML = '<i class="fas fa-save"></i> Update Item';
+        submitBtn.onclick = async (e) => {
+          e.preventDefault();
+          await updateWeeklySpecial(id);
+          submitBtn.innerHTML = originalText;
+          submitBtn.onclick = null;
+        };
+      } catch (error) {
+        showMessage('weeklySpecialsMessage', `❌ Error: ${error.message}`, 'error');
+      }
+    }
+
+    async function updateWeeklySpecial(id) {
+      const name = document.getElementById('weeklySpecialName').value;
+      const description = document.getElementById('weeklySpecialDescription').value;
+      const price = parseFloat(document.getElementById('weeklySpecialPrice').value);
+      const imageUrl = document.getElementById('weeklySpecialImageUrl').value;
+      const tag = document.getElementById('weeklySpecialTag').value;
+      const orderPosition = parseInt(document.getElementById('weeklySpecialOrder').value) || 0;
+
+      try {
+        const { error } = await supabaseClient
+          .from('weekly_specials')
+          .update({
+            name: name,
+            description: description || null,
+            price: price,
+            image_url: imageUrl || null,
+            tag: tag || 'New',
+            order_position: orderPosition
+          })
+          .eq('id', id);
+
+        if (error) throw error;
+
+        showMessage('weeklySpecialsMessage', '✅ Weekly special updated successfully!', 'success');
+        document.getElementById('addWeeklySpecialForm').reset();
+        document.getElementById('weeklySpecialTag').value = 'New';
+        loadWeeklySpecials();
+      } catch (error) {
+        showMessage('weeklySpecialsMessage', `❌ Error: ${error.message}`, 'error');
+      }
+    }
+
     // Initialize and load on start
     document.addEventListener('DOMContentLoaded', () => {
       // Only load items if Supabase is already initialized
       // Otherwise, waitForSupabase will call it when ready
       if (supabaseInitialized && typeof supabaseClient !== 'undefined') {
         loadItems();
+        loadHeroSlides();
+        loadWeeklySpecials();
       }
     });
   </script>
