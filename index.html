@@ -542,51 +542,71 @@ var SUPABASE_KEY = window.supabaseConfig.key;
 
 // Use global supabase from script tag; create our own client named `sb`
 let sb;
+let supabaseInitialized = false;
 
 function initSupabaseClient() {
-  if (typeof window.supabase === 'undefined') {
-    console.error('Supabase library not loaded yet');
+  // Check if Supabase library is loaded
+  if (typeof window.supabase === 'undefined' || typeof window.supabase.createClient !== 'function') {
     return false;
   }
   
+  // Create client if not already created
   if (typeof sb === 'undefined') {
     try {
       sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-      console.log('Supabase client initialized');
+      supabaseInitialized = true;
+      console.log('✅ Supabase client initialized successfully');
       return true;
     } catch (err) {
-      console.error('Error creating Supabase client:', err);
+      console.error('❌ Error creating Supabase client:', err);
       return false;
     }
   }
+  
+  supabaseInitialized = true;
   return true;
 }
 
-// Initialize Supabase client
-if (!initSupabaseClient()) {
-  // Retry after a delay if Supabase isn't loaded yet
-  let retries = 0;
-  const maxRetries = 10;
-  const checkInterval = setInterval(() => {
-    retries++;
-    if (initSupabaseClient()) {
-      clearInterval(checkInterval);
-      // Reload menu once Supabase is ready
+// Wait for Supabase library to load, then initialize
+function waitForSupabase() {
+  if (initSupabaseClient()) {
+    // Supabase is ready, trigger menu load if DOM is ready
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
       if (typeof loadMenu === 'function') {
-        loadMenu();
-      }
-    } else if (retries >= maxRetries) {
-      clearInterval(checkInterval);
-      console.error('Failed to initialize Supabase after', maxRetries, 'retries');
-      const loader = document.querySelector('.loader');
-      if (loader) loader.remove();
-      const menuSections = document.getElementById('menuSections');
-      if (menuSections) {
-        menuSections.innerHTML = '<div style="text-align:center;padding:2rem;color:red;">Failed to load menu. Please refresh the page.</div>';
+        setTimeout(() => loadMenu(), 100);
       }
     }
-  }, 200);
+    return;
+  }
+  
+  // Retry every 100ms, up to 50 times (5 seconds total)
+  let attempts = 0;
+  const maxAttempts = 50;
+  const retryInterval = setInterval(() => {
+    attempts++;
+    if (initSupabaseClient()) {
+      clearInterval(retryInterval);
+      // Trigger menu load if DOM is ready
+      if (document.readyState === 'complete' || document.readyState === 'interactive') {
+        if (typeof loadMenu === 'function') {
+          setTimeout(() => loadMenu(), 100);
+        }
+      }
+    } else if (attempts >= maxAttempts) {
+      clearInterval(retryInterval);
+      console.error('❌ Failed to initialize Supabase after', maxAttempts, 'attempts');
+      const loader = document.querySelector('.loader');
+      if (loader) loader.style.display = 'none';
+      const menuSections = document.getElementById('menuSections');
+      if (menuSections) {
+        menuSections.innerHTML = '<div style="text-align:center;padding:2rem;color:red;font-size:1.1rem;">⚠️ Failed to connect to Supabase.<br>Please check your internet connection and refresh the page.</div>';
+      }
+    }
+  }, 100);
 }
+
+// Start waiting for Supabase
+waitForSupabase();
 
 const iconMap = {
   "Cookies": "fa-cookie-bite", "Rolls": "fa-bread-slice", "Slices": "fa-chart-pie", 
@@ -809,20 +829,22 @@ function updateBoxSummary() {
 
 // Menu Loading
 async function loadMenu() {
-  if (typeof sb === 'undefined') {
-    console.error('Supabase client not initialized yet');
-    // Try to initialize
+  // Ensure Supabase is initialized
+  if (typeof sb === 'undefined' || !supabaseInitialized) {
+    console.warn('⚠️ Supabase client not ready, attempting initialization...');
     if (!initSupabaseClient()) {
+      console.error('❌ Failed to initialize Supabase in loadMenu');
       const loader = document.querySelector('.loader');
-      if (loader) loader.remove();
+      if (loader) loader.style.display = 'none';
       const menuSections = document.getElementById('menuSections');
       if (menuSections) {
-        menuSections.innerHTML = '<div style="text-align:center;padding:2rem;color:red;">Failed to connect to Supabase. Please refresh the page.</div>';
+        menuSections.innerHTML = '<div style="text-align:center;padding:2rem;color:red;">⚠️ Failed to connect to Supabase. Please refresh the page.</div>';
       }
       return;
     }
   }
   
+  console.log('📋 Loading menu items...');
   try {
     const { data, error } = await sb.from('menu_items').select('*').order('category', { ascending: true });
     if (error) {
@@ -839,6 +861,8 @@ async function loadMenu() {
     if (!data) {
       throw new Error('No data returned from Supabase');
     }
+    
+    console.log('✅ Menu loaded successfully:', data.length, 'items');
   
   document.querySelector('.loader').style.display = 'none';
   
@@ -1102,7 +1126,11 @@ window.onload = () => {
 
 // Init
 document.addEventListener('DOMContentLoaded', () => {
-  loadMenu();
+  // Load menu only if Supabase is already initialized
+  // Otherwise, waitForSupabase will call it when ready
+  if (supabaseInitialized && typeof sb !== 'undefined') {
+    loadMenu();
+  }
   loadFeaturedItems();
   initSlideshow();
   setupFortuneCookie();
