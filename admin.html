@@ -305,14 +305,215 @@
       font-weight: normal;
     }
 
+    /* File Upload Styles */
+    .file-upload-wrapper {
+      position: relative;
+      margin-bottom: 1rem;
+    }
+
+    .file-upload-label {
+      display: block;
+      padding: 0.8rem;
+      border: 2px dashed #e4d7ff;
+      border-radius: 8px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+      background: #f9f6ff;
+      color: #8a4fff;
+      font-weight: 500;
+    }
+
+    .file-upload-label:hover {
+      border-color: #8a4fff;
+      background: #f0e8ff;
+    }
+
+    .file-upload-label i {
+      margin-right: 0.5rem;
+      color: #8a4fff;
+    }
+
+    input[type="file"] {
+      position: absolute;
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+    }
+
+    .file-preview {
+      margin-top: 1rem;
+      display: none;
+    }
+
+    .file-preview.show {
+      display: block;
+    }
+
+    .file-preview img {
+      max-width: 200px;
+      max-height: 200px;
+      border-radius: 8px;
+      border: 2px solid #e4d7ff;
+      margin-top: 0.5rem;
+      object-fit: cover;
+    }
+
+    .file-preview-info {
+      margin-top: 0.5rem;
+      font-size: 0.85rem;
+      color: #6b6b6b;
+    }
+
+    .file-url-input {
+      margin-top: 1rem;
+    }
+
+    /* Mobile Responsive Styles */
     @media (max-width: 768px) {
       .header {
         flex-direction: column;
         gap: 1rem;
+        padding: 1rem;
+        text-align: center;
+      }
+
+      .logo {
+        font-size: 1.5rem;
+      }
+
+      .header-actions {
+        flex-direction: column;
+        width: 100%;
+        gap: 0.5rem;
+      }
+
+      .header-actions .btn {
+        width: 100%;
+      }
+
+      .container {
+        padding: 1rem;
+      }
+
+      .section {
+        padding: 1rem;
+        margin-bottom: 1rem;
+      }
+
+      .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+
+      .section-header .btn {
+        width: 100%;
+      }
+
+      .section-title {
+        font-size: 1.2rem;
       }
 
       .form-grid {
         grid-template-columns: 1fr;
+        gap: 0.5rem;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+
+      .stat-card {
+        padding: 1rem;
+      }
+
+      .stat-value {
+        font-size: 1.5rem;
+      }
+
+      table {
+        font-size: 0.85rem;
+      }
+
+      th, td {
+        padding: 0.5rem;
+        font-size: 0.8rem;
+      }
+
+      .item-image-thumb {
+        width: 40px;
+        height: 40px;
+      }
+
+      .action-btns {
+        flex-direction: column;
+        gap: 0.25rem;
+      }
+
+      .btn-icon {
+        padding: 0.4rem;
+        font-size: 0.8rem;
+      }
+
+      .table-container {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .modal-content {
+        width: 95%;
+        max-width: 95%;
+        margin: 1rem auto;
+        padding: 1rem;
+      }
+
+      .modal-header h2 {
+        font-size: 1.2rem;
+      }
+
+      .file-preview img {
+        max-width: 100%;
+      }
+
+      input, select, textarea {
+        font-size: 16px; /* Prevents zoom on iOS */
+      }
+    }
+
+    @media (max-width: 480px) {
+      .header {
+        padding: 0.75rem;
+      }
+
+      .logo {
+        font-size: 1.3rem;
+      }
+
+      .section {
+        padding: 0.75rem;
+      }
+
+      .section-title {
+        font-size: 1.1rem;
+      }
+
+      table {
+        font-size: 0.75rem;
+      }
+
+      th, td {
+        padding: 0.4rem;
+        font-size: 0.75rem;
+      }
+
+      .btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.85rem;
       }
     }
   </style>
@@ -396,7 +597,19 @@
 
         <div class="form-group">
           <label for="imageUrl">Image URL <span class="optional-label">(optional)</span></label>
-          <input type="url" id="imageUrl" placeholder="images/cookie.jpg">
+          <div class="file-upload-wrapper">
+            <label for="imageFile" class="file-upload-label">
+              <i class="fas fa-upload"></i> Choose Image File
+            </label>
+            <input type="file" id="imageFile" accept="image/*" onchange="handleImageUpload(this, 'imageUrl', 'imagePreview')">
+            <div class="file-preview" id="imagePreview">
+              <img id="imagePreviewImg" src="" alt="Preview">
+              <div class="file-preview-info" id="imagePreviewInfo"></div>
+            </div>
+          </div>
+          <div class="file-url-input">
+            <input type="url" id="imageUrl" placeholder="Or enter image URL: images/cookie.jpg">
+          </div>
         </div>
 
         <button type="submit" class="btn btn-primary" style="width: 100%;">
@@ -419,7 +632,19 @@
       <form id="addHeroSlideForm" onsubmit="addHeroSlide(event)" style="margin-bottom: 2rem;">
         <div class="form-group">
           <label for="heroImageUrl">Image URL *</label>
-          <input type="url" id="heroImageUrl" placeholder="images/slide.jpg" required>
+          <div class="file-upload-wrapper">
+            <label for="heroImageFile" class="file-upload-label">
+              <i class="fas fa-upload"></i> Choose Image File
+            </label>
+            <input type="file" id="heroImageFile" accept="image/*" onchange="handleImageUpload(this, 'heroImageUrl', 'heroImagePreview')">
+            <div class="file-preview" id="heroImagePreview">
+              <img id="heroImagePreviewImg" src="" alt="Preview">
+              <div class="file-preview-info" id="heroImagePreviewInfo"></div>
+            </div>
+          </div>
+          <div class="file-url-input">
+            <input type="url" id="heroImageUrl" placeholder="Or enter image URL: images/slide.jpg" required>
+          </div>
         </div>
         <div class="form-group">
           <label for="heroOrderPosition">Order Position (lower = first)</label>
@@ -484,7 +709,19 @@
         </div>
         <div class="form-group">
           <label for="weeklySpecialImageUrl">Image URL *</label>
-          <input type="url" id="weeklySpecialImageUrl" placeholder="images/item.jpg" required>
+          <div class="file-upload-wrapper">
+            <label for="weeklySpecialImageFile" class="file-upload-label">
+              <i class="fas fa-upload"></i> Choose Image File
+            </label>
+            <input type="file" id="weeklySpecialImageFile" accept="image/*" onchange="handleImageUpload(this, 'weeklySpecialImageUrl', 'weeklySpecialImagePreview')">
+            <div class="file-preview" id="weeklySpecialImagePreview">
+              <img id="weeklySpecialImagePreviewImg" src="" alt="Preview">
+              <div class="file-preview-info" id="weeklySpecialImagePreviewInfo"></div>
+            </div>
+          </div>
+          <div class="file-url-input">
+            <input type="url" id="weeklySpecialImageUrl" placeholder="Or enter image URL: images/item.jpg" required>
+          </div>
         </div>
         <button type="submit" class="btn btn-primary">
           <i class="fas fa-plus"></i> Add Weekly Special
@@ -605,7 +842,19 @@
 
         <div class="form-group">
           <label for="editImageUrl">Image URL</label>
-          <input type="url" id="editImageUrl">
+          <div class="file-upload-wrapper">
+            <label for="editImageFile" class="file-upload-label">
+              <i class="fas fa-upload"></i> Choose Image File
+            </label>
+            <input type="file" id="editImageFile" accept="image/*" onchange="handleImageUpload(this, 'editImageUrl', 'editImagePreview')">
+            <div class="file-preview" id="editImagePreview">
+              <img id="editImagePreviewImg" src="" alt="Preview">
+              <div class="file-preview-info" id="editImagePreviewInfo"></div>
+            </div>
+          </div>
+          <div class="file-url-input">
+            <input type="url" id="editImageUrl">
+          </div>
         </div>
 
         <button type="submit" class="btn btn-primary" style="width: 100%;">
@@ -1196,6 +1445,57 @@
       } catch (error) {
         showMessage('weeklySpecialsMessage', `❌ Error: ${error.message}`, 'error');
       }
+    }
+
+    // File Upload Handler
+    function handleImageUpload(input, urlInputId, previewId) {
+      const file = input.files[0];
+      if (!file) return;
+
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        alert('Please select an image file');
+        input.value = '';
+        return;
+      }
+
+      // Validate file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        alert('Image size must be less than 5MB');
+        input.value = '';
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const preview = document.getElementById(previewId);
+        const previewImg = document.getElementById(previewId + 'Img');
+        const previewInfo = document.getElementById(previewId + 'Info');
+        const urlInput = document.getElementById(urlInputId);
+
+        if (previewImg) {
+          previewImg.src = e.target.result;
+          if (preview) preview.classList.add('show');
+        }
+
+        if (previewInfo) {
+          previewInfo.textContent = `File: ${file.name} (${(file.size / 1024).toFixed(2)} KB)`;
+        }
+
+        // Set the file name as a suggestion for the URL
+        // User can still manually enter a URL or upload to their server
+        if (urlInput) {
+          urlInput.value = `images/${file.name}`;
+          urlInput.placeholder = `Upload this file to your server as: images/${file.name}`;
+        }
+      };
+
+      reader.onerror = function() {
+        alert('Error reading file');
+        input.value = '';
+      };
+
+      reader.readAsDataURL(file);
     }
 
     // Initialize and load on start
