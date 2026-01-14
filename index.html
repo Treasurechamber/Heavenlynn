@@ -123,7 +123,7 @@
     .featured-price { font-weight: bold; color: var(--primary); font-size: 1.1rem; }
     .featured-button { background: var(--primary-light); color: var(--primary-dark); border: none; padding: .4rem .8rem; font-size: .8rem; border-radius: 20px; font-weight: 500; cursor: pointer; transition: var(--transition); }
     .featured-button:hover { background: var(--primary); color: #fff; }
-    .limited-tag { position: absolute; top: 10px; right: 10px; background: var(--accent); color: #fff; padding: 3px 10px; border-radius: 10px; font-size: .7rem; font-weight: 500; transform: rotate(5deg); box-shadow: 0 2px 4px rgba(0,0,0,.2); }
+    .limited-tag { position: absolute; top: 10px; right: 10px; background: var(--accent); color: #fff; padding: 3px 10px; border-radius: 10px; font-size: .7rem; font-weight: 500; transform: rotate(5deg); box-shadow: 0 2px 4px rgba(0,0,0,.2); z-index: 10; }
     .slider-controls { display: flex; justify-content: center; gap: 15px; margin-top: 1rem; }
     .slider-btn { width: 40px; height: 40px; border-radius: 50%; background: #fff; border: 2px solid var(--primary); color: var(--primary-dark); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: var(--transition); }
     .slider-btn:hover { background: var(--primary); color: #fff; transform: scale(1.1); }
@@ -1012,8 +1012,12 @@ async function loadFeaturedItems() {
     data.forEach(item => {
       const div = document.createElement('div');
       div.className = 'featured-item';
+      
+      // Ensure tag always has a value and is properly trimmed
+      const tagText = (item.tag && item.tag.trim() !== '') ? item.tag.trim() : 'New';
+      
       div.innerHTML = `
-        <div class="limited-tag">${item.tag || 'New'}</div>
+        <div class="limited-tag">${tagText}</div>
         <div class="featured-img"><img src="${item.image_url || ''}" alt="${item.name}" onerror="this.style.display='none'"></div>
         <div class="featured-content">
           <div class="featured-name">${item.name}</div>
