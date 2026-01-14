@@ -629,6 +629,9 @@ function waitForSupabase() {
         if (typeof loadFeaturedItems === 'function') {
           setTimeout(() => loadFeaturedItems(), 150);
         }
+        if (typeof loadUpcomingEvents === 'function') {
+          setTimeout(() => loadUpcomingEvents(), 160);
+        }
         if (typeof initSlideshow === 'function') {
           setTimeout(() => initSlideshow(), 150);
         }
