@@ -1233,6 +1233,8 @@
         const table = document.getElementById('heroSlidesTable');
         if (!data || data.length === 0) {
           table.innerHTML = '<tr><td colspan="5" style="text-align: center;">No slides added yet.</td></tr>';
+          // Set default order to 0 if no slides exist
+          document.getElementById('heroOrderPosition').value = '0';
           return;
         }
 
@@ -1252,6 +1254,10 @@
             </td>
           </tr>
         `).join('');
+        
+        // Auto-suggest next available order number
+        const maxOrder = Math.max(...data.map(s => s.order_position || 0), -1);
+        document.getElementById('heroOrderPosition').value = maxOrder + 1;
       } catch (error) {
         console.error('Error loading hero slides:', error);
         document.getElementById('heroSlidesTable').innerHTML = `
@@ -1271,6 +1277,20 @@
       }
 
       try {
+        // Check for existing slides with the same order position
+        const { data: existingSlides, error: checkError } = await supabaseClient
+          .from('slideshow_images')
+          .select('order_position')
+          .eq('order_position', orderPosition);
+        
+        if (checkError) throw checkError;
+        
+        // If duplicate found, warn user
+        if (existingSlides && existingSlides.length > 0) {
+          showMessage('heroMessage', `⚠️ Order position ${orderPosition} is already in use. Please choose a different number.`, 'error');
+          return;
+        }
+
         const { error } = await supabaseClient
           .from('slideshow_images')
           .insert([{ image_url: imageUrl, order_position: orderPosition }]);
@@ -1279,6 +1299,7 @@
 
         showMessage('heroMessage', '✅ Slide added successfully!', 'success');
         document.getElementById('addHeroSlideForm').reset();
+        document.getElementById('heroOrderPosition').value = ''; // Clear order field
         loadHeroSlides();
       } catch (error) {
         showMessage('heroMessage', `❌ Error: ${error.message}`, 'error');
@@ -1373,11 +1394,17 @@
       const description = document.getElementById('weeklySpecialDescription').value;
       const price = parseFloat(document.getElementById('weeklySpecialPrice').value);
       const imageUrl = document.getElementById('weeklySpecialImageUrl').value;
-      const tag = document.getElementById('weeklySpecialTag').value;
+      const tag = document.getElementById('weeklySpecialTag').value.trim(); // Trim whitespace
       const orderPosition = parseInt(document.getElementById('weeklySpecialOrder').value) || 0;
 
       if (!imageUrl) {
         showMessage('weeklySpecialsMessage', '❌ Please upload an image first', 'error');
+        return;
+      }
+
+      // Ensure tag is not empty
+      if (!tag || tag === '') {
+        showMessage('weeklySpecialsMessage', '❌ Please enter a tag (e.g., "New", "Trending", "Limited")', 'error');
         return;
       }
 
@@ -1389,7 +1416,7 @@
             description: description || null,
             price: price,
             image_url: imageUrl,
-            tag: tag || 'New',
+            tag: tag, // Use actual tag value, not fallback
             order_position: orderPosition
           }]);
 
@@ -1488,15 +1515,21 @@
       const description = document.getElementById('weeklySpecialDescription').value;
       const price = parseFloat(document.getElementById('weeklySpecialPrice').value);
       const imageUrl = document.getElementById('weeklySpecialImageUrl').value;
-      const tag = document.getElementById('weeklySpecialTag').value;
+      const tag = document.getElementById('weeklySpecialTag').value.trim(); // Trim whitespace
       const orderPosition = parseInt(document.getElementById('weeklySpecialOrder').value) || 0;
+
+      // Ensure tag is not empty
+      if (!tag || tag === '') {
+        showMessage('weeklySpecialsMessage', '❌ Please enter a tag (e.g., "New", "Trending", "Limited")', 'error');
+        return;
+      }
 
       // Build update object - only include image_url if a new image was uploaded
       const updateData = {
         name: name,
         description: description || null,
         price: price,
-        tag: tag || 'New',
+        tag: tag, // Use actual tag value, not fallback
         order_position: orderPosition
       };
 
