@@ -766,6 +766,75 @@
       </div>
     </div>
 
+    <!-- Upcoming Events Management Section -->
+    <div class="section">
+      <div class="section-header">
+        <h2 class="section-title">Upcoming Events</h2>
+        <button class="btn btn-primary" onclick="loadUpcomingEvents()">
+          <i class="fas fa-sync"></i> Refresh
+        </button>
+      </div>
+
+      <div class="message" id="eventsMessage"></div>
+
+      <form id="addEventForm" onsubmit="addEvent(event)" style="margin-bottom: 2rem;">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="eventTitle">Event Title *</label>
+            <input type="text" id="eventTitle" required>
+          </div>
+          <div class="form-group">
+            <label for="eventDate">Event Date</label>
+            <input type="date" id="eventDate">
+          </div>
+          <div class="form-group">
+            <label for="eventOrder">Order Position</label>
+            <input type="number" id="eventOrder" value="0" min="0">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="eventDescription">Description <span class="optional-label">(optional)</span></label>
+          <textarea id="eventDescription"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="eventImageFile">Poster Image *</label>
+          <div class="file-upload-wrapper">
+            <label for="eventImageFile" class="file-upload-label">
+              <i class="fas fa-upload"></i> Choose Image File
+            </label>
+            <input type="file" id="eventImageFile" accept="image/*" required onchange="handleImageUpload(this, 'eventImagePreview', 'eventImageUploadStatus')">
+            <div class="file-preview" id="eventImagePreview">
+              <img id="eventImagePreviewImg" src="" alt="Preview">
+              <div class="file-preview-info" id="eventImagePreviewInfo"></div>
+            </div>
+            <div class="upload-status" id="eventImageUploadStatus"></div>
+          </div>
+          <input type="hidden" id="eventImageUrl">
+        </div>
+        <button type="submit" class="btn btn-primary">
+          <i class="fas fa-plus"></i> Add Event
+        </button>
+      </form>
+
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Preview</th>
+              <th>Title</th>
+              <th>Date</th>
+              <th>Order</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="eventsTable">
+            <tr><td colspan="6" style="text-align: center;">Loading...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
     <!-- Items List Section -->
     <div class="section">
       <div class="section-header">
@@ -1691,6 +1760,7 @@
         loadItems();
         loadHeroSlides();
         loadWeeklySpecials();
+        loadUpcomingEvents();
       }
     });
   </script>
