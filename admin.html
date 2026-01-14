@@ -797,19 +797,18 @@
           <textarea id="eventDescription"></textarea>
         </div>
         <div class="form-group">
-          <label for="eventImageFile">Poster Image *</label>
+          <label for="eventImageFile">Event Images * <span class="optional-label">(You can select multiple images)</span></label>
           <div class="file-upload-wrapper">
             <label for="eventImageFile" class="file-upload-label">
-              <i class="fas fa-upload"></i> Choose Image File
+              <i class="fas fa-upload"></i> Choose Image Files (Multiple)
             </label>
-            <input type="file" id="eventImageFile" accept="image/*" required onchange="handleImageUpload(this, 'eventImagePreview', 'eventImageUploadStatus')">
-            <div class="file-preview" id="eventImagePreview">
-              <img id="eventImagePreviewImg" src="" alt="Preview">
-              <div class="file-preview-info" id="eventImagePreviewInfo"></div>
+            <input type="file" id="eventImageFile" accept="image/*" multiple required onchange="handleMultipleImageUpload(this, 'eventImagesPreview', 'eventImageUploadStatus')">
+            <div class="file-preview" id="eventImagesPreview" style="display:none;">
+              <div id="eventImagesList" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;margin-top:1rem;"></div>
             </div>
             <div class="upload-status" id="eventImageUploadStatus"></div>
           </div>
-          <input type="hidden" id="eventImageUrl">
+          <input type="hidden" id="eventImagesJson">
         </div>
         <button type="submit" class="btn btn-primary">
           <i class="fas fa-plus"></i> Add Event
@@ -1465,11 +1464,21 @@
       const title = document.getElementById('eventTitle').value.trim();
       const description = document.getElementById('eventDescription').value.trim();
       const eventDate = document.getElementById('eventDate').value;
-      const imageUrl = document.getElementById('eventImageUrl').value;
+      const imagesJson = document.getElementById('eventImagesJson').value;
       const orderPosition = parseInt(document.getElementById('eventOrder').value) || 0;
 
-      if (!imageUrl) {
-        showMessage('eventsMessage', '❌ Please upload an image first', 'error');
+      let images = [];
+      if (imagesJson) {
+        try {
+          images = JSON.parse(imagesJson);
+        } catch (e) {
+          showMessage('eventsMessage', '❌ Invalid images data', 'error');
+          return;
+        }
+      }
+
+      if (images.length === 0) {
+        showMessage('eventsMessage', '❌ Please upload at least one image', 'error');
         return;
       }
 
@@ -1479,21 +1488,26 @@
       }
 
       try {
+        const insertData = {
+          title: title,
+          description: description || null,
+          event_date: eventDate || null,
+          order_position: orderPosition,
+          image_url: images[0], // Keep for backward compatibility
+          images: images // Store as JSON array
+        };
+
         const { error } = await supabaseClient
           .from('upcoming_events')
-          .insert([{
-            title: title,
-            description: description || null,
-            event_date: eventDate || null,
-            image_url: imageUrl,
-            order_position: orderPosition
-          }]);
+          .insert([insertData]);
 
         if (error) throw error;
 
         showMessage('eventsMessage', '✅ Event added successfully!', 'success');
         document.getElementById('addEventForm').reset();
         document.getElementById('eventOrder').value = '0';
+        document.getElementById('eventImagesPreview').style.display = 'none';
+        document.getElementById('eventImagesList').innerHTML = '';
         loadUpcomingEvents();
       } catch (error) {
         showMessage('eventsMessage', `❌ Error: ${error.message}`, 'error');
@@ -1542,18 +1556,35 @@
         document.getElementById('eventTitle').value = data.title;
         document.getElementById('eventDescription').value = data.description || '';
         document.getElementById('eventDate').value = data.event_date || '';
-        const currentImageUrl = data.image_url || '';
-        document.getElementById('eventImageUrl').value = currentImageUrl;
         document.getElementById('eventOrder').value = data.order_position;
         
-        // Show current image preview
-        if (currentImageUrl) {
-          const previewImg = document.getElementById('eventImagePreviewImg');
-          const preview = document.getElementById('eventImagePreview');
-          if (previewImg) {
-            previewImg.src = currentImageUrl;
-            if (preview) preview.classList.add('show');
-          }
+        // Handle images (support both old image_url and new images array)
+        let images = [];
+        if (data.images && Array.isArray(data.images) && data.images.length > 0) {
+          images = data.images;
+        } else if (data.image_url) {
+          images = [data.image_url];
+        }
+        
+        document.getElementById('eventImagesJson').value = JSON.stringify(images);
+        
+        // Show current images preview
+        const preview = document.getElementById('eventImagesPreview');
+        const imagesList = document.getElementById('eventImagesList');
+        if (images.length > 0) {
+          imagesList.innerHTML = '';
+          images.forEach((url, idx) => {
+            const imgDiv = document.createElement('div');
+            imgDiv.style.position = 'relative';
+            imgDiv.innerHTML = `
+              <img src="${url}" style="width:100%;height:120px;object-fit:cover;border-radius:8px;border:2px solid var(--primary-light);">
+              <button type="button" onclick="removeEventImage(${idx})" style="position:absolute;top:5px;right:5px;background:#ff4444;color:#fff;border:none;border-radius:50%;width:24px;height:24px;cursor:pointer;font-size:12px;">×</button>
+            `;
+            imagesList.appendChild(imgDiv);
+          });
+          preview.style.display = 'block';
+        } else {
+          preview.style.display = 'none';
         }
         
         // Clear file input
@@ -1582,7 +1613,7 @@
       const title = document.getElementById('eventTitle').value.trim();
       const description = document.getElementById('eventDescription').value.trim();
       const eventDate = document.getElementById('eventDate').value;
-      const imageUrl = document.getElementById('eventImageUrl').value;
+      const imagesJson = document.getElementById('eventImagesJson').value;
       const orderPosition = parseInt(document.getElementById('eventOrder').value) || 0;
 
       if (!title) {
@@ -1590,18 +1621,30 @@
         return;
       }
 
-      // Build update object - only include image_url if a new image was uploaded
+      let images = [];
+      if (imagesJson) {
+        try {
+          images = JSON.parse(imagesJson);
+        } catch (e) {
+          showMessage('eventsMessage', '❌ Invalid images data', 'error');
+          return;
+        }
+      }
+
+      if (images.length === 0) {
+        showMessage('eventsMessage', '❌ Please upload at least one image', 'error');
+        return;
+      }
+
+      // Build update object
       const updateData = {
         title: title,
         description: description || null,
         event_date: eventDate || null,
-        order_position: orderPosition
+        order_position: orderPosition,
+        image_url: images[0], // Keep for backward compatibility
+        images: images // Store as JSON array
       };
-
-      // Only update image if a new one was uploaded
-      if (imageUrl) {
-        updateData.image_url = imageUrl;
-      }
 
       try {
         const { error } = await supabaseClient
@@ -1614,6 +1657,8 @@
         showMessage('eventsMessage', '✅ Event updated successfully!', 'success');
         document.getElementById('addEventForm').reset();
         document.getElementById('eventOrder').value = '0';
+        document.getElementById('eventImagesPreview').style.display = 'none';
+        document.getElementById('eventImagesList').innerHTML = '';
         loadUpcomingEvents();
       } catch (error) {
         showMessage('eventsMessage', `❌ Error: ${error.message}`, 'error');
@@ -1894,6 +1939,109 @@
         reader.onerror = reject;
         reader.readAsDataURL(file);
       });
+    }
+
+    // Multiple Image Upload Handler for Events
+    async function handleMultipleImageUpload(input, previewId, statusId) {
+      const files = Array.from(input.files);
+      if (files.length === 0) return;
+
+      // Validate all files
+      for (const file of files) {
+        if (!file.type.startsWith('image/')) {
+          alert('Please select only image files');
+          input.value = '';
+          return;
+        }
+        if (file.size > 5 * 1024 * 1024) {
+          alert(`Image "${file.name}" is too large. Maximum size is 5MB.`);
+          input.value = '';
+          return;
+        }
+      }
+
+      const preview = document.getElementById(previewId);
+      const imagesList = document.getElementById('eventImagesList');
+      const statusEl = document.getElementById(statusId);
+      const jsonInput = document.getElementById('eventImagesJson');
+
+      // Show uploading status
+      if (statusEl) {
+        statusEl.textContent = `⏳ Uploading ${files.length} image(s)...`;
+        statusEl.className = 'upload-status uploading';
+      }
+
+      imagesList.innerHTML = '';
+      const uploadedUrls = [];
+
+      try {
+        // Upload all files
+        for (let i = 0; i < files.length; i++) {
+          const file = files[i];
+          const imageUrl = await uploadImageToSupabase(file);
+          uploadedUrls.push(imageUrl);
+
+          // Show preview
+          const imgDiv = document.createElement('div');
+          imgDiv.style.position = 'relative';
+          imgDiv.innerHTML = `
+            <img src="${imageUrl}" style="width:100%;height:120px;object-fit:cover;border-radius:8px;border:2px solid var(--primary-light);">
+            <button type="button" onclick="removeEventImage(${i})" style="position:absolute;top:5px;right:5px;background:#ff4444;color:#fff;border:none;border-radius:50%;width:24px;height:24px;cursor:pointer;font-size:12px;">×</button>
+          `;
+          imagesList.appendChild(imgDiv);
+        }
+
+        // Store URLs as JSON
+        jsonInput.value = JSON.stringify(uploadedUrls);
+        preview.style.display = 'block';
+
+        // Show success
+        if (statusEl) {
+          statusEl.textContent = `✅ ${uploadedUrls.length} image(s) uploaded successfully!`;
+          statusEl.className = 'upload-status success';
+          setTimeout(() => {
+            statusEl.className = 'upload-status';
+            statusEl.textContent = '';
+          }, 3000);
+        }
+      } catch (error) {
+        console.error('Upload failed:', error);
+        if (statusEl) {
+          statusEl.textContent = '❌ Upload failed: ' + error.message;
+          statusEl.className = 'upload-status error';
+        }
+        alert('Failed to upload images: ' + error.message);
+        input.value = '';
+      }
+    }
+
+    function removeEventImage(index) {
+      const jsonInput = document.getElementById('eventImagesJson');
+      const imagesList = document.getElementById('eventImagesList');
+      
+      try {
+        const urls = JSON.parse(jsonInput.value || '[]');
+        urls.splice(index, 1);
+        jsonInput.value = JSON.stringify(urls);
+        
+        // Re-render preview
+        imagesList.innerHTML = '';
+        urls.forEach((url, idx) => {
+          const imgDiv = document.createElement('div');
+          imgDiv.style.position = 'relative';
+          imgDiv.innerHTML = `
+            <img src="${url}" style="width:100%;height:120px;object-fit:cover;border-radius:8px;border:2px solid var(--primary-light);">
+            <button type="button" onclick="removeEventImage(${idx})" style="position:absolute;top:5px;right:5px;background:#ff4444;color:#fff;border:none;border-radius:50%;width:24px;height:24px;cursor:pointer;font-size:12px;">×</button>
+          `;
+          imagesList.appendChild(imgDiv);
+        });
+        
+        if (urls.length === 0) {
+          document.getElementById('eventImagesPreview').style.display = 'none';
+        }
+      } catch (e) {
+        console.error('Error removing image:', e);
+      }
     }
 
     // File Upload Handler - Now uploads automatically
