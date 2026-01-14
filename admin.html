@@ -787,10 +787,6 @@
             <label for="eventDate">Event Date</label>
             <input type="date" id="eventDate">
           </div>
-          <div class="form-group">
-            <label for="eventOrder">Order Position</label>
-            <input type="number" id="eventOrder" value="0" min="0">
-          </div>
         </div>
         <div class="form-group">
           <label for="eventDescription">Description <span class="optional-label">(optional)</span></label>
@@ -822,7 +818,6 @@
               <th>Preview</th>
               <th>Title</th>
               <th>Date</th>
-              <th>Order</th>
               <th>Status</th>
               <th>Actions</th>
             </tr>
@@ -1418,24 +1413,30 @@
         const { data, error } = await supabaseClient
           .from('upcoming_events')
           .select('*')
-          .order('order_position', { ascending: true });
+          .order('created_at', { ascending: false });
 
         if (error) throw error;
 
         const table = document.getElementById('eventsTable');
         if (!data || data.length === 0) {
-          table.innerHTML = '<tr><td colspan="6" style="text-align: center;">No events added yet.</td></tr>';
+          table.innerHTML = '<tr><td colspan="5" style="text-align: center;">No events added yet.</td></tr>';
           return;
         }
 
         table.innerHTML = data.map(event => {
           const dateText = event.event_date ? new Date(event.event_date + 'T00:00:00').toLocaleDateString() : '-';
+          // Get first image for preview
+          let previewImg = '';
+          if (event.images && Array.isArray(event.images) && event.images.length > 0) {
+            previewImg = event.images[0];
+          } else if (event.image_url) {
+            previewImg = event.image_url;
+          }
           return `
             <tr>
-              <td><img src="${event.image_url || ''}" alt="${event.title}" class="item-image-thumb" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2260%22 height=%2260%22%3E%3Crect fill=%22%23ddd%22 width=%2260%22 height=%2260%22/%3E%3Ctext fill=%22%23999%22 x=%2230%22 y=%2230%22 text-anchor=%22middle%22 dy=%22.3em%22%3ENo Image%3C/text%3E%3C/svg%3E'"></td>
+              <td><img src="${previewImg}" alt="${event.title}" class="item-image-thumb" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2260%22 height=%2260%22%3E%3Crect fill=%22%23ddd%22 width=%2260%22 height=%2260%22/%3E%3Ctext fill=%22%23999%22 x=%2230%22 y=%2230%22 text-anchor=%22middle%22 dy=%22.3em%22%3ENo Image%3C/text%3E%3C/svg%3E'"></td>
               <td><strong>${event.title}</strong></td>
               <td>${dateText}</td>
-              <td>${event.order_position}</td>
               <td>${event.active ? '✅ Active' : '❌ Inactive'}</td>
               <td class="action-btns">
                 <button class="btn-icon btn-primary" onclick="editEvent('${event.id}')" title="Edit">
@@ -1454,7 +1455,7 @@
       } catch (error) {
         console.error('Error loading events:', error);
         document.getElementById('eventsTable').innerHTML = `
-          <tr><td colspan="6" style="text-align: center; color: red;">Error: ${error.message}</td></tr>
+          <tr><td colspan="5" style="text-align: center; color: red;">Error: ${error.message}</td></tr>
         `;
       }
     }
@@ -1465,7 +1466,6 @@
       const description = document.getElementById('eventDescription').value.trim();
       const eventDate = document.getElementById('eventDate').value;
       const imagesJson = document.getElementById('eventImagesJson').value;
-      const orderPosition = parseInt(document.getElementById('eventOrder').value) || 0;
 
       let images = [];
       if (imagesJson) {
@@ -1492,7 +1492,6 @@
           title: title,
           description: description || null,
           event_date: eventDate || null,
-          order_position: orderPosition,
           image_url: images[0], // Keep for backward compatibility
           images: images // Store as JSON array
         };
@@ -1505,7 +1504,6 @@
 
         showMessage('eventsMessage', '✅ Event added successfully!', 'success');
         document.getElementById('addEventForm').reset();
-        document.getElementById('eventOrder').value = '0';
         document.getElementById('eventImagesPreview').style.display = 'none';
         document.getElementById('eventImagesList').innerHTML = '';
         loadUpcomingEvents();
@@ -1556,7 +1554,6 @@
         document.getElementById('eventTitle').value = data.title;
         document.getElementById('eventDescription').value = data.description || '';
         document.getElementById('eventDate').value = data.event_date || '';
-        document.getElementById('eventOrder').value = data.order_position;
         
         // Handle images (support both old image_url and new images array)
         let images = [];
@@ -1569,23 +1566,7 @@
         document.getElementById('eventImagesJson').value = JSON.stringify(images);
         
         // Show current images preview
-        const preview = document.getElementById('eventImagesPreview');
-        const imagesList = document.getElementById('eventImagesList');
-        if (images.length > 0) {
-          imagesList.innerHTML = '';
-          images.forEach((url, idx) => {
-            const imgDiv = document.createElement('div');
-            imgDiv.style.position = 'relative';
-            imgDiv.innerHTML = `
-              <img src="${url}" style="width:100%;height:120px;object-fit:cover;border-radius:8px;border:2px solid var(--primary-light);">
-              <button type="button" onclick="removeEventImage(${idx})" style="position:absolute;top:5px;right:5px;background:#ff4444;color:#fff;border:none;border-radius:50%;width:24px;height:24px;cursor:pointer;font-size:12px;">×</button>
-            `;
-            imagesList.appendChild(imgDiv);
-          });
-          preview.style.display = 'block';
-        } else {
-          preview.style.display = 'none';
-        }
+        renderEventImagesPreview(images);
         
         // Clear file input
         document.getElementById('eventImageFile').value = '';
@@ -1614,7 +1595,6 @@
       const description = document.getElementById('eventDescription').value.trim();
       const eventDate = document.getElementById('eventDate').value;
       const imagesJson = document.getElementById('eventImagesJson').value;
-      const orderPosition = parseInt(document.getElementById('eventOrder').value) || 0;
 
       if (!title) {
         showMessage('eventsMessage', '❌ Please enter an event title', 'error');
@@ -1641,7 +1621,6 @@
         title: title,
         description: description || null,
         event_date: eventDate || null,
-        order_position: orderPosition,
         image_url: images[0], // Keep for backward compatibility
         images: images // Store as JSON array
       };
@@ -1656,7 +1635,6 @@
 
         showMessage('eventsMessage', '✅ Event updated successfully!', 'success');
         document.getElementById('addEventForm').reset();
-        document.getElementById('eventOrder').value = '0';
         document.getElementById('eventImagesPreview').style.display = 'none';
         document.getElementById('eventImagesList').innerHTML = '';
         loadUpcomingEvents();
@@ -1984,8 +1962,11 @@
           // Show preview
           const imgDiv = document.createElement('div');
           imgDiv.style.position = 'relative';
+          const isCover = i === 0;
           imgDiv.innerHTML = `
-            <img src="${imageUrl}" style="width:100%;height:120px;object-fit:cover;border-radius:8px;border:2px solid var(--primary-light);">
+            <img src="${imageUrl}" style="width:100%;height:120px;object-fit:cover;border-radius:8px;border:${isCover ? '3px solid var(--primary)' : '2px solid var(--primary-light)'};">
+            ${isCover ? '<div style="position:absolute;top:5px;left:5px;background:var(--primary);color:#fff;padding:2px 8px;border-radius:12px;font-size:10px;font-weight:600;">COVER</div>' : ''}
+            <button type="button" onclick="setEventCover(${i})" style="position:absolute;bottom:5px;left:5px;background:var(--primary);color:#fff;border:none;border-radius:12px;padding:4px 8px;font-size:10px;font-weight:600;cursor:pointer;${isCover ? 'display:none;' : ''}">Set as Cover</button>
             <button type="button" onclick="removeEventImage(${i})" style="position:absolute;top:5px;right:5px;background:#ff4444;color:#fff;border:none;border-radius:50%;width:24px;height:24px;cursor:pointer;font-size:12px;">×</button>
           `;
           imagesList.appendChild(imgDiv);
@@ -1993,7 +1974,7 @@
 
         // Store URLs as JSON
         jsonInput.value = JSON.stringify(uploadedUrls);
-        preview.style.display = 'block';
+        renderEventImagesPreview(uploadedUrls);
 
         // Show success
         if (statusEl) {
@@ -2015,30 +1996,58 @@
       }
     }
 
-    function removeEventImage(index) {
+    function setEventCover(index) {
       const jsonInput = document.getElementById('eventImagesJson');
       const imagesList = document.getElementById('eventImagesList');
       
       try {
         const urls = JSON.parse(jsonInput.value || '[]');
+        if (index < 0 || index >= urls.length) return;
+        
+        // Move selected image to first position
+        const selectedUrl = urls[index];
+        urls.splice(index, 1);
+        urls.unshift(selectedUrl);
+        
+        jsonInput.value = JSON.stringify(urls);
+        renderEventImagesPreview(urls);
+      } catch (e) {
+        console.error('Error setting cover:', e);
+      }
+    }
+
+    function renderEventImagesPreview(urls) {
+      const imagesList = document.getElementById('eventImagesList');
+      imagesList.innerHTML = '';
+      
+      urls.forEach((url, idx) => {
+        const isCover = idx === 0;
+        const imgDiv = document.createElement('div');
+        imgDiv.style.position = 'relative';
+        imgDiv.innerHTML = `
+          <img src="${url}" style="width:100%;height:120px;object-fit:cover;border-radius:8px;border:${isCover ? '3px solid var(--primary)' : '2px solid var(--primary-light)'};">
+          ${isCover ? '<div style="position:absolute;top:5px;left:5px;background:var(--primary);color:#fff;padding:2px 8px;border-radius:12px;font-size:10px;font-weight:600;">COVER</div>' : ''}
+          <button type="button" onclick="setEventCover(${idx})" style="position:absolute;bottom:5px;left:5px;background:var(--primary);color:#fff;border:none;border-radius:12px;padding:4px 8px;font-size:10px;font-weight:600;cursor:pointer;${isCover ? 'display:none;' : ''}">Set as Cover</button>
+          <button type="button" onclick="removeEventImage(${idx})" style="position:absolute;top:5px;right:5px;background:#ff4444;color:#fff;border:none;border-radius:50%;width:24px;height:24px;cursor:pointer;font-size:12px;">×</button>
+        `;
+        imagesList.appendChild(imgDiv);
+      });
+      
+      if (urls.length === 0) {
+        document.getElementById('eventImagesPreview').style.display = 'none';
+      } else {
+        document.getElementById('eventImagesPreview').style.display = 'block';
+      }
+    }
+
+    function removeEventImage(index) {
+      const jsonInput = document.getElementById('eventImagesJson');
+      
+      try {
+        const urls = JSON.parse(jsonInput.value || '[]');
         urls.splice(index, 1);
         jsonInput.value = JSON.stringify(urls);
-        
-        // Re-render preview
-        imagesList.innerHTML = '';
-        urls.forEach((url, idx) => {
-          const imgDiv = document.createElement('div');
-          imgDiv.style.position = 'relative';
-          imgDiv.innerHTML = `
-            <img src="${url}" style="width:100%;height:120px;object-fit:cover;border-radius:8px;border:2px solid var(--primary-light);">
-            <button type="button" onclick="removeEventImage(${idx})" style="position:absolute;top:5px;right:5px;background:#ff4444;color:#fff;border:none;border-radius:50%;width:24px;height:24px;cursor:pointer;font-size:12px;">×</button>
-          `;
-          imagesList.appendChild(imgDiv);
-        });
-        
-        if (urls.length === 0) {
-          document.getElementById('eventImagesPreview').style.display = 'none';
-        }
+        renderEventImagesPreview(urls);
       } catch (e) {
         console.error('Error removing image:', e);
       }
