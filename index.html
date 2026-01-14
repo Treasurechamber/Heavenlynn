@@ -1059,7 +1059,7 @@ async function loadUpcomingEvents() {
       .from('upcoming_events')
       .select('*')
       .eq('active', true)
-      .order('order_position', { ascending: true });
+      .order('created_at', { ascending: false });
 
     if (error) throw error;
 
