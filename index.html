@@ -129,6 +129,23 @@
     .slider-btn:hover { background: var(--primary); color: #fff; transform: scale(1.1); }
     .slider-btn:focus { outline: none; }
 
+    /* Upcoming Events Section */
+    .events-section { padding: 2rem 1rem; margin: 0 auto 1rem; max-width: 1200px; }
+    .events-header { display: flex; align-items: center; justify-content: center; margin-bottom: 2rem; position: relative; margin-top: 1rem; }
+    .events-header h2 { font-size: 2rem; color: var(--primary-dark); padding: 0 1.5rem; }
+    .events-header::before, .events-header::after { content: ""; height: 2px; background: var(--primary-light); flex-grow: 1; border-radius: 2px; }
+    .events-badge { position: absolute; top: -20px; left: 50%; transform: translateX(-50%); background: var(--primary); color: #fff; padding: 4px 15px; border-radius: 20px; font-size: .8rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; }
+    .events-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+    .event-card { background: #fff; border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--shadow-md); border: 2px solid var(--primary-light); display: flex; flex-direction: column; transition: var(--transition); }
+    .event-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-lg); border-color: var(--primary); }
+    .event-image { width: 100%; height: 200px; overflow: hidden; }
+    .event-image img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s; }
+    .event-card:hover .event-image img { transform: scale(1.05); }
+    .event-content { padding: 1rem 1.2rem 1.2rem; flex: 1; display: flex; flex-direction: column; }
+    .event-title { font-weight: 600; font-size: 1.1rem; color: var(--primary-dark); margin-bottom: .4rem; }
+    .event-date { font-size: .85rem; color: var(--accent); font-weight: 600; margin-bottom: .5rem; }
+    .event-desc { font-size: .9rem; color: var(--text-light); line-height: 1.4; }
+
     /* Main Content */
     main { padding: 2rem 1rem; max-width: 1200px; margin: 0 auto; }
     section { margin-bottom: 4rem; scroll-margin-top: 100px; }
@@ -437,6 +454,15 @@
     </div>
   </div>
 
+  <!-- Upcoming Events -->
+  <div class="events-section" id="eventsSectionWrapper" style="display:none">
+    <div class="events-header">
+      <h2>Upcoming Events</h2>
+      <div class="events-badge">Don't Miss Out</div>
+    </div>
+    <div class="events-grid" id="eventsGrid"></div>
+  </div>
+
   <!-- Menu Sections -->
   <main id="menuSections"></main>
 
@@ -577,6 +603,9 @@ function waitForSupabase() {
       }
       if (typeof loadFeaturedItems === 'function') {
         setTimeout(() => loadFeaturedItems(), 150);
+      }
+      if (typeof loadUpcomingEvents === 'function') {
+        setTimeout(() => loadUpcomingEvents(), 160);
       }
       if (typeof initSlideshow === 'function') {
         setTimeout(() => initSlideshow(), 150);
@@ -984,6 +1013,63 @@ async function loadMenu() {
   }
 }
 
+// Upcoming Events - Load from Supabase
+async function loadUpcomingEvents() {
+  if (!supabaseInitialized || typeof sb === 'undefined') {
+    console.log('Supabase not ready for upcoming events');
+    return;
+  }
+
+  const wrapper = document.getElementById('eventsSectionWrapper');
+  const grid = document.getElementById('eventsGrid');
+  if (!wrapper || !grid) return;
+
+  try {
+    const { data, error } = await sb
+      .from('upcoming_events')
+      .select('*')
+      .eq('active', true)
+      .order('order_position', { ascending: true });
+
+    if (error) throw error;
+
+    if (!data || data.length === 0) {
+      // Hide section if no events
+      wrapper.style.display = 'none';
+      grid.innerHTML = '';
+      return;
+    }
+
+    wrapper.style.display = 'block';
+    grid.innerHTML = data.map(event => {
+      const title = event.title || 'Upcoming Event';
+      const desc = event.description || '';
+      const img = event.image_url || '';
+      let dateText = '';
+      if (event.event_date) {
+        const d = new Date(event.event_date + 'T00:00:00');
+        dateText = d.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+      }
+
+      return `
+        <div class="event-card">
+          <div class="event-image">
+            <img src="${img}" alt="${title}" onerror="this.style.display='none'">
+          </div>
+          <div class="event-content">
+            <div class="event-title">${title}</div>
+            ${dateText ? `<div class="event-date">📅 ${dateText}</div>` : ''}
+            <div class="event-desc">${desc}</div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  } catch (err) {
+    console.error('Error loading upcoming events:', err);
+    wrapper.style.display = 'none';
+  }
+}
+
 // Featured Items (Weekly Specials) - Load from Supabase
 async function loadFeaturedItems() {
   if (!supabaseInitialized || typeof sb === 'undefined') {
@@ -1214,6 +1300,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (supabaseInitialized && typeof sb !== 'undefined') {
     loadMenu();
     loadFeaturedItems();
+    loadUpcomingEvents();
     initSlideshow();
   }
   setupFortuneCookie();
