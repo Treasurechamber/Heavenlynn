@@ -173,45 +173,314 @@
       .events-grid { grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); }
     }
 
-    /* Loyalty Program Section */
-    .loyalty-section { padding: 2rem 1rem; margin: 0 auto 1rem; max-width: 1200px; }
-    .loyalty-header { display: flex; align-items: center; justify-content: center; margin-bottom: 2rem; position: relative; margin-top: 1rem; }
-    .loyalty-header h2 { font-size: 2rem; color: var(--primary-dark); padding: 0 1.5rem; }
-    .loyalty-header::before, .loyalty-header::after { content: ""; height: 2px; background: var(--primary-light); flex-grow: 1; border-radius: 2px; }
-    .loyalty-badge { position: absolute; top: -20px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, #ffd700, #ffed4e); color: #301e54; padding: 4px 15px; border-radius: 20px; font-size: .8rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; }
-    .loyalty-card { background: linear-gradient(135deg, #fff, #f9f6ff); border-radius: var(--radius-md); padding: 2rem; box-shadow: var(--shadow-lg); border: 2px solid var(--primary-light); }
-    .loyalty-tier-display { display: flex; align-items: center; gap: 1.5rem; margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 2px dashed var(--primary-light); }
-    .tier-icon { font-size: 4rem; filter: drop-shadow(0 4px 8px rgba(0,0,0,.2)); }
-    .tier-info { flex: 1; }
-    .tier-name { font-size: 1.8rem; font-weight: 700; color: var(--primary-dark); margin-bottom: .3rem; }
-    .tier-subtitle { font-size: 1rem; color: var(--text-light); }
-    .loyalty-progress { margin-bottom: 2rem; }
-    .progress-label { display: flex; justify-content: space-between; margin-bottom: .8rem; font-weight: 600; color: var(--primary-dark); }
-    .progress-bar-container { width: 100%; height: 24px; background: var(--primary-light); border-radius: 12px; overflow: hidden; margin-bottom: .5rem; position: relative; }
-    .progress-bar { height: 100%; background: linear-gradient(90deg, var(--primary), var(--accent)); border-radius: 12px; transition: width 0.5s ease; position: relative; }
-    .progress-bar::after { content: ''; position: absolute; top: 0; right: 0; bottom: 0; width: 4px; background: rgba(255,255,255,.8); }
-    .progress-info { font-size: .9rem; color: var(--text-light); text-align: center; }
-    .loyalty-rewards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
-    .reward-card { background: #fff; border: 2px solid var(--primary-light); border-radius: var(--radius-sm); padding: 1rem; text-align: center; transition: var(--transition); position: relative; }
-    .reward-card.unlocked { border-color: var(--primary); background: linear-gradient(135deg, #fff, var(--primary-light)); box-shadow: var(--shadow-md); }
-    .reward-card.unlocked::before { content: '✓'; position: absolute; top: 10px; right: 10px; background: var(--primary); color: #fff; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; }
-    .reward-card.locked { opacity: .5; }
-    .reward-tier { font-weight: 700; font-size: 1.1rem; color: var(--primary-dark); margin-bottom: .5rem; }
-    .reward-requirement { font-size: .85rem; color: var(--text-light); margin-bottom: .5rem; }
-    .reward-benefit { font-size: .9rem; color: var(--primary); font-weight: 600; }
-    .loyalty-actions { text-align: center; }
-    .phone-input { width: 100%; max-width: 300px; padding: .8rem; border: 2px solid var(--primary-light); border-radius: var(--radius-sm); font-size: 1rem; margin-bottom: 1rem; text-align: center; }
-    .phone-input:focus { outline: none; border-color: var(--primary); }
-    .save-phone-btn, .redeem-btn { background: var(--primary); color: #fff; border: none; padding: .8rem 2rem; border-radius: var(--radius-sm); font-size: 1rem; font-weight: 600; cursor: pointer; transition: var(--transition); margin: 0 auto; display: block; }
-    .save-phone-btn:hover, .redeem-btn:hover { background: var(--primary-dark); transform: translateY(-2px); }
-    .redeem-btn:disabled { background: var(--text-light); cursor: not-allowed; opacity: .6; }
-    .redeem-btn.urgent { animation: pulse-urgent 2s infinite; background: var(--accent); }
-    .loyalty-note { font-size: .85rem; color: var(--text-light); margin-bottom: 1rem; }
-    @keyframes pulse-urgent { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
-    @media (min-width: 768px) {
-      .loyalty-card { padding: 2.5rem; }
-      .tier-icon { font-size: 5rem; }
-      .tier-name { font-size: 2.2rem; }
+    /* Compact Loyalty Ad Banner */
+    .loyalty-section {
+      padding: 1rem;
+      margin: 1.5rem auto;
+      max-width: 1200px;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .loyalty-section:hover {
+      transform: translateY(-2px);
+    }
+
+    .loyalty-ad-banner {
+      background: linear-gradient(135deg, #8a4fff 0%, #d9afe1 50%, #ffd700 100%);
+      border-radius: 16px;
+      padding: 1.5rem;
+      box-shadow: 0 8px 24px rgba(138, 79, 255, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+      position: relative;
+      overflow: hidden;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .loyalty-ad-banner::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+      animation: shimmer 3s infinite;
+    }
+
+    @keyframes shimmer {
+      0%, 100% { transform: rotate(0deg); }
+      50% { transform: rotate(180deg); }
+    }
+
+    .loyalty-ad-content {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      z-index: 1;
+    }
+
+    .loyalty-ad-icon {
+      font-size: 3.5rem;
+      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+      animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .loyalty-ad-text {
+      flex: 1;
+    }
+
+    .loyalty-ad-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 0.3rem;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .loyalty-ad-subtitle {
+      font-size: 0.95rem;
+      color: rgba(255, 255, 255, 0.95);
+      font-weight: 500;
+    }
+
+    .loyalty-ad-arrow {
+      font-size: 2rem;
+      color: white;
+      z-index: 1;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.7; transform: scale(1.1); }
+    }
+
+    .loyalty-ad-badge {
+      position: absolute;
+      top: -8px;
+      right: 20px;
+      background: linear-gradient(135deg, #ffd700, #ffed4e);
+      color: #301e54;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      z-index: 2;
+    }
+
+    /* Loyalty Modal */
+    .loyalty-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 10000;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      backdrop-filter: blur(4px);
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .loyalty-modal.active {
+      display: flex;
+    }
+
+    .loyalty-modal-content {
+      background: white;
+      border-radius: 20px;
+      max-width: 600px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      position: relative;
+      animation: slideUp 0.3s ease;
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .loyalty-modal-header {
+      background: linear-gradient(135deg, #8a4fff, #d9afe1);
+      color: white;
+      padding: 1.5rem;
+      border-radius: 20px 20px 0 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .loyalty-modal-header h2 {
+      margin: 0;
+      font-size: 1.8rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .loyalty-modal-close {
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      color: white;
+      font-size: 1.5rem;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+
+    .loyalty-modal-close:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: rotate(90deg);
+    }
+
+    .loyalty-modal-body {
+      padding: 2rem;
+    }
+
+    .loyalty-modal-intro {
+      text-align: center;
+      margin-bottom: 2rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 2px dashed #e4d7ff;
+    }
+
+    .loyalty-modal-intro p {
+      font-size: 1.1rem;
+      color: var(--text-light);
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    .loyalty-modal-rewards {
+      display: grid;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .loyalty-modal-reward-card {
+      background: linear-gradient(135deg, #fff, #f9f6ff);
+      border: 2px solid var(--primary-light);
+      border-radius: 12px;
+      padding: 1.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .loyalty-modal-reward-card:hover {
+      transform: translateX(5px);
+      box-shadow: 0 4px 12px rgba(138, 79, 255, 0.2);
+      border-color: var(--primary);
+    }
+
+    .loyalty-modal-reward-tier {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--primary-dark);
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .loyalty-modal-reward-requirement {
+      font-size: 0.9rem;
+      color: var(--text-light);
+      margin-bottom: 0.5rem;
+    }
+
+    .loyalty-modal-reward-benefit {
+      font-size: 1rem;
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .loyalty-modal-actions {
+      text-align: center;
+      padding-top: 1.5rem;
+      border-top: 2px dashed #e4d7ff;
+    }
+
+    .loyalty-modal-whatsapp-btn {
+      background: linear-gradient(135deg, #25D366, #128C7E);
+      color: white;
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: 50px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+    }
+
+    .loyalty-modal-whatsapp-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
+    }
+
+    @media (max-width: 768px) {
+      .loyalty-ad-banner {
+        flex-direction: column;
+        text-align: center;
+        padding: 1.2rem;
+      }
+      
+      .loyalty-ad-content {
+        flex-direction: column;
+        gap: 1rem;
+      }
+      
+      .loyalty-ad-icon {
+        font-size: 3rem;
+      }
+      
+      .loyalty-ad-title {
+        font-size: 1.3rem;
+      }
+      
+      .loyalty-modal-content {
+        max-width: 95%;
+        max-height: 95vh;
+      }
+      
+      .loyalty-modal-body {
+        padding: 1.5rem;
+      }
     }
 
     /* Main Content */
@@ -532,40 +801,46 @@
   </div>
 
   <!-- Loyalty Program Section -->
-  <div class="loyalty-section" id="loyaltySectionWrapper">
-    <div class="loyalty-header">
-      <h2>Loyalty Rewards</h2>
-      <div class="loyalty-badge">Earn Points</div>
+  <!-- Compact Loyalty Ad Banner -->
+  <div class="loyalty-section" id="loyaltySectionWrapper" onclick="openLoyaltyModal()">
+    <div class="loyalty-ad-banner">
+      <div class="loyalty-ad-badge">Earn Points</div>
+      <div class="loyalty-ad-content">
+        <div class="loyalty-ad-icon">🎁</div>
+        <div class="loyalty-ad-text">
+          <div class="loyalty-ad-title">Loyalty Rewards Program</div>
+          <div class="loyalty-ad-subtitle">Earn points with every order • Unlock exclusive rewards • Click to learn more!</div>
+        </div>
+      </div>
+      <div class="loyalty-ad-arrow">→</div>
     </div>
-    <div class="loyalty-card" id="loyaltyCard">
-      <div class="loyalty-intro">
-        <p style="text-align: center; font-size: 1.1rem; color: var(--text-light); margin-bottom: 2rem; line-height: 1.6;">
-          Order items to earn points! Every <strong>3 items = 1 point</strong>. Points reset monthly on the 1st.<br>
-          <strong style="color: var(--primary-dark);">Contact us via WhatsApp to check your status!</strong>
-        </p>
+  </div>
+
+  <!-- Loyalty Modal Popup -->
+  <div class="loyalty-modal" id="loyaltyModal" onclick="closeLoyaltyModal(event)">
+    <div class="loyalty-modal-content" onclick="event.stopPropagation()">
+      <div class="loyalty-modal-header">
+        <h2>🎁 Loyalty Rewards Program</h2>
+        <button class="loyalty-modal-close" onclick="closeLoyaltyModal()">&times;</button>
       </div>
-      
-      <div class="loyalty-progress" style="margin-bottom: 2rem;">
-        <div class="progress-label" style="justify-content: center;">
-          <span>Track Your Progress</span>
+      <div class="loyalty-modal-body">
+        <div class="loyalty-modal-intro">
+          <p>
+            Order items to earn points! Every <strong>3 items = 1 point</strong>.<br>
+            Points reset monthly on the 1st.<br>
+            <strong style="color: var(--primary-dark);">Contact us via WhatsApp to check your status!</strong>
+          </p>
         </div>
-        <div class="progress-bar-container">
-          <div class="progress-bar" style="width: 0%; background: linear-gradient(90deg, var(--primary-light), var(--primary));"></div>
+        
+        <div class="loyalty-modal-rewards" id="loyaltyModalRewards"></div>
+        
+        <div class="loyalty-modal-actions">
+          <a href="https://wa.me/96181955816?text=Hi! I'd like to check my loyalty points status." 
+             class="loyalty-modal-whatsapp-btn" 
+             target="_blank">
+            <i class="fab fa-whatsapp"></i> Check My Status via WhatsApp
+          </a>
         </div>
-        <div class="progress-info" style="text-align: center; color: var(--text-light); margin-top: 0.5rem;">
-          Enter your phone number when ordering to track your points automatically
-        </div>
-      </div>
-      
-      <div class="loyalty-rewards" id="loyaltyRewards"></div>
-      
-      <div class="loyalty-actions" style="text-align: center; margin-top: 2rem;">
-        <a href="https://wa.me/96181955816?text=Hi! I'd like to check my loyalty points status." 
-           class="save-phone-btn" 
-           target="_blank" 
-           style="text-decoration: none; display: inline-block;">
-          <i class="fab fa-whatsapp"></i> Check My Status via WhatsApp
-        </a>
       </div>
     </div>
   </div>
@@ -1484,24 +1759,59 @@ const tierConfig = {
   'Diamond': { items: 30, icon: '💠', color: '#b9f2ff', reward: '50% off total next order' }
 };
 
-// Display general rewards (no personal data)
+// Display general rewards in modal (no personal data)
 function displayGeneralLoyaltyRewards() {
   const rewardsHtml = Object.entries(tierConfig)
     .map(([tierName, tierCfg]) => {
       return `
-        <div class="reward-card">
-          <div class="reward-tier">${tierCfg.icon} ${tierName}</div>
-          <div class="reward-requirement">${tierCfg.items} items (${Math.floor(tierCfg.items/3)} points)</div>
-          <div class="reward-benefit">${tierCfg.reward}</div>
+        <div class="loyalty-modal-reward-card">
+          <div class="loyalty-modal-reward-tier">${tierCfg.icon} ${tierName}</div>
+          <div class="loyalty-modal-reward-requirement">${tierCfg.items} items (${Math.floor(tierCfg.items/3)} points)</div>
+          <div class="loyalty-modal-reward-benefit">${tierCfg.reward}</div>
         </div>
       `;
     }).join('');
   
-  const rewardsContainer = document.getElementById('loyaltyRewards');
+  const rewardsContainer = document.getElementById('loyaltyModalRewards');
   if (rewardsContainer) {
     rewardsContainer.innerHTML = rewardsHtml;
   }
 }
+
+// Open loyalty modal
+function openLoyaltyModal() {
+  const modal = document.getElementById('loyaltyModal');
+  if (modal) {
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden'; // Prevent background scrolling
+    // Ensure rewards are displayed
+    displayGeneralLoyaltyRewards();
+  }
+}
+
+// Close loyalty modal
+function closeLoyaltyModal(event) {
+  // If event is provided and clicked element is not the modal overlay, don't close
+  if (event && event.target.id !== 'loyaltyModal') {
+    return;
+  }
+  
+  const modal = document.getElementById('loyaltyModal');
+  if (modal) {
+    modal.classList.remove('active');
+    document.body.style.overflow = ''; // Restore scrolling
+  }
+}
+
+// Close modal on ESC key
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    const modal = document.getElementById('loyaltyModal');
+    if (modal && modal.classList.contains('active')) {
+      closeLoyaltyModal();
+    }
+  }
+});
 
 // Update loyalty points in background when order is placed (for admin tracking)
 // Note: This still tracks points but doesn't display to customer
