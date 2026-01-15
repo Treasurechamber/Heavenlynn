@@ -173,6 +173,47 @@
       .events-grid { grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); }
     }
 
+    /* Loyalty Program Section */
+    .loyalty-section { padding: 2rem 1rem; margin: 0 auto 1rem; max-width: 1200px; }
+    .loyalty-header { display: flex; align-items: center; justify-content: center; margin-bottom: 2rem; position: relative; margin-top: 1rem; }
+    .loyalty-header h2 { font-size: 2rem; color: var(--primary-dark); padding: 0 1.5rem; }
+    .loyalty-header::before, .loyalty-header::after { content: ""; height: 2px; background: var(--primary-light); flex-grow: 1; border-radius: 2px; }
+    .loyalty-badge { position: absolute; top: -20px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, #ffd700, #ffed4e); color: #301e54; padding: 4px 15px; border-radius: 20px; font-size: .8rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; }
+    .loyalty-card { background: linear-gradient(135deg, #fff, #f9f6ff); border-radius: var(--radius-md); padding: 2rem; box-shadow: var(--shadow-lg); border: 2px solid var(--primary-light); }
+    .loyalty-tier-display { display: flex; align-items: center; gap: 1.5rem; margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 2px dashed var(--primary-light); }
+    .tier-icon { font-size: 4rem; filter: drop-shadow(0 4px 8px rgba(0,0,0,.2)); }
+    .tier-info { flex: 1; }
+    .tier-name { font-size: 1.8rem; font-weight: 700; color: var(--primary-dark); margin-bottom: .3rem; }
+    .tier-subtitle { font-size: 1rem; color: var(--text-light); }
+    .loyalty-progress { margin-bottom: 2rem; }
+    .progress-label { display: flex; justify-content: space-between; margin-bottom: .8rem; font-weight: 600; color: var(--primary-dark); }
+    .progress-bar-container { width: 100%; height: 24px; background: var(--primary-light); border-radius: 12px; overflow: hidden; margin-bottom: .5rem; position: relative; }
+    .progress-bar { height: 100%; background: linear-gradient(90deg, var(--primary), var(--accent)); border-radius: 12px; transition: width 0.5s ease; position: relative; }
+    .progress-bar::after { content: ''; position: absolute; top: 0; right: 0; bottom: 0; width: 4px; background: rgba(255,255,255,.8); }
+    .progress-info { font-size: .9rem; color: var(--text-light); text-align: center; }
+    .loyalty-rewards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+    .reward-card { background: #fff; border: 2px solid var(--primary-light); border-radius: var(--radius-sm); padding: 1rem; text-align: center; transition: var(--transition); position: relative; }
+    .reward-card.unlocked { border-color: var(--primary); background: linear-gradient(135deg, #fff, var(--primary-light)); box-shadow: var(--shadow-md); }
+    .reward-card.unlocked::before { content: '✓'; position: absolute; top: 10px; right: 10px; background: var(--primary); color: #fff; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+    .reward-card.locked { opacity: .5; }
+    .reward-tier { font-weight: 700; font-size: 1.1rem; color: var(--primary-dark); margin-bottom: .5rem; }
+    .reward-requirement { font-size: .85rem; color: var(--text-light); margin-bottom: .5rem; }
+    .reward-benefit { font-size: .9rem; color: var(--primary); font-weight: 600; }
+    .loyalty-actions { text-align: center; }
+    .phone-input { width: 100%; max-width: 300px; padding: .8rem; border: 2px solid var(--primary-light); border-radius: var(--radius-sm); font-size: 1rem; margin-bottom: 1rem; text-align: center; }
+    .phone-input:focus { outline: none; border-color: var(--primary); }
+    .save-phone-btn, .redeem-btn { background: var(--primary); color: #fff; border: none; padding: .8rem 2rem; border-radius: var(--radius-sm); font-size: 1rem; font-weight: 600; cursor: pointer; transition: var(--transition); margin: 0 auto; display: block; }
+    .save-phone-btn:hover, .redeem-btn:hover { background: var(--primary-dark); transform: translateY(-2px); }
+    .redeem-btn:disabled { background: var(--text-light); cursor: not-allowed; opacity: .6; }
+    .redeem-btn.urgent { animation: pulse-urgent 2s infinite; background: var(--accent); }
+    .loyalty-note { font-size: .85rem; color: var(--text-light); margin-bottom: 1rem; }
+    @keyframes pulse-urgent { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+    @media (min-width: 768px) {
+      .loyalty-card { padding: 2.5rem; }
+      .tier-icon { font-size: 5rem; }
+      .tier-name { font-size: 2.2rem; }
+    }
+
     /* Main Content */
     main { padding: 2rem 1rem; max-width: 1200px; margin: 0 auto; }
     section { margin-bottom: 4rem; scroll-margin-top: 100px; }
@@ -490,6 +531,45 @@
     <div class="events-grid" id="eventsGrid"></div>
   </div>
 
+  <!-- Loyalty Program Section -->
+  <div class="loyalty-section" id="loyaltySectionWrapper">
+    <div class="loyalty-header">
+      <h2>Loyalty Rewards</h2>
+      <div class="loyalty-badge">Earn Points</div>
+    </div>
+    <div class="loyalty-card" id="loyaltyCard">
+      <div class="loyalty-intro">
+        <p style="text-align: center; font-size: 1.1rem; color: var(--text-light); margin-bottom: 2rem; line-height: 1.6;">
+          Order items to earn points! Every <strong>3 items = 1 point</strong>. Points reset monthly on the 1st.<br>
+          <strong style="color: var(--primary-dark);">Contact us via WhatsApp to check your status!</strong>
+        </p>
+      </div>
+      
+      <div class="loyalty-progress" style="margin-bottom: 2rem;">
+        <div class="progress-label" style="justify-content: center;">
+          <span>Track Your Progress</span>
+        </div>
+        <div class="progress-bar-container">
+          <div class="progress-bar" style="width: 0%; background: linear-gradient(90deg, var(--primary-light), var(--primary));"></div>
+        </div>
+        <div class="progress-info" style="text-align: center; color: var(--text-light); margin-top: 0.5rem;">
+          Enter your phone number when ordering to track your points automatically
+        </div>
+      </div>
+      
+      <div class="loyalty-rewards" id="loyaltyRewards"></div>
+      
+      <div class="loyalty-actions" style="text-align: center; margin-top: 2rem;">
+        <a href="https://wa.me/96181955816?text=Hi! I'd like to check my loyalty points status." 
+           class="save-phone-btn" 
+           target="_blank" 
+           style="text-decoration: none; display: inline-block;">
+          <i class="fab fa-whatsapp"></i> Check My Status via WhatsApp
+        </a>
+      </div>
+    </div>
+  </div>
+
   <!-- Menu Sections -->
   <main id="menuSections"></main>
 
@@ -637,6 +717,9 @@ function waitForSupabase() {
       if (typeof initSlideshow === 'function') {
         setTimeout(() => initSlideshow(), 150);
       }
+      if (typeof displayGeneralLoyaltyRewards === 'function') {
+        setTimeout(() => displayGeneralLoyaltyRewards(), 170);
+      }
     }
     return;
   }
@@ -661,6 +744,9 @@ function waitForSupabase() {
         }
         if (typeof initSlideshow === 'function') {
           setTimeout(() => initSlideshow(), 150);
+        }
+        if (typeof displayGeneralLoyaltyRewards === 'function') {
+          setTimeout(() => displayGeneralLoyaltyRewards(), 170);
         }
       }
     } else if (attempts >= maxAttempts) {
@@ -1389,6 +1475,98 @@ function createSparkles(x, y) {
   }
 }
 
+// ========== LOYALTY PROGRAM (GENERAL INFO ONLY) ==========
+
+const tierConfig = {
+  'Silver': { items: 9, icon: '🥈', color: '#c0c0c0', reward: '5% off total next order' },
+  'Gold': { items: 15, icon: '🥇', color: '#ffd700', reward: '10% off total next order' },
+  'Platinum': { items: 21, icon: '💎', color: '#e5e4e2', reward: '15% off total next order + Free delivery' },
+  'Diamond': { items: 30, icon: '💠', color: '#b9f2ff', reward: '50% off total next order' }
+};
+
+// Display general rewards (no personal data)
+function displayGeneralLoyaltyRewards() {
+  const rewardsHtml = Object.entries(tierConfig)
+    .map(([tierName, tierCfg]) => {
+      return `
+        <div class="reward-card">
+          <div class="reward-tier">${tierCfg.icon} ${tierName}</div>
+          <div class="reward-requirement">${tierCfg.items} items (${Math.floor(tierCfg.items/3)} points)</div>
+          <div class="reward-benefit">${tierCfg.reward}</div>
+        </div>
+      `;
+    }).join('');
+  
+  const rewardsContainer = document.getElementById('loyaltyRewards');
+  if (rewardsContainer) {
+    rewardsContainer.innerHTML = rewardsHtml;
+  }
+}
+
+// Update loyalty points in background when order is placed (for admin tracking)
+// Note: This still tracks points but doesn't display to customer
+async function updateLoyaltyPointsOnOrder(itemCount, phoneNumber) {
+  if (!phoneNumber || !supabaseInitialized || typeof sb === 'undefined') {
+    return;
+  }
+
+  try {
+    // Check if we need to reset (monthly reset)
+    const now = new Date();
+    const firstOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    
+    const { data, error } = await sb
+      .from('loyalty_points')
+      .select('*')
+      .eq('customer_phone', phoneNumber)
+      .single();
+
+    if (error && error.code !== 'PGRST116') {
+      console.error('Error fetching loyalty points:', error);
+      return;
+    }
+
+    if (data) {
+      // Check if reset is needed
+      const lastReset = new Date(data.last_reset_date);
+      if (lastReset < firstOfMonth) {
+        // Reset points first
+        await sb
+          .from('loyalty_points')
+          .update({
+            items_purchased: 0,
+            points: 0,
+            current_tier: 'None',
+            redeemed_this_month: false,
+            last_reset_date: firstOfMonth.toISOString().split('T')[0]
+          })
+          .eq('customer_phone', phoneNumber);
+      }
+      
+      // Update items purchased
+      const newItems = (data.items_purchased || 0) + itemCount;
+      await sb
+        .from('loyalty_points')
+        .update({ items_purchased: newItems })
+        .eq('customer_phone', phoneNumber);
+    } else {
+      // Create new entry
+      const firstOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+      await sb
+        .from('loyalty_points')
+        .insert([{
+          customer_phone: phoneNumber,
+          items_purchased: itemCount,
+          points: 0,
+          current_tier: 'None',
+          last_reset_date: firstOfMonth.toISOString().split('T')[0]
+        }]);
+    }
+  } catch (error) {
+    console.error('Error in updateLoyaltyPointsOnOrder:', error);
+  }
+}
+
 // Loading Screen
 window.onload = () => {
   const cookies = ['cookie1', 'cookie2', 'cookie3', 'cookie4', 'cookie5'];
@@ -1416,20 +1594,33 @@ document.addEventListener('DOMContentLoaded', () => {
     loadFeaturedItems();
     loadUpcomingEvents();
     initSlideshow();
+    displayGeneralLoyaltyRewards();
   }
   setupFortuneCookie();
+  
+  // Display general loyalty rewards
+  displayGeneralLoyaltyRewards();
   
   // Cart modal
   document.getElementById('cartBtn').onclick = () => document.getElementById('cartModal').style.display = 'block';
   document.getElementById('cartClose').onclick = () => document.getElementById('cartModal').style.display = 'none';
   document.getElementById('cartModal').onclick = e => { if (e.target.id === 'cartModal') e.target.style.display = 'none'; };
-  document.getElementById('orderBtn').onclick = () => {
+  document.getElementById('orderBtn').onclick = async () => {
     if (!cart.length) return;
     const total = cart.reduce((s, i) => s + i.price * i.quantity, 0);
+    const totalItems = cart.reduce((s, i) => s + i.quantity, 0);
+    
     let msg = "Hi! I'd like to place an order from Heavenlynn:\n\n";
     cart.forEach(i => msg += `• ${i.name} x${i.quantity} - $${(i.price * i.quantity).toFixed(2)}\n`);
-    msg += `\nTotal: $${total.toFixed(2)}\n\nThank you!`;
+    msg += `\nTotal: $${total.toFixed(2)}`;
+    msg += `\n\nPlease include your phone number in your message to track loyalty points!`;
+    msg += `\n\nThank you!`;
+    
     window.open(`https://wa.me/96181955816?text=${encodeURIComponent(msg)}`, '_blank');
+    
+    // Note: Points will be tracked by admin when they process the order
+    // Admin can manually update points or we can add phone extraction later
+    
     cart = [];
     updateCartUI();
     document.getElementById('cartModal').style.display = 'none';
