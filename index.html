@@ -1950,26 +1950,17 @@ async function updateLoyaltyPointsOnOrder(itemCount, phoneNumber) {
       
       // Update items purchased - database trigger will calculate points and tier
       const newItems = (data.items_purchased || 0) + itemCount;
-      const { data: updatedData, error: updateError } = await sb
+      const { error: updateError } = await sb
         .from('loyalty_points')
         .update({ items_purchased: newItems })
-        .eq('customer_phone', phoneNumber)
-        .select();
+        .eq('customer_phone', phoneNumber);
       
       if (updateError) {
         console.error('❌ Error updating items:', updateError);
         return { error: updateError.message };
       }
       
-      if (updatedData && updatedData[0]) {
-        console.log('✅ Items updated successfully:', { 
-          phone: phoneNumber, 
-          oldItems: data.items_purchased, 
-          newItems, 
-          tier: updatedData[0].current_tier,
-          points: updatedData[0].points 
-        });
-      }
+      console.log('✅ Items updated successfully:', { phone: phoneNumber, oldItems: data.items_purchased, newItems });
       return { success: true, items: newItems };
     } else {
       // Create new entry
@@ -2083,16 +2074,19 @@ document.addEventListener('DOMContentLoaded', () => {
     window.open(`https://wa.me/96181955816?text=${encodeURIComponent(msg)}`, '_blank');
     
     // Update loyalty points automatically (only if valid phone)
-    if (finalPhone) {
-      try {
-        console.log('🔄 Attempting to update loyalty points...', { phone: finalPhone, items: totalItems });
-        const result = await updateLoyaltyPointsOnOrder(totalItems, finalPhone);
-        console.log('✅ Loyalty points update result:', result);
-      } catch (error) {
-        console.error('❌ Error updating loyalty points:', error);
-      }
+    if (finalPhone && finalPhone.length >= 10) {
+      console.log('🔄 Updating loyalty points...', { phone: finalPhone, items: totalItems });
+      updateLoyaltyPointsOnOrder(totalItems, finalPhone).then(result => {
+        if (result && result.error) {
+          console.error('❌ Update failed:', result.error);
+        } else {
+          console.log('✅ Loyalty points updated');
+        }
+      }).catch(error => {
+        console.error('❌ Error:', error);
+      });
     } else {
-      console.log('⚠️ No valid phone number - skipping loyalty points update');
+      console.log('⚠️ No valid phone - finalPhone:', finalPhone);
     }
     
     cart = [];
