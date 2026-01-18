@@ -2031,32 +2031,32 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('orderBtn').onclick = async () => {
     if (!cart.length) return;
     
-    // Get and validate phone number
+    // Get phone number (optional - don't block order if missing)
     const phoneInput = document.getElementById('customerPhone');
-    let phoneNumber = phoneInput.value.trim();
+    let phoneNumber = phoneInput ? phoneInput.value.trim() : '';
+    let finalPhone = null;
     
-    // Remove any non-digit characters except + for validation
-    const cleanPhone = phoneNumber.replace(/[^\d+]/g, '');
-    
-    // Validate phone number (should have at least 7 digits)
-    if (!phoneNumber || cleanPhone.replace(/\D/g, '').length < 7) {
-      phoneInput.classList.add('error');
-      phoneInput.focus();
-      alert('Please enter a valid phone number (at least 7 digits)');
-      return;
-    }
-    
-    phoneInput.classList.remove('error');
-    
-    // Clean phone number: remove all non-digits, handle Lebanon country code
-    // If it starts with 0, replace with 961 (Lebanon code)
-    let finalPhone = cleanPhone.replace(/\D/g, '');
-    if (finalPhone.startsWith('0')) {
-      finalPhone = '961' + finalPhone.substring(1);
-    } else if (!finalPhone.startsWith('961') && finalPhone.length >= 7) {
-      // If it doesn't have country code and is local format, add 961
-      if (finalPhone.length >= 7 && finalPhone.length <= 10) {
-        finalPhone = '961' + finalPhone;
+    // Only validate and process phone if provided
+    if (phoneNumber) {
+      const cleanPhone = phoneNumber.replace(/[^\d+]/g, '');
+      const digitCount = cleanPhone.replace(/\D/g, '').length;
+      
+      if (digitCount >= 7) {
+        // Clean phone number: remove all non-digits, handle Lebanon country code
+        finalPhone = cleanPhone.replace(/\D/g, '');
+        if (finalPhone.startsWith('0')) {
+          finalPhone = '961' + finalPhone.substring(1);
+        } else if (!finalPhone.startsWith('961') && finalPhone.length >= 7) {
+          if (finalPhone.length >= 7 && finalPhone.length <= 10) {
+            finalPhone = '961' + finalPhone;
+          }
+        }
+        if (phoneInput) phoneInput.classList.remove('error');
+      } else if (phoneInput) {
+        // Invalid phone but don't block order - just warn
+        phoneInput.classList.add('error');
+        phoneInput.focus();
+        alert('Phone number format invalid, but order will proceed. Loyalty points may not be tracked.');
       }
     }
     
@@ -2066,19 +2066,24 @@ document.addEventListener('DOMContentLoaded', () => {
     let msg = "Hi! I'd like to place an order from Heavenlynn:\n\n";
     cart.forEach(i => msg += `• ${i.name} x${i.quantity} - $${(i.price * i.quantity).toFixed(2)}\n`);
     msg += `\nTotal: $${total.toFixed(2)}`;
-    msg += `\n\nPhone: ${phoneNumber}`;
+    if (phoneNumber) {
+      msg += `\n\nPhone: ${phoneNumber}`;
+    }
     msg += `\n\nThank you!`;
     
     window.open(`https://wa.me/96181955816?text=${encodeURIComponent(msg)}`, '_blank');
     
-    // Update loyalty points automatically
-    try {
-      console.log('🔄 Attempting to update loyalty points...', { phone: finalPhone, items: totalItems, supabaseReady: typeof sb !== 'undefined', initialized: supabaseInitialized });
-      const result = await updateLoyaltyPointsOnOrder(totalItems, finalPhone);
-      console.log('✅ Loyalty points update result:', result);
-    } catch (error) {
-      console.error('❌ Error updating loyalty points:', error);
-      alert('Warning: Loyalty points could not be updated. Order still sent to WhatsApp.');
+    // Update loyalty points automatically (only if valid phone)
+    if (finalPhone) {
+      try {
+        console.log('🔄 Attempting to update loyalty points...', { phone: finalPhone, items: totalItems });
+        const result = await updateLoyaltyPointsOnOrder(totalItems, finalPhone);
+        console.log('✅ Loyalty points update result:', result);
+      } catch (error) {
+        console.error('❌ Error updating loyalty points:', error);
+      }
+    } else {
+      console.log('⚠️ No valid phone number - skipping loyalty points update');
     }
     
     cart = [];
