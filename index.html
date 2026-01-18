@@ -1948,19 +1948,28 @@ async function updateLoyaltyPointsOnOrder(itemCount, phoneNumber) {
           .eq('customer_phone', phoneNumber);
       }
       
-      // Update items purchased
+      // Update items purchased - database trigger will calculate points and tier
       const newItems = (data.items_purchased || 0) + itemCount;
-      const { error: updateError } = await sb
+      const { data: updatedData, error: updateError } = await sb
         .from('loyalty_points')
         .update({ items_purchased: newItems })
-        .eq('customer_phone', phoneNumber);
+        .eq('customer_phone', phoneNumber)
+        .select();
       
       if (updateError) {
         console.error('❌ Error updating items:', updateError);
         return { error: updateError.message };
       }
       
-      console.log('✅ Items updated successfully:', { phone: phoneNumber, oldItems: data.items_purchased, newItems });
+      if (updatedData && updatedData[0]) {
+        console.log('✅ Items updated successfully:', { 
+          phone: phoneNumber, 
+          oldItems: data.items_purchased, 
+          newItems, 
+          tier: updatedData[0].current_tier,
+          points: updatedData[0].points 
+        });
+      }
       return { success: true, items: newItems };
     } else {
       // Create new entry
