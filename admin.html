@@ -2760,12 +2760,16 @@
         return;
       }
 
-      // Clean phone number
+      // Clean phone number: remove all non-digits, handle Lebanon country code
+      // If it starts with 0, replace with 961 (Lebanon code)
       let cleanPhone = phoneInput.replace(/[^\d]/g, '');
       if (cleanPhone.startsWith('0')) {
         cleanPhone = '961' + cleanPhone.substring(1);
       } else if (!cleanPhone.startsWith('961') && cleanPhone.length >= 7) {
-        cleanPhone = '961' + cleanPhone;
+        // If it doesn't have country code and is local format, add 961
+        if (cleanPhone.length >= 7 && cleanPhone.length <= 10) {
+          cleanPhone = '961' + cleanPhone;
+        }
       }
 
       try {
