@@ -864,6 +864,28 @@
 
       <div class="message" id="loyaltyMessage"></div>
 
+      <!-- Discount Calculator Tool -->
+      <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem; color: white;">
+        <h3 style="margin: 0 0 1rem 0; font-size: 1.3rem;">💰 Discount Calculator Tool</h3>
+        <p style="margin: 0 0 1rem 0; opacity: 0.9; font-size: 0.95rem;">Enter customer phone number and order amount to calculate discount instantly</p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr auto; gap: 1rem; align-items: end;">
+          <div>
+            <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Phone Number</label>
+            <input type="text" id="discountPhoneInput" class="search-input" placeholder="e.g., 9613123456" style="width: 100%; padding: 0.75rem;">
+          </div>
+          <div>
+            <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Order Amount ($)</label>
+            <input type="number" id="discountAmountInput" class="search-input" placeholder="e.g., 50.00" step="0.01" min="0" style="width: 100%; padding: 0.75rem;">
+          </div>
+          <button class="btn" style="background: white; color: #667eea; font-weight: 600; padding: 0.75rem 1.5rem; white-space: nowrap;" onclick="calculateDiscount()">
+            Calculate
+          </button>
+        </div>
+        <div id="discountResult" style="margin-top: 1rem; padding: 1rem; background: rgba(255,255,255,0.2); border-radius: 8px; display: none;">
+          <div id="discountResultContent"></div>
+        </div>
+      </div>
+
       <div class="filter-container">
         <input type="text" class="search-input" id="loyaltySearchInput" placeholder="Search by phone number..." onkeyup="filterLoyaltyPoints()">
       </div>
@@ -2561,6 +2583,9 @@
                 <button class="btn-icon" style="background: #25D366; color: white;" onclick="sendWhatsAppUpdate('${point.customer_phone}', '${point.current_tier}', ${point.items_purchased}, ${point.points}, ${point.redeemed_this_month}, ${daysRemaining})" title="Send WhatsApp Update">
                   <i class="fab fa-whatsapp"></i>
                 </button>
+                ${!point.redeemed_this_month && point.current_tier !== 'None' ? `<button class="btn-icon" style="background: #4CAF50; color: white;" onclick="markAsRedeemed('${point.id}', '${point.customer_phone}')" title="Mark as Redeemed">
+                  <i class="fas fa-check-circle"></i>
+                </button>` : ''}
                 <button class="btn-icon btn-primary" onclick="editLoyaltyPoint('${point.id}')" title="Edit">
                   <i class="fas fa-edit"></i>
                 </button>
@@ -2700,6 +2725,155 @@
             loadLoyaltyPoints();
           }
         });
+    }
+
+    // Mark customer reward as redeemed
+    function markAsRedeemed(id, phone) {
+      if (!confirm(`Mark ${phone} as redeemed this month? This will prevent them from redeeming again until next month.`)) return;
+
+      supabaseClient
+        .from('loyalty_points')
+        .update({ redeemed_this_month: true })
+        .eq('id', id)
+        .then(({ error }) => {
+          if (error) {
+            alert(`❌ Error: ${error.message}`);
+          } else {
+            alert('✅ Marked as redeemed!');
+            loadLoyaltyPoints();
+          }
+        });
+    }
+
+    // Discount Calculator Tool
+    async function calculateDiscount() {
+      const phoneInput = document.getElementById('discountPhoneInput').value.trim();
+      const amountInput = parseFloat(document.getElementById('discountAmountInput').value);
+
+      if (!phoneInput) {
+        alert('Please enter a phone number');
+        return;
+      }
+
+      if (!amountInput || amountInput <= 0) {
+        alert('Please enter a valid order amount');
+        return;
+      }
+
+      // Clean phone number
+      let cleanPhone = phoneInput.replace(/[^\d]/g, '');
+      if (cleanPhone.startsWith('0')) {
+        cleanPhone = '961' + cleanPhone.substring(1);
+      } else if (!cleanPhone.startsWith('961') && cleanPhone.length >= 7) {
+        cleanPhone = '961' + cleanPhone;
+      }
+
+      try {
+        // Look up customer in loyalty_points
+        const { data, error } = await supabaseClient
+          .from('loyalty_points')
+          .select('*')
+          .eq('customer_phone', cleanPhone)
+          .single();
+
+        if (error || !data) {
+          document.getElementById('discountResult').style.display = 'block';
+          document.getElementById('discountResultContent').innerHTML = `
+            <div style="color: #ffeb3b; font-weight: 600;">⚠️ Customer not found</div>
+            <div style="margin-top: 0.5rem; font-size: 0.9rem; opacity: 0.9;">No loyalty points record found for phone: ${phoneInput}</div>
+          `;
+          return;
+        }
+
+        const tier = data.current_tier || 'None';
+        const redeemed = data.redeemed_this_month || false;
+        
+        // Define discount percentages
+        const discountPercentages = {
+          'None': 0,
+          'Silver': 5,
+          'Gold': 10,
+          'Platinum': 15,
+          'Diamond': 50
+        };
+
+        const discountPercent = discountPercentages[tier] || 0;
+        const discountAmount = (amountInput * discountPercent) / 100;
+        const finalAmount = amountInput - discountAmount;
+        const hasFreeDelivery = tier === 'Platinum';
+
+        // Tier colors and emojis
+        const tierEmojis = {
+          'None': '⭐',
+          'Silver': '🥈',
+          'Gold': '🥇',
+          'Platinum': '💎',
+          'Diamond': '💠'
+        };
+        const tierColors = {
+          'None': '#ccc',
+          'Silver': '#c0c0c0',
+          'Gold': '#ffd700',
+          'Platinum': '#e5e4e2',
+          'Diamond': '#b9f2ff'
+        };
+
+        let resultHtml = `
+          <div style="display: grid; gap: 0.75rem;">
+            <div style="font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem;">📊 Discount Calculation</div>
+            
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: rgba(255,255,255,0.1); border-radius: 6px;">
+              <span style="font-weight: 600;">Customer Tier:</span>
+              <span style="background: ${tierColors[tier]}; color: ${tier === 'None' ? '#333' : '#000'}; padding: 0.3rem 0.8rem; border-radius: 20px; font-weight: 600;">
+                ${tierEmojis[tier]} ${tier}
+              </span>
+            </div>
+
+            ${redeemed ? `
+              <div style="padding: 0.75rem; background: rgba(255,193,7,0.3); border-radius: 6px; color: #ffc107; font-weight: 600;">
+                ⚠️ Already redeemed this month
+              </div>
+            ` : ''}
+
+            <div style="display: grid; gap: 0.5rem; margin-top: 0.5rem;">
+              <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.2);">
+                <span>Original Amount:</span>
+                <span style="font-weight: 600;">$${amountInput.toFixed(2)}</span>
+              </div>
+              
+              ${discountPercent > 0 ? `
+                <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.2);">
+                  <span>Discount (${discountPercent}%):</span>
+                  <span style="font-weight: 600; color: #4CAF50;">-$${discountAmount.toFixed(2)}</span>
+                </div>
+                
+                ${hasFreeDelivery ? `
+                  <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.2);">
+                    <span>Free Delivery:</span>
+                    <span style="font-weight: 600; color: #4CAF50;">✅ Included</span>
+                  </div>
+                ` : ''}
+                
+                <div style="display: flex; justify-content: space-between; padding: 0.75rem 0; margin-top: 0.5rem; border-top: 2px solid rgba(255,255,255,0.3); font-size: 1.2rem; font-weight: 700;">
+                  <span>Final Amount:</span>
+                  <span style="color: #4CAF50;">$${finalAmount.toFixed(2)}</span>
+                </div>
+              ` : `
+                <div style="padding: 0.5rem; background: rgba(255,255,255,0.1); border-radius: 6px; text-align: center; font-size: 0.9rem; margin-top: 0.5rem;">
+                  No discount available (${tier} tier)
+                </div>
+              `}
+            </div>
+          </div>
+        `;
+
+        document.getElementById('discountResult').style.display = 'block';
+        document.getElementById('discountResultContent').innerHTML = resultHtml;
+
+      } catch (error) {
+        console.error('Error calculating discount:', error);
+        alert(`❌ Error: ${error.message}`);
+      }
     }
 
     // Initialize and load on start
