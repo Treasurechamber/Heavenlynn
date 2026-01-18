@@ -1894,8 +1894,25 @@ document.addEventListener('keydown', (e) => {
 // Update loyalty points in background when order is placed (for admin tracking)
 // Note: This still tracks points but doesn't display to customer
 async function updateLoyaltyPointsOnOrder(itemCount, phoneNumber) {
-  if (!phoneNumber || !supabaseInitialized || typeof sb === 'undefined') {
-    return;
+  console.log('📞 updateLoyaltyPointsOnOrder called:', { phoneNumber, itemCount, supabaseInitialized, sbExists: typeof sb !== 'undefined' });
+  
+  if (!phoneNumber) {
+    console.error('❌ No phone number provided');
+    return { error: 'No phone number' };
+  }
+  
+  // Try to initialize Supabase if not ready
+  if (!supabaseInitialized || typeof sb === 'undefined') {
+    console.log('⚠️ Supabase not initialized, attempting initialization...');
+    if (!initSupabaseClient()) {
+      console.error('❌ Failed to initialize Supabase client');
+      return { error: 'Supabase not initialized' };
+    }
+  }
+
+  if (typeof sb === 'undefined') {
+    console.error('❌ Supabase client (sb) is still undefined after initialization');
+    return { error: 'Supabase client undefined' };
   }
 
   try {
@@ -1910,8 +1927,8 @@ async function updateLoyaltyPointsOnOrder(itemCount, phoneNumber) {
       .single();
 
     if (error && error.code !== 'PGRST116') {
-      console.error('Error fetching loyalty points:', error);
-      return;
+      console.error('❌ Error fetching loyalty points:', error);
+      return { error: error.message };
     }
 
     if (data) {
@@ -1933,14 +1950,22 @@ async function updateLoyaltyPointsOnOrder(itemCount, phoneNumber) {
       
       // Update items purchased
       const newItems = (data.items_purchased || 0) + itemCount;
-      await sb
+      const { error: updateError } = await sb
         .from('loyalty_points')
         .update({ items_purchased: newItems })
         .eq('customer_phone', phoneNumber);
+      
+      if (updateError) {
+        console.error('❌ Error updating items:', updateError);
+        return { error: updateError.message };
+      }
+      
+      console.log('✅ Items updated successfully:', { phone: phoneNumber, oldItems: data.items_purchased, newItems });
+      return { success: true, items: newItems };
     } else {
       // Create new entry
       const firstOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
-      await sb
+      const { data: insertData, error: insertError } = await sb
         .from('loyalty_points')
         .insert([{
           customer_phone: phoneNumber,
@@ -1948,10 +1973,20 @@ async function updateLoyaltyPointsOnOrder(itemCount, phoneNumber) {
           points: 0,
           current_tier: 'None',
           last_reset_date: firstOfMonth.toISOString().split('T')[0]
-        }]);
+        }])
+        .select();
+      
+      if (insertError) {
+        console.error('❌ Error creating loyalty entry:', insertError);
+        return { error: insertError.message };
+      }
+      
+      console.log('✅ New loyalty entry created:', insertData);
+      return { success: true, items: itemCount, new: true };
     }
   } catch (error) {
-    console.error('Error in updateLoyaltyPointsOnOrder:', error);
+    console.error('❌ Error in updateLoyaltyPointsOnOrder:', error);
+    return { error: error.message };
   }
 }
 
@@ -2038,11 +2073,12 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Update loyalty points automatically
     try {
-      await updateLoyaltyPointsOnOrder(totalItems, finalPhone);
-      console.log('✅ Loyalty points updated for phone:', finalPhone);
+      console.log('🔄 Attempting to update loyalty points...', { phone: finalPhone, items: totalItems, supabaseReady: typeof sb !== 'undefined', initialized: supabaseInitialized });
+      const result = await updateLoyaltyPointsOnOrder(totalItems, finalPhone);
+      console.log('✅ Loyalty points update result:', result);
     } catch (error) {
-      console.error('Error updating loyalty points:', error);
-      // Don't block the order if loyalty update fails
+      console.error('❌ Error updating loyalty points:', error);
+      alert('Warning: Loyalty points could not be updated. Order still sent to WhatsApp.');
     }
     
     cart = [];
