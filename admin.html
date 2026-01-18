@@ -2583,7 +2583,7 @@
                 <button class="btn-icon" style="background: #25D366; color: white;" onclick="sendWhatsAppUpdate('${point.customer_phone}', '${point.current_tier}', ${point.items_purchased}, ${point.points}, ${point.redeemed_this_month}, ${daysRemaining})" title="Send WhatsApp Update">
                   <i class="fab fa-whatsapp"></i>
                 </button>
-                ${!point.redeemed_this_month && point.current_tier && point.current_tier !== 'None' ? `<button class="btn-icon" style="background: #4CAF50; color: white;" onclick="markAsRedeemed('${point.id}', '${point.customer_phone}')" title="Mark as Redeemed">
+                ${!point.redeemed_this_month && point.current_tier && ['Silver', 'Gold', 'Platinum', 'Diamond'].includes(point.current_tier) ? `<button class="btn-icon" style="background: #4CAF50; color: white;" onclick="markAsRedeemed('${point.id}', '${point.customer_phone}')" title="Mark as Redeemed">
                   <i class="fas fa-check-circle"></i>
                 </button>` : ''}
                 <button class="btn-icon btn-primary" onclick="editLoyaltyPoint('${point.id}')" title="Edit">
