@@ -2565,6 +2565,12 @@
         const firstOfNextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
         const daysRemaining = Math.ceil((firstOfNextMonth - now) / (1000 * 60 * 60 * 24));
         
+        // Check if redeem button should show - handle null/undefined tier
+        const currentTier = point.current_tier || 'None';
+        const canRedeem = !point.redeemed_this_month && 
+                          currentTier !== 'None' && 
+                          ['Silver', 'Gold', 'Platinum', 'Diamond'].includes(currentTier);
+        
         return `
           <tr>
             <td><strong>${point.customer_phone}</strong></td>
@@ -2572,7 +2578,7 @@
             <td>${point.points || 0}</td>
             <td>
               <span style="background: ${tierColor}; padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.85rem; font-weight: 600;">
-                ${point.current_tier || 'None'}
+                ${currentTier}
               </span>
             </td>
             <td>${point.redeemed_this_month ? '✅ Yes' : '❌ No'}</td>
@@ -2580,10 +2586,10 @@
             <td>${daysRemaining} days</td>
             <td>
               <div class="action-btns">
-                <button class="btn-icon" style="background: #25D366; color: white;" onclick="sendWhatsAppUpdate('${point.customer_phone}', '${point.current_tier}', ${point.items_purchased}, ${point.points}, ${point.redeemed_this_month}, ${daysRemaining})" title="Send WhatsApp Update">
+                <button class="btn-icon" style="background: #25D366; color: white;" onclick="sendWhatsAppUpdate('${point.customer_phone}', '${currentTier}', ${point.items_purchased || 0}, ${point.points || 0}, ${point.redeemed_this_month || false}, ${daysRemaining})" title="Send WhatsApp Update">
                   <i class="fab fa-whatsapp"></i>
                 </button>
-                ${!point.redeemed_this_month && point.current_tier && ['Silver', 'Gold', 'Platinum', 'Diamond'].includes(point.current_tier) ? `<button class="btn-icon" style="background: #4CAF50; color: white;" onclick="markAsRedeemed('${point.id}', '${point.customer_phone}')" title="Mark as Redeemed">
+                ${canRedeem ? `<button class="btn-icon" style="background: #4CAF50; color: white;" onclick="markAsRedeemed('${point.id}', '${point.customer_phone}')" title="Mark as Redeemed">
                   <i class="fas fa-check-circle"></i>
                 </button>` : ''}
                 <button class="btn-icon btn-primary" onclick="editLoyaltyPoint('${point.id}')" title="Edit">
