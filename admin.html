@@ -2343,23 +2343,23 @@
           const reward = metadata.reward || 'Keep ordering!';
           
           const tierEmojis = {
-            'Silver': '🥈',
-            'Gold': '🥇',
-            'Platinum': '💎',
-            'Diamond': '💠'
+            'Silver': '\u{1F948}',
+            'Gold': '\u{1F947}',
+            'Platinum': '\u{1F48E}',
+            'Diamond': '\u{1F4A0}'
           };
-          const emoji = tierEmojis[tier] || '🎉';
+          const emoji = tierEmojis[tier] || '\u{1F389}';
           
-          message = '🎉 *Heavenlynn Loyalty Program - Tier Upgrade!*\n\n';
+          message = '\u{1F389} *Heavenlynn Loyalty Program - Tier Upgrade!*\n\n';
           message += emoji + ' *Congratulations! You reached ' + tier + ' tier!*\n\n';
-          message += '📊 *Your Progress:*\n';
+          message += '\u{1F4CA} *Your Progress:*\n';
           message += '• Items: ' + items + '\n';
           message += '• Points: ' + points + '\n\n';
-          message += '🎁 *Your Reward:*\n';
+          message += '\u{1F381} *Your Reward:*\n';
           message += reward + '\n\n';
-          message += '✨ *You can redeem this on your next order!*\n';
+          message += '\u{2728} *You can redeem this on your next order!*\n';
           message += 'Just mention your tier when ordering.\n\n';
-          message += 'Thank you for being a loyal customer! 💕\n';
+          message += 'Thank you for being a loyal customer! \u{1F495}\n';
           message += '_Heavenlynn Bakery_';
         } else {
           // For other notification types, use the stored message (but clean it up)
@@ -2368,7 +2368,9 @@
         
         // Clean phone number (remove any non-digits except +)
         const cleanPhone = phone.replace(/[^\d+]/g, '');
-        const whatsappUrl = 'https://wa.me/' + cleanPhone + '?text=' + encodeURIComponent(message);
+        // Ensure message is properly encoded for WhatsApp
+        const encodedMessage = encodeURIComponent(message);
+        const whatsappUrl = 'https://wa.me/' + cleanPhone + '?text=' + encodedMessage;
         
         // Open WhatsApp
         window.open(whatsappUrl, '_blank');
@@ -2706,11 +2708,11 @@
       redeemed = redeemed || false;
       
       const tierEmojis = {
-        'None': '⭐',
-        'Silver': '🥈',
-        'Gold': '🥇',
-        'Platinum': '💎',
-        'Diamond': '💠'
+        'None': '\u2B50',
+        'Silver': '\u{1F948}',
+        'Gold': '\u{1F947}',
+        'Platinum': '\u{1F48E}',
+        'Diamond': '\u{1F4A0}'
       };
       
       const tierRewards = {
@@ -2724,41 +2726,43 @@
       const emoji = tierEmojis[tier] || '⭐';
       const reward = tierRewards[tier] || 'Keep ordering!';
       
-      // Build message with proper emojis
-      let message = '🍪 *Heavenlynn Loyalty Program Update*\n\n';
+      // Build message with proper emojis (using Unicode escapes)
+      let message = '\u{1F36A} *Heavenlynn Loyalty Program Update*\n\n';
       message += emoji + ' *Your Current Tier: ' + tier + '*\n\n';
-      message += '📊 *Your Progress:*\n';
+      message += '\u{1F4CA} *Your Progress:*\n';
       message += '• Items Purchased: ' + items + '\n';
       message += '• Points Earned: ' + points + '\n';
       message += '• Days Remaining: ' + daysLeft + ' days\n\n';
       
       if (tier !== 'None') {
-        message += '🎁 *Your Reward:*\n';
+        message += '\u{1F381} *Your Reward:*\n';
         message += reward + '\n\n';
         
         if (!redeemed) {
-          message += '✨ *You can redeem this reward on your next order!*\n';
+          message += '\u{2728} *You can redeem this reward on your next order!*\n';
           message += 'Just mention it when placing your order.\n\n';
         } else {
-          message += '✅ *You\'ve already redeemed this month\'s reward.*\n\n';
+          message += '\u{2705} *You\'ve already redeemed this month\'s reward.*\n\n';
         }
       } else {
         const nextTier = items < 9 ? 'Silver (9 items)' : items < 15 ? 'Gold (15 items)' : items < 21 ? 'Platinum (21 items)' : 'Diamond (30 items)';
         const itemsNeeded = items < 9 ? 9 - items : items < 15 ? 15 - items : items < 21 ? 21 - items : 30 - items;
-        message += '🎯 *Next Tier: ' + nextTier + '*\n';
+        message += '\u{1F3AF} *Next Tier: ' + nextTier + '*\n';
         message += 'You need ' + itemsNeeded + ' more item(s) to unlock the next tier!\n\n';
       }
       
       if (daysLeft <= 3) {
-        message += '⏰ *URGENT:* Points reset in ' + daysLeft + ' day(s)! Redeem now or lose your points.\n\n';
+        message += '\u{23F0} *URGENT:* Points reset in ' + daysLeft + ' day(s)! Redeem now or lose your points.\n\n';
       }
       
-      message += 'Thank you for being a loyal customer! 💕\n';
+      message += 'Thank you for being a loyal customer! \u{1F495}\n';
       message += '_Heavenlynn Bakery_';
       
-      // Open WhatsApp with pre-filled message
+      // Open WhatsApp with pre-filled message (ensure proper encoding)
       const cleanPhone = phone.replace(/[^\d+]/g, '');
-      const whatsappUrl = 'https://wa.me/' + cleanPhone + '?text=' + encodeURIComponent(message);
+      // Ensure message is properly encoded for WhatsApp
+      const encodedMessage = encodeURIComponent(message);
+      const whatsappUrl = 'https://wa.me/' + cleanPhone + '?text=' + encodedMessage;
       window.open(whatsappUrl, '_blank');
       
       showMessage('loyaltyMessage', '✅ WhatsApp message prepared for ' + phone, 'success');
