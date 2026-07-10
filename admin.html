@@ -102,6 +102,128 @@
       font-size: 0.9rem;
     }
 
+    /* Dashboard Specific layout */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+    
+    .dashboard-panel {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(138, 79, 255, 0.08);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      border: 1px solid rgba(138, 79, 255, 0.1);
+    }
+
+    .dashboard-panel-header {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #301e54;
+      margin-bottom: 1rem;
+      padding-bottom: 0.8rem;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .dashboard-panel-header i {
+      color: #ff7eb5;
+    }
+
+    .dashboard-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      overflow-y: auto;
+      max-height: 350px;
+      padding-right: 5px;
+    }
+
+    .dashboard-list::-webkit-scrollbar {
+      width: 6px;
+    }
+    .dashboard-list::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 4px;
+    }
+    .dashboard-list::-webkit-scrollbar-thumb {
+      background: #d9afe1;
+      border-radius: 4px;
+    }
+
+    .dashboard-list-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 1rem;
+      border-radius: 12px;
+      background: #faf8ff;
+      border: 1px solid #f0e6ff;
+      transition: transform 0.2s;
+    }
+    
+    .dashboard-list-item:hover {
+      transform: translateY(-2px);
+      background: #f5f0ff;
+    }
+
+    .dashboard-item-img {
+      width: 50px;
+      height: 50px;
+      border-radius: 10px;
+      object-fit: cover;
+      background: #fff;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+
+    .dashboard-item-icon {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      background: #fff;
+      color: #ff7eb5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+
+    .dashboard-item-content {
+      flex: 1;
+    }
+
+    .dashboard-item-title {
+      font-weight: 600;
+      color: #301e54;
+      margin-bottom: 0.2rem;
+    }
+
+    .dashboard-item-subtitle {
+      font-size: 0.85rem;
+      color: #666;
+    }
+
+    .dashboard-item-meta {
+      font-size: 0.75rem;
+      color: #8a4fff;
+      margin-top: 0.4rem;
+      font-weight: 500;
+    }
+
+    .feedback-rating {
+      color: #ffd700;
+      font-size: 0.8rem;
+      margin-bottom: 0.3rem;
+    }
+
     .section {
       background: white;
       border-radius: 15px;
@@ -164,6 +286,10 @@
     .table-container {
       overflow-x: auto;
     }
+    .drag-handle { cursor: grab; color: #ccc; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; padding: 10px; }
+    .drag-handle:active { cursor: grabbing; }
+    tr.dragging { opacity: 0.5; background: #f8f9fa; }
+    tr.drag-over { border-top: 2px solid var(--primary); }
 
     table {
       width: 100%;
@@ -713,6 +839,49 @@
       </div>
     </div>
 
+    <!-- Dashboard specific panels -->
+    <div class="dashboard-grid">
+      <!-- Newly Added Items -->
+      <div class="dashboard-panel">
+        <div class="dashboard-panel-header">
+          <i class="fas fa-cookie-bite"></i> Newly Added Items
+        </div>
+        <div class="dashboard-list" id="dashboardRecentItems">
+          <div style="text-align: center; color: #999; padding: 1rem;">Loading...</div>
+        </div>
+      </div>
+
+      <!-- Events Overview -->
+      <div class="dashboard-panel">
+        <div class="dashboard-panel-header">
+          <i class="far fa-calendar-alt"></i> Events Overview
+        </div>
+        <div class="dashboard-list" id="dashboardEvents">
+          <div style="text-align: center; color: #999; padding: 1rem;">Loading...</div>
+        </div>
+      </div>
+
+      <!-- Weekly Specials -->
+      <div class="dashboard-panel">
+        <div class="dashboard-panel-header">
+          <i class="fas fa-star"></i> Weekly Specials
+        </div>
+        <div class="dashboard-list" id="dashboardSpecials">
+          <div style="text-align: center; color: #999; padding: 1rem;">Loading...</div>
+        </div>
+      </div>
+
+      <!-- Feedback Comments -->
+      <div class="dashboard-panel">
+        <div class="dashboard-panel-header">
+          <i class="far fa-comments"></i> Customer Feedback
+        </div>
+        <div class="dashboard-list" id="dashboardFeedback">
+          <!-- Populated by JS (mocked) -->
+        </div>
+      </div>
+    </div>
+
     </div>
 
     <!-- Add Item Section -->
@@ -855,43 +1024,18 @@
       <form id="addWeeklySpecialForm" onsubmit="addWeeklySpecial(event)" style="margin-bottom: 2rem;">
         <div class="form-grid">
           <div class="form-group">
-            <label for="weeklySpecialName">Item Name *</label>
-            <input type="text" id="weeklySpecialName" required>
-          </div>
-          <div class="form-group">
-            <label for="weeklySpecialPrice">Price ($) *</label>
-            <input type="number" id="weeklySpecialPrice" step="0.01" min="0" required>
+            <label for="weeklySpecialMenuSelect">Select Menu Item *</label>
+            <select id="weeklySpecialMenuSelect" required>
+              <option value="" disabled selected>-- Select an Item --</option>
+            </select>
           </div>
           <div class="form-group">
             <label for="weeklySpecialTag">Tag (e.g., "New", "Trending")</label>
             <input type="text" id="weeklySpecialTag" placeholder="New" value="New">
           </div>
-          <div class="form-group">
-            <label for="weeklySpecialOrder">Order Position</label>
-            <input type="number" id="weeklySpecialOrder" value="0" min="0">
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="weeklySpecialDescription">Description</label>
-          <textarea id="weeklySpecialDescription"></textarea>
-        </div>
-        <div class="form-group">
-          <label for="weeklySpecialImageFile">Image *</label>
-          <div class="file-upload-wrapper">
-            <label for="weeklySpecialImageFile" class="file-upload-label">
-              <i class="fas fa-upload"></i> Choose Image File
-            </label>
-            <input type="file" id="weeklySpecialImageFile" accept="image/*" required onchange="handleImageUpload(this, 'weeklySpecialImagePreview', 'weeklySpecialImageUploadStatus')">
-            <div class="file-preview" id="weeklySpecialImagePreview">
-              <img id="weeklySpecialImagePreviewImg" src="" alt="Preview">
-              <div class="file-preview-info" id="weeklySpecialImagePreviewInfo"></div>
-            </div>
-            <div class="upload-status" id="weeklySpecialImageUploadStatus"></div>
-          </div>
-          <input type="hidden" id="weeklySpecialImageUrl">
         </div>
         <button type="submit" class="btn btn-primary">
-          <i class="fas fa-plus"></i> Add Weekly Special
+          <i class="fas fa-plus"></i> Add to Weekly Specials
         </button>
       </form>
 
@@ -899,11 +1043,11 @@
         <table>
           <thead>
             <tr>
+              <th style="width: 40px;"></th>
               <th>Preview</th>
               <th>Name</th>
               <th>Price</th>
               <th>Tag</th>
-              <th>Order</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -1363,6 +1507,34 @@
         displayItems(data);
         updateStats();
 
+        const specialSelect = document.getElementById('weeklySpecialMenuSelect');
+        if (specialSelect) {
+          const categoryOrder = ['Cookies', 'Rolls', 'Slices', 'Cups', 'Cheesecakes'];
+          let optionsHtml = '<option value="" disabled selected>-- Select an Item --</option>';
+          
+          categoryOrder.forEach(cat => {
+            const itemsInCat = data.filter(item => item.category === cat);
+            if (itemsInCat.length > 0) {
+              optionsHtml += `<optgroup label="${cat}">`;
+              itemsInCat.forEach(item => {
+                optionsHtml += `<option value="${item.id}">${item.item_name}</option>`;
+              });
+              optionsHtml += `</optgroup>`;
+            }
+          });
+          
+          const otherItems = data.filter(item => !categoryOrder.includes(item.category));
+          if (otherItems.length > 0) {
+            optionsHtml += `<optgroup label="Other">`;
+            otherItems.forEach(item => {
+              optionsHtml += `<option value="${item.id}">${item.item_name}</option>`;
+            });
+            optionsHtml += `</optgroup>`;
+          }
+          
+          specialSelect.innerHTML = optionsHtml;
+        }
+
       } catch (error) {
         console.error('Error loading items:', error);
         document.getElementById('itemsTable').innerHTML = `
@@ -1449,6 +1621,148 @@
       document.getElementById('totalItems').textContent = total;
       document.getElementById('totalCategories').textContent = categories;
       document.getElementById('avgPrice').textContent = `$${avgPrice.toFixed(2)}`;
+      
+      initDashboardWidgets();
+    }
+
+    // Initialize Dashboard Widgets
+    async function initDashboardWidgets() {
+      loadDashboardRecentItems();
+      loadDashboardEvents();
+      loadDashboardSpecials();
+      loadDashboardFeedback();
+    }
+
+    function loadDashboardRecentItems() {
+      const container = document.getElementById('dashboardRecentItems');
+      if (!allItems || allItems.length === 0) {
+        container.innerHTML = '<div style="text-align: center; color: #999; padding: 1rem;">No items found.</div>';
+        return;
+      }
+      // Sort by id descending as a proxy for newest if created_at is missing, or try created_at if it exists
+      const sorted = [...allItems].sort((a, b) => {
+        if (a.created_at && b.created_at) return new Date(b.created_at) - new Date(a.created_at);
+        return b.id - a.id; 
+      }).slice(0, 5);
+
+      container.innerHTML = sorted.map(item => `
+        <div class="dashboard-list-item">
+          ${item.image_url ? `<img src="${item.image_url}" class="dashboard-item-img">` : `<div class="dashboard-item-icon"><i class="fas fa-cookie"></i></div>`}
+          <div class="dashboard-item-content">
+            <div class="dashboard-item-title">${item.item_name}</div>
+            <div class="dashboard-item-subtitle">${item.category} &bull; $${parseFloat(item.price).toFixed(2)}</div>
+            ${item.is_best_seller ? '<div class="dashboard-item-meta"><i class="fas fa-star" style="color:#ffd700;"></i> Best Seller</div>' : ''}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    async function loadDashboardEvents() {
+      const container = document.getElementById('dashboardEvents');
+      try {
+        const { data, error } = await supabaseClient
+          .from('upcoming_events')
+          .select('*')
+          .eq('active', true)
+          .order('event_date', { ascending: true })
+          .limit(4);
+
+        if (error) throw error;
+        
+        if (!data || data.length === 0) {
+          container.innerHTML = '<div style="text-align: center; color: #999; padding: 1rem;">No upcoming events.</div>';
+          return;
+        }
+
+        container.innerHTML = data.map(event => {
+          const evtDate = event.event_date ? new Date(event.event_date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) : 'TBA';
+          return `
+            <div class="dashboard-list-item">
+              ${event.image_url ? `<img src="${event.image_url}" class="dashboard-item-img">` : `<div class="dashboard-item-icon"><i class="far fa-calendar"></i></div>`}
+              <div class="dashboard-item-content">
+                <div class="dashboard-item-title">${event.title}</div>
+                <div class="dashboard-item-subtitle">${evtDate}</div>
+                ${event.description ? `<div class="dashboard-item-meta">${event.description.substring(0, 50)}${event.description.length > 50 ? '...' : ''}</div>` : ''}
+              </div>
+            </div>
+          `;
+        }).join('');
+      } catch (err) {
+        console.error('Error loading events:', err);
+        container.innerHTML = '<div style="text-align: center; color: #ff4757; padding: 1rem;">Failed to load events.</div>';
+      }
+    }
+
+    async function loadDashboardSpecials() {
+      const container = document.getElementById('dashboardSpecials');
+      try {
+        const { data, error } = await supabaseClient
+          .from('weekly_specials')
+          .select('*')
+          .order('created_at', { ascending: false })
+          .limit(4);
+
+        if (error) throw error;
+        
+        if (!data || data.length === 0) {
+          container.innerHTML = '<div style="text-align: center; color: #999; padding: 1rem;">No active specials.</div>';
+          return;
+        }
+
+        container.innerHTML = data.map(special => `
+          <div class="dashboard-list-item">
+            ${special.image_url ? `<img src="${special.image_url}" class="dashboard-item-img">` : `<div class="dashboard-item-icon"><i class="fas fa-star"></i></div>`}
+            <div class="dashboard-item-content">
+              <div class="dashboard-item-title">${special.title}</div>
+              <div class="dashboard-item-subtitle">${special.description ? special.description.substring(0, 50) + '...' : ''}</div>
+              ${special.price ? `<div class="dashboard-item-meta">$${parseFloat(special.price).toFixed(2)}</div>` : ''}
+            </div>
+          </div>
+        `).join('');
+      } catch (err) {
+        console.error('Error loading specials:', err);
+        container.innerHTML = '<div style="text-align: center; color: #ff4757; padding: 1rem;">Failed to load specials.</div>';
+      }
+    }
+
+    async function loadDashboardFeedback() {
+      const container = document.getElementById('dashboardFeedback');
+      
+      try {
+        const { data, error } = await supabaseClient
+          .from('customer_feedback')
+          .select('*')
+          .order('created_at', { ascending: false })
+          .limit(10);
+          
+        if (error) throw error;
+        
+        if (!data || data.length === 0) {
+          container.innerHTML = '<div style="text-align: center; color: #999; padding: 1rem;">No feedback yet.</div>';
+          return;
+        }
+
+        container.innerHTML = data.map(fb => {
+          const dateStr = new Date(fb.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+          const commentHtml = fb.comment ? `<div class="dashboard-item-subtitle">"${fb.comment}"</div>` : '';
+          return `
+            <div class="dashboard-list-item">
+              <div class="dashboard-item-icon" style="background:#fff; color:#8a4fff;"><i class="fas fa-user"></i></div>
+              <div class="dashboard-item-content">
+                <div class="dashboard-item-title">${fb.customer_name || 'Anonymous'}</div>
+                <div class="feedback-rating">
+                  ${'<i class="fas fa-star"></i>'.repeat(fb.rating)}${fb.rating < 5 ? '<i class="far fa-star"></i>'.repeat(5 - fb.rating) : ''}
+                </div>
+                ${commentHtml}
+                <div class="dashboard-item-meta">${dateStr}</div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      } catch (err) {
+        console.error('Error loading feedback:', err);
+        container.innerHTML = '<div style="text-align: center; color: #ff4757; padding: 1rem;">Failed to load feedback.</div>';
+      }
     }
 
     // Filter items
@@ -1991,16 +2305,13 @@
         }
 
         table.innerHTML = data.map(item => `
-          <tr>
+          <tr draggable="true" data-id="${item.id}" class="draggable-row">
+            <td><div class="drag-handle"><i class="fas fa-grip-lines"></i></div></td>
             <td><img src="${item.image_url || ''}" alt="${item.name}" class="item-image-thumb" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2260%22 height=%2260%22%3E%3Crect fill=%22%23ddd%22 width=%2260%22 height=%2260%22/%3E%3Ctext fill=%22%23999%22 x=%2230%22 y=%2230%22 text-anchor=%22middle%22 dy=%22.3em%22%3ENo Image%3C/text%3E%3C/svg%3E'"></td>
             <td>${item.name}</td>
             <td>$${parseFloat(item.price).toFixed(2)}</td>
             <td>${item.tag || 'New'}</td>
-            <td>${item.order_position}</td>
             <td class="action-btns">
-              <button class="btn-icon btn-primary" onclick="editWeeklySpecial('${item.id}')" title="Edit">
-                <i class="fas fa-edit"></i>
-              </button>
               <button class="btn-icon btn-danger" onclick="deleteWeeklySpecial('${item.id}')" title="Delete">
                 <i class="fas fa-trash"></i>
               </button>
@@ -2010,6 +2321,8 @@
             </td>
           </tr>
         `).join('');
+
+        setupDragAndDrop();
       } catch (error) {
         console.error('Error loading weekly specials:', error);
         document.getElementById('weeklySpecialsTable').innerHTML = `
@@ -2018,43 +2331,110 @@
       }
     }
 
+    function setupDragAndDrop() {
+      const table = document.getElementById('weeklySpecialsTable');
+      const rows = table.querySelectorAll('.draggable-row');
+      
+      let draggedRow = null;
+
+      rows.forEach(row => {
+        row.addEventListener('dragstart', function(e) {
+          draggedRow = this;
+          setTimeout(() => this.classList.add('dragging'), 0);
+        });
+
+        row.addEventListener('dragend', function(e) {
+          this.classList.remove('dragging');
+          rows.forEach(r => r.classList.remove('drag-over'));
+          if (draggedRow) {
+            updateWeeklySpecialsOrder();
+            draggedRow = null;
+          }
+        });
+
+        row.addEventListener('dragover', function(e) {
+          e.preventDefault();
+          if (this !== draggedRow) {
+            this.classList.add('drag-over');
+          }
+        });
+
+        row.addEventListener('dragleave', function(e) {
+          this.classList.remove('drag-over');
+        });
+
+        row.addEventListener('drop', function(e) {
+          e.preventDefault();
+          this.classList.remove('drag-over');
+          if (this !== draggedRow) {
+            const allRows = Array.from(table.querySelectorAll('.draggable-row'));
+            const draggedIndex = allRows.indexOf(draggedRow);
+            const dropIndex = allRows.indexOf(this);
+            
+            if (draggedIndex < dropIndex) {
+              this.parentNode.insertBefore(draggedRow, this.nextSibling);
+            } else {
+              this.parentNode.insertBefore(draggedRow, this);
+            }
+          }
+        });
+      });
+    }
+
+    async function updateWeeklySpecialsOrder() {
+      const rows = document.querySelectorAll('#weeklySpecialsTable .draggable-row');
+      const updates = Array.from(rows).map((row, index) => {
+        return supabaseClient
+          .from('weekly_specials')
+          .update({ order_position: index })
+          .eq('id', row.dataset.id);
+      });
+      
+      try {
+        const results = await Promise.all(updates);
+        const error = results.find(r => r.error);
+        if (error) throw error.error;
+        updateStats(); // Refresh dashboard widget
+      } catch (err) {
+        console.error('Error updating order:', err);
+        showMessage('weeklySpecialsMessage', '❌ Failed to save new order', 'error');
+      }
+    }
+
     async function addWeeklySpecial(e) {
       e.preventDefault();
-      const name = document.getElementById('weeklySpecialName').value;
-      const description = document.getElementById('weeklySpecialDescription').value;
-      const price = parseFloat(document.getElementById('weeklySpecialPrice').value);
-      const imageUrl = document.getElementById('weeklySpecialImageUrl').value;
-      const tag = document.getElementById('weeklySpecialTag').value.trim(); // Trim whitespace
-      const orderPosition = parseInt(document.getElementById('weeklySpecialOrder').value) || 0;
-
-      if (!imageUrl) {
-        showMessage('weeklySpecialsMessage', '❌ Please upload an image first', 'error');
+      const selectedId = document.getElementById('weeklySpecialMenuSelect').value;
+      const tag = document.getElementById('weeklySpecialTag').value.trim();
+      
+      if (!selectedId) {
+        showMessage('weeklySpecialsMessage', '❌ Please select a menu item', 'error');
         return;
       }
-
-      // Ensure tag is not empty
-      if (!tag || tag === '') {
-        showMessage('weeklySpecialsMessage', '❌ Please enter a tag (e.g., "New", "Trending", "Limited")', 'error');
+      if (!tag) {
+        showMessage('weeklySpecialsMessage', '❌ Please enter a tag', 'error');
         return;
       }
-
+      
+      const menuItem = allItems.find(i => i.id === selectedId);
+      if (!menuItem) return;
+      
       try {
         const { error } = await supabaseClient
           .from('weekly_specials')
           .insert([{
-            name: name,
-            description: description || null,
-            price: price,
-            image_url: imageUrl,
-            tag: tag, // Use actual tag value, not fallback
-            order_position: orderPosition
+            name: menuItem.item_name,
+            description: menuItem.description || null,
+            price: menuItem.price,
+            image_url: menuItem.image_url,
+            tag: tag,
+            order_position: 999 
           }]);
 
         if (error) throw error;
 
-        showMessage('weeklySpecialsMessage', '✅ Weekly special added successfully!', 'success');
+        showMessage('weeklySpecialsMessage', '✅ Added to Weekly Specials!', 'success');
         document.getElementById('addWeeklySpecialForm').reset();
-        document.getElementById('weeklySpecialTag').value = 'New'; // Reset tag to default
+        document.getElementById('weeklySpecialTag').value = 'New';
         loadWeeklySpecials();
       } catch (error) {
         showMessage('weeklySpecialsMessage', `❌ Error: ${error.message}`, 'error');

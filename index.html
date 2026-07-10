@@ -170,21 +170,19 @@
     .featured-header h2 { font-size: 2rem; color: var(--primary-dark); padding: 0 1.5rem; }
     .featured-header::before, .featured-header::after { content: ""; height: 2px; background: var(--primary-light); flex-grow: 1; border-radius: 2px; }
     .featured-badge { position: absolute; top: -20px; left: 50%; transform: translateX(-50%); background: var(--accent); color: #fff; padding: 4px 15px; border-radius: 20px; font-size: .8rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; }
-    .featured-slider { overflow-x: auto; scroll-behavior: smooth; display: flex; gap: 20px; padding: .5rem .5rem 1.5rem; scrollbar-width: none; }
+    .featured-slider { overflow-x: auto; scroll-behavior: smooth; display: flex; align-items: stretch; gap: 20px; padding: .5rem .5rem 1.5rem; scrollbar-width: none; }
     .featured-slider::-webkit-scrollbar { display: none; }
-    .featured-item { min-width: 250px; width: 250px; flex: 0 0 auto; border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--shadow-md); transition: var(--transition); background: #fff; border: 2px solid var(--primary-light); position: relative; }
-    .featured-item:hover { transform: translateY(-8px); box-shadow: var(--shadow-lg); border-color: var(--primary); }
-    .featured-img { height: 160px; overflow: hidden; }
-    .featured-img img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s; filter: saturate(1.2); }
-    .featured-item:hover .featured-img img { transform: scale(1.1); }
-    .featured-content { padding: 1rem; text-align: center; }
-    .featured-name { font-weight: 600; font-size: 1.2rem; color: var(--primary-dark); margin-bottom: .5rem; }
-    .featured-desc { font-size: .9rem; color: var(--text-light); margin-bottom: 1rem; line-height: 1.4; }
-    .featured-footer { display: flex; justify-content: space-between; align-items: center; padding-top: .5rem; border-top: 1px dashed var(--primary-light); }
-    .featured-price { font-weight: bold; color: var(--primary); font-size: 1.1rem; }
-    .featured-button { background: var(--primary-light); color: var(--primary-dark); border: none; padding: .4rem .8rem; font-size: .8rem; border-radius: 20px; font-weight: 500; cursor: pointer; transition: var(--transition); }
-    .featured-button:hover { background: var(--primary); color: #fff; }
-    .limited-tag { position: absolute; top: 10px; right: 10px; background: var(--accent); color: #fff; padding: 3px 10px; border-radius: 10px; font-size: .7rem; font-weight: 500; transform: rotate(5deg); box-shadow: 0 2px 4px rgba(0,0,0,.2); z-index: 10; }
+    .featured-slider .item-card { flex: 0 0 min(60vw, 320px); min-width: min(60vw, 320px); scroll-snap-align: start; }
+    .featured-category-wrapper { background: transparent !important; border: none !important; box-shadow: none !important; padding: 0 !important; margin: 0 !important; max-width: none !important; border-radius: 0 !important; }
+    .featured-category-wrapper::before, .featured-category-wrapper::after { display: none !important; }
+    .featured-slider .badge {
+      background: linear-gradient(135deg, #c77d46 0%, #9e5b29 50%, #7c4118 100%) !important;
+      border: 1px solid rgba(255, 255, 255, 0.5) !important;
+      box-shadow: inset 0 2px 4px rgba(255,255,255,0.4), inset 0 -2px 6px rgba(0,0,0,0.4), 0 4px 10px rgba(124, 65, 24, 0.5) !important;
+      color: #fff !important;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+      position: relative;
+    }
     .slider-controls { display: flex; justify-content: center; gap: 15px; margin-top: 1rem; }
     .slider-btn { width: 40px; height: 40px; border-radius: 50%; background: #fff; border: 2px solid var(--primary); color: var(--primary-dark); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: var(--transition); }
     .slider-btn:hover { background: var(--primary); color: #fff; transform: scale(1.1); }
@@ -590,6 +588,23 @@
     .thank-you-content { background: #fff; padding: 3rem; border-radius: var(--radius-lg); text-align: center; max-width: 400px; animation: bounce-in .6s ease-out; }
     .thank-you-cookie { font-size: 4rem; margin-bottom: 1rem; animation: cookie-spin 2s ease-in-out infinite; }
 
+    /* Feedback Modal */
+    .feedback-modal { position: fixed; inset: 0; background: rgba(0,0,0,.8); z-index: 2100; display: none; justify-content: center; align-items: center; }
+    .feedback-content { background: #fff; padding: 2.5rem; border-radius: var(--radius-lg); text-align: center; max-width: 400px; width: 90%; animation: bounce-in .6s ease-out; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+    .feedback-close { position: absolute; top: 15px; right: 20px; font-size: 1.5rem; cursor: pointer; color: var(--text-light); transition: var(--transition); }
+    .feedback-close:hover { color: var(--accent); }
+    .feedback-title { font-size: 1.5rem; color: var(--primary-dark); margin-bottom: 0.5rem; font-family: 'Playfair Display', serif; }
+    .feedback-subtitle { font-size: 0.9rem; color: var(--text); margin-bottom: 1.5rem; }
+    .star-rating { display: flex; justify-content: center; gap: 10px; margin-bottom: 1.5rem; font-size: 2rem; color: #ddd; cursor: pointer; }
+    .star-rating i { transition: color 0.2s ease, transform 0.2s ease; }
+    .star-rating i:hover { transform: scale(1.1); }
+    .star-rating i.active { color: #ffd700; }
+    .feedback-textarea { width: 100%; padding: 12px; border-radius: 12px; border: 1px solid var(--primary-light); background: #faf8ff; resize: none; height: 100px; font-family: 'Poppins', sans-serif; font-size: 0.9rem; margin-bottom: 1.5rem; outline: none; transition: var(--transition); }
+    .feedback-textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(138, 79, 255, 0.1); }
+    .feedback-submit { background: var(--primary); color: #fff; border: none; padding: 12px 24px; border-radius: 25px; font-size: 1rem; font-weight: 500; cursor: pointer; transition: var(--transition); width: 100%; box-shadow: 0 4px 10px rgba(138, 79, 255, 0.3); }
+    .feedback-submit:hover { background: var(--primary-dark); transform: translateY(-2px); box-shadow: 0 6px 15px rgba(138, 79, 255, 0.4); }
+    .feedback-submit:disabled { background: var(--text-light); cursor: not-allowed; transform: none; box-shadow: none; }
+
     /* Category Scroll Button */
     .category-scroll-btn { position: fixed; right: 20px; bottom: 80px; width: 50px; height: 50px; background: var(--primary); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; box-shadow: var(--shadow-md); cursor: pointer; z-index: 20; transition: var(--transition); border: none; }
     .category-scroll-btn:hover { background: var(--primary-dark); transform: translateY(-5px) rotate(-15deg); }
@@ -803,7 +818,10 @@
     body.fortune-open { overflow: hidden; }
     h1, h2, h3 { letter-spacing: -.025em; }
 
-    .cookie-loading-screen { background: var(--gradient); }
+    .cookie-loading-screen { background:
+        radial-gradient(circle at 73% 44%,rgba(255,255,255,.17) 0 1px,transparent 2px),
+        repeating-conic-gradient(from 8deg at 74% 46%,rgba(255,255,255,.055) 0 7deg,transparent 7deg 15deg),
+        var(--gradient); }
     .cookie-loading-screen .loading-text { font-size: clamp(2.8rem,8vw,5.5rem); }
 
     /* Hero */
@@ -1006,7 +1024,9 @@
       min-width: 0;
       display: flex;
       flex-direction: column;
-      height: 100%;
+      align-items: stretch;
+      height: auto;
+      align-self: stretch;
       padding: 0;
       overflow: hidden;
       background: rgba(255,255,255,.94);
@@ -1045,6 +1065,13 @@
     .menu-category-section .add-to-cart-btn:hover i { transform: rotate(90deg); }
 
     @media (max-width: 980px) {
+      nav.nav-container .sticky-cart-btn {
+        position: sticky;
+        right: 0;
+        z-index: 10;
+        background: rgb(255, 250, 245);
+        box-shadow: -12px 0 16px rgba(255, 250, 245, 0.98);
+      }
       main#menuSections .menu-category-section { padding: 46px 34px; border-radius: 36px; }
       .menu-category-section .items-grid { grid-template-columns: repeat(2,minmax(0,1fr)) !important; }
       .box-banner-inner { grid-template-columns: 1fr; gap: 38px; padding: 40px 30px 30px; }
@@ -1069,9 +1096,9 @@
       .menu-section-count small { font-size: .45rem; }
       .menu-swipe-hint { display: flex; align-items: center; gap: 7px; width: fit-content; margin: -9px 0 16px; color: var(--category-deep); font-size: .6rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; }
       .menu-swipe-hint i { color: var(--category-accent); animation: swipeHint 1.8s ease-in-out infinite; }
-      .menu-category-section .items-grid { display: flex !important; flex-direction: row; grid-template-columns: none !important; gap: 14px; margin-right: -16px; padding: 0 16px 14px 0; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
+      .menu-category-section .items-grid { display: flex !important; flex-direction: row; grid-template-columns: none !important; gap: 14px; margin-right: -16px; padding: 0 16px 14px 0; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; align-items: stretch; }
       .menu-category-section .items-grid::-webkit-scrollbar { display: none; }
-      .menu-category-section .item-card { flex: 0 0 min(82vw,320px); min-width: min(82vw,320px); scroll-snap-align: start; }
+      .menu-category-section .item-card { flex: 0 0 min(60vw,320px); min-width: min(60vw,320px); scroll-snap-align: start; }
       .menu-category-section .item-image { height: 235px; }
       .menu-category-section .item-content { padding: 21px 20px 20px; }
       .menu-category-section .item-name { font-size: 1.55rem !important; }
@@ -1214,7 +1241,7 @@
       .gallery-card { border-radius: 14px; }
       .social-gallery { padding: 72px 16px 94px; }
       .review-band { padding: 70px 18px; }
-      .whatsapp-cookie-btn { right: 14px; bottom: 14px; width: 48px; height: 48px; font-size: 1.25rem; }
+      .whatsapp-cookie-btn { right: 18px; bottom: 18px; width: 64px; height: 64px; font-size: 1.9rem; }
       .fortune-finale { margin-top: -36px; padding: 0 14px; }
       .fortune-card { grid-template-columns: 1fr; gap: 12px; padding: 25px 24px 28px; text-align: center; border-radius: 28px; }
       .fortune-visual { height: 110px; width: 190px; margin: 0 auto; }
@@ -1426,7 +1453,9 @@
       <h2>Weekly Specials</h2>
       <div class="featured-badge">Just Dropped</div>
     </div>
-    <div class="featured-slider" id="featuredSlider"></div>
+    <div class="menu-category-section featured-category-wrapper">
+      <div class="featured-slider" id="featuredSlider"></div>
+    </div>
     <div class="slider-controls">
       <button class="slider-btn" id="sliderPrev"><i class="fas fa-chevron-left"></i></button>
       <button class="slider-btn" id="sliderNext"><i class="fas fa-chevron-right"></i></button>
@@ -1625,6 +1654,27 @@
       <div class="thank-you-cookie">🍪</div>
       <h2>Thank You!</h2>
       <p>Your order has been sent to WhatsApp. We'll get back to you soon!</p>
+    </div>
+  </div>
+
+  <!-- Feedback Modal -->
+  <div class="feedback-modal" id="feedbackModal">
+    <div class="feedback-content">
+      <div class="feedback-close" id="closeFeedback">&times;</div>
+      <h2 class="feedback-title">How was your experience?</h2>
+      <p class="feedback-subtitle">We'd love to hear your thoughts!</p>
+      
+      <div class="star-rating" id="starRating">
+        <i class="far fa-star" data-rating="1"></i>
+        <i class="far fa-star" data-rating="2"></i>
+        <i class="far fa-star" data-rating="3"></i>
+        <i class="far fa-star" data-rating="4"></i>
+        <i class="far fa-star" data-rating="5"></i>
+      </div>
+      
+      <textarea id="feedbackComment" class="feedback-textarea" placeholder="Tell us what you think... (optional)"></textarea>
+      
+      <button class="feedback-submit" id="submitFeedbackBtn" disabled>Submit Feedback</button>
     </div>
   </div>
 
@@ -2148,10 +2198,12 @@ async function loadMenu() {
           <div class="item-type">${category}</div>
           <div class="item-name">${item.item_name}</div>
           <div class="item-desc">${descHtml}</div>
-          ${extraHtml}
-          <div class="item-footer">
-            <div class="item-price-wrap"><span class="item-price-label">Price</span><div class="item-price">$${parseFloat(item.price).toFixed(2)}</div></div>
-            <button class="add-to-cart-btn" aria-label="Add ${item.item_name} to cart">Add <i class="fas fa-plus" aria-hidden="true"></i></button>
+          <div class="item-bottom-container" style="margin-top: auto; width: 100%;">
+            ${extraHtml}
+            <div class="item-footer" style="margin-top: 0;">
+              <div class="item-price-wrap"><span class="item-price-label">Price</span><div class="item-price">$${parseFloat(item.price).toFixed(2)}</div></div>
+              <button class="add-to-cart-btn" aria-label="Add ${item.item_name} to cart">Add <i class="fas fa-plus" aria-hidden="true"></i></button>
+            </div>
           </div>
         </div>
       `;
@@ -2344,31 +2396,37 @@ async function loadFeaturedItems() {
 
     slider.innerHTML = '';
 
-    data.forEach(item => {
-      const div = document.createElement('div');
-      div.className = 'featured-item';
+    data.forEach((item, index) => {
+      const card = document.createElement('article');
+      card.className = 'item-card';
       
-      // Ensure tag always has a value and is properly trimmed
-      const tagText = (item.tag && item.tag.trim() !== '') ? item.tag.trim() : 'New';
+      const tagText = (item.tag && item.tag.trim() !== '') ? item.tag.trim() : 'Weekly Special';
       
-      div.innerHTML = `
-        <div class="limited-tag">${tagText}</div>
-        <div class="featured-img"><img src="${item.image_url || ''}" alt="${item.name}" onerror="this.style.display='none'"></div>
-        <div class="featured-content">
-          <div class="featured-name">${item.name}</div>
-          <div class="featured-desc">${item.description || ''}</div>
-          <div class="featured-footer">
-            <div class="featured-price">$${parseFloat(item.price).toFixed(2)}</div>
-            <button class="featured-button">Order Now</button>
+      card.innerHTML = `
+        <div class="item-visual">
+          <div class="item-image"><img src="${item.image_url || 'images/cookies.jpeg'}" alt="${item.name}" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='images/cookies.jpeg'"></div>
+          <div class="badge">${tagText}</div>
+          <span class="item-card-number" aria-hidden="true">${String(index + 1).padStart(2, '0')}</span>
+        </div>
+        <div class="item-content">
+          <div class="item-type">Featured</div>
+          <div class="item-name">${item.name}</div>
+          <div class="item-desc">${item.description || 'A delicious treat made with the finest ingredients.'}</div>
+          <div class="item-bottom-container" style="margin-top: auto; width: 100%;">
+            <div class="item-footer" style="margin-top: 0;">
+              <div class="item-price-wrap"><span class="item-price-label">Price</span><div class="item-price">$${parseFloat(item.price).toFixed(2)}</div></div>
+              <button class="add-to-cart-btn" aria-label="Add ${item.name} to cart">Add <i class="fas fa-plus" aria-hidden="true"></i></button>
+            </div>
           </div>
         </div>
       `;
-      div.querySelector('.featured-button').onclick = () => addToCart({
+      
+      card.querySelector('.add-to-cart-btn').onclick = () => addToCart({
         name: item.name,
         price: parseFloat(item.price),
         category: 'Featured'
       });
-      slider.appendChild(div);
+      slider.appendChild(card);
     });
 
     // Initialize slider controls
@@ -2875,7 +2933,15 @@ document.addEventListener('DOMContentLoaded', () => {
     updateCartUI();
     document.getElementById('cartModal').style.display = 'none';
     document.getElementById('thankYouModal').style.display = 'flex';
-    setTimeout(() => document.getElementById('thankYouModal').style.display = 'none', 4000);
+    setTimeout(() => {
+      document.getElementById('thankYouModal').style.display = 'none';
+      document.getElementById('feedbackModal').style.display = 'flex';
+      // Reset feedback form
+      selectedRating = 0;
+      stars.forEach(s => { s.classList.remove('fas', 'active'); s.classList.add('far'); });
+      document.getElementById('feedbackComment').value = '';
+      document.getElementById('submitFeedbackBtn').disabled = true;
+    }, 4000);
   };
   
   // Box builder
@@ -2909,6 +2975,61 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 });
+  // Feedback Modal Logic
+  let selectedRating = 0;
+  const stars = document.querySelectorAll('#starRating i');
+  const submitFeedbackBtn = document.getElementById('submitFeedbackBtn');
+  const feedbackModal = document.getElementById('feedbackModal');
+  
+  stars.forEach(star => {
+    star.addEventListener('click', () => {
+      selectedRating = parseInt(star.dataset.rating);
+      stars.forEach(s => {
+        if (parseInt(s.dataset.rating) <= selectedRating) {
+          s.classList.remove('far');
+          s.classList.add('fas', 'active');
+        } else {
+          s.classList.remove('fas', 'active');
+          s.classList.add('far');
+        }
+      });
+      submitFeedbackBtn.disabled = false;
+    });
+  });
+
+  document.getElementById('closeFeedback').onclick = () => {
+    feedbackModal.style.display = 'none';
+  };
+
+  submitFeedbackBtn.onclick = async () => {
+    const comment = document.getElementById('feedbackComment').value.trim();
+    const customerName = document.getElementById('phoneInput')?.value.trim() || 'Anonymous';
+    
+    try {
+      submitFeedbackBtn.textContent = 'Submitting...';
+      submitFeedbackBtn.disabled = true;
+      
+      const { error } = await supabaseClient
+        .from('customer_feedback')
+        .insert([{
+          customer_name: customerName,
+          rating: selectedRating,
+          comment: comment
+        }]);
+        
+      if (error) throw error;
+      
+      feedbackModal.style.display = 'none';
+      alert('Thank you for your feedback! ❤️');
+      
+    } catch (err) {
+      console.error('Error submitting feedback:', err);
+      alert('Oops, something went wrong submitting your feedback.');
+    } finally {
+      submitFeedbackBtn.textContent = 'Submit Feedback';
+      submitFeedbackBtn.disabled = false;
+    }
+  };
 </script>
 </body>
 </html>
