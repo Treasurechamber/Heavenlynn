@@ -1297,16 +1297,26 @@
       }
 
       try {
-        const { error } = await supabaseClient
+        const newItem = {
+          item_name: itemName,
+          category: category,
+          price: price,
+          description: description || null,
+          image_url: imageUrl,
+          is_best_seller: document.getElementById('isBestSeller').checked
+        };
+
+        let { error } = await supabaseClient
           .from('menu_items')
-          .insert([{
-            item_name: itemName,
-            category: category,
-            price: price,
-            description: description || null,
-            image_url: imageUrl,
-            is_best_seller: document.getElementById('isBestSeller').checked
-          }]);
+          .insert([newItem]);
+
+        // Retry without the best-seller flag if the column doesn't exist yet
+        if (error && error.message.includes('is_best_seller')) {
+          delete newItem.is_best_seller;
+          ({ error } = await supabaseClient
+            .from('menu_items')
+            .insert([newItem]));
+        }
 
         if (error) throw error;
 
@@ -1522,19 +1532,44 @@
         updateData.image_url = imageUrl;
       }
 
+      if (window.imageUploadInProgress) {
+        showMessage('editMessage', '⏳ The image is still uploading — please wait a moment, then save again.', 'error');
+        return;
+      }
+
       try {
-        const { error } = await supabaseClient
+        let { data, error } = await supabaseClient
           .from('menu_items')
           .update(updateData)
-          .eq('id', id);
+          .eq('id', id)
+          .select();
+
+        // Retry without the best-seller flag if the column doesn't exist yet
+        let bestSellerSkipped = false;
+        if (error && error.message.includes('is_best_seller')) {
+          delete updateData.is_best_seller;
+          bestSellerSkipped = true;
+          ({ data, error } = await supabaseClient
+            .from('menu_items')
+            .update(updateData)
+            .eq('id', id)
+            .select());
+        }
 
         if (error) throw error;
 
-        showMessage('editMessage', '✅ Item updated!', 'success');
+        // Supabase returns success even when RLS silently blocks the write — verify a row actually changed
+        if (!data || data.length === 0) {
+          throw new Error('The database accepted the request but updated 0 rows. This usually means Row Level Security is blocking UPDATE on menu_items — add an UPDATE policy in Supabase.');
+        }
+
+        showMessage('editMessage', bestSellerSkipped
+          ? '⚠️ Item updated, but the Best Seller flag was not saved — the is_best_seller column is missing in Supabase.'
+          : '✅ Item updated!', bestSellerSkipped ? 'error' : 'success');
         setTimeout(() => {
           closeEditModal();
           loadItems();
-        }, 1500);
+        }, bestSellerSkipped ? 3000 : 1500);
 
       } catch (error) {
         showMessage('editMessage', `❌ Error: ${error.message}`, 'error');
@@ -2382,6 +2417,7 @@
         statusEl.textContent = '⏳ Uploading image...';
         statusEl.className = 'upload-status uploading';
       }
+      window.imageUploadInProgress = true;
 
       try {
         // Upload to Supabase Storage
@@ -2409,6 +2445,8 @@
         }
         alert('Failed to upload image: ' + error.message);
         input.value = '';
+      } finally {
+        window.imageUploadInProgress = false;
       }
     }
 
