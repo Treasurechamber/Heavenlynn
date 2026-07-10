@@ -896,6 +896,11 @@
     .contact-item a { color: var(--primary-dark); }
     .contact-item i { color: var(--primary); }
     .nav-wrapper { top: 0; padding: .8rem .5rem; background: rgba(255,250,245,.94); border: 0; border-bottom: 1px solid #eadce6; box-shadow: 0 8px 24px rgba(61,35,77,.06); }
+    .sticky-cart-btn { position: relative; display: none; place-items: center; flex: 0 0 auto; height: 42px; padding: 0; border-radius: 50%; background: #fff; color: var(--primary-dark); cursor: pointer; box-shadow: 0 6px 16px rgba(61,35,77,.08); scroll-snap-align: end; align-self: center; }
+    nav.nav-container .sticky-cart-btn { display: grid; width: 0; margin-left: 0; border: 0 solid #eadce6; opacity: 0; overflow: hidden; pointer-events: none; transition: width .3s ease, margin .3s ease, opacity .25s ease, background .25s ease, color .25s ease, transform .25s ease; }
+    .nav-wrapper.cart-visible nav.nav-container .sticky-cart-btn { width: 42px; margin-left: .35rem; border-width: 1px; opacity: 1; overflow: visible; pointer-events: auto; }
+    .sticky-cart-btn:hover { background: var(--primary); border-color: var(--primary); color: #fff; transform: translateY(-3px); }
+    .sticky-cart-btn .nav-cart-icon { width: 21px; height: 21px; }
     nav.nav-container { justify-content: center; max-width: 1240px; }
     nav a { padding: .62rem 1rem; color: var(--primary-dark); background: transparent; border: 0; box-shadow: none; border-radius: 999px; }
     nav a:hover,
@@ -1401,6 +1406,18 @@
   <!-- Navigation -->
   <div class="nav-wrapper" id="menu">
     <nav class="nav-container" id="categoryNav"><div class="loader"><div></div><div></div><div></div></div></nav>
+    <button class="sticky-cart-btn" id="stickyCartBtn" type="button" aria-label="View your order">
+      <svg class="nav-cart-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M2.5 3.2h2.1l2.4 11.2h11.4l2.1-8.1H6.2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="9.3" cy="20" r="1.7" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <circle cx="16.9" cy="20" r="1.7" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <circle cx="12.6" cy="9.6" r="3.1" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <circle cx="11.5" cy="8.8" r=".8" fill="currentColor"/>
+        <circle cx="13.8" cy="9.4" r=".8" fill="currentColor"/>
+        <circle cx="12.3" cy="11" r=".8" fill="currentColor"/>
+      </svg>
+      <span class="nav-cart-count" id="stickyCartCount" style="display:none">0</span>
+    </button>
   </div>
 
   <!-- Featured Section -->
@@ -1822,6 +1839,11 @@ function addToCart(item) {
     navBtn.style.transform = 'scale(1.18)';
     setTimeout(() => navBtn.style.transform = '', 200);
   }
+  const stickyBtn = document.getElementById('stickyCartBtn');
+  if (stickyBtn) {
+    stickyBtn.style.transform = 'scale(1.18)';
+    setTimeout(() => stickyBtn.style.transform = '', 200);
+  }
 }
 
 function removeFromCart(name) {
@@ -1847,11 +1869,13 @@ function updateCartUI() {
   const totalItems = cart.reduce((s, i) => s + i.quantity, 0);
   const totalPrice = cart.reduce((s, i) => s + i.price * i.quantity, 0);
 
-  const navCount = document.getElementById('navCartCount');
-  if (navCount) {
-    navCount.style.display = totalItems > 0 ? 'flex' : 'none';
-    navCount.textContent = totalItems;
-  }
+  ['navCartCount', 'stickyCartCount'].forEach(id => {
+    const badge = document.getElementById(id);
+    if (badge) {
+      badge.style.display = totalItems > 0 ? 'flex' : 'none';
+      badge.textContent = totalItems;
+    }
+  });
   
   const phoneInput = document.getElementById('customerPhone');
   const phoneInputContainer = document.getElementById('cartPhoneInput');
@@ -2139,7 +2163,11 @@ async function loadMenu() {
     section.appendChild(grid);
     sections.appendChild(section);
   });
-  
+
+  // Cart button rides at the end of the category strip, right after Add-ons
+  const stickyCart = document.getElementById('stickyCartBtn');
+  if (stickyCart) nav.appendChild(stickyCart);
+
   // Navigation highlighting
   const navLinks = document.querySelectorAll('nav a');
   if ('IntersectionObserver' in window) {
@@ -2158,7 +2186,13 @@ async function loadMenu() {
   
   // Scroll effects
   const navWrapper = document.querySelector('.nav-wrapper');
-  window.addEventListener('scroll', () => navWrapper.classList.toggle('scrolled', window.scrollY > 100));
+  const onNavScroll = () => {
+    navWrapper.classList.toggle('scrolled', window.scrollY > 100);
+    // Reveal the cart only while the category bar is pinned to the top (past the hero)
+    navWrapper.classList.toggle('cart-visible', navWrapper.getBoundingClientRect().top <= 1);
+  };
+  window.addEventListener('scroll', onNavScroll);
+  onNavScroll();
   
   // Smooth scrolling
   document.querySelectorAll('a[href^="#"]').forEach(a => {
@@ -2773,6 +2807,7 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // Cart modal
   document.getElementById('navCartBtn').onclick = () => document.getElementById('cartModal').style.display = 'block';
+  document.getElementById('stickyCartBtn').onclick = () => document.getElementById('cartModal').style.display = 'block';
   document.getElementById('cartClose').onclick = () => document.getElementById('cartModal').style.display = 'none';
   document.getElementById('cartModal').onclick = e => { if (e.target.id === 'cartModal') e.target.style.display = 'none'; };
   document.getElementById('orderBtn').onclick = async () => {
