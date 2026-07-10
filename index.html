@@ -4,7 +4,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Heavenlynn Menu</title>
+  <title>Heavenlynn | Cookies, Cakes & Sweet Treats</title>
+  <meta name="description" content="Discover Heavenlynn's small-batch cookies, cakes and handcrafted sweet treats in Tyre, Lebanon.">
   <script src="https://unpkg.com/@supabase/supabase-js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Playfair+Display:wght@500;700&family=Poppins:wght@300;400;500;600&family=Cormorant+Garamond:wght@400;500;600&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
@@ -785,6 +786,410 @@
       .box-size-selector { grid-template-columns: 1fr; }
       .selectable-items { grid-template-columns: repeat(3,1fr); }
     }
+
+    /* 2026 editorial redesign */
+    :root {
+      --primary: #7d4aa1;
+      --primary-light: #f0e6f4;
+      --primary-dark: #3d234d;
+      --accent: #f3a7bd;
+      --background: #fffaf5;
+      --card-bg: #fffefb;
+      --text: #362333;
+      --text-light: #796b75;
+      --cocoa: #75432c;
+      --cocoa-dark: #48291f;
+      --cream: #fffaf2;
+      --gold: #e8b45f;
+      --gradient: linear-gradient(135deg,#6f3e93,#a967b1 58%,#d293be);
+      --shadow-sm: 0 8px 24px rgba(61,35,77,.08);
+      --shadow-md: 0 16px 38px rgba(61,35,77,.12);
+      --shadow-lg: 0 24px 65px rgba(61,35,77,.18);
+    }
+
+    html { scroll-behavior: smooth; }
+    body { background: var(--background); color: var(--text); overflow-x: hidden; }
+    body.fortune-open { overflow: hidden; }
+    h1, h2, h3 { letter-spacing: -.025em; }
+
+    .cookie-loading-screen { background: var(--gradient); }
+    .cookie-loading-screen .loading-text { font-size: clamp(2.8rem,8vw,5.5rem); }
+
+    /* Hero */
+    .hero {
+      height: auto;
+      min-height: 720px;
+      max-height: none;
+      display: block;
+      text-align: left;
+      color: #fff;
+      isolation: isolate;
+      background:
+        radial-gradient(circle at 73% 44%,rgba(255,255,255,.17) 0 1px,transparent 2px),
+        repeating-conic-gradient(from 8deg at 74% 46%,rgba(255,255,255,.055) 0 7deg,transparent 7deg 15deg),
+        var(--gradient);
+    }
+    .hero::before,
+    .hero::after {
+      content: '';
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      filter: blur(1px);
+    }
+    .hero::before { width: 360px; height: 360px; left: -180px; top: 200px; background: rgba(255,255,255,.06); }
+    .hero::after { width: 280px; height: 280px; right: -100px; top: -120px; border: 1px solid rgba(255,255,255,.14); }
+    .hero-overlay,
+    .slideshow-container,
+    .slideshow-dots,
+    .scroll-down { display: none !important; }
+    .hero-shell { position: relative; z-index: 2; max-width: 1240px; min-height: 720px; margin: 0 auto; padding: 0 32px 90px; }
+    .hero-nav { height: 108px; display: flex; align-items: center; justify-content: space-between; gap: 28px; }
+    .hero-brand { color: #fff; text-decoration: none; font: 700 2.1rem/1 'Dancing Script',cursive; letter-spacing: .01em; }
+    .hero-brand span { display: block; margin-top: 5px; font: 600 .58rem/1 'Poppins',sans-serif; letter-spacing: .25em; text-transform: uppercase; opacity: .8; }
+    .hero-links { display: flex; align-items: center; gap: 28px; }
+    .hero-links a { color: rgba(255,255,255,.86); text-decoration: none; font-size: .8rem; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; transition: .25s ease; }
+    .hero-links a:hover { color: #fff; transform: translateY(-2px); }
+    .hero-links .hero-order-link { padding: 12px 18px; border: 1px solid rgba(255,255,255,.48); border-radius: 999px; }
+    .hero-grid { min-height: 560px; display: grid; grid-template-columns: .86fr 1.14fr; align-items: center; gap: 28px; }
+    .hero-content { position: relative; padding: 10px 0 38px; text-shadow: none; max-width: 530px; z-index: 4; }
+    .hero-eyebrow { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; font-size: .75rem; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: #f6d7e1; }
+    .hero-eyebrow::before { content: ''; width: 34px; height: 1px; background: currentColor; }
+    .hero h1 { margin: 0 0 20px; max-width: 620px; color: #fff; font: 600 clamp(4.3rem,7vw,7.2rem)/.84 'Cormorant Garamond',serif; letter-spacing: -.055em; }
+    .hero h1 em { display: block; color: #f6d1db; font-family: 'Dancing Script',cursive; font-weight: 600; }
+    .hero-tagline { margin: 0 0 30px; max-width: 430px; color: rgba(255,255,255,.78); font: 400 1rem/1.8 'Poppins',sans-serif; letter-spacing: 0; }
+    .hero-actions { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+    .hero-primary-btn,
+    .hero-secondary-btn { display: inline-flex; align-items: center; justify-content: center; gap: 12px; min-height: 50px; padding: 0 22px; border-radius: 999px; color: var(--primary-dark); background: #fff; text-decoration: none; font-size: .82rem; font-weight: 600; box-shadow: 0 12px 28px rgba(46,20,56,.17); transition: transform .25s ease,box-shadow .25s ease; }
+    .hero-primary-btn i { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; color: #fff; background: var(--cocoa); }
+    .hero-secondary-btn { background: transparent; color: #fff; border: 1px solid rgba(255,255,255,.4); box-shadow: none; }
+    .hero-primary-btn:hover,
+    .hero-secondary-btn:hover { transform: translateY(-3px); box-shadow: 0 16px 34px rgba(46,20,56,.2); }
+    .hero-meta { display: flex; gap: 22px; margin-top: 26px; color: rgba(255,255,255,.72); font-size: .72rem; letter-spacing: .05em; }
+    .hero-meta span { display: inline-flex; gap: 7px; align-items: center; }
+    .hero-meta i { color: #f6d1db; }
+
+    .hero-cookie-stage { position: relative; width: min(100%,650px); aspect-ratio: 1.08; justify-self: end; }
+    .hero-orbit { position: absolute; width: 82%; height: 82%; left: 9%; top: 9%; border: 1px solid rgba(255,255,255,.15); border-radius: 50%; animation: orbitTurn 30s linear infinite; }
+    .hero-orbit::after { content: ''; position: absolute; inset: 9%; border: 1px dashed rgba(255,255,255,.14); border-radius: 50%; }
+    .cookie-photo { position: absolute; overflow: hidden; border-radius: 50%; border: 6px solid rgba(255,250,245,.92); box-shadow: 0 22px 50px rgba(42,18,47,.28); background: #eee0d5; will-change: transform; }
+    .cookie-photo img { width: 100%; height: 100%; object-fit: cover; display: block; transform: scale(1.04); }
+    .cookie-photo-main { width: 55%; height: 55%; left: 23%; top: 20%; z-index: 4; animation: cookieFloatMain 6s ease-in-out infinite; }
+    .cookie-photo-main img { object-position: 52% 35%; }
+    .cookie-photo-one { width: 27%; height: 27%; left: 1%; top: 4%; z-index: 3; animation: cookieFloatOne 7.5s ease-in-out infinite; }
+    .cookie-photo-one img { object-position: 73% 78%; }
+    .cookie-photo-two { width: 24%; height: 24%; right: 2%; top: 1%; z-index: 2; animation: cookieFloatTwo 6.8s ease-in-out .7s infinite; }
+    .cookie-photo-two img { object-position: 48% 68%; }
+    .cookie-photo-three { width: 23%; height: 23%; left: 6%; bottom: 1%; z-index: 5; animation: cookieFloatTwo 7.8s ease-in-out 1.3s infinite reverse; }
+    .cookie-photo-three img { object-position: 48% 54%; }
+    .cookie-photo-four { width: 29%; height: 29%; right: 0; bottom: 2%; z-index: 3; animation: cookieFloatOne 8.2s ease-in-out .4s infinite reverse; }
+    .cookie-photo-four img { object-position: 48% 62%; }
+    .choco-chip { position: absolute; z-index: 6; width: 18px; height: 22px; border-radius: 5px 9px 6px 8px; background: linear-gradient(135deg,#8a573e,#3f241e); box-shadow: 0 8px 14px rgba(40,20,22,.24); animation: chipFloat 5s ease-in-out infinite; }
+    .chip-one { left: 30%; top: 7%; transform: rotate(24deg); }
+    .chip-two { right: 26%; top: 26%; transform: rotate(-14deg) scale(.8); animation-delay: 1.2s; }
+    .chip-three { right: 20%; bottom: 22%; transform: rotate(45deg) scale(.65); animation-delay: .5s; }
+    .hero-wave { position: absolute; z-index: 3; left: -2%; right: -2%; bottom: -2px; height: 72px; background: var(--background); clip-path: polygon(0 72%,4% 61%,8% 76%,12% 60%,16% 69%,20% 49%,25% 68%,30% 54%,35% 70%,40% 56%,45% 72%,50% 52%,55% 69%,60% 57%,65% 72%,70% 50%,75% 67%,80% 57%,85% 72%,90% 53%,95% 67%,100% 55%,100% 100%,0 100%); }
+
+    /* Warm editorial menu styling */
+    .contact-bar { padding: 12px 20px; color: var(--primary-dark); background: #f5e5eb; border: 0; box-shadow: none; }
+    .contact-item a { color: var(--primary-dark); }
+    .contact-item i { color: var(--primary); }
+    .nav-wrapper { top: 0; padding: .8rem .5rem; background: rgba(255,250,245,.94); border: 0; border-bottom: 1px solid #eadce6; box-shadow: 0 8px 24px rgba(61,35,77,.06); }
+    nav.nav-container { justify-content: center; max-width: 1240px; }
+    nav a { padding: .62rem 1rem; color: var(--primary-dark); background: transparent; border: 0; box-shadow: none; border-radius: 999px; }
+    nav a:hover,
+    nav a.active { color: #fff; background: var(--primary); transform: none; }
+    .featured-section { max-width: 1220px; padding: 90px 24px 70px; margin-bottom: 0; }
+    .featured-header { display: block; text-align: center; margin: 0 0 38px; }
+    .featured-header::before,
+    .featured-header::after { display: none; }
+    .featured-header h2 { padding: 0; color: var(--text); font: 600 clamp(2.6rem,5vw,4.5rem)/1 'Cormorant Garamond',serif; }
+    .featured-badge { position: static; display: block; width: fit-content; margin: 0 auto 10px; padding: 0; color: var(--cocoa); background: transparent; font-family: 'Dancing Script',cursive; font-size: 1.2rem; letter-spacing: .02em; text-transform: none; }
+    .featured-slider { gap: 18px; padding: 8px 8px 28px; }
+    .featured-item { min-width: 250px; width: 250px; border: 1px solid #eadfd5; border-radius: 18px; box-shadow: 0 10px 28px rgba(83,58,70,.08); background: #fff; }
+    .featured-item:hover { transform: translateY(-7px); border-color: var(--gold); box-shadow: 0 18px 38px rgba(83,58,70,.13); }
+    .featured-img { height: 215px; }
+    .featured-content { padding: 18px; }
+    .featured-name { color: var(--text); font-family: 'Cormorant Garamond',serif; font-size: 1.35rem; }
+    .slider-btn { color: var(--primary-dark); background: #fff5ee; border-color: #eee1d8; }
+    /* Product catalog */
+    .menu-intro-section {
+      position: relative;
+      overflow: hidden;
+      padding: 96px 24px 88px;
+      text-align: center;
+      background:
+        radial-gradient(circle at 14% 20%,rgba(125,74,161,.1) 0 2px,transparent 3px),
+        radial-gradient(circle at 85% 68%,rgba(232,180,95,.16) 0 3px,transparent 4px),
+        linear-gradient(180deg,#fffaf5,#f8eff4);
+      background-size: 72px 72px,96px 96px,auto;
+    }
+    .menu-intro-section::before,
+    .menu-intro-section::after { content: ''; position: absolute; width: 280px; height: 280px; border: 1px solid rgba(125,74,161,.1); border-radius: 50%; }
+    .menu-intro-section::before { left: -170px; top: -110px; }
+    .menu-intro-section::after { right: -140px; bottom: -190px; }
+    .menu-intro-inner { position: relative; z-index: 1; max-width: 770px; margin: 0 auto; }
+    .menu-intro-kicker { display: block; margin-bottom: 12px; color: var(--cocoa); font: 600 1.15rem/1 'Dancing Script',cursive; }
+    .menu-intro-section h2 { color: var(--text); font: 600 clamp(3.2rem,6vw,5.7rem)/.95 'Cormorant Garamond',serif; }
+    .menu-intro-section p { max-width: 620px; margin: 20px auto 0; color: var(--text-light); font-size: .95rem; line-height: 1.85; }
+    .menu-intro-notes { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin-top: 30px; }
+    .menu-intro-notes span { display: inline-flex; align-items: center; gap: 8px; padding: 10px 15px; color: var(--primary-dark); background: rgba(255,255,255,.75); border: 1px solid rgba(125,74,161,.13); border-radius: 999px; font-size: .72rem; font-weight: 600; letter-spacing: .04em; box-shadow: 0 8px 20px rgba(61,35,77,.05); }
+    .menu-intro-notes i { color: var(--primary); }
+
+    main#menuSections { position: relative; background: #f7f0ec; padding: 66px 20px 130px; }
+    main#menuSections::before { content: ''; position: absolute; inset: 0; pointer-events: none; opacity: .22; background-image: radial-gradient(rgba(125,74,161,.13) .7px,transparent .7px); background-size: 18px 18px; }
+    main#menuSections .menu-category-section {
+      --category-accent: #8a4fa0;
+      --category-deep: #4d285d;
+      --category-soft: #f3e8f5;
+      position: relative;
+      isolation: isolate;
+      max-width: 1260px;
+      margin: 0 auto 74px;
+      padding: 62px;
+      overflow: hidden;
+      border: 1px solid rgba(83,54,72,.08);
+      border-radius: 44px;
+      background: linear-gradient(145deg,rgba(255,255,255,.98),rgba(255,252,248,.94));
+      box-shadow: 0 24px 70px rgba(65,41,56,.07);
+      scroll-margin-top: 105px;
+    }
+    main#menuSections .menu-category-section:last-child { margin-bottom: 0; }
+    .menu-category-section::before { content: ''; position: absolute; z-index: -1; width: 430px; height: 430px; right: -250px; top: -245px; border-radius: 50%; background: var(--category-soft); opacity: .78; }
+    .menu-category-section::after { content: ''; position: absolute; z-index: -1; width: 160px; height: 160px; left: -100px; bottom: -90px; border: 1px solid color-mix(in srgb,var(--category-accent) 18%,transparent); border-radius: 50%; }
+    main#menuSections .menu-category-section[data-category="Rolls"],
+    main#menuSections .menu-category-section[data-category="Cakes"] { --category-accent: #bd744a; --category-deep: #6f3c28; --category-soft: #f8e8da; }
+    main#menuSections .menu-category-section[data-category="Slices"],
+    main#menuSections .menu-category-section[data-category="Cups"] { --category-accent: #c56d87; --category-deep: #743b50; --category-soft: #f8e4ea; }
+    main#menuSections .menu-category-section[data-category="Cookie Cakes"] { --category-accent: #9b6ab0; --category-deep: #54305f; --category-soft: #eee3f3; }
+    main#menuSections .menu-category-section[data-category="Cheesecakes"] { --category-accent: #d7a346; --category-deep: #725222; --category-soft: #fbf0d8; }
+    main#menuSections .menu-category-section[data-category="Ice Cream"] { --category-accent: #8b80bf; --category-deep: #4e4777; --category-soft: #ebe9f7; }
+    main#menuSections .menu-category-section[data-category="Drinks"] { --category-accent: #8b5c46; --category-deep: #4f3024; --category-soft: #eee1da; }
+    main#menuSections .menu-category-section[data-category="Add-ons"] { --category-accent: #a87085; --category-deep: #5e3546; --category-soft: #f4e6eb; }
+    .menu-section-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 30px; margin-bottom: 38px; }
+    .menu-section-copy { max-width: 680px; }
+    .menu-section-kicker { display: flex; align-items: center; gap: 10px; margin-bottom: 9px; color: var(--category-deep); font: 600 .68rem/1 'Poppins',sans-serif; letter-spacing: .19em; text-transform: uppercase; }
+    .menu-section-kicker::before { content: ''; width: 28px; height: 1px; background: var(--category-accent); }
+    .menu-section-head h2 { margin: 0; color: var(--text); font: 600 clamp(3rem,5vw,4.8rem)/.9 'Cormorant Garamond',serif; }
+    .menu-section-description { max-width: 600px; margin-top: 16px; color: var(--text-light); font-size: .86rem; line-height: 1.75; }
+    .menu-section-count { flex: 0 0 auto; display: grid; place-items: center; width: 92px; height: 92px; color: var(--category-deep); background: var(--category-soft); border: 1px solid color-mix(in srgb,var(--category-accent) 22%,transparent); border-radius: 50%; box-shadow: inset 0 0 0 7px rgba(255,255,255,.42); }
+    .menu-section-count strong { display: block; margin-bottom: -12px; font: 600 2.2rem/1 'Cormorant Garamond',serif; }
+    .menu-section-count small { font-size: .57rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; }
+    .menu-swipe-hint { display: none; }
+    .menu-category-section .items-grid { display: grid !important; grid-template-columns: repeat(3,minmax(0,1fr)) !important; gap: 26px; padding: 0; }
+    .menu-category-section .item-card {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      padding: 0;
+      overflow: hidden;
+      background: rgba(255,255,255,.94);
+      border: 1px solid rgba(80,49,65,.1) !important;
+      border-radius: 25px;
+      box-shadow: 0 12px 34px rgba(71,45,60,.07);
+      transition: transform .38s cubic-bezier(.2,.8,.2,1),box-shadow .38s ease,border-color .38s ease;
+    }
+    .menu-category-section .item-card:first-child { border-top: 1px solid rgba(80,49,65,.1); }
+    .menu-category-section .item-card:hover { transform: translateY(-9px); background: #fff; border-color: color-mix(in srgb,var(--category-accent) 42%,transparent) !important; box-shadow: 0 24px 52px rgba(71,45,60,.14); }
+    .item-visual { position: relative; overflow: hidden; margin: 10px 10px 0; border-radius: 18px; background-color: var(--category-soft); background-image: url('images/product-studio-backdrop-v1.webp'); background-position: center; background-size: cover; }
+    .item-visual::before { content: ''; position: absolute; z-index: 0; inset: 0; opacity: .62; background: linear-gradient(145deg,color-mix(in srgb,var(--category-soft) 78%,transparent),transparent 48%,color-mix(in srgb,var(--category-accent) 24%,transparent)); mix-blend-mode: color; pointer-events: none; }
+    .menu-category-section .item-image { position: relative; z-index: 1; width: 100%; height: 265px; margin: 0; padding: 25px; overflow: visible; border-radius: 0; background: transparent; box-shadow: none; }
+    .menu-category-section .item-image img { width: 100%; height: 100%; object-fit: contain; display: block; mix-blend-mode: multiply; filter: saturate(1.06) contrast(1.02) drop-shadow(0 16px 15px rgba(62,35,47,.14)); transition: transform .55s cubic-bezier(.2,.8,.2,1),filter .55s ease; }
+    .menu-category-section .item-card:hover .item-image img { transform: translateY(-7px) scale(1.055) rotate(-1.2deg); filter: saturate(1.12) contrast(1.03) drop-shadow(0 22px 18px rgba(62,35,47,.2)); }
+    .menu-category-section .badge,
+    .menu-category-section .preorder-tag { position: absolute; z-index: 4; top: 14px; left: 14px; right: auto; display: inline-flex; align-items: center; min-height: 28px; padding: 0 11px; color: #fff; background: var(--category-deep); border: 1px solid rgba(255,255,255,.55); border-radius: 999px; box-shadow: 0 7px 18px rgba(55,29,44,.16); font-size: .62rem; font-weight: 600; letter-spacing: .05em; animation: none; transform: none; }
+    .menu-category-section .preorder-tag { background: var(--category-accent); }
+    .menu-category-section .badge + .preorder-tag { top: 48px; }
+    .item-card-number { position: absolute; z-index: 3; top: 15px; right: 17px; color: color-mix(in srgb,var(--category-deep) 56%,transparent); font: 600 .68rem/1 'Poppins',sans-serif; letter-spacing: .08em; }
+    .menu-category-section .item-content { flex: 1; display: flex; flex-direction: column; padding: 24px 24px 22px; }
+    .item-type { margin-bottom: 7px; color: var(--category-accent); font-size: .6rem; font-weight: 600; letter-spacing: .17em; text-transform: uppercase; }
+    .menu-category-section .item-name { margin-bottom: 9px; color: var(--text) !important; font: 600 1.65rem/1.03 'Cormorant Garamond',serif; }
+    .menu-category-section .item-desc { display: -webkit-box; min-height: 4.5em; margin-bottom: 19px; overflow: hidden; color: var(--text-light); font-size: .78rem; line-height: 1.5; -webkit-line-clamp: 3; -webkit-box-orient: vertical; }
+    .menu-category-section .item-desc:empty { min-height: 1.5em; }
+    .item-note { display: flex; align-items: flex-start; gap: 8px; margin: -4px 0 17px; padding: 10px 11px; color: var(--category-deep); background: var(--category-soft); border-radius: 11px; font-size: .65rem; line-height: 1.45; }
+    .item-note i { margin-top: 2px; color: var(--category-accent); }
+    .item-note strong { font-weight: 700; }
+    .menu-category-section .item-footer { margin-top: auto; padding-top: 17px; border-top: 1px solid rgba(77,49,63,.09); }
+    .item-price-wrap { display: grid; gap: 1px; }
+    .item-price-label { color: var(--text-light); font-size: .52rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; }
+    .menu-category-section .item-price { color: var(--category-deep); font: 700 1.3rem/1 'Cormorant Garamond',serif; }
+    .menu-category-section .add-to-cart-btn { display: inline-flex; align-items: center; gap: 10px; min-height: 42px; padding: 0 8px 0 17px; color: #fff; background: var(--category-deep); border-radius: 999px; font-size: .7rem; letter-spacing: .02em; box-shadow: none; }
+    .menu-category-section .add-to-cart-btn i { display: grid; place-items: center; width: 28px; height: 28px; color: var(--category-deep); background: #fff; border-radius: 50%; font-size: .65rem; transition: transform .3s ease; }
+    .menu-category-section .add-to-cart-btn:hover { background: var(--category-accent); transform: translateY(-2px); }
+    .menu-category-section .add-to-cart-btn:hover i { transform: rotate(90deg); }
+
+    @media (max-width: 980px) {
+      main#menuSections .menu-category-section { padding: 46px 34px; border-radius: 36px; }
+      .menu-category-section .items-grid { grid-template-columns: repeat(2,minmax(0,1fr)) !important; }
+    }
+    @media (max-width: 640px) {
+      .menu-intro-section { padding: 72px 18px 66px; }
+      .menu-intro-section h2 { font-size: clamp(3rem,15vw,4.6rem); }
+      .menu-intro-section p { font-size: .84rem; }
+      main#menuSections { padding: 32px 12px 90px; }
+      main#menuSections .menu-category-section { margin-bottom: 28px; padding: 36px 16px 18px; border-radius: 30px; }
+      .menu-section-head { align-items: center; gap: 12px; margin-bottom: 26px; }
+      .menu-section-head h2 { font-size: clamp(2.8rem,15vw,4rem); }
+      .menu-section-description { font-size: .76rem; line-height: 1.65; }
+      .menu-section-count { width: 66px; height: 66px; }
+      .menu-section-count strong { margin-bottom: -9px; font-size: 1.65rem; }
+      .menu-section-count small { font-size: .45rem; }
+      .menu-swipe-hint { display: flex; align-items: center; gap: 7px; width: fit-content; margin: -9px 0 16px; color: var(--category-deep); font-size: .6rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; }
+      .menu-swipe-hint i { color: var(--category-accent); animation: swipeHint 1.8s ease-in-out infinite; }
+      .menu-category-section .items-grid { display: flex !important; flex-direction: row; grid-template-columns: none !important; gap: 14px; margin-right: -16px; padding: 0 16px 14px 0; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
+      .menu-category-section .items-grid::-webkit-scrollbar { display: none; }
+      .menu-category-section .item-card { flex: 0 0 min(82vw,320px); min-width: min(82vw,320px); scroll-snap-align: start; }
+      .menu-category-section .item-image { height: 235px; }
+      .menu-category-section .item-content { padding: 21px 20px 20px; }
+      .menu-category-section .item-name { font-size: 1.55rem !important; }
+      .menu-category-section .item-desc { min-height: 0; }
+    }
+    @keyframes swipeHint { 0%,100% { transform: translateX(0); } 50% { transform: translateX(5px); } }
+
+    /* Brand story sections inspired by the supplied reference */
+    .review-band { position: relative; overflow: hidden; padding: 86px 24px 92px; color: #fff; text-align: center; background: linear-gradient(125deg,#70402f,#99603b 65%,#76412e); }
+    .review-band::before { content: '“'; position: absolute; left: 50%; top: 45px; transform: translateX(-50%); color: rgba(255,255,255,.1); font: 260px/1 'Cormorant Garamond',serif; }
+    .review-band::after { content: ''; position: absolute; inset: 0; opacity: .16; background: repeating-linear-gradient(115deg,transparent 0 55px,rgba(255,255,255,.08) 56px 57px); }
+    .review-inner { position: relative; z-index: 1; max-width: 810px; margin: 0 auto; }
+    .section-kicker { display: block; margin-bottom: 8px; color: #f6d5b2; font: 600 1.15rem/1 'Dancing Script',cursive; }
+    .review-band h2 { color: #fff; font: 600 clamp(2.5rem,5vw,4.2rem)/1 'Cormorant Garamond',serif; }
+    .review-mark { margin: 20px 0 8px; color: #f3c993; font: 600 4.5rem/.5 'Cormorant Garamond',serif; }
+    .review-copy { max-width: 650px; margin: 0 auto 18px; color: rgba(255,255,255,.82); font: italic 400 1rem/1.8 'Poppins',sans-serif; }
+    .review-name { font: 600 .82rem/1 'Poppins',sans-serif; letter-spacing: .14em; text-transform: uppercase; }
+    .social-gallery { padding: 92px 24px 120px; text-align: center; background: #fffaf5; }
+    .social-gallery h2 { font: 600 clamp(2.7rem,5vw,4.6rem)/1 'Cormorant Garamond',serif; }
+    .social-gallery h2 a { color: var(--text); text-decoration: none; }
+    .social-gallery h2 a:hover { color: var(--primary); }
+    .gallery-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; max-width: 1020px; margin: 36px auto 0; }
+    .gallery-card { position: relative; overflow: hidden; aspect-ratio: .82; border-radius: 20px; background: #eadfd8; box-shadow: 0 12px 30px rgba(77,48,64,.09); }
+    .gallery-card img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .55s ease,filter .55s ease; }
+    .gallery-card:hover img { transform: scale(1.06); filter: saturate(1.08); }
+    .gallery-card::after { content: '\f16d'; position: absolute; right: 14px; bottom: 14px; display: grid; place-items: center; width: 38px; height: 38px; border-radius: 50%; color: #fff; background: rgba(61,35,77,.7); font-family: 'Font Awesome 6 Brands'; opacity: 0; transform: translateY(8px); transition: .3s ease; }
+    .gallery-card:hover::after { opacity: 1; transform: translateY(0); }
+
+    /* Fortune cookie finale */
+    .fortune-finale { position: relative; z-index: 3; max-width: 1040px; margin: -54px auto -68px; padding: 0 24px; }
+    .fortune-card { position: relative; overflow: hidden; min-height: 184px; display: grid; grid-template-columns: 220px 1fr auto; align-items: center; gap: 30px; padding: 30px 42px 30px 22px; color: #fff; background: linear-gradient(115deg,#b8739c,#8a4fa0); border-radius: 40px; box-shadow: 0 22px 50px rgba(61,35,77,.24); }
+    .fortune-card::before { content: ''; position: absolute; width: 230px; height: 230px; right: -70px; top: -120px; border: 1px solid rgba(255,255,255,.16); border-radius: 50%; }
+    .fortune-card-copy { position: relative; z-index: 2; }
+    .fortune-card-copy small { display: block; margin-bottom: 6px; color: #f7dbe5; font: 600 .7rem/1 'Poppins',sans-serif; letter-spacing: .2em; text-transform: uppercase; }
+    .fortune-card h2 { margin: 0 0 7px; color: #fff; font: 600 clamp(2rem,4vw,3.1rem)/1 'Cormorant Garamond',serif; }
+    .fortune-card p { color: rgba(255,255,255,.76); font-size: .85rem; }
+    .fortune-visual { position: relative; height: 132px; }
+    .fortune-half { position: absolute; top: 17px; width: 108px; height: 92px; background: radial-gradient(circle at 40% 30%,#ffe3a7 0 12%,#e8a952 42%,#b8712f 100%); border: 3px solid #a75f27; box-shadow: 0 12px 24px rgba(61,31,31,.22),inset 0 3px 9px rgba(255,255,255,.42); }
+    .fortune-half.left { left: 12px; border-radius: 58% 40% 56% 38%; transform: rotate(-24deg); }
+    .fortune-half.right { right: 12px; border-radius: 40% 58% 38% 56%; transform: rotate(24deg); }
+    .fortune-slip { position: absolute; z-index: -1; width: 90px; height: 29px; left: 65px; top: 57px; background: #fff9e9; border: 1px solid #e2ceb2; transform: rotate(-3deg); }
+    .fortune-trigger { position: relative; z-index: 2; display: inline-flex; align-items: center; gap: 12px; min-height: 52px; padding: 0 22px; color: var(--primary-dark); background: #fff; border: 0; border-radius: 999px; font: 600 .78rem/1 'Poppins',sans-serif; cursor: pointer; box-shadow: 0 12px 24px rgba(57,29,69,.16); transition: transform .25s ease,box-shadow .25s ease; }
+    .fortune-trigger:hover { transform: translateY(-3px); box-shadow: 0 16px 30px rgba(57,29,69,.23); }
+    .fortune-trigger i { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; color: #fff; background: var(--cocoa); }
+
+    footer { padding: 130px 24px 34px; text-align: left; background: var(--primary-dark); }
+    .footer-content { max-width: 1180px; margin: 0 auto; }
+    .footer-top { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 60px; padding-bottom: 46px; }
+    .footer-logo { margin: 0 0 14px; font-size: 3rem; }
+    .footer-blurb { max-width: 330px; color: rgba(255,255,255,.65); font-size: .85rem; line-height: 1.8; }
+    .footer-heading { margin: 8px 0 16px; color: #f1ceda; font: 600 .72rem/1 'Poppins',sans-serif; letter-spacing: .18em; text-transform: uppercase; }
+    .footer-links { display: grid; gap: 10px; }
+    .footer-links a { width: fit-content; color: rgba(255,255,255,.68); text-decoration: none; font-size: .8rem; transition: color .2s ease; }
+    .footer-links a:hover { color: #fff; }
+    .footer-bottom { display: flex; justify-content: space-between; align-items: center; gap: 20px; padding-top: 26px; border-top: 1px solid rgba(255,255,255,.1); }
+    .footer-bottom .footer-text { margin: 0; }
+    .social-links { justify-content: flex-start; margin: 18px 0 0; }
+    .social-links a { display: grid; place-items: center; width: 38px; height: 38px; border: 1px solid rgba(255,255,255,.2); border-radius: 50%; font-size: 1rem; }
+    .category-scroll-btn,
+    .category-dropdown { display: none !important; }
+    .whatsapp-cookie-btn,
+    .box-builder-btn,
+    .cart-btn { left: auto; right: 20px; width: 54px; height: 54px; border-width: 2px; }
+    .whatsapp-cookie-btn { bottom: 20px; }
+    .cart-btn { bottom: 86px; }
+    .box-builder-btn { bottom: 152px; }
+
+    .fortune-overlay { background: rgba(35,18,38,.72); backdrop-filter: blur(8px); }
+    .fortune-overlay.show { display: block; }
+    .fortune-cookie { width: 230px; height: 185px; padding: 0; border: 0; background: transparent; filter: drop-shadow(0 18px 28px rgba(33,16,30,.34)); animation: fortuneWiggle 1.4s ease-in-out infinite; }
+    .fortune-cookie::before,
+    .fortune-cookie::after { content: ''; position: absolute; top: 20px; width: 124px; height: 145px; background: radial-gradient(circle at 38% 26%,#ffe6a5 0 10%,#e7a84f 44%,#ad6127 100%); border: 4px solid #9b5221; box-shadow: inset 0 4px 12px rgba(255,255,255,.38); }
+    .fortune-cookie::before { left: 4px; border-radius: 68% 36% 58% 44%; transform: rotate(-25deg); }
+    .fortune-cookie::after { right: 4px; border-radius: 36% 68% 44% 58%; transform: rotate(25deg); }
+    .fortune-cookie.crack { animation: crack-cookie .8s forwards; }
+    .fortune-paper { width: min(88%,520px); max-width: 520px; padding: 42px 38px 34px; background: #fffaf0; border: 0; border-radius: 22px; box-shadow: 0 24px 80px rgba(32,14,32,.3); transform: translate(-50%,-45%) scale(.88); transition: opacity .35s ease,transform .35s ease; }
+    .fortune-paper::before,
+    .fortune-paper::after { content: ''; position: absolute; left: 20px; right: 20px; height: 1px; background: #ead7b3; }
+    .fortune-paper::before { top: 16px; }
+    .fortune-paper::after { bottom: 16px; }
+    .fortune-paper.show { opacity: 1; transform: translate(-50%,-50%) scale(1); }
+    .fortune-text-container { color: var(--primary-dark); font: 600 clamp(1.6rem,4vw,2.2rem)/1.35 'Cormorant Garamond',serif; }
+    .fortune-icon { color: var(--cocoa); font-size: 1.6rem; }
+    .fortune-close { position: absolute; right: 13px; top: 10px; width: 34px; height: 34px; border: 0; border-radius: 50%; color: var(--primary-dark); background: transparent; font-size: 1.35rem; cursor: pointer; }
+    .fortune-again { display: block; margin: 24px auto 0; padding: 11px 18px; border: 0; border-radius: 999px; color: #fff; background: var(--primary); font: 600 .75rem/1 'Poppins',sans-serif; cursor: pointer; }
+    .cookie-sparkle { z-index: 1003; background: var(--gold) !important; }
+
+    @keyframes orbitTurn { to { transform: rotate(360deg); } }
+    @keyframes cookieFloatMain { 0%,100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(-16px) rotate(2deg); } }
+    @keyframes cookieFloatOne { 0%,100% { transform: translate(0,0) rotate(-7deg); } 50% { transform: translate(9px,-15px) rotate(1deg); } }
+    @keyframes cookieFloatTwo { 0%,100% { transform: translate(0,0) rotate(7deg); } 50% { transform: translate(-8px,-13px) rotate(-1deg); } }
+    @keyframes chipFloat { 0%,100% { margin-top: 0; } 50% { margin-top: -14px; } }
+    @keyframes fortuneWiggle { 0%,100% { transform: translate(-50%,-50%) rotate(-2deg); } 50% { transform: translate(-50%,-50%) rotate(2deg) scale(1.03); } }
+
+    @media (max-width: 900px) {
+      .hero { min-height: 820px; }
+      .hero-shell { min-height: 820px; padding: 0 22px 76px; }
+      .hero-grid { grid-template-columns: 1fr; gap: 0; }
+      .hero-content { padding-top: 34px; max-width: 650px; }
+      .hero h1 { font-size: clamp(4rem,13vw,6.5rem); }
+      .hero-cookie-stage { width: min(100%,520px); margin: -40px auto 0; justify-self: center; }
+      .hero-links a:not(.hero-order-link) { display: none; }
+      .fortune-card { grid-template-columns: 170px 1fr; padding-right: 30px; }
+      .fortune-trigger { grid-column: 2; width: fit-content; }
+      .fortune-visual { grid-row: span 2; }
+      .footer-top { grid-template-columns: 1.3fr 1fr; }
+      .footer-top > div:last-child { grid-column: 2; }
+    }
+    @media (max-width: 640px) {
+      .hero { min-height: 780px; }
+      .hero-shell { min-height: 780px; padding-inline: 18px; }
+      .hero-nav { height: 86px; }
+      .hero-brand { font-size: 1.75rem; }
+      .hero-links .hero-order-link { padding: 9px 13px; font-size: .68rem; }
+      .hero-content { padding-top: 18px; }
+      .hero h1 { font-size: clamp(3.8rem,18vw,5.6rem); }
+      .hero-tagline { font-size: .88rem; margin-bottom: 22px; }
+      .hero-meta { gap: 12px; flex-wrap: wrap; }
+      .hero-cookie-stage { width: min(100%,400px); margin-top: -20px; }
+      .cookie-photo { border-width: 4px; }
+      .contact-info { gap: 6px; }
+      .contact-item { font-size: .78rem; padding: 0 5px; }
+      .contact-separator { display: none; }
+      .featured-section { padding: 68px 16px 50px; }
+      .featured-item { min-width: 222px !important; width: 222px !important; }
+      main#menuSections { padding-bottom: 70px; }
+      main section { padding: 54px 16px 6px; }
+      .gallery-grid { grid-template-columns: repeat(2,1fr); gap: 10px; }
+      .gallery-card { border-radius: 14px; }
+      .social-gallery { padding: 72px 16px 94px; }
+      .review-band { padding: 70px 18px; }
+      .whatsapp-cookie-btn,
+      .box-builder-btn,
+      .cart-btn { right: 14px; width: 48px; height: 48px; font-size: 1.25rem; }
+      .whatsapp-cookie-btn { bottom: 14px; }
+      .cart-btn { bottom: 72px; }
+      .box-builder-btn { bottom: 130px; }
+      .fortune-finale { margin-top: -36px; padding: 0 14px; }
+      .fortune-card { grid-template-columns: 1fr; gap: 12px; padding: 25px 24px 28px; text-align: center; border-radius: 28px; }
+      .fortune-visual { height: 110px; width: 190px; margin: 0 auto; }
+      .fortune-half { width: 92px; height: 78px; }
+      .fortune-trigger { grid-column: 1; justify-self: center; }
+      footer { padding: 112px 20px 30px; }
+      .footer-top { grid-template-columns: 1fr; gap: 28px; }
+      .footer-top > div:last-child { grid-column: 1; }
+      .footer-bottom { align-items: flex-start; flex-direction: column; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *,*::before,*::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
+    }
   </style>
 </head>
 <body>
@@ -811,11 +1216,44 @@
   <div class="hero">
     <div class="hero-overlay"></div>
     <div class="slideshow-container"></div>
-    <div class="hero-content">
-      <h1>heavenlynn</h1>
-      <p class="hero-tagline">Artisanal Treats Made with Love</p>
+    <div class="hero-shell" id="top">
+      <header class="hero-nav">
+        <a class="hero-brand" href="#top" aria-label="Heavenlynn home">heavenlynn<span>Tyre, Lebanon</span></a>
+        <div class="hero-links" aria-label="Primary navigation">
+          <a href="#menu">Our menu</a>
+          <a href="#about">Our story</a>
+          <a href="https://www.instagram.com/heavenlynn.lb/" target="_blank" rel="noopener">Instagram</a>
+          <a class="hero-order-link" href="https://wa.me/96181955816" target="_blank" rel="noopener">Order a treat</a>
+        </div>
+      </header>
+      <div class="hero-grid">
+        <div class="hero-content">
+          <div class="hero-eyebrow">Small-batch bakery</div>
+          <h1>Sweet things, <em>made happy.</em></h1>
+          <p class="hero-tagline">Cookies, cakes and dreamy little treats, handcrafted in Tyre to make ordinary days feel worth celebrating.</p>
+          <div class="hero-actions">
+            <a class="hero-primary-btn" href="#menu">See the menu <i class="fas fa-arrow-down" aria-hidden="true"></i></a>
+            <a class="hero-secondary-btn" href="https://wa.me/96181955816" target="_blank" rel="noopener"><i class="fab fa-whatsapp" aria-hidden="true"></i> Order on WhatsApp</a>
+          </div>
+          <div class="hero-meta">
+            <span><i class="fas fa-heart" aria-hidden="true"></i> Baked with love</span>
+            <span><i class="fas fa-location-dot" aria-hidden="true"></i> Made in Tyre</span>
+          </div>
+        </div>
+        <div class="hero-cookie-stage" aria-label="A playful collection of Heavenlynn cookies and treats">
+          <div class="hero-orbit" aria-hidden="true"></div>
+          <figure class="cookie-photo cookie-photo-main"><img src="images/cookies.jpeg" alt="A pile of Heavenlynn chocolate chip cookies"></figure>
+          <figure class="cookie-photo cookie-photo-one"><img src="images/cookie-choc.jpg" alt="Warm chocolate chip cookies beside melted chocolate"></figure>
+          <figure class="cookie-photo cookie-photo-two"><img src="images/cookie-ice.jpg" alt="A warm cookie topped with ice cream and chocolate"></figure>
+          <figure class="cookie-photo cookie-photo-three"><img src="images/heavenlynn_spec.jpg" alt="Heavenlynn brownie cup with ice cream"></figure>
+          <figure class="cookie-photo cookie-photo-four"><img src="images/cc_dec.jpg" alt="Heavenlynn cookie display with a celebration cake"></figure>
+          <span class="choco-chip chip-one" aria-hidden="true"></span>
+          <span class="choco-chip chip-two" aria-hidden="true"></span>
+          <span class="choco-chip chip-three" aria-hidden="true"></span>
+        </div>
+      </div>
     </div>
-    <a href="#menu" class="scroll-down"><i class="fas fa-chevron-down"></i></a>
+    <div class="hero-wave" aria-hidden="true"></div>
     <div class="slideshow-dots"></div>
   </div>
 
@@ -904,8 +1342,44 @@
     </div>
   </div>
 
+  <!-- Menu Introduction -->
+  <section class="menu-intro-section" aria-labelledby="menuIntroHeading">
+    <div class="menu-intro-inner">
+      <span class="menu-intro-kicker">Made to tempt you</span>
+      <h2 id="menuIntroHeading">Find your new favorite</h2>
+      <p>Every treat is made in small batches with big flavor. Browse the full Heavenlynn collection, then build an order that feels completely yours.</p>
+      <div class="menu-intro-notes" aria-label="Menu highlights">
+        <span><i class="fas fa-cookie-bite" aria-hidden="true"></i> Small-batch baked</span>
+        <span><i class="fas fa-wand-magic-sparkles" aria-hidden="true"></i> Weekly surprises</span>
+        <span><i class="fab fa-whatsapp" aria-hidden="true"></i> Easy WhatsApp ordering</span>
+      </div>
+    </div>
+  </section>
+
   <!-- Menu Sections -->
   <main id="menuSections"></main>
+
+  <!-- Brand Story -->
+  <section class="review-band" id="about" aria-labelledby="reviewHeading">
+    <div class="review-inner">
+      <span class="section-kicker">A little love note</span>
+      <h2 id="reviewHeading">What our customers say</h2>
+      <div class="review-mark" aria-hidden="true">&ldquo;</div>
+      <p class="review-copy">&ldquo;The kind of dessert you think about again the next day. Everything feels homemade, thoughtful and just the right amount of indulgent.&rdquo;</p>
+      <div class="review-name">A happy Heavenlynn regular</div>
+    </div>
+  </section>
+
+  <section class="social-gallery" aria-labelledby="socialHeading">
+    <span class="section-kicker">Follow the crumbs</span>
+    <h2 id="socialHeading"><a href="https://www.instagram.com/heavenlynn.lb/" target="_blank" rel="noopener">@heavenlynn.lb</a></h2>
+    <div class="gallery-grid">
+      <a class="gallery-card" href="https://www.instagram.com/heavenlynn.lb/" target="_blank" rel="noopener" aria-label="See Heavenlynn cookie cake creations on Instagram"><img src="images/cookie_cake_deco.jpg" alt="Two decorated Heavenlynn cookie cakes"></a>
+      <a class="gallery-card" href="https://www.instagram.com/heavenlynn.lb/" target="_blank" rel="noopener" aria-label="See Heavenlynn cookies on Instagram"><img src="images/cookies.jpeg" alt="A box filled with chocolate chip cookies"></a>
+      <a class="gallery-card" href="https://www.instagram.com/heavenlynn.lb/" target="_blank" rel="noopener" aria-label="See Heavenlynn dessert cups on Instagram"><img src="images/heavenlynn_spec.jpg" alt="Brownie and ice cream dessert cup"></a>
+      <a class="gallery-card" href="https://www.instagram.com/heavenlynn.lb/" target="_blank" rel="noopener" aria-label="See Heavenlynn celebration treats on Instagram"><img src="images/birthday.jpg" alt="Birthday cheesecake slice and iced coffee"></a>
+    </div>
+  </section>
 
   <!-- Floating Buttons -->
   <button class="category-scroll-btn" id="categoryScrollBtn"><i class="fas fa-cookie-bite"></i></button>
@@ -913,9 +1387,9 @@
     <div class="category-dropdown-title">Browse Categories</div>
     <ul id="categoryDropdownList"></ul>
   </div>
-  <button class="box-builder-btn" id="boxBuilderBtn">🎁</button>
-  <button class="cart-btn" id="cartBtn" style="display:none"><i class="fas fa-shopping-cart"></i><div class="cart-count" id="cartCount" style="display:none">0</div></button>
-  <a href="https://wa.me/96181955816" class="whatsapp-cookie-btn" target="_blank"><i class="fab fa-whatsapp"></i></a>
+  <button class="box-builder-btn" id="boxBuilderBtn" type="button" aria-label="Build a custom treat box">🎁</button>
+  <button class="cart-btn" id="cartBtn" type="button" aria-label="Open shopping cart" style="display:none"><i class="fas fa-shopping-cart" aria-hidden="true"></i><div class="cart-count" id="cartCount" style="display:none">0</div></button>
+  <a href="https://wa.me/96181955816" class="whatsapp-cookie-btn" target="_blank" rel="noopener" aria-label="Order from Heavenlynn on WhatsApp"><i class="fab fa-whatsapp" aria-hidden="true"></i></a>
 
   <!-- Box Builder Modal -->
   <div class="box-modal" id="boxModal">
@@ -988,15 +1462,55 @@
   <!-- Fortune Cookie Elements -->
   <div class="fortune-overlay" id="fortuneOverlay"></div>
 
+  <section class="fortune-finale" id="fortuneFinale" aria-labelledby="fortuneHeading">
+    <div class="fortune-card">
+      <div class="fortune-visual" aria-hidden="true">
+        <span class="fortune-half left"></span>
+        <span class="fortune-slip"></span>
+        <span class="fortune-half right"></span>
+      </div>
+      <div class="fortune-card-copy">
+        <small>A sweet thought for your day</small>
+        <h2 id="fortuneHeading">Crack open your fortune</h2>
+        <p>One click, one tiny surprise&mdash;freshly picked for you.</p>
+      </div>
+      <button class="fortune-trigger" id="footerFortuneBtn" type="button" aria-haspopup="dialog" aria-expanded="false">Reveal my quote <i class="fas fa-arrow-right" aria-hidden="true"></i></button>
+    </div>
+  </section>
+
   <!-- Footer -->
   <footer>
     <div class="footer-content">
-      <div class="footer-logo">heavenlynn</div>
-      <div class="social-links">
-        <a href="https://www.instagram.com/heavenlynn.lb/" target="_blank"><i class="fab fa-instagram"></i></a>
+      <div class="footer-top">
+        <div>
+          <div class="footer-logo">heavenlynn</div>
+          <p class="footer-blurb">Small-batch cookies, cakes and sweet moments, handcrafted with love in Tyre.</p>
+          <div class="social-links">
+            <a href="https://www.instagram.com/heavenlynn.lb/" target="_blank" rel="noopener" aria-label="Follow Heavenlynn on Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="https://wa.me/96181955816" target="_blank" rel="noopener" aria-label="Message Heavenlynn on WhatsApp"><i class="fab fa-whatsapp"></i></a>
+          </div>
+        </div>
+        <div>
+          <div class="footer-heading">Explore</div>
+          <div class="footer-links">
+            <a href="#menu">Our menu</a>
+            <a href="#about">Our story</a>
+            <a href="#fortuneFinale">Your fortune</a>
+          </div>
+        </div>
+        <div>
+          <div class="footer-heading">Come say hello</div>
+          <div class="footer-links">
+            <a href="https://maps.google.com/?q=Tyre,Lebanon" target="_blank" rel="noopener">Tyre, Lebanon</a>
+            <a href="tel:+96181955816">+961 81 955 816</a>
+            <a href="https://wa.me/96181955816" target="_blank" rel="noopener">Order via WhatsApp</a>
+          </div>
+        </div>
       </div>
-      <p class="footer-text">© 2025 heavenlynn Bakery. All rights reserved.</p>
-      <p class="footer-text">Tyre, Lebanon • 81955816</p>
+      <div class="footer-bottom">
+        <p class="footer-text">&copy; 2026 Heavenlynn Bakery. All rights reserved.</p>
+        <p class="footer-text">Baked in Tyre &middot; Best enjoyed together</p>
+      </div>
     </div>
   </footer>
 
@@ -1116,6 +1630,19 @@ const specialBadges = {
 };
 
 const categoryOrder = ["Cookies", "Rolls", "Slices", "Cakes", "Cookie Cakes", "Cups", "Cheesecakes", "Ice Cream", "Drinks", "Add-ons"];
+
+const categoryMeta = {
+  "Cookies": { kicker: "The signature collection", description: "Thick centers, crisp edges and fillings worth breaking into. Meet the cookies that started it all." },
+  "Rolls": { kicker: "Soft, warm & swirled", description: "Pillowy dough, generous fillings and the kind of glaze that makes every layer a little celebration." },
+  "Slices": { kicker: "Just one more bite", description: "Brownies, brookies and bakery favorites cut into the perfect little moment of indulgence." },
+  "Cakes": { kicker: "Made for gathering", description: "Thoughtful whole cakes for birthdays, milestones or a Tuesday that deserves something beautiful." },
+  "Cookie Cakes": { kicker: "Big cookie energy", description: "Our signature cookie, celebration-sized and ready to be personalized for someone special." },
+  "Cups": { kicker: "Layers of happiness", description: "Creamy, crunchy, chocolatey layers packed into one dangerously spoonable cup." },
+  "Cheesecakes": { kicker: "Silky by the spoonful", description: "Rich, smooth cheesecake in bright, fruity and deeply comforting flavors." },
+  "Ice Cream": { kicker: "A little extra dreamy", description: "Cool, creamy pairings made for warm cookies, strong espresso and sweet afternoon pauses." },
+  "Drinks": { kicker: "Your perfect pairing", description: "Coffee, tea and colorful sips chosen to make every dessert taste even better." },
+  "Add-ons": { kicker: "Make it completely yours", description: "Finishing touches, sauces and toppings for turning a favorite into your favorite." }
+};
 
 // Note: featuredItems and slideImages are now loaded from Supabase (weekly_specials and slideshow_images tables)
 
@@ -1370,7 +1897,7 @@ async function loadMenu() {
   const nav = document.getElementById('categoryNav');
   const sections = document.getElementById('menuSections');
   const dropdown = document.getElementById('categoryDropdownList');
-  nav.innerHTML = ''; dropdown.innerHTML = '';
+  nav.innerHTML = ''; dropdown.innerHTML = ''; sections.innerHTML = '';
   
   const sorted = Object.keys(grouped).sort((a, b) => {
     const ia = categoryOrder.indexOf(a), ib = categoryOrder.indexOf(b);
@@ -1397,32 +1924,54 @@ async function loadMenu() {
     // Section
     const section = document.createElement('section');
     section.id = catId;
-    section.innerHTML = `<div class="section-title"><h2>${category}</h2></div>`;
+    section.className = 'menu-category-section';
+    section.dataset.category = category;
+    const meta = categoryMeta[category] || { kicker: 'Fresh from the kitchen', description: 'Handcrafted treats made with care and plenty of joy.' };
+    const itemCount = grouped[category].length;
+    section.innerHTML = `
+      <div class="menu-section-head">
+        <div class="menu-section-copy">
+          <span class="menu-section-kicker">${meta.kicker}</span>
+          <h2>${category}</h2>
+          <p class="menu-section-description">${meta.description}</p>
+        </div>
+        <div class="menu-section-count" aria-label="${itemCount} ${itemCount === 1 ? 'treat' : 'treats'}">
+          <div><strong>${String(itemCount).padStart(2, '0')}</strong><small>${itemCount === 1 ? 'treat' : 'treats'}</small></div>
+        </div>
+      </div>
+      <div class="menu-swipe-hint" aria-hidden="true"><i class="fas fa-arrow-right-arrow-left"></i> Swipe to explore</div>
+    `;
     
     const grid = document.createElement('div');
     grid.className = 'items-grid';
     
-    grouped[category].forEach(item => {
-      const card = document.createElement('div');
+    grouped[category].forEach((item, index) => {
+      const card = document.createElement('article');
       card.className = 'item-card';
       
       let descHtml = item.description || 'A delicious treat made with the finest ingredients.';
+      let extraHtml = '';
       if (category === 'Add-ons') descHtml = '';
       else if (category === 'Cookie Cakes') {
         const isMini = item.item_name.toLowerCase().includes('mini');
-        descHtml += `<br><span style="font-style:italic;color:var(--primary-dark);display:block;margin-top:.5rem">${isMini ? '' : 'Starting from $22<br>'}Decorations <strong>$2-$5 extra</strong></span>`;
+        extraHtml = `<div class="item-note"><i class="fas fa-wand-magic-sparkles" aria-hidden="true"></i><span>${isMini ? 'Custom decorations' : 'Starting from $22 · Custom decorations'} <strong>+$2–$5</strong></span></div>`;
       }
       
       card.innerHTML = `
-        <div class="item-image"><img src="${item.image_url || '/api/placeholder/400/400'}" alt="${item.item_name}"></div>
-        ${specialBadges[item.item_name] ? `<div class="badge">${specialBadges[item.item_name]}</div>` : ''}
-        ${needsPreorder ? '<div class="preorder-tag">Preorder</div>' : ''}
+        <div class="item-visual">
+          <div class="item-image"><img src="${item.image_url || 'images/cookies.jpeg'}" alt="${item.item_name}" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='images/cookies.jpeg'"></div>
+          ${specialBadges[item.item_name] ? `<div class="badge">${specialBadges[item.item_name]}</div>` : ''}
+          ${needsPreorder ? '<div class="preorder-tag">Preorder</div>' : ''}
+          <span class="item-card-number" aria-hidden="true">${String(index + 1).padStart(2, '0')}</span>
+        </div>
         <div class="item-content">
+          <div class="item-type">${category}</div>
           <div class="item-name">${item.item_name}</div>
           <div class="item-desc">${descHtml}</div>
+          ${extraHtml}
           <div class="item-footer">
-            <div class="item-price">$${parseFloat(item.price).toFixed(2)}</div>
-            <button class="add-to-cart-btn">Add to Cart</button>
+            <div class="item-price-wrap"><span class="item-price-label">Price</span><div class="item-price">$${parseFloat(item.price).toFixed(2)}</div></div>
+            <button class="add-to-cart-btn" aria-label="Add ${item.item_name} to cart">Add <i class="fas fa-plus" aria-hidden="true"></i></button>
           </div>
         </div>
       `;
@@ -1447,7 +1996,7 @@ async function loadMenu() {
         }
       });
     }, { rootMargin: '-100px 0px -90% 0px' });
-    document.querySelectorAll('section').forEach(s => observer.observe(s));
+    document.querySelectorAll('.menu-category-section').forEach(s => observer.observe(s));
   }
   navLinks[0]?.classList.add('active');
   
@@ -1460,7 +2009,7 @@ async function loadMenu() {
     a.addEventListener('click', e => {
       e.preventDefault();
       const target = document.querySelector(a.getAttribute('href'));
-      if (target) window.scrollTo({ top: target.offsetTop - 80, behavior: 'smooth' });
+      if (target) window.scrollTo({ top: target.getBoundingClientRect().top + window.scrollY - 90, behavior: 'smooth' });
     });
   });
   
@@ -1768,53 +2317,94 @@ function changeEventSlide(eventId, direction, targetIndex = null) {
 
 // Fortune Cookie
 function setupFortuneCookie() {
-  const btn = document.getElementById('categoryScrollBtn');
+  const btn = document.getElementById('footerFortuneBtn');
   const overlay = document.getElementById('fortuneOverlay');
   let cookie, paper;
-  
-  btn.onclick = e => {
+
+  if (!btn || !overlay) return;
+
+  const typeFortune = container => {
+    const cats = ['tips', 'motivation', 'inspiration', 'offers'];
+    const cat = Math.random() < 0.05 ? 'offers' : cats[Math.floor(Math.random() * 3)];
+    const text = fortunes[cat][Math.floor(Math.random() * fortunes[cat].length)];
+    container.textContent = '';
+    let i = 0;
+    const type = () => {
+      if (i < text.length) {
+        container.textContent += text[i++];
+        setTimeout(type, 34);
+      }
+    };
+    type();
+  };
+
+  const showPaper = () => {
+    paper = document.createElement('div');
+    paper.className = 'fortune-paper';
+    paper.setAttribute('role', 'dialog');
+    paper.setAttribute('aria-modal', 'true');
+    paper.setAttribute('aria-label', 'Your fortune cookie quote');
+    paper.innerHTML = `
+      <button class="fortune-close" type="button" aria-label="Close fortune">&times;</button>
+      <div class="fortune-icon" aria-hidden="true">&#10022;</div>
+      <div class="fortune-text-container" aria-live="polite"></div>
+      <button class="fortune-again" type="button">Pick another fortune</button>
+    `;
+    document.body.appendChild(paper);
+    requestAnimationFrame(() => paper.classList.add('show'));
+    typeFortune(paper.querySelector('.fortune-text-container'));
+    paper.querySelector('.fortune-close').onclick = closeFortune;
+    paper.querySelector('.fortune-again').onclick = event => {
+      event.stopPropagation();
+      createSparkles(window.innerWidth / 2, window.innerHeight / 2);
+      typeFortune(paper.querySelector('.fortune-text-container'));
+    };
+    paper.querySelector('.fortune-close').focus();
+  };
+
+  const openFortune = e => {
     e.stopPropagation();
-    btn.style.display = 'none';
+    if (cookie || paper) return;
+    btn.setAttribute('aria-expanded', 'true');
     overlay.classList.add('show');
-    
-    cookie = document.createElement('div');
+    document.body.classList.add('fortune-open');
+
+    cookie = document.createElement('button');
+    cookie.type = 'button';
     cookie.className = 'fortune-cookie';
-    cookie.style.display = 'block';
+    cookie.setAttribute('aria-label', 'Crack the fortune cookie');
     document.body.appendChild(cookie);
-    
-    cookie.onclick = () => {
+
+    cookie.onclick = event => {
+      event.stopPropagation();
+      cookie.disabled = true;
       cookie.classList.add('crack');
       createSparkles(window.innerWidth / 2, window.innerHeight / 2);
-      
+
       setTimeout(() => {
-        paper = document.createElement('div');
-        paper.className = 'fortune-paper';
-        paper.style.display = 'block';
-        document.body.appendChild(paper);
-        
-        setTimeout(() => {
-          paper.classList.add('show');
-          const cats = ['tips', 'motivation', 'inspiration', 'offers'];
-          const cat = Math.random() < 0.05 ? 'offers' : cats[Math.floor(Math.random() * 3)];
-          const text = fortunes[cat][Math.floor(Math.random() * fortunes[cat].length)];
-          const icons = { tips: '💡', motivation: '✨', inspiration: '🌈', offers: '🎁' };
-          
-          paper.innerHTML = `<div class="fortune-icon">${icons[cat]}</div><div class="fortune-text-container"></div>`;
-          const container = paper.querySelector('.fortune-text-container');
-          let i = 0;
-          const type = () => { if (i < text.length) { container.textContent += text[i++]; setTimeout(type, 40); } else document.addEventListener('click', closeFortune); };
-          type();
-        }, 200);
-      }, 800);
+        cookie.remove();
+        cookie = null;
+        showPaper();
+      }, 650);
     };
+    cookie.focus();
   };
-  
+
+  btn.addEventListener('click', openFortune);
+  overlay.addEventListener('click', closeFortune);
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && (cookie || paper)) closeFortune();
+  });
+
   function closeFortune() {
-    document.removeEventListener('click', closeFortune);
     paper?.remove();
     cookie?.remove();
+    paper = null;
+    cookie = null;
     overlay.classList.remove('show');
-    btn.style.display = 'flex';
+    document.body.classList.remove('fortune-open');
+    btn.setAttribute('aria-expanded', 'false');
+    btn.focus();
   }
 }
 
