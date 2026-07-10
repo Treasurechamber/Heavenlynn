@@ -754,6 +754,13 @@
         </div>
 
         <div class="form-group">
+          <label for="isBestSeller" style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+            <input type="checkbox" id="isBestSeller" style="width: auto; margin: 0;">
+            <span>★ Best Seller</span>
+          </label>
+        </div>
+
+        <div class="form-group">
           <label for="description">Description <span class="optional-label">(optional)</span></label>
           <textarea id="description"></textarea>
         </div>
@@ -1141,6 +1148,13 @@
         </div>
 
         <div class="form-group">
+          <label for="editBestSeller" style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+            <input type="checkbox" id="editBestSeller" style="width: auto; margin: 0;">
+            <span>★ Best Seller</span>
+          </label>
+        </div>
+
+        <div class="form-group">
           <label for="editDescription">Description</label>
           <textarea id="editDescription"></textarea>
         </div>
@@ -1290,7 +1304,8 @@
             category: category,
             price: price,
             description: description || null,
-            image_url: imageUrl
+            image_url: imageUrl,
+            is_best_seller: document.getElementById('isBestSeller').checked
           }]);
 
         if (error) throw error;
@@ -1449,7 +1464,7 @@
 
     // Edit item
     function editItem(id) {
-      const item = allItems.find(i => i.id === id);
+      const item = allItems.find(i => String(i.id) === String(id));
       if (!item) return;
 
       document.getElementById('editItemId').value = item.id;
@@ -1498,7 +1513,8 @@
         item_name: itemName,
         category: category,
         price: price,
-        description: description || null
+        description: description || null,
+        is_best_seller: document.getElementById('editBestSeller').checked
       };
 
       // Only update image if a new one was uploaded
@@ -1626,8 +1642,7 @@
 
         const { error } = await supabaseClient
           .from('slideshow_images')
-          .insert([{ image_url: imageUrl,
-        is_best_seller: document.getElementById('isBestSeller').checked, order_position: orderPosition }]);
+          .insert([{ image_url: imageUrl, order_position: orderPosition }]);
 
         if (error) throw error;
 
@@ -1996,7 +2011,6 @@
             description: description || null,
             price: price,
             image_url: imageUrl,
-        is_best_seller: document.getElementById('isBestSeller').checked,
             tag: tag, // Use actual tag value, not fallback
             order_position: orderPosition
           }]);
