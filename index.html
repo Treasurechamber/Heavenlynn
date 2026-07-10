@@ -227,47 +227,27 @@
       .events-grid { grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); }
     }
 
-    /* Compact Loyalty Ad Banner */
+    /* Premium Loyalty Ad Banner */
     .loyalty-section {
       padding: 1rem;
-      margin: 1.5rem auto;
+      margin: 2rem auto;
       max-width: 1200px;
       cursor: pointer;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .loyalty-section:hover {
-      transform: translateY(-2px);
     }
 
     .loyalty-ad-banner {
-      background: linear-gradient(135deg, #8a4fff 0%, #d9afe1 50%, #ffd700 100%);
-      border-radius: 16px;
-      padding: 1.5rem;
-      box-shadow: 0 8px 24px rgba(138, 79, 255, 0.3);
+      background: linear-gradient(135deg, rgba(78,52,116,0.8), rgba(138,79,255,0.7)), url('images/cookies.jpeg') center/cover no-repeat;
+      border-radius: 24px;
+      padding: 2rem;
+      box-shadow: 0 15px 35px rgba(138, 79, 255, 0.25);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 1.5rem;
+      gap: 2rem;
       position: relative;
       overflow: hidden;
-      border: 2px solid rgba(255, 255, 255, 0.3);
-    }
-
-    .loyalty-ad-banner::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      right: -50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-      animation: shimmer 3s infinite;
-    }
-
-    @keyframes shimmer {
-      0%, 100% { transform: rotate(0deg); }
-      50% { transform: rotate(180deg); }
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(5px);
     }
 
     .loyalty-ad-content {
@@ -275,18 +255,7 @@
       display: flex;
       align-items: center;
       gap: 1.5rem;
-      z-index: 1;
-    }
-
-    .loyalty-ad-icon {
-      font-size: 3.5rem;
-      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
-      animation: bounce 2s infinite;
-    }
-
-    @keyframes bounce {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
+      z-index: 2;
     }
 
     .loyalty-ad-text {
@@ -294,45 +263,60 @@
     }
 
     .loyalty-ad-title {
-      font-size: 1.5rem;
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem;
       font-weight: 700;
       color: white;
       margin-bottom: 0.3rem;
-      text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      letter-spacing: 0.5px;
+      text-shadow: 0 2px 5px rgba(0,0,0,0.2);
     }
 
     .loyalty-ad-subtitle {
-      font-size: 0.95rem;
-      color: rgba(255, 255, 255, 0.95);
-      font-weight: 500;
-    }
-
-    .loyalty-ad-arrow {
-      font-size: 2rem;
-      color: white;
-      z-index: 1;
-      animation: pulse 2s infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.7; transform: scale(1.1); }
+      font-family: 'Poppins', sans-serif;
+      font-size: 1rem;
+      color: rgba(255, 255, 255, 0.9);
+      font-weight: 400;
     }
 
     .loyalty-ad-badge {
       position: absolute;
-      top: -8px;
-      right: 20px;
-      background: linear-gradient(135deg, #ffd700, #ffed4e);
-      color: #301e54;
-      padding: 4px 12px;
-      border-radius: 12px;
-      font-size: 0.75rem;
+      top: 0;
+      right: 40px;
+      background: linear-gradient(135deg, #ffd700, #ff8c00);
+      color: #fff;
+      padding: 6px 18px;
+      border-radius: 0 0 12px 12px;
+      font-size: 0.85rem;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      letter-spacing: 1.5px;
+      box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
       z-index: 2;
+    }
+
+    .loyalty-ad-btn {
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      color: white;
+      padding: 12px 28px;
+      border-radius: 30px;
+      font-weight: 600;
+      font-size: 1rem;
+      font-family: 'Poppins', sans-serif;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: all 0.3s ease;
+      z-index: 2;
+      backdrop-filter: blur(5px);
+    }
+    
+    .loyalty-section:hover .loyalty-ad-btn {
+      background: white;
+      color: #8a4fff;
+      box-shadow: 0 8px 20px rgba(255,255,255,0.3);
+      transform: scale(1.05);
     }
 
     /* Loyalty Modal */
@@ -1298,18 +1282,18 @@
   </div>
 
   <!-- Loyalty Program Section -->
-  <!-- Compact Loyalty Ad Banner -->
+  <!-- Premium Loyalty Ad Banner -->
   <div class="loyalty-section" id="loyaltySectionWrapper" onclick="openLoyaltyModal()">
     <div class="loyalty-ad-banner">
-      <div class="loyalty-ad-badge">Earn Points</div>
       <div class="loyalty-ad-content">
-        <div class="loyalty-ad-icon">🎁</div>
         <div class="loyalty-ad-text">
           <div class="loyalty-ad-title">Loyalty Rewards Program</div>
-          <div class="loyalty-ad-subtitle">Earn points with every order • Unlock exclusive rewards • Click to learn more!</div>
+          <div class="loyalty-ad-subtitle">Earn points with every sweet treat and unlock exclusive bakery rewards.</div>
         </div>
       </div>
-      <div class="loyalty-ad-arrow">→</div>
+      <div class="loyalty-ad-btn">
+        Discover More <i class="fas fa-arrow-right"></i>
+      </div>
     </div>
   </div>
 
