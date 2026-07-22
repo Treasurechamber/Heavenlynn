@@ -2990,57 +2990,20 @@
       msgEl.textContent = '⏳ Processing...';
 
       try {
-        const monthStart = localDateStr(new Date(new Date().getFullYear(), new Date().getMonth(), 1));
-
-        const { data: existing, error: fetchError } = await supabaseClient
-          .from('loyalty_points')
-          .select('*')
-          .eq('customer_phone', phone)
-          .maybeSingle();
-
-        if (fetchError) throw fetchError;
-
-        function getTier(items) {
-          if (items >= 30) return 'Diamond';
-          if (items >= 21) return 'Platinum';
-          if (items >= 15) return 'Gold';
-          if (items >= 9) return 'Silver';
-          return 'None';
+        const { data, error } = await supabaseClient.rpc('add_loyalty_items', {
+          p_phone: phone,
+          p_items: itemsRaw
+        });
+        if (error) {
+          if (error.message && error.message.includes('function')) {
+            throw new Error('Run fix-loyalty.sql in Supabase SQL Editor first.');
+          }
+          throw error;
         }
 
-        if (existing) {
-          const resetNeeded = isFromPreviousMonth(existing.last_reset_date);
-          const base = resetNeeded ? 0 : (existing.items_purchased || 0);
-          const newItems = base + itemsRaw;
-          const newTier = getTier(newItems);
-          const oldTier = getTier(base);
-
-          const { error } = await supabaseClient.from('loyalty_points').update({
-            items_purchased: newItems,
-            points: Math.floor(newItems / 3),
-            current_tier: newTier,
-            redeemed_this_month: resetNeeded ? false : !!existing.redeemed_this_month,
-            last_reset_date: monthStart
-          }).eq('customer_phone', phone);
-
-          if (error) throw error;
-          const tierMsg = newTier !== oldTier ? ` 🎉 Tier upgraded to ${newTier}!` : '';
-          msgEl.style.color = '#d4ffec';
-          msgEl.textContent = `✅ Added ${itemsRaw}. Monthly total: ${newItems} (was ${base}).${tierMsg}`;
-        } else {
-          const newTier = getTier(itemsRaw);
-          const { error } = await supabaseClient.from('loyalty_points').insert([{
-            customer_phone: phone,
-            items_purchased: itemsRaw,
-            points: Math.floor(itemsRaw / 3),
-            current_tier: newTier,
-            redeemed_this_month: false,
-            last_reset_date: monthStart
-          }]);
-          if (error) throw error;
-          msgEl.style.color = '#d4ffec';
-          msgEl.textContent = `✅ New customer! ${phone} — ${itemsRaw} items, tier: ${newTier}.`;
-        }
+        const tierMsg = data.tier && data.tier !== 'None' ? ` Tier: ${data.tier}.` : '';
+        msgEl.style.color = '#d4ffec';
+        msgEl.textContent = `✅ Added ${itemsRaw} to previous ${data.previous}. Monthly total: ${data.total}.${tierMsg}`;
 
         document.getElementById('confirmOrderPhone').value = '';
         document.getElementById('confirmOrderItems').value = '';

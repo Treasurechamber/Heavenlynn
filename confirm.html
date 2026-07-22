@@ -8,141 +8,48 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     body {
       font-family: 'Poppins', sans-serif;
       min-height: 100vh;
       background: linear-gradient(135deg, #f9d6e3 0%, #fce4ec 50%, #f3e5f5 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 1rem;
+      display: flex; align-items: center; justify-content: center; padding: 1rem;
     }
-
     .card {
-      background: white;
-      border-radius: 20px;
-      padding: 2rem 1.8rem;
-      width: 100%;
-      max-width: 400px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.12);
+      background: white; border-radius: 20px; padding: 2rem 1.8rem;
+      width: 100%; max-width: 400px; box-shadow: 0 20px 60px rgba(0,0,0,0.12);
     }
-
     .logo { text-align: center; margin-bottom: 1.5rem; }
     .logo h1 { font-family: 'Dancing Script', cursive; font-size: 2rem; color: #c2185b; }
     .logo p { font-size: 0.85rem; color: #888; margin-top: 0.2rem; }
-
     #pinScreen { display: block; }
     #mainScreen { display: none; }
-
-    .label {
-      display: block;
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: #555;
-      margin-bottom: 0.4rem;
-    }
-
+    .label { display: block; font-size: 0.85rem; font-weight: 600; color: #555; margin-bottom: 0.4rem; }
     input {
-      width: 100%;
-      padding: 0.85rem 1rem;
-      border: 2px solid #f0c5d5;
-      border-radius: 12px;
-      font-size: 1rem;
-      font-family: 'Poppins', sans-serif;
-      transition: border-color 0.2s;
-      outline: none;
+      width: 100%; padding: 0.85rem 1rem; border: 2px solid #f0c5d5; border-radius: 12px;
+      font-size: 1rem; font-family: 'Poppins', sans-serif; outline: none;
     }
-
     input:focus { border-color: #c2185b; }
     input.error { border-color: #e53935; }
-
     .btn {
-      width: 100%;
-      padding: 0.9rem;
-      background: linear-gradient(135deg, #e91e8c, #c2185b);
-      color: white;
-      border: none;
-      border-radius: 12px;
-      font-size: 1.05rem;
-      font-weight: 700;
-      font-family: 'Poppins', sans-serif;
-      cursor: pointer;
-      margin-top: 1.2rem;
-      transition: opacity 0.2s, transform 0.1s;
+      width: 100%; padding: 0.9rem; background: linear-gradient(135deg, #e91e8c, #c2185b);
+      color: white; border: none; border-radius: 12px; font-size: 1.05rem; font-weight: 700;
+      font-family: 'Poppins', sans-serif; cursor: pointer; margin-top: 1.2rem;
     }
-
-    .btn:active { transform: scale(0.98); opacity: 0.9; }
     .btn:disabled { background: #ccc; cursor: not-allowed; }
-
     .field { margin-bottom: 1.2rem; }
-
-    .msg {
-      margin-top: 1rem;
-      padding: 0.85rem 1rem;
-      border-radius: 12px;
-      font-size: 0.9rem;
-      font-weight: 600;
-      display: none;
-      text-align: center;
-    }
-
+    .msg { margin-top: 1rem; padding: 0.85rem 1rem; border-radius: 12px; font-size: 0.88rem; font-weight: 600; display: none; text-align: center; line-height: 1.4; }
     .msg.success { background: #e8f5e9; color: #2e7d32; display: block; }
     .msg.error { background: #ffebee; color: #c62828; display: block; }
-
-    .hint {
-      font-size: 0.78rem;
-      color: #999;
-      margin-top: 0.35rem;
-      line-height: 1.4;
-    }
-
-    .divider {
-      border: none;
-      border-top: 1px solid #f0e0e8;
-      margin: 1.5rem 0;
-    }
-
-    .history-title {
-      font-size: 0.8rem;
-      font-weight: 600;
-      color: #aaa;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-bottom: 0.8rem;
-    }
-
+    .hint { font-size: 0.78rem; color: #999; margin-top: 0.35rem; line-height: 1.4; }
+    .divider { border: none; border-top: 1px solid #f0e0e8; margin: 1.5rem 0; }
+    .history-title { font-size: 0.8rem; font-weight: 600; color: #aaa; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.8rem; }
     .history-list { list-style: none; max-height: 200px; overflow-y: auto; }
-
-    .history-list li {
-      font-size: 0.82rem;
-      color: #666;
-      padding: 0.5rem 0;
-      border-bottom: 1px solid #fce4ec;
-    }
-
-    .history-list li:last-child { border-bottom: none; }
-
-    .history-top {
-      display: flex;
-      justify-content: space-between;
-      gap: 0.5rem;
-      margin-bottom: 0.15rem;
-    }
-
-    .tier-badge {
-      display: inline-block;
-      padding: 0.1rem 0.5rem;
-      border-radius: 20px;
-      font-size: 0.75rem;
-      font-weight: 700;
-      background: #fce4ec;
-      color: #c2185b;
-    }
+    .history-list li { font-size: 0.82rem; color: #666; padding: 0.5rem 0; border-bottom: 1px solid #fce4ec; }
+    .history-top { display: flex; justify-content: space-between; gap: 0.5rem; margin-bottom: 0.15rem; }
+    .tier-badge { display: inline-block; padding: 0.1rem 0.5rem; border-radius: 20px; font-size: 0.75rem; font-weight: 700; background: #fce4ec; color: #c2185b; }
   </style>
 </head>
 <body>
-
 <div class="card">
   <div class="logo">
     <h1>heavenlynn</h1>
@@ -164,18 +71,14 @@
       <label class="label" for="phoneInput">Customer Phone Number</label>
       <input type="tel" id="phoneInput" placeholder="e.g., 03 123 456" maxlength="20" inputmode="tel">
     </div>
-
     <div class="field">
       <label class="label" for="itemsInput">Final Number of Items</label>
       <input type="number" id="itemsInput" placeholder="e.g., 6" min="1" inputmode="numeric">
       <p class="hint">Adds to this customer's total for the month (does not replace).</p>
     </div>
-
     <button class="btn" id="confirmBtn" onclick="confirmOrder()">✅ Confirm Order</button>
     <div class="msg" id="confirmMsg"></div>
-
     <hr class="divider">
-
     <div class="history-title">Today's Confirmed Orders</div>
     <ul class="history-list" id="historyList">
       <li style="color:#bbb; text-align:center;">No orders confirmed yet today</li>
@@ -187,27 +90,8 @@
   const SUPABASE_URL = 'https://cfvsxnvvkdskbkljqicw.supabase.co';
   const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNmdnN4bnZ2a2Rza2JrbGpxaWN3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ1MzU0MTcsImV4cCI6MjA2MDExMTQxN30.dNZsSOJyW1bE4bDQP-AIEYV7Z6hlw_iVMN6LZ2IdPio';
   const EMPLOYEE_PIN = '1234';
-
   const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
   let isSaving = false;
-
-  // Local YYYY-MM-DD (avoids UTC timezone wipe bug)
-  function localDateStr(d) {
-    return d.getFullYear() + '-' +
-      String(d.getMonth() + 1).padStart(2, '0') + '-' +
-      String(d.getDate()).padStart(2, '0');
-  }
-
-  function currentMonthKey() {
-    const n = new Date();
-    return n.getFullYear() + '-' + String(n.getMonth() + 1).padStart(2, '0');
-  }
-
-  // Compare stored date string by month only — no Date() timezone conversion
-  function isFromPreviousMonth(lastResetDateStr) {
-    if (!lastResetDateStr) return true;
-    return String(lastResetDateStr).slice(0, 7) !== currentMonthKey();
-  }
 
   function normalizePhone(raw) {
     let phone = String(raw).replace(/\D/g, '');
@@ -216,23 +100,9 @@
     return phone;
   }
 
-  function tierName(items) {
-    if (items >= 30) return 'Diamond';
-    if (items >= 21) return 'Platinum';
-    if (items >= 15) return 'Gold';
-    if (items >= 9) return 'Silver';
-    return 'None';
-  }
-
-  function tierLabel(items) {
-    const map = {
-      Diamond: 'Diamond 💠',
-      Platinum: 'Platinum 💎',
-      Gold: 'Gold 🥇',
-      Silver: 'Silver 🥈',
-      None: 'None'
-    };
-    return map[tierName(items)];
+  function tierLabel(tier) {
+    const map = { Diamond: 'Diamond 💠', Platinum: 'Platinum 💎', Gold: 'Gold 🥇', Silver: 'Silver 🥈', None: 'None' };
+    return map[tier] || tier || 'None';
   }
 
   function checkPin() {
@@ -292,55 +162,31 @@
     btn.textContent = 'Saving...';
 
     const phone = normalizePhone(phoneRaw);
-    const monthStart = localDateStr(new Date(new Date().getFullYear(), new Date().getMonth(), 1));
 
     try {
-      const { data: existing, error: fetchError } = await sb
-        .from('loyalty_points')
-        .select('*')
-        .eq('customer_phone', phone)
-        .maybeSingle();
+      // Prefer secure DB function (bypasses 401/RLS issues)
+      const { data, error } = await sb.rpc('add_loyalty_items', {
+        p_phone: phone,
+        p_items: itemsVal
+      });
 
-      if (fetchError) throw fetchError;
-
-      let newItems;
-      let previousItems = 0;
-
-      if (existing) {
-        const resetNeeded = isFromPreviousMonth(existing.last_reset_date);
-        previousItems = resetNeeded ? 0 : (existing.items_purchased || 0);
-        newItems = previousItems + itemsVal;
-        const newTier = tierName(newItems);
-
-        const { error } = await sb.from('loyalty_points').update({
-          items_purchased: newItems,
-          points: Math.floor(newItems / 3),
-          current_tier: newTier,
-          redeemed_this_month: resetNeeded ? false : !!existing.redeemed_this_month,
-          last_reset_date: monthStart
-        }).eq('customer_phone', phone);
-
-        if (error) throw error;
-      } else {
-        newItems = itemsVal;
-        const newTier = tierName(newItems);
-
-        const { error } = await sb.from('loyalty_points').insert([{
-          customer_phone: phone,
-          items_purchased: newItems,
-          points: Math.floor(newItems / 3),
-          current_tier: newTier,
-          redeemed_this_month: false,
-          last_reset_date: monthStart
-        }]);
-
-        if (error) throw error;
+      if (error) {
+        // Fallback: direct update if RPC not created yet
+        if (error.message && (error.message.includes('function') || error.code === 'PGRST202')) {
+          throw new Error('Database function missing. Run fix-loyalty.sql in Supabase first.');
+        }
+        if (error.code === '42501' || String(error.message).includes('401') || String(error.message).toLowerCase().includes('permission') || String(error.message).toLowerCase().includes('jwt')) {
+          throw new Error('Blocked by Supabase (401). Open Supabase SQL Editor and run fix-loyalty.sql');
+        }
+        throw error;
       }
 
-      const label = tierLabel(newItems);
-      let successText = 'Added ' + itemsVal + ' items. Monthly total: ' + newItems + ' (' + label + ')';
-      if (previousItems > 0) {
-        successText = 'Added ' + itemsVal + ' to previous ' + previousItems + '. Monthly total: ' + newItems + ' (' + label + ')';
+      const previous = data.previous || 0;
+      const total = data.total;
+      const label = tierLabel(data.tier);
+      let successText = 'Added ' + itemsVal + '. Monthly total: ' + total + ' (' + label + ')';
+      if (previous > 0) {
+        successText = 'Added ' + itemsVal + ' to previous ' + previous + '. Monthly total: ' + total + ' (' + label + ')';
       }
 
       msg.className = 'msg success';
@@ -350,7 +196,7 @@
       history.unshift({
         phone: phoneRaw,
         items: itemsVal,
-        total: newItems,
+        total: total,
         tier: label,
         time: new Date().toLocaleTimeString()
       });
@@ -362,7 +208,8 @@
       document.getElementById('phoneInput').focus();
     } catch (err) {
       msg.className = 'msg error';
-      msg.textContent = 'Error: ' + (err.message || 'Could not save. Try again.');
+      msg.textContent = err.message || 'Could not save. Try again.';
+      console.error('Confirm failed:', err);
     } finally {
       isSaving = false;
       btn.disabled = false;
