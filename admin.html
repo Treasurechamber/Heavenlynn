@@ -802,20 +802,27 @@
     }
     .login-box button:hover { opacity: 0.9; }
     #loginError { color: #e74c3c; display: none; margin-top: 15px; font-size: 0.85rem; font-weight: 500; }
+    #loginAttemptWarning { color: #e67e22; display: none; margin-top: 10px; font-size: 0.82rem; font-weight: 500; }
+    /* Dashboard is hidden until auth succeeds */
+    #dashboardRoot { display: none; }
   </style>
 </head>
 <body>
-  <!-- Login Screen Overlay -->
+  <!-- Login Screen (always shown first; dashboard revealed only after auth) -->
   <div id="loginOverlay" class="login-overlay">
     <div class="login-box">
       <h2>Heavenlynn Admin</h2>
-      <p>Please enter your credentials to continue</p>
-      <input type="text" id="loginUsername" placeholder="Username" autocomplete="off">
-      <input type="password" id="loginPassword" placeholder="Password" autocomplete="off" onkeypress="if(event.key === 'Enter') checkLogin()">
-      <button onclick="checkLogin()">Login</button>
+      <p>Owner access only. Enter your credentials to continue.</p>
+      <input type="text" id="loginUsername" placeholder="Username" autocomplete="off" spellcheck="false">
+      <input type="password" id="loginPassword" placeholder="Password" autocomplete="off" onkeypress="if(event.key==='Enter') checkLogin()">
+      <button onclick="checkLogin()" id="loginBtn">Login</button>
       <div id="loginError">Invalid username or password</div>
+      <div id="loginAttemptWarning"></div>
     </div>
   </div>
+
+  <!-- Dashboard root (only revealed after successful login) -->
+  <div id="dashboardRoot">
   
   <div class="sidebar">
     <div class="sidebar-header">
@@ -1387,25 +1394,88 @@
   </div>
 
   <script>
-    // Authentication logic
-    document.addEventListener('DOMContentLoaded', () => {
-      if (sessionStorage.getItem('hl_admin_auth') === 'true') {
-        document.getElementById('loginOverlay').style.display = 'none';
+    // ========== URL TOKEN GATE (first line of defense) ==========
+    (function() {
+      const ACCESS_TOKEN = 'hl-owner-2026';
+      const params = new URLSearchParams(window.location.search);
+      const hasToken   = params.get('access') === ACCESS_TOKEN;
+      const hasSession = sessionStorage.getItem('hl_admin_auth') === 'true';
+      if (!hasToken && !hasSession) {
+        // No valid token and no session — redirect silently to home
+        window.location.replace('index.html');
       }
+    })();
+
+    // ========== SECURE AUTHENTICATION ==========
+    let _loginAttempts = 0;
+    let _lockUntil = 0;
+
+    function _revealDashboard() {
+      const overlay = document.getElementById('loginOverlay');
+      const root    = document.getElementById('dashboardRoot');
+      overlay.style.transition = 'opacity .4s';
+      overlay.style.opacity = '0';
+      setTimeout(() => {
+        overlay.style.display = 'none';
+        root.style.display = 'block';
+      }, 420);
+      // Now safe to initialize Supabase and load data
+      waitForSupabase();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Only reveal dashboard if session token exists; never auto-init Supabase otherwise
+      if (sessionStorage.getItem('hl_admin_auth') === 'true') {
+        _revealDashboard();
+      }
+      // Focus username field for fast login
+      const usernameField = document.getElementById('loginUsername');
+      if (usernameField) usernameField.focus();
     });
 
     function checkLogin() {
-      const user = document.getElementById('loginUsername').value;
-      const pass = document.getElementById('loginPassword').value;
-      
-      if (user === 'lynnadmin' && pass === 'Heavenlynn2026!') {
-        sessionStorage.setItem('hl_admin_auth', 'true');
-        const overlay = document.getElementById('loginOverlay');
-        overlay.style.opacity = '0';
-        setTimeout(() => { overlay.style.display = 'none'; }, 400);
-      } else {
-        document.getElementById('loginError').style.display = 'block';
+      const now = Date.now();
+      // Locked out?
+      if (_lockUntil > now) {
+        const secs = Math.ceil((_lockUntil - now) / 1000);
+        document.getElementById('loginAttemptWarning').style.display = 'block';
+        document.getElementById('loginAttemptWarning').textContent = `Too many attempts. Try again in ${secs}s.`;
+        return;
       }
+
+      const user = document.getElementById('loginUsername').value.trim();
+      const pass = document.getElementById('loginPassword').value;
+      const btn  = document.getElementById('loginBtn');
+
+      // Subtle timing delay to resist brute-force
+      btn.disabled = true;
+      btn.textContent = 'Verifying...';
+
+      setTimeout(() => {
+        btn.disabled = false;
+        btn.textContent = 'Login';
+
+        if (user === 'lynnadmin' && pass === 'Heavenlynn2026!') {
+          _loginAttempts = 0;
+          sessionStorage.setItem('hl_admin_auth', 'true');
+          document.getElementById('loginError').style.display = 'none';
+          document.getElementById('loginAttemptWarning').style.display = 'none';
+          _revealDashboard();
+        } else {
+          _loginAttempts++;
+          document.getElementById('loginError').style.display = 'block';
+          document.getElementById('loginPassword').value = '';
+          if (_loginAttempts >= 5) {
+            _lockUntil = Date.now() + 60000; // 1-minute lockout after 5 failures
+            _loginAttempts = 0;
+            document.getElementById('loginAttemptWarning').style.display = 'block';
+            document.getElementById('loginAttemptWarning').textContent = 'Too many failed attempts. Locked for 60 seconds.';
+          } else if (_loginAttempts >= 3) {
+            document.getElementById('loginAttemptWarning').style.display = 'block';
+            document.getElementById('loginAttemptWarning').textContent = `${5 - _loginAttempts} attempt(s) remaining before lockout.`;
+          }
+        }
+      }, 600); // artificial delay
     }
     // Tab switching logic
     function switchTab(sectionId, navElement) {
@@ -1445,44 +1515,48 @@
     }
     
     // Wait for Supabase library to load
+    function _loadAllDashboardData() {
+      setTimeout(() => {
+        if (typeof loadItems              === 'function') loadItems();
+        if (typeof loadHeroSlides         === 'function') loadHeroSlides();
+        if (typeof loadWeeklySpecials     === 'function') loadWeeklySpecials();
+        if (typeof loadUpcomingEvents     === 'function') loadUpcomingEvents();
+        if (typeof loadLoyaltyPoints      === 'function') loadLoyaltyPoints();
+        if (typeof loadPendingNotifications === 'function') loadPendingNotifications();
+      }, 100);
+    }
+
     function waitForSupabase() {
       if (initSupabase()) {
-        // Supabase is ready, load items if DOM is ready
         if (document.readyState === 'complete' || document.readyState === 'interactive') {
-          if (typeof loadItems === 'function') {
-            setTimeout(() => loadItems(), 100);
-          }
+          _loadAllDashboardData();
         }
         return;
       }
-      
-      // Retry every 100ms, up to 50 times (5 seconds total)
+
       let attempts = 0;
       const maxAttempts = 50;
       const retryInterval = setInterval(() => {
         attempts++;
         if (initSupabase()) {
           clearInterval(retryInterval);
-          // Load items if DOM is ready
           if (document.readyState === 'complete' || document.readyState === 'interactive') {
-            if (typeof loadItems === 'function') {
-              setTimeout(() => loadItems(), 100);
-            }
+            _loadAllDashboardData();
           }
         } else if (attempts >= maxAttempts) {
           clearInterval(retryInterval);
           console.error('❌ Admin: Failed to initialize Supabase after', maxAttempts, 'attempts');
-          document.getElementById('itemsTable').innerHTML = `
-            <tr><td colspan="6" style="text-align: center; color: red; padding: 2rem;">
-              ⚠️ Failed to connect to Supabase.<br>Please check your internet connection and refresh the page.
+          const el = document.getElementById('itemsTable');
+          if (el) el.innerHTML = `
+            <tr><td colspan="6" style="text-align:center; color:red; padding:2rem;">
+              ⚠️ Failed to connect. Please check your internet and refresh.
             </td></tr>
           `;
         }
       }, 100);
     }
-    
-    // Start waiting for Supabase
-    waitForSupabase();
+
+    // waitForSupabase() is called only after successful authentication (see _revealDashboard)
 
     let allItems = [];
 
@@ -3385,15 +3459,23 @@
         return;
       }
 
+      // Recalculate points and tier from items
+      const newPoints = Math.floor(items / 3);
+      let newTier = 'None';
+      if (items >= 30) newTier = 'Diamond';
+      else if (items >= 21) newTier = 'Platinum';
+      else if (items >= 15) newTier = 'Gold';
+      else if (items >= 9)  newTier = 'Silver';
+
       supabaseClient
         .from('loyalty_points')
-        .update({ items_purchased: items })
+        .update({ items_purchased: items, points: newPoints, current_tier: newTier })
         .eq('id', id)
         .then(({ error }) => {
           if (error) {
             alert(`❌ Error: ${error.message}`);
           } else {
-            alert('✅ Updated!');
+            alert(`✅ Updated! Tier: ${newTier}, Points: ${newPoints}`);
             loadLoyaltyPoints();
           }
         });
@@ -3639,10 +3721,8 @@
       }
     }
 
-    // Initialize and load on start
-    document.addEventListener('DOMContentLoaded', () => {
-      // Only load items if Supabase is already initialized
-      // Otherwise, waitForSupabase will call it when ready
+    // Initialize and load on start — called only after auth succeeds
+    function initDashboardData() {
       if (supabaseInitialized && typeof supabaseClient !== 'undefined') {
         loadItems();
         loadHeroSlides();
@@ -3651,8 +3731,16 @@
         loadLoyaltyPoints();
         loadPendingNotifications();
       }
+    }
+
+    // Legacy DOMContentLoaded — kept but only fires if already authed
+    document.addEventListener('DOMContentLoaded', () => {
+      if (supabaseInitialized && typeof supabaseClient !== 'undefined' && sessionStorage.getItem('hl_admin_auth') === 'true') {
+        initDashboardData();
+      }
     });
   </script>
-  </div>
+  </div><!-- /.main-wrapper -->
+</div><!-- /#dashboardRoot -->
 </body>
 </html>
