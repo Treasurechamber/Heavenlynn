@@ -1972,27 +1972,26 @@ async function updateLoyaltyPointsOnOrder(itemCount, phoneNumber) {
   }
 
   try {
-    // Check if we need to reset (monthly reset)
+    // Local YYYY-MM-DD (avoids UTC timezone wipe)
     const now = new Date();
-    const firstOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    const monthStart = now.getFullYear() + '-' +
+      String(now.getMonth() + 1).padStart(2, '0') + '-01';
+    const monthKey = monthStart.slice(0, 7);
     
     const { data, error } = await sb
       .from('loyalty_points')
       .select('*')
       .eq('customer_phone', phoneNumber)
-      .single();
+      .maybeSingle();
 
-    if (error && error.code !== 'PGRST116') {
+    if (error) {
       console.error('❌ Error fetching loyalty points:', error);
       return { error: error.message };
     }
 
     if (data) {
-      const lastReset = new Date(data.last_reset_date);
-      let baseItems = data.items_purchased || 0;
-      if (lastReset < firstOfMonth) {
-        baseItems = 0;
-      }
+      const resetNeeded = !data.last_reset_date || String(data.last_reset_date).slice(0, 7) !== monthKey;
+      const baseItems = resetNeeded ? 0 : (data.items_purchased || 0);
 
       const newItems = baseItems + itemCount;
       const newPoints = Math.floor(newItems / 3);
@@ -2004,8 +2003,8 @@ async function updateLoyaltyPointsOnOrder(itemCount, phoneNumber) {
           items_purchased: newItems,
           points: newPoints,
           current_tier: newTier,
-          redeemed_this_month: lastReset < firstOfMonth ? false : data.redeemed_this_month,
-          last_reset_date: firstOfMonth.toISOString().split('T')[0]
+          redeemed_this_month: resetNeeded ? false : data.redeemed_this_month,
+          last_reset_date: monthStart
         })
         .eq('customer_phone', phoneNumber);
 
@@ -2027,7 +2026,7 @@ async function updateLoyaltyPointsOnOrder(itemCount, phoneNumber) {
           points: newPoints,
           current_tier: newTier,
           redeemed_this_month: false,
-          last_reset_date: firstOfMonth.toISOString().split('T')[0]
+          last_reset_date: monthStart
         }])
         .select();
 

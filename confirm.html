@@ -28,24 +28,10 @@
       box-shadow: 0 20px 60px rgba(0,0,0,0.12);
     }
 
-    .logo {
-      text-align: center;
-      margin-bottom: 1.5rem;
-    }
+    .logo { text-align: center; margin-bottom: 1.5rem; }
+    .logo h1 { font-family: 'Dancing Script', cursive; font-size: 2rem; color: #c2185b; }
+    .logo p { font-size: 0.85rem; color: #888; margin-top: 0.2rem; }
 
-    .logo h1 {
-      font-family: 'Dancing Script', cursive;
-      font-size: 2rem;
-      color: #c2185b;
-    }
-
-    .logo p {
-      font-size: 0.85rem;
-      color: #888;
-      margin-top: 0.2rem;
-    }
-
-    /* PIN screen */
     #pinScreen { display: block; }
     #mainScreen { display: none; }
 
@@ -104,6 +90,13 @@
     .msg.success { background: #e8f5e9; color: #2e7d32; display: block; }
     .msg.error { background: #ffebee; color: #c62828; display: block; }
 
+    .hint {
+      font-size: 0.78rem;
+      color: #999;
+      margin-top: 0.35rem;
+      line-height: 1.4;
+    }
+
     .divider {
       border: none;
       border-top: 1px solid #f0e0e8;
@@ -119,22 +112,23 @@
       margin-bottom: 0.8rem;
     }
 
-    .history-list {
-      list-style: none;
-      max-height: 180px;
-      overflow-y: auto;
-    }
+    .history-list { list-style: none; max-height: 200px; overflow-y: auto; }
 
     .history-list li {
       font-size: 0.82rem;
       color: #666;
-      padding: 0.4rem 0;
+      padding: 0.5rem 0;
       border-bottom: 1px solid #fce4ec;
-      display: flex;
-      justify-content: space-between;
     }
 
     .history-list li:last-child { border-bottom: none; }
+
+    .history-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.5rem;
+      margin-bottom: 0.15rem;
+    }
 
     .tier-badge {
       display: inline-block;
@@ -155,7 +149,6 @@
     <p>Employee Order Confirmation</p>
   </div>
 
-  <!-- PIN Screen -->
   <div id="pinScreen">
     <div class="field">
       <label class="label" for="pinInput">Enter Employee PIN</label>
@@ -166,7 +159,6 @@
     <div class="msg" id="pinMsg"></div>
   </div>
 
-  <!-- Main Screen -->
   <div id="mainScreen">
     <div class="field">
       <label class="label" for="phoneInput">Customer Phone Number</label>
@@ -176,6 +168,7 @@
     <div class="field">
       <label class="label" for="itemsInput">Final Number of Items</label>
       <input type="number" id="itemsInput" placeholder="e.g., 6" min="1" inputmode="numeric">
+      <p class="hint">Adds to this customer's total for the month (does not replace).</p>
     </div>
 
     <button class="btn" id="confirmBtn" onclick="confirmOrder()">✅ Confirm Order</button>
@@ -185,7 +178,7 @@
 
     <div class="history-title">Today's Confirmed Orders</div>
     <ul class="history-list" id="historyList">
-      <li style="color:#bbb; justify-content:center;">No orders confirmed yet today</li>
+      <li style="color:#bbb; text-align:center;">No orders confirmed yet today</li>
     </ul>
   </div>
 </div>
@@ -193,11 +186,55 @@
 <script>
   const SUPABASE_URL = 'https://cfvsxnvvkdskbkljqicw.supabase.co';
   const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNmdnN4bnZ2a2Rza2JrbGpxaWN3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ1MzU0MTcsImV4cCI6MjA2MDExMTQxN30.dNZsSOJyW1bE4bDQP-AIEYV7Z6hlw_iVMN6LZ2IdPio';
-  const EMPLOYEE_PIN = '1234'; // Change this to whatever PIN you want
+  const EMPLOYEE_PIN = '1234';
 
   const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  let isSaving = false;
 
-  // Session: stay unlocked for 8 hours
+  // Local YYYY-MM-DD (avoids UTC timezone wipe bug)
+  function localDateStr(d) {
+    return d.getFullYear() + '-' +
+      String(d.getMonth() + 1).padStart(2, '0') + '-' +
+      String(d.getDate()).padStart(2, '0');
+  }
+
+  function currentMonthKey() {
+    const n = new Date();
+    return n.getFullYear() + '-' + String(n.getMonth() + 1).padStart(2, '0');
+  }
+
+  // Compare stored date string by month only — no Date() timezone conversion
+  function isFromPreviousMonth(lastResetDateStr) {
+    if (!lastResetDateStr) return true;
+    return String(lastResetDateStr).slice(0, 7) !== currentMonthKey();
+  }
+
+  function normalizePhone(raw) {
+    let phone = String(raw).replace(/\D/g, '');
+    if (phone.startsWith('0')) phone = '961' + phone.substring(1);
+    else if (!phone.startsWith('961') && phone.length <= 10) phone = '961' + phone;
+    return phone;
+  }
+
+  function tierName(items) {
+    if (items >= 30) return 'Diamond';
+    if (items >= 21) return 'Platinum';
+    if (items >= 15) return 'Gold';
+    if (items >= 9) return 'Silver';
+    return 'None';
+  }
+
+  function tierLabel(items) {
+    const map = {
+      Diamond: 'Diamond 💠',
+      Platinum: 'Platinum 💎',
+      Gold: 'Gold 🥇',
+      Silver: 'Silver 🥈',
+      None: 'None'
+    };
+    return map[tierName(items)];
+  }
+
   function checkPin() {
     const pin = document.getElementById('pinInput').value.trim();
     const msg = document.getElementById('pinMsg');
@@ -218,23 +255,16 @@
     loadTodayHistory();
   }
 
-  // Auto-unlock if session still valid (8 hours)
   window.addEventListener('DOMContentLoaded', () => {
     const t = sessionStorage.getItem('hl_emp_auth');
     if (t && (Date.now() - parseInt(t)) < 8 * 60 * 60 * 1000) showMain();
   });
 
-  function getTier(items) {
-    if (items >= 30) return 'Diamond 💠';
-    if (items >= 21) return 'Platinum 💎';
-    if (items >= 15) return 'Gold 🥇';
-    if (items >= 9)  return 'Silver 🥈';
-    return 'None';
-  }
-
   async function confirmOrder() {
+    if (isSaving) return;
+
     const phoneRaw = document.getElementById('phoneInput').value.trim();
-    const itemsVal = parseInt(document.getElementById('itemsInput').value);
+    const itemsVal = parseInt(document.getElementById('itemsInput').value, 10);
     const msg = document.getElementById('confirmMsg');
     const btn = document.getElementById('confirmBtn');
 
@@ -256,98 +286,106 @@
 
     document.getElementById('phoneInput').classList.remove('error');
     document.getElementById('itemsInput').classList.remove('error');
+
+    isSaving = true;
     btn.disabled = true;
     btn.textContent = 'Saving...';
 
-    // Normalise phone to Lebanese format
-    let phone = phoneRaw.replace(/\D/g, '');
-    if (phone.startsWith('0')) phone = '961' + phone.substring(1);
-    else if (!phone.startsWith('961') && phone.length <= 10) phone = '961' + phone;
+    const phone = normalizePhone(phoneRaw);
+    const monthStart = localDateStr(new Date(new Date().getFullYear(), new Date().getMonth(), 1));
 
     try {
-      const now = new Date();
-      const firstOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-
-      const { data: existing } = await sb
+      const { data: existing, error: fetchError } = await sb
         .from('loyalty_points')
         .select('*')
         .eq('customer_phone', phone)
-        .single();
+        .maybeSingle();
 
-      let newItems, newTier, oldTier = 'None';
+      if (fetchError) throw fetchError;
+
+      let newItems;
+      let previousItems = 0;
 
       if (existing) {
-        const lastReset = new Date(existing.last_reset_date);
-        const base = lastReset < firstOfMonth ? 0 : (existing.items_purchased || 0);
-        oldTier = getTier(base);
-        newItems = base + itemsVal;
-        newTier = getTier(newItems);
+        const resetNeeded = isFromPreviousMonth(existing.last_reset_date);
+        previousItems = resetNeeded ? 0 : (existing.items_purchased || 0);
+        newItems = previousItems + itemsVal;
+        const newTier = tierName(newItems);
 
         const { error } = await sb.from('loyalty_points').update({
           items_purchased: newItems,
           points: Math.floor(newItems / 3),
-          current_tier: newTier.replace(/\s.+/, ''), // store just tier name
-          redeemed_this_month: lastReset < firstOfMonth ? false : existing.redeemed_this_month,
-          last_reset_date: lastReset < firstOfMonth
-            ? firstOfMonth.toISOString().split('T')[0]
-            : existing.last_reset_date
+          current_tier: newTier,
+          redeemed_this_month: resetNeeded ? false : !!existing.redeemed_this_month,
+          last_reset_date: monthStart
         }).eq('customer_phone', phone);
 
         if (error) throw error;
       } else {
         newItems = itemsVal;
-        newTier = getTier(newItems);
+        const newTier = tierName(newItems);
 
         const { error } = await sb.from('loyalty_points').insert([{
           customer_phone: phone,
           items_purchased: newItems,
           points: Math.floor(newItems / 3),
-          current_tier: newTier.replace(/\s.+/, ''),
+          current_tier: newTier,
           redeemed_this_month: false,
-          last_reset_date: firstOfMonth.toISOString().split('T')[0]
+          last_reset_date: monthStart
         }]);
 
         if (error) throw error;
       }
 
-      const tierChanged = newTier !== oldTier && oldTier !== 'None' || (oldTier === 'None' && newTier !== 'None');
-      let successText = `✅ Done! ${itemsVal} items added for ${phoneRaw}. Total this month: ${newItems}.`;
-      if (tierChanged) successText += ` 🎉 Tier: ${newTier}!`;
+      const label = tierLabel(newItems);
+      let successText = 'Added ' + itemsVal + ' items. Monthly total: ' + newItems + ' (' + label + ')';
+      if (previousItems > 0) {
+        successText = 'Added ' + itemsVal + ' to previous ' + previousItems + '. Monthly total: ' + newItems + ' (' + label + ')';
+      }
 
       msg.className = 'msg success';
       msg.textContent = successText;
 
-      // Save to today's history in localStorage
       const history = JSON.parse(localStorage.getItem('hl_order_history') || '[]');
-      history.unshift({ phone: phoneRaw, items: itemsVal, total: newItems, tier: newTier, time: new Date().toLocaleTimeString() });
+      history.unshift({
+        phone: phoneRaw,
+        items: itemsVal,
+        total: newItems,
+        tier: label,
+        time: new Date().toLocaleTimeString()
+      });
       localStorage.setItem('hl_order_history', JSON.stringify(history.slice(0, 20)));
       loadTodayHistory();
 
       document.getElementById('phoneInput').value = '';
       document.getElementById('itemsInput').value = '';
-
+      document.getElementById('phoneInput').focus();
     } catch (err) {
       msg.className = 'msg error';
-      msg.textContent = '❌ Error: ' + err.message;
+      msg.textContent = 'Error: ' + (err.message || 'Could not save. Try again.');
+    } finally {
+      isSaving = false;
+      btn.disabled = false;
+      btn.textContent = '✅ Confirm Order';
     }
-
-    btn.disabled = false;
-    btn.textContent = '✅ Confirm Order';
   }
 
   function loadTodayHistory() {
     const list = document.getElementById('historyList');
     const history = JSON.parse(localStorage.getItem('hl_order_history') || '[]');
     if (!history.length) {
-      list.innerHTML = '<li style="color:#bbb; justify-content:center;">No orders confirmed yet today</li>';
+      list.innerHTML = '<li style="color:#bbb; text-align:center;">No orders confirmed yet today</li>';
       return;
     }
-    list.innerHTML = history.map(h => `
-      <li>
-        <span>${h.phone} — ${h.items} items</span>
-        <span><span class="tier-badge">${h.tier}</span> ${h.time}</span>
-      </li>
-    `).join('');
+    list.innerHTML = history.map(h =>
+      '<li>' +
+        '<div class="history-top">' +
+          '<span><strong>' + h.phone + '</strong> +' + h.items + ' items</span>' +
+          '<span class="tier-badge">' + h.tier + '</span>' +
+        '</div>' +
+        '<div style="color:#999;font-size:0.75rem;">Month total: ' + h.total + ' · ' + h.time + '</div>' +
+      '</li>'
+    ).join('');
   }
 </script>
 </body>
