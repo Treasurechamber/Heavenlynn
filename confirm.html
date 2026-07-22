@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Heavenlynn — Confirm Order</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #f9d6e3 0%, #fce4ec 50%, #f3e5f5 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .card {
+      background: white;
+      border-radius: 20px;
+      padding: 2rem 1.8rem;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.12);
+    }
+
+    .logo {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .logo h1 {
+      font-family: 'Dancing Script', cursive;
+      font-size: 2rem;
+      color: #c2185b;
+    }
+
+    .logo p {
+      font-size: 0.85rem;
+      color: #888;
+      margin-top: 0.2rem;
+    }
+
+    /* PIN screen */
+    #pinScreen { display: block; }
+    #mainScreen { display: none; }
+
+    .label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #555;
+      margin-bottom: 0.4rem;
+    }
+
+    input {
+      width: 100%;
+      padding: 0.85rem 1rem;
+      border: 2px solid #f0c5d5;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-family: 'Poppins', sans-serif;
+      transition: border-color 0.2s;
+      outline: none;
+    }
+
+    input:focus { border-color: #c2185b; }
+    input.error { border-color: #e53935; }
+
+    .btn {
+      width: 100%;
+      padding: 0.9rem;
+      background: linear-gradient(135deg, #e91e8c, #c2185b);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      font-family: 'Poppins', sans-serif;
+      cursor: pointer;
+      margin-top: 1.2rem;
+      transition: opacity 0.2s, transform 0.1s;
+    }
+
+    .btn:active { transform: scale(0.98); opacity: 0.9; }
+    .btn:disabled { background: #ccc; cursor: not-allowed; }
+
+    .field { margin-bottom: 1.2rem; }
+
+    .msg {
+      margin-top: 1rem;
+      padding: 0.85rem 1rem;
+      border-radius: 12px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      display: none;
+      text-align: center;
+    }
+
+    .msg.success { background: #e8f5e9; color: #2e7d32; display: block; }
+    .msg.error { background: #ffebee; color: #c62828; display: block; }
+
+    .divider {
+      border: none;
+      border-top: 1px solid #f0e0e8;
+      margin: 1.5rem 0;
+    }
+
+    .history-title {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #aaa;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.8rem;
+    }
+
+    .history-list {
+      list-style: none;
+      max-height: 180px;
+      overflow-y: auto;
+    }
+
+    .history-list li {
+      font-size: 0.82rem;
+      color: #666;
+      padding: 0.4rem 0;
+      border-bottom: 1px solid #fce4ec;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .history-list li:last-child { border-bottom: none; }
+
+    .tier-badge {
+      display: inline-block;
+      padding: 0.1rem 0.5rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      background: #fce4ec;
+      color: #c2185b;
+    }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <div class="logo">
+    <h1>heavenlynn</h1>
+    <p>Employee Order Confirmation</p>
+  </div>
+
+  <!-- PIN Screen -->
+  <div id="pinScreen">
+    <div class="field">
+      <label class="label" for="pinInput">Enter Employee PIN</label>
+      <input type="password" id="pinInput" placeholder="••••" maxlength="6" inputmode="numeric"
+             onkeypress="if(event.key==='Enter') checkPin()">
+    </div>
+    <button class="btn" onclick="checkPin()">Unlock</button>
+    <div class="msg" id="pinMsg"></div>
+  </div>
+
+  <!-- Main Screen -->
+  <div id="mainScreen">
+    <div class="field">
+      <label class="label" for="phoneInput">Customer Phone Number</label>
+      <input type="tel" id="phoneInput" placeholder="e.g., 03 123 456" maxlength="20" inputmode="tel">
+    </div>
+
+    <div class="field">
+      <label class="label" for="itemsInput">Final Number of Items</label>
+      <input type="number" id="itemsInput" placeholder="e.g., 6" min="1" inputmode="numeric">
+    </div>
+
+    <button class="btn" id="confirmBtn" onclick="confirmOrder()">✅ Confirm Order</button>
+    <div class="msg" id="confirmMsg"></div>
+
+    <hr class="divider">
+
+    <div class="history-title">Today's Confirmed Orders</div>
+    <ul class="history-list" id="historyList">
+      <li style="color:#bbb; justify-content:center;">No orders confirmed yet today</li>
+    </ul>
+  </div>
+</div>
+
+<script>
+  const SUPABASE_URL = 'https://cfvsxnvvkdskbkljqicw.supabase.co';
+  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNmdnN4bnZ2a2Rza2JrbGpxaWN3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ1MzU0MTcsImV4cCI6MjA2MDExMTQxN30.dNZsSOJyW1bE4bDQP-AIEYV7Z6hlw_iVMN6LZ2IdPio';
+  const EMPLOYEE_PIN = '1234'; // Change this to whatever PIN you want
+
+  const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  // Session: stay unlocked for 8 hours
+  function checkPin() {
+    const pin = document.getElementById('pinInput').value.trim();
+    const msg = document.getElementById('pinMsg');
+    if (pin === EMPLOYEE_PIN) {
+      sessionStorage.setItem('hl_emp_auth', Date.now());
+      showMain();
+    } else {
+      msg.className = 'msg error';
+      msg.textContent = 'Wrong PIN. Try again.';
+      document.getElementById('pinInput').classList.add('error');
+      document.getElementById('pinInput').value = '';
+    }
+  }
+
+  function showMain() {
+    document.getElementById('pinScreen').style.display = 'none';
+    document.getElementById('mainScreen').style.display = 'block';
+    loadTodayHistory();
+  }
+
+  // Auto-unlock if session still valid (8 hours)
+  window.addEventListener('DOMContentLoaded', () => {
+    const t = sessionStorage.getItem('hl_emp_auth');
+    if (t && (Date.now() - parseInt(t)) < 8 * 60 * 60 * 1000) showMain();
+  });
+
+  function getTier(items) {
+    if (items >= 30) return 'Diamond 💠';
+    if (items >= 21) return 'Platinum 💎';
+    if (items >= 15) return 'Gold 🥇';
+    if (items >= 9)  return 'Silver 🥈';
+    return 'None';
+  }
+
+  async function confirmOrder() {
+    const phoneRaw = document.getElementById('phoneInput').value.trim();
+    const itemsVal = parseInt(document.getElementById('itemsInput').value);
+    const msg = document.getElementById('confirmMsg');
+    const btn = document.getElementById('confirmBtn');
+
+    msg.className = 'msg';
+    msg.style.display = 'none';
+
+    if (!phoneRaw) {
+      msg.className = 'msg error';
+      msg.textContent = 'Please enter the customer phone number.';
+      document.getElementById('phoneInput').classList.add('error');
+      return;
+    }
+    if (!itemsVal || itemsVal < 1) {
+      msg.className = 'msg error';
+      msg.textContent = 'Please enter the number of items.';
+      document.getElementById('itemsInput').classList.add('error');
+      return;
+    }
+
+    document.getElementById('phoneInput').classList.remove('error');
+    document.getElementById('itemsInput').classList.remove('error');
+    btn.disabled = true;
+    btn.textContent = 'Saving...';
+
+    // Normalise phone to Lebanese format
+    let phone = phoneRaw.replace(/\D/g, '');
+    if (phone.startsWith('0')) phone = '961' + phone.substring(1);
+    else if (!phone.startsWith('961') && phone.length <= 10) phone = '961' + phone;
+
+    try {
+      const now = new Date();
+      const firstOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+
+      const { data: existing } = await sb
+        .from('loyalty_points')
+        .select('*')
+        .eq('customer_phone', phone)
+        .single();
+
+      let newItems, newTier, oldTier = 'None';
+
+      if (existing) {
+        const lastReset = new Date(existing.last_reset_date);
+        const base = lastReset < firstOfMonth ? 0 : (existing.items_purchased || 0);
+        oldTier = getTier(base);
+        newItems = base + itemsVal;
+        newTier = getTier(newItems);
+
+        const { error } = await sb.from('loyalty_points').update({
+          items_purchased: newItems,
+          points: Math.floor(newItems / 3),
+          current_tier: newTier.replace(/\s.+/, ''), // store just tier name
+          redeemed_this_month: lastReset < firstOfMonth ? false : existing.redeemed_this_month,
+          last_reset_date: lastReset < firstOfMonth
+            ? firstOfMonth.toISOString().split('T')[0]
+            : existing.last_reset_date
+        }).eq('customer_phone', phone);
+
+        if (error) throw error;
+      } else {
+        newItems = itemsVal;
+        newTier = getTier(newItems);
+
+        const { error } = await sb.from('loyalty_points').insert([{
+          customer_phone: phone,
+          items_purchased: newItems,
+          points: Math.floor(newItems / 3),
+          current_tier: newTier.replace(/\s.+/, ''),
+          redeemed_this_month: false,
+          last_reset_date: firstOfMonth.toISOString().split('T')[0]
+        }]);
+
+        if (error) throw error;
+      }
+
+      const tierChanged = newTier !== oldTier && oldTier !== 'None' || (oldTier === 'None' && newTier !== 'None');
+      let successText = `✅ Done! ${itemsVal} items added for ${phoneRaw}. Total this month: ${newItems}.`;
+      if (tierChanged) successText += ` 🎉 Tier: ${newTier}!`;
+
+      msg.className = 'msg success';
+      msg.textContent = successText;
+
+      // Save to today's history in localStorage
+      const history = JSON.parse(localStorage.getItem('hl_order_history') || '[]');
+      history.unshift({ phone: phoneRaw, items: itemsVal, total: newItems, tier: newTier, time: new Date().toLocaleTimeString() });
+      localStorage.setItem('hl_order_history', JSON.stringify(history.slice(0, 20)));
+      loadTodayHistory();
+
+      document.getElementById('phoneInput').value = '';
+      document.getElementById('itemsInput').value = '';
+
+    } catch (err) {
+      msg.className = 'msg error';
+      msg.textContent = '❌ Error: ' + err.message;
+    }
+
+    btn.disabled = false;
+    btn.textContent = '✅ Confirm Order';
+  }
+
+  function loadTodayHistory() {
+    const list = document.getElementById('historyList');
+    const history = JSON.parse(localStorage.getItem('hl_order_history') || '[]');
+    if (!history.length) {
+      list.innerHTML = '<li style="color:#bbb; justify-content:center;">No orders confirmed yet today</li>';
+      return;
+    }
+    list.innerHTML = history.map(h => `
+      <li>
+        <span>${h.phone} — ${h.items} items</span>
+        <span><span class="tier-badge">${h.tier}</span> ${h.time}</span>
+      </li>
+    `).join('');
+  }
+</script>
+</body>
+</html>
