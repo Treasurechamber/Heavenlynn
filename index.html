@@ -782,6 +782,18 @@
       .box-size-selector { grid-template-columns: 1fr; }
       .selectable-items { grid-template-columns: repeat(3,1fr); }
     }
+    /* XMAS START */
+.xmas-glow, .xmas-snow { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.xmas-glow { mix-blend-mode: screen; }
+.xmas-glow i { position: absolute; border-radius: 50%; background: radial-gradient(circle, rgba(255,214,150,.55) 0%, rgba(255,214,150,0) 70%); animation: glowPulse ease-in-out infinite alternate; }
+@keyframes glowPulse { from { opacity: .2; transform: scale(.9); } to { opacity: .75; transform: scale(1.1); } }
+.xmas-snow b { position: absolute; top: -10px; border-radius: 50%; background: rgba(255,255,255,.85); filter: blur(.5px); animation: softSnow linear infinite; }
+@keyframes softSnow { 0% { transform: translate(0,0); opacity: 0; } 10% { opacity: .8; } 100% { transform: translate(30px,80vh); opacity: 0; } }
+.hero-tagline { color: #ffe9b8 !important; letter-spacing: 1.5px; }
+.section-title::after { background: linear-gradient(90deg, #e8cf9a, rgba(232,207,154,0)) !important; height: 1px !important; }
+.xmas-note { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; color: #f3dfb0; letter-spacing: 1px; margin-bottom: 1rem; }
+@media (prefers-reduced-motion: reduce) { .xmas-glow i, .xmas-snow b { animation: none; } .xmas-snow { display: none; } }
+/* XMAS END */
   </style>
 </head>
 <body>
@@ -2188,6 +2200,48 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 });
+</script>
+  <script>
+// XMAS START
+(function () {
+  var hero = document.querySelector('.hero');
+  var overlay = hero && hero.querySelector('.hero-overlay');
+  if (!overlay) return;
+
+  var glow = document.createElement('div');
+  glow.className = 'xmas-glow';
+  for (var i = 0; i < 7; i++) {
+    var g = document.createElement('i');
+    var size = 70 + Math.random() * 110;
+    g.style.cssText = 'width:' + size + 'px;height:' + size + 'px;left:' + Math.random() * 95 + '%;top:' + Math.random() * 85 + '%;animation-duration:' + (3 + Math.random() * 4) + 's;animation-delay:' + (-Math.random() * 5) + 's';
+    glow.appendChild(g);
+  }
+
+  var snow = document.createElement('div');
+  snow.className = 'xmas-snow';
+  for (var j = 0; j < 14; j++) {
+    var f = document.createElement('b');
+    var sz = 3 + Math.random() * 4;
+    f.style.cssText = 'width:' + sz + 'px;height:' + sz + 'px;left:' + Math.random() * 100 + '%;animation-duration:' + (14 + Math.random() * 10) + 's;animation-delay:' + (-Math.random() * 20) + 's';
+    snow.appendChild(f);
+  }
+
+  overlay.after(glow);
+  glow.after(snow);
+
+  var tag = document.querySelector('.hero-tagline');
+  if (tag) tag.textContent = 'Cozy treats for a warm Christmas';
+
+  var fc = document.querySelector('.footer-content');
+  var firstText = fc && fc.querySelector('.footer-text');
+  if (fc && firstText) {
+    var note = document.createElement('p');
+    note.className = 'xmas-note';
+    note.textContent = 'Wishing you a warm and cozy Christmas';
+    fc.insertBefore(note, firstText);
+  }
+})();
+// XMAS END
 </script>
 </body>
 </html>
