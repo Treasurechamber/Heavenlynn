@@ -901,55 +901,54 @@
     <div class="events-grid" id="eventsGrid"></div>
   </div>
 
-  <!-- Loyalty Program Section -->
-  <!-- Compact Loyalty Ad Banner -->
-  <div class="loyalty-section" id="loyaltySectionWrapper" onclick="openLoyaltyModal()">
-    <div class="loyalty-ad-banner">
-      <div class="loyalty-ad-badge">Earn Points</div>
-      <div class="loyalty-ad-content">
-        <div class="loyalty-ad-icon">🎁</div>
-        <div class="loyalty-ad-text">
-          <div class="loyalty-ad-title">Loyalty Rewards Program</div>
-          <div class="loyalty-ad-subtitle">Earn points with every order • Unlock exclusive rewards • Click to learn more!</div>
-        </div>
+ <!--
+<div class="loyalty-section" id="loyaltySectionWrapper" onclick="openLoyaltyModal()">
+  <div class="loyalty-ad-banner">
+    <div class="loyalty-ad-badge">Earn Points</div>
+    <div class="loyalty-ad-content">
+      <div class="loyalty-ad-icon">🎁</div>
+      <div class="loyalty-ad-text">
+        <div class="loyalty-ad-title">Loyalty Rewards Program</div>
+        <div class="loyalty-ad-subtitle">Earn points with every order • Unlock exclusive rewards • Click to learn more!</div>
       </div>
-      <div class="loyalty-ad-arrow">→</div>
     </div>
+    <div class="loyalty-ad-arrow">→</div>
   </div>
+</div>
 
-  <!-- Loyalty Modal Popup -->
-  <div class="loyalty-modal" id="loyaltyModal" onclick="closeLoyaltyModal(event)">
-    <div class="loyalty-modal-content" onclick="event.stopPropagation()">
-      <div class="loyalty-modal-header">
-        <h2>🎁 Loyalty Rewards Program</h2>
-        <button class="loyalty-modal-close" onclick="closeLoyaltyModal()">&times;</button>
+<div class="loyalty-modal" id="loyaltyModal" onclick="closeLoyaltyModal(event)">
+  <div class="loyalty-modal-content" onclick="event.stopPropagation()">
+    <div class="loyalty-modal-header">
+      <h2>🎁 Loyalty Rewards Program</h2>
+      <button class="loyalty-modal-close" onclick="closeLoyaltyModal()">&times;</button>
+    </div>
+    <div class="loyalty-modal-body">
+      <div class="loyalty-modal-intro">
+        <p style="font-size:1.05rem; color:var(--text); line-height:1.7; margin:0;">
+          Every item you order counts toward your loyalty tier.<br>
+          <strong>Just provide your phone number when ordering</strong> — we track it automatically.<br>
+          <span style="color:var(--text-light); font-size:.95rem;">Tiers reset on the 1st of each month. Redeem your reward on any order before reset.</span>
+        </p>
+        <div style="display:flex; gap:.8rem; justify-content:center; flex-wrap:wrap; margin-top:1.2rem;">
+          <div style="background:var(--primary-light); border-radius:12px; padding:.6rem 1.1rem; font-size:.9rem; color:var(--primary-dark); font-weight:600;">🛒 Order items</div>
+          <div style="background:var(--primary-light); border-radius:12px; padding:.6rem 1.1rem; font-size:.9rem; color:var(--primary-dark); font-weight:600;">📈 Climb tiers</div>
+          <div style="background:var(--primary-light); border-radius:12px; padding:.6rem 1.1rem; font-size:.9rem; color:var(--primary-dark); font-weight:600;">🎁 Unlock rewards</div>
+        </div>
       </div>
-      <div class="loyalty-modal-body">
-        <div class="loyalty-modal-intro">
-          <p style="font-size:1.05rem; color:var(--text); line-height:1.7; margin:0;">
-            Every item you order counts toward your loyalty tier.<br>
-            <strong>Just provide your phone number when ordering</strong> — we track it automatically.<br>
-            <span style="color:var(--text-light); font-size:.95rem;">Tiers reset on the 1st of each month. Redeem your reward on any order before reset.</span>
-          </p>
-          <div style="display:flex; gap:.8rem; justify-content:center; flex-wrap:wrap; margin-top:1.2rem;">
-            <div style="background:var(--primary-light); border-radius:12px; padding:.6rem 1.1rem; font-size:.9rem; color:var(--primary-dark); font-weight:600;">🛒 Order items</div>
-            <div style="background:var(--primary-light); border-radius:12px; padding:.6rem 1.1rem; font-size:.9rem; color:var(--primary-dark); font-weight:600;">📈 Climb tiers</div>
-            <div style="background:var(--primary-light); border-radius:12px; padding:.6rem 1.1rem; font-size:.9rem; color:var(--primary-dark); font-weight:600;">🎁 Unlock rewards</div>
-          </div>
-        </div>
-        <div style="font-family:'Playfair Display',serif; font-size:1.1rem; font-weight:700; color:var(--primary-dark); margin-bottom:1rem; text-align:center;">Your Reward Tiers</div>
-        <div class="loyalty-modal-rewards" id="loyaltyModalRewards"></div>
-        <div class="loyalty-modal-actions">
-          <p style="font-size:.9rem; color:var(--text-light); margin-bottom:1rem;">Want to know your current tier? Message us anytime on WhatsApp!</p>
-          <a href="https://wa.me/96181955816?text=Hi%20Heavenlynn!%20I'd%20like%20to%20check%20my%20loyalty%20status" 
-             class="loyalty-modal-whatsapp-btn" 
-             target="_blank" rel="noopener">
-            <i class="fab fa-whatsapp"></i> Check My Status on WhatsApp
-          </a>
-        </div>
+      <div style="font-family:'Playfair Display',serif; font-size:1.1rem; font-weight:700; color:var(--primary-dark); margin-bottom:1rem; text-align:center;">Your Reward Tiers</div>
+      <div class="loyalty-modal-rewards" id="loyaltyModalRewards"></div>
+      <div class="loyalty-modal-actions">
+        <p style="font-size:.9rem; color:var(--text-light); margin-bottom:1rem;">Want to know your current tier? Message us anytime on WhatsApp!</p>
+        <a href="https://wa.me/96181955816?text=Hi%20Heavenlynn!%20I'd%20like%20to%20check%20my%20loyalty%20status"
+           class="loyalty-modal-whatsapp-btn"
+           target="_blank" rel="noopener">
+          <i class="fab fa-whatsapp"></i> Check My Status on WhatsApp
+        </a>
       </div>
     </div>
   </div>
+</div>
+-->
 
   <!-- Menu Sections -->
   <main id="menuSections"></main>
@@ -1015,9 +1014,9 @@
       <div id="cartItems"></div>
       <div class="cart-total" id="cartTotal" style="display:none"><div>Total: <span class="cart-total-amount" id="totalAmount">$0.00</span></div></div>
       <div class="cart-phone-input" id="cartPhoneInput" style="display:none">
-        <label for="customerPhone">📱 Phone Number <span style="color: var(--text-light); font-weight: 400; font-size: 0.85rem;">(optional — for loyalty tracking)</span></label>
+        <label for="customerPhone">📱 Phone Number <span style="color: var(--text-light); font-weight: 400; font-size: 0.85rem;">(optional)</span></label>
         <input type="tel" id="customerPhone" placeholder="e.g., 03 123 456" maxlength="20">
-        <small style="color: var(--text-light); font-size: 0.82rem;">Enter your number to earn loyalty rewards on this order</small>
+        <small style="color: var(--text-light); font-size: 0.82rem;">Enter your phone number (optional)</small>
       </div>
       <button class="order-btn" id="orderBtn" disabled>Order via WhatsApp</button>
     </div>
